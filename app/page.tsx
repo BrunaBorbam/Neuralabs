@@ -2,7 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ChevronDown, Menu, X, Brain, Zap, BarChart3, Lock } from 'lucide-react';
+import { ChevronDown, Menu, X, Brain, Zap, BarChart3, Lock, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
 
 const NeuralNetwork = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -18,13 +21,13 @@ const NeuralNetwork = () => {
     canvas.height = canvas.offsetHeight;
 
     const particles: any[] = [];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 50; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
-        radius: Math.random() * 2.5 + 1,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        radius: Math.random() * 2 + 1.5,
       });
     }
 
@@ -36,7 +39,6 @@ const NeuralNetwork = () => {
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
-
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
@@ -51,7 +53,6 @@ const NeuralNetwork = () => {
           const dx = p1.x - p2.x;
           const dy = p1.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-
           if (dist < 180) {
             ctx.strokeStyle = `rgba(255, 140, 0, ${0.3 * (1 - dist / 180)})`;
             ctx.lineWidth = 0.8;
@@ -67,17 +68,45 @@ const NeuralNetwork = () => {
     };
 
     animate();
-
     const handleResize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return <canvas ref={canvasRef} className="w-full h-full" />;
+};
+
+const Counter = ({ end, suffix }: { end: number; suffix: string }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const timer = setInterval(() => {
+      start += end / 80;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 25);
+    return () => clearInterval(timer);
+  }, [isInView, end]);
+
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-5xl md:text-6xl font-black font-serif text-orange-500">
+        {count}
+        {suffix}
+      </div>
+    </div>
+  );
 };
 
 const LeadForm = () => {
@@ -86,13 +115,12 @@ const LeadForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       await fetch(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK || '', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: `🧠 Novo lead neuro: ${formData.name} | ${formData.email} | ${formData.company} | ${formData.phone}`,
+          content: `🧠 Novo lead: ${formData.name} | ${formData.email} | ${formData.company} | ${formData.phone}`,
         }),
       }).catch(() => {});
 
@@ -140,14 +168,9 @@ const LeadForm = () => {
         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:border-orange-500 focus:outline-none text-white placeholder-white/50"
       />
-      <motion.button
-        type="submit"
-        className="w-full px-6 py-4 bg-orange-500 hover:bg-orange-600 rounded-lg font-bold transition"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        {submitted ? 'Diagnóstico chegando em 24h' : 'Receber Diagnóstico Neuro Grátis'}
-      </motion.button>
+      <Button type="submit" variant="primary" size="lg" className="w-full">
+        {submitted ? '✓ Diagnóstico chegando em 24h' : 'Receber Diagnóstico Grátis'}
+      </Button>
     </form>
   );
 };
@@ -155,43 +178,6 @@ const LeadForm = () => {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
-
-  const problems = [
-    { title: 'Seu site não usa ciência', desc: 'Você coloca elementos "porque acha que funciona". Sem entender psicologia, é chute. Taxa de conversão = consequência.' },
-    { title: 'Abandono é sintoma, não problema', desc: 'O visitante sai porque não ativou os gatilhos mentais certos. Layout bonito não vende se não ativa emoção.' },
-    { title: 'Concorrente já está fazendo', desc: 'Quem aplica neuromarketing já tira conversão. Você está esperando o quê para começar?' },
-  ];
-
-  const solutions = [
-    {
-      title: 'Análise Neuro com IA',
-      desc: 'Usamos Claude IA para analisar fundo o comportamento do seu público e psicologia de compra. Mapeamento real, não adivinhação.'
-    },
-    {
-      title: 'Design Baseado em Ciência',
-      desc: 'Cada cor, posição, palavra é escolhida por gatilhos mentais comprovados. Urgência, escassez, prova social, autoridade.'
-    },
-    {
-      title: 'Otimização com Dados',
-      desc: 'A/B testes, heatmaps, comportamento do usuário. Melhoramos cada semana baseado em números, não em opinião.'
-    },
-  ];
-
-  const faqs = [
-    { q: 'Como vocês usam IA para neuromarketing?', a: 'Usamos Claude IA para analisar fundo a psicologia do seu público, identificar gatilhos mentais e criar estratégia customizada. IA faz análise, nós implementamos no design.' },
-    { q: 'Quanto é o investimento?', a: 'Starter R$ 9.990 (design base + análise neuro + 30 dias suporte). Pro R$ 14.990 (design premium + análise completa + 60 dias). Pague apenas se aprovado na demo.' },
-    { q: 'Qual é o prazo?', a: '21 dias do briefing até deploy. 3 checkpoints você aprova. Depois é seu site, sem cláusulas de lock-in.' },
-    { q: 'Vocês garantem +20-40% conversão?', a: 'Ninguém garante. MAS: estudos mostram que aplicar neuromarketing leva a +20-40%. Nós implementamos a ciência. Resultados dependem do seu produto, tráfego e público.' },
-    { q: 'Como é o suporte?', a: '30 ou 60 dias de WhatsApp + email. Ajustes rápidos. Depois virou seu site, você mantém. Sem assinatura mensal eterna.' },
-    { q: 'Somos nova empresa, vale a pena?', a: 'Vale MUITO. Novo significa sem vícios. Sem bagagem de 10 anos de "sempre fizemos assim". Somos ágeis, criativas, e aplicamos ciência atual.' },
-  ];
-
-  const process = [
-    { step: 'Análise Neuro', days: 'Dia 1-3', icon: Brain, desc: 'Mapeamos psicologia do seu público com IA. Gatilhos, motivações, objeções.' },
-    { step: 'Mapeamento Mental', days: 'Dia 4-7', icon: Zap, desc: 'Identificamos onde você perde visitantes. Por quê saem? Qual gatilho ativar?' },
-    { step: 'Design Científico', days: 'Dia 8-18', icon: BarChart3, desc: '3D, layout, cores, copy. Tudo baseado em neurociência comprovada. 3 checkpoints você aprova.' },
-    { step: 'Testes & Deploy', days: 'Dia 19-21', icon: Lock, desc: 'A/B testes, otimizações finais, deploy em produção. Monitoramento 30 dias.' },
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -204,22 +190,22 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-slate-850 text-white overflow-x-hidden">
       {/* HEADER */}
-      <motion.header className="fixed top-0 z-50 w-full border-b border-orange-500/10 backdrop-blur-xl bg-[#0A0E27]/80">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-black">NEURALABS</div>
+      <motion.header className="fixed top-0 z-50 w-full border-b border-border-light backdrop-blur-xl bg-slate-850/80">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="text-2xl font-black font-serif">NEURALABS</div>
           <nav className="hidden md:flex gap-8">
-            {['Método', 'Portfólio', 'Preços', 'Processo', 'FAQ', 'Contato'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="text-sm hover:text-orange-400 transition">
+            {['Método', 'Portfólio', 'Preços', 'Processo', 'FAQ'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="text-sm hover:text-orange-500 transition">
                 {item}
               </a>
             ))}
           </nav>
           <div className="flex gap-4 items-center">
-            <a href="#demo" className="hidden sm:block px-6 py-2 bg-orange-500 hover:bg-orange-600 rounded-lg font-bold text-sm transition">
+            <Button variant="primary" size="sm" className="hidden sm:flex">
               Demo
-            </a>
+            </Button>
             <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden">
               {menuOpen ? <X /> : <Menu />}
             </button>
@@ -233,32 +219,48 @@ export default function Home() {
           <NeuralNetwork />
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
-            <motion.div className="inline-block px-4 py-2 bg-orange-500/20 border border-orange-500/50 rounded-full mb-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-              <span className="text-orange-400 text-sm font-bold">Ciência aplicada a conversão</span>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+              <Badge variant="primary">Ciência aplicada a conversão</Badge>
             </motion.div>
 
-            <motion.h1 className="text-7xl md:text-8xl font-black mb-6 leading-tight" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }}>
+            <motion.h1
+              className="text-7xl md:text-8xl font-black font-serif mb-6 leading-tight mt-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
               Neurociência<br />
               <span className="text-orange-500">+ IA</span><br />
               <span className="text-slate-400">+ Design</span>
             </motion.h1>
 
-            <motion.p className="text-xl text-slate-300 mb-12 max-w-xl" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
-              Seus visitantes tomam 95% das decisões inconscientemente. Nós ativamos os gatilhos mentais certos com design, 3D e análise de IA.
+            <motion.p
+              className="text-xl text-slate-300 mb-12 max-w-xl leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              95% das decisões são inconscientes. Ativamos os gatilhos mentais certos com design, 3D e IA.
             </motion.p>
 
-            <motion.div className="flex flex-col sm:flex-row gap-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-              <a href="#demo" className="px-8 py-4 bg-orange-500 hover:bg-orange-600 rounded-lg font-bold transition transform hover:scale-105 text-center">
-                Diagnóstico Grátis
-              </a>
-              <a href="#metodo" className="px-8 py-4 border-2 border-orange-500 hover:bg-orange-500/10 rounded-lg font-bold transition text-center">
-                Como funciona
-              </a>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Button variant="primary" size="lg">Diagnóstico Grátis</Button>
+              <Button variant="outline" size="lg">Como funciona</Button>
             </motion.div>
 
-            <motion.p className="text-sm text-orange-400 mt-8 font-bold" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+            <motion.p
+              className="text-sm text-orange-400 mt-8 font-bold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
               Somos novos. Mais ágeis. Menos caros.
             </motion.p>
           </motion.div>
@@ -266,394 +268,140 @@ export default function Home() {
       </section>
 
       {/* PROBLEMA */}
-      <section id="problema" className="max-w-7xl mx-auto px-4 py-24">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-black mb-6">Por que seus clientes não compram?</h2>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Você não entende a psicologia deles. Ninguém ensinou. Agora vamos.
-          </p>
+      <section id="metodo" className="max-w-7xl mx-auto px-6 py-32">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
+          <h2 className="text-6xl font-black font-serif mb-6">Por que seus clientes não compram?</h2>
+          <p className="text-xl text-slate-400 max-w-2xl mx-auto">Sem entender a psicologia deles, é só chute.</p>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          {problems.map((p, i) => (
-            <motion.div
-              key={i}
-              className="p-8 bg-gradient-to-br from-orange-500/10 to-transparent border border-orange-500/20 rounded-xl hover:border-orange-500/50 transition backdrop-blur-sm"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-            >
-              <h3 className="text-2xl font-bold text-orange-400 mb-4">{p.title}</h3>
-              <p className="text-slate-300 leading-relaxed">{p.desc}</p>
+          {[
+            { title: 'Sem ciência', desc: 'Layout bonito não vende se não ativa emoção.' },
+            { title: 'Abandono alto', desc: 'O visitante sai porque não ativou os gatilhos mentais.' },
+            { title: 'Concorrente adiantado', desc: 'Quem aplica neuromarketing já tira conversão.' },
+          ].map((p, i) => (
+            <motion.div key={i} variants={itemVariants}>
+              <Card variant="gradient">
+                <h3 className="text-2xl font-bold text-orange-400 mb-4">{p.title}</h3>
+                <p className="text-slate-300">{p.desc}</p>
+              </Card>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
       {/* SOLUÇÃO */}
-      <section id="metodo" className="max-w-7xl mx-auto px-4 py-24 bg-gradient-to-b from-orange-500/5 to-transparent">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-black mb-6">Como funciona Neuralabs</h2>
+      <section className="max-w-7xl mx-auto px-6 py-32 bg-gradient-to-b from-orange-500/5 to-transparent">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
+          <h2 className="text-6xl font-black font-serif mb-6">Como funciona Neuralabs</h2>
           <p className="text-xl text-slate-400">Neurociência + IA + Design Premium</p>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          {solutions.map((p, i) => (
-            <motion.div key={i} className="p-8 bg-gradient-to-br from-slate-900/50 to-transparent border border-orange-500/20 rounded-xl" variants={itemVariants}>
-              <div className="text-4xl font-black text-orange-500 mb-4">{i + 1}</div>
-              <h3 className="text-2xl font-bold mb-3">{p.title}</h3>
-              <p className="text-slate-300">{p.desc}</p>
+          {[
+            { title: 'Análise Neuro com IA', desc: 'Claude IA analisa psicologia do seu público real.' },
+            { title: 'Design Científico', desc: 'Cada elemento ativa gatilhos mentais comprovados.' },
+            { title: 'Otimização com Dados', desc: 'A/B tests, heatmaps, métricas reais.' },
+          ].map((p, i) => (
+            <motion.div key={i} variants={itemVariants}>
+              <Card variant="surface">
+                <div className="text-4xl font-black text-orange-500 mb-4">{i + 1}</div>
+                <h3 className="text-2xl font-bold mb-3 font-serif">{p.title}</h3>
+                <p className="text-slate-300">{p.desc}</p>
+              </Card>
             </motion.div>
           ))}
-        </motion.div>
-
-        <motion.div className="mt-16 text-center" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-          <p className="text-slate-400 max-w-3xl mx-auto text-lg leading-relaxed">
-            Baseamos tudo em neurocientistas como Daniel Kahneman (nobel), Robert Cialdini (6 princípios de persuasão), e pesquisas modernas sobre decisão de compra.
-            Não é magia. É ciência.
-          </p>
         </motion.div>
       </section>
 
       {/* PREÇOS */}
-      <section id="precos" className="max-w-7xl mx-auto px-4 py-24">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-black mb-6">Preços Realistas</h2>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Sem enganação. Sem surpresas. Você recebe valor REAL em neurociência + IA + design.
-          </p>
+      <section id="precos" className="max-w-7xl mx-auto px-6 py-32">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
+          <h2 className="text-6xl font-black font-serif mb-6">Preços Realistas</h2>
+          <p className="text-xl text-slate-400">Sem enganação. Você recebe valor REAL.</p>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          {/* STARTER */}
-          <motion.div variants={itemVariants} className="border border-orange-500/20 rounded-xl p-8 hover:border-orange-500/50 transition">
-            <h3 className="text-2xl font-bold mb-2">STARTER</h3>
-            <p className="text-slate-400 mb-6">Para pequenos negócios</p>
-
-            <div className="mb-8">
-              <div className="text-4xl font-black text-orange-500">R$ 9.990</div>
-              <p className="text-slate-400 text-sm mt-2">Pagamento único. Sem recorrência.</p>
-            </div>
-
-            <ul className="space-y-3 mb-8 text-sm">
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Landing page ou 1 página responsiva</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Análise neuro com IA (público + gatilhos)</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Design neuromarketing + 3D básico</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>3 revisões incluídas</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>30 dias de suporte (email/whatsapp)</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>21 dias até deploy</span>
-              </li>
-            </ul>
-
-            <motion.a
-              href="#demo"
-              className="w-full px-4 py-3 border border-orange-500 text-orange-400 rounded-lg font-bold hover:bg-orange-500/10 transition text-center"
-              whileHover={{ scale: 1.02 }}
-            >
-              Começar
-            </motion.a>
-          </motion.div>
-
-          {/* PROFESSIONAL */}
-          <motion.div variants={itemVariants} className="border-2 border-orange-500 rounded-xl p-8 bg-gradient-to-br from-orange-500/10 to-transparent relative">
-            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white px-4 py-1 rounded-full text-xs font-bold">
-              MAIS POPULAR
-            </div>
-
-            <h3 className="text-2xl font-bold mb-2">PROFESSIONAL</h3>
-            <p className="text-slate-400 mb-6">Para negócios em crescimento</p>
-
-            <div className="mb-8">
-              <div className="text-4xl font-black text-orange-500">R$ 19.990</div>
-              <p className="text-slate-400 text-sm mt-2">Pagamento único. Sem recorrência.</p>
-            </div>
-
-            <ul className="space-y-3 mb-8 text-sm">
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Até 5 páginas + estrutura escalável</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Análise neuro COMPLETA (IA aprofundada)</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Design premium + 3D animações</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>5 revisões + refinamentos</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>60 dias de suporte prioritário</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Google Analytics + heatmap setup</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>A/B test recommendations</span>
-              </li>
-            </ul>
-
-            <motion.a
-              href="#demo"
-              className="w-full px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-bold transition text-center"
-              whileHover={{ scale: 1.02 }}
-            >
-              Começar Agora
-            </motion.a>
-          </motion.div>
-
-          {/* ENTERPRISE */}
-          <motion.div variants={itemVariants} className="border border-orange-500/20 rounded-xl p-8 hover:border-orange-500/50 transition">
-            <h3 className="text-2xl font-bold mb-2">ENTERPRISE</h3>
-            <p className="text-slate-400 mb-6">Para operações complexas</p>
-
-            <div className="mb-8">
-              <div className="text-4xl font-black text-orange-500">R$ 35.000+</div>
-              <p className="text-slate-400 text-sm mt-2">Custom. Conversamos sobre necessidades.</p>
-            </div>
-
-            <ul className="space-y-3 mb-8 text-sm">
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Multipage + e-commerce possível</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Análise neuro COMPLETA + workshops</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Integrações (CRM, payment, etc)</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Revisões ilimitadas durante projeto</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Suporte continuado (90+ dias)</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Treinamento da equipe</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500">✓</span>
-                <span>Roadmap de otimizações futuras</span>
-              </li>
-            </ul>
-
-            <motion.a
-              href="#demo"
-              className="w-full px-4 py-3 border border-orange-500 text-orange-400 rounded-lg font-bold hover:bg-orange-500/10 transition text-center"
-              whileHover={{ scale: 1.02 }}
-            >
-              Conversar
-            </motion.a>
-          </motion.div>
-        </motion.div>
-
-        <motion.div className="mt-12 text-center" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-          <p className="text-slate-400 max-w-3xl mx-auto text-lg">
-            Tudo inclui: Análise com IA, design neuromarketing, 3D, suporte pós-launch, e garantia de qualidade.
-            <br />
-            <span className="text-orange-400 font-bold">Nenhum valor escondido. Nenhuma surpresa.</span>
-          </p>
-        </motion.div>
-      </section>
-
-      {/* PORTFÓLIO / EXEMPLOS */}
-      <section className="max-w-7xl mx-auto px-4 py-24 bg-gradient-to-b from-slate-900/30 to-transparent">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-black mb-6">Exemplos de Design Neuromarketing</h2>
-          <p className="text-xl text-slate-400">Dois tipos de negócios. Dois designs científicos.</p>
-        </motion.div>
-
-        <motion.div className="grid md:grid-cols-2 gap-12" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          {/* PORTFÓLIO 1: E-COMMERCE */}
-          <motion.div variants={itemVariants} className="border border-orange-500/20 rounded-xl overflow-hidden hover:border-orange-500/50 transition">
-            <div className="bg-gradient-to-br from-purple-900 to-purple-950 p-8 text-white">
-              <h3 className="text-2xl font-bold mb-2">Loja de Cosméticos Naturais</h3>
-              <p className="text-slate-300 mb-6">E-commerce com foco em conversão</p>
-
-              <div className="space-y-4 mb-6">
-                <div className="bg-white/10 rounded-lg p-4">
-                  <p className="text-sm text-slate-400">GATILHOS APLICADOS:</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    <li>✓ Escassez: "Apenas 3 em estoque"</li>
-                    <li>✓ Urgência: Countdown timer 24h</li>
-                    <li>✓ Prova Social: "42 pessoas compraram hoje"</li>
-                    <li>✓ Autoridade: Certificações visíveis</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/10 rounded-lg p-4">
-                  <p className="text-sm text-slate-400">COPY NEUROMARKETING:</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    <li>❌ "Creme facial premium"</li>
-                    <li>✅ "Sua pele aos 30 anos ou seu dinheiro de volta"</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/10 rounded-lg p-4">
-                  <p className="text-sm text-slate-400">DESIGN:</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    <li>• Hero com video 3D (produto girando)</li>
-                    <li>• Cores: Rosa (#FF8C00) + Verde (natureza)</li>
-                    <li>• CTA laranja gigante (ativa ação)</li>
-                    <li>• Checkout em 2 cliques (remove fricção)</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
-                <p className="text-xs text-slate-400">RESULTADO ESPERADO</p>
-                <p className="text-lg font-bold text-green-400">+25-35% conversão vs design genérico</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* PORTFÓLIO 2: SAAS */}
-          <motion.div variants={itemVariants} className="border border-orange-500/20 rounded-xl overflow-hidden hover:border-orange-500/50 transition">
-            <div className="bg-gradient-to-br from-blue-900 to-blue-950 p-8 text-white">
-              <h3 className="text-2xl font-bold mb-2">Plataforma de BI para PMEs</h3>
-              <p className="text-slate-300 mb-6">SaaS B2B com foco em leads qualificados</p>
-
-              <div className="space-y-4 mb-6">
-                <div className="bg-white/10 rounded-lg p-4">
-                  <p className="text-sm text-slate-400">GATILHOS APLICADOS:</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    <li>✓ FOMO: "500+ empresas já usam"</li>
-                    <li>✓ Reciprocidade: "Trial grátis 30 dias"</li>
-                    <li>✓ Autoridade: Logos de clientes</li>
-                    <li>✓ Urgência: "Limite de 10 trials/mês"</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/10 rounded-lg p-4">
-                  <p className="text-sm text-slate-400">COPY NEUROMARKETING:</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    <li>❌ "Análise de dados em tempo real"</li>
-                    <li>✅ "Decisões em minutos, não em semanas"</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/10 rounded-lg p-4">
-                  <p className="text-sm text-slate-400">DESIGN:</p>
-                  <ul className="mt-2 space-y-1 text-sm">
-                    <li>• Demo interativo 3D (mostra valor rápido)</li>
-                    <li>• Cores: Azul (#0A0E27) + Orange (#FF8C00)</li>
-                    <li>• CTA primário: "Começar Grátis"</li>
-                    <li>• Seção de ROI calculadora (envolve usuário)</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
-                <p className="text-xs text-slate-400">RESULTADO ESPERADO</p>
-                <p className="text-lg font-bold text-green-400">+40-50% lead quality vs design padrão</p>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        <motion.div className="mt-12 text-center" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-          <p className="text-slate-400 max-w-3xl mx-auto text-lg">
-            Cada projeto é customizado. Estes são 2 exemplos de como aplicamos neurociência + design.
-            <br />
-            <span className="text-orange-400 font-bold">Seu negócio merece o mesmo tratamento científico.</span>
-          </p>
+          {[
+            { name: 'STARTER', price: '9.990', items: ['Landing + análise neuro', 'Design base + 3D', '30 dias suporte', 'Análise com IA'] },
+            { name: 'PROFESSIONAL', price: '19.990', items: ['5 páginas completas', 'Análise neuro profunda', '3D animações', '60 dias suporte'], highlight: true },
+            { name: 'ENTERPRISE', price: '35k+', items: ['Multipage + e-commerce', 'Análise completa + workshops', 'Integrações custom', 'Suporte continuado'] },
+          ].map((plan, i) => (
+            <motion.div key={i} variants={itemVariants}>
+              <Card variant={plan.highlight ? 'accent' : 'glass'}>
+                <h3 className="text-2xl font-bold font-serif mb-2">{plan.name}</h3>
+                <div className="text-4xl font-black text-orange-500 mb-6">R$ {plan.price}</div>
+                <ul className="space-y-3 mb-8">
+                  {plan.items.map((item, j) => (
+                    <li key={j} className="flex gap-2 text-sm">
+                      <span className="text-orange-500">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button variant={plan.highlight ? 'primary' : 'outline'} size="lg" className="w-full">
+                  {plan.highlight ? 'Começar Agora' : 'Saiba Mais'}
+                </Button>
+              </Card>
+            </motion.div>
+          ))}
         </motion.div>
       </section>
 
       {/* PROCESSO */}
-      <section id="processo" className="max-w-7xl mx-auto px-4 py-24">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-black mb-6">Processo: 21 dias</h2>
-          <p className="text-xl text-slate-400">Do briefing ao seu site novo em produção</p>
+      <section id="processo" className="max-w-7xl mx-auto px-6 py-32">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
+          <h2 className="text-6xl font-black font-serif mb-6">Processo: 21 dias</h2>
+          <p className="text-xl text-slate-400">Do briefing ao deploy em produção</p>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-4 gap-6" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          {process.map((p, i) => {
+          {[
+            { step: 'Análise Neuro', days: 'Dia 1-3', icon: Brain },
+            { step: 'Mapeamento', days: 'Dia 4-7', icon: Zap },
+            { step: 'Design', days: 'Dia 8-18', icon: BarChart3 },
+            { step: 'Deploy', days: 'Dia 19-21', icon: Lock },
+          ].map((p, i) => {
             const Icon = p.icon;
             return (
-              <motion.div key={i} className="relative" variants={itemVariants}>
-                {i < 3 && <div className="hidden md:block absolute top-12 -right-4 w-8 h-px bg-orange-500" />}
-                <div className="p-6 bg-gradient-to-br from-orange-500/10 to-transparent border border-orange-500/20 rounded-xl">
-                  <Icon className="w-8 h-8 text-orange-500 mb-3" />
-                  <h3 className="font-bold mb-2">{p.step}</h3>
-                  <p className="text-orange-400 text-sm mb-3">{p.days}</p>
-                  <p className="text-slate-300 text-sm">{p.desc}</p>
-                </div>
+              <motion.div key={i} variants={itemVariants}>
+                <Card variant="glass">
+                  <Icon className="w-8 h-8 text-orange-500 mb-4" />
+                  <h3 className="font-bold mb-2 font-serif">{p.step}</h3>
+                  <p className="text-orange-400 text-sm">{p.days}</p>
+                </Card>
               </motion.div>
             );
           })}
         </motion.div>
       </section>
 
-      {/* DIFERENCIAL */}
-      <section className="max-w-7xl mx-auto px-4 py-24">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center">
-          <h2 className="text-5xl md:text-6xl font-black mb-16">Por que Neuralabs?</h2>
-
-          <motion.div className="grid md:grid-cols-2 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            {[
-              'Usamos IA (Claude) para análise real de comportamento',
-              'Baseado em neurociência (Kahneman, Cialdini, pesquisa contemporânea)',
-              'Design 3D nativo, não template',
-              'Você aprova 3x durante o processo',
-              'Suporte 30-60 dias. Depois é só seu',
-              'R$ 9.990-14.990 vs agências 25k+',
-            ].map((item, i) => (
-              <motion.div key={i} className="text-left p-6 bg-gradient-to-r from-orange-500/10 to-transparent border border-orange-500/20 rounded-lg" variants={itemVariants}>
-                <p className="font-bold text-lg">{item}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
-      </section>
-
       {/* FAQ */}
-      <section id="faq" className="max-w-4xl mx-auto px-4 py-24">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-black">Perguntas Frequentes</h2>
+      <section id="faq" className="max-w-4xl mx-auto px-6 py-32">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
+          <h2 className="text-6xl font-black font-serif">FAQ</h2>
         </motion.div>
 
         <motion.div className="space-y-4" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          {faqs.map((faq, i) => (
-            <motion.div key={i} className="border border-orange-500/20 rounded-lg overflow-hidden" variants={itemVariants}>
+          {[
+            { q: 'Como vocês usam IA?', a: 'Claude IA analisa psicologia do seu público. Identificamos gatilhos mentais e criamos estratégia customizada.' },
+            { q: 'Quanto é o investimento?', a: 'STARTER R$ 9.990 | PROFESSIONAL R$ 19.990 | ENTERPRISE custom. Sem surpresas.' },
+            { q: 'Qual é o prazo?', a: '21 dias do briefing até deploy. Você aprova em 3 checkpoints.' },
+            { q: 'Vocês garantem +20-40%?', a: 'Ninguém garante. MAS: estudos mostram que neuromarketing leva a +20-40%. Nós implementamos a ciência.' },
+            { q: 'Como é o suporte?', a: '30-60 dias de email/WhatsApp. Depois é seu site, você mantém. Sem assinatura mensal.' },
+            { q: 'Somos nova empresa, vale?', a: 'Vale MUITO. Novo = sem vícios. Sem "sempre fizemos assim". Ágeis. Aplicamos ciência atual.' },
+          ].map((faq, i) => (
+            <motion.div key={i} className="border border-border-light rounded-lg overflow-hidden" variants={itemVariants}>
               <button
                 onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
-                className="w-full p-6 bg-gradient-to-r from-orange-500/5 to-transparent hover:from-orange-500/10 flex justify-between items-center transition text-left"
+                className="w-full p-6 bg-slate-800/50 hover:bg-slate-800 flex justify-between items-center transition text-left"
               >
-                <span className="font-bold text-lg">{faq.q}</span>
+                <span className="font-bold">{faq.q}</span>
                 <ChevronDown className={`transition ${openFAQ === i ? 'rotate-180' : ''}`} />
               </button>
               {openFAQ === i && (
-                <motion.div className="p-6 bg-slate-950 border-t border-orange-500/20" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
-                  <p className="text-slate-300 leading-relaxed">{faq.a}</p>
+                <motion.div className="p-6 bg-slate-900 border-t border-border-light" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <p className="text-slate-300">{faq.a}</p>
                 </motion.div>
               )}
             </motion.div>
@@ -662,16 +410,13 @@ export default function Home() {
       </section>
 
       {/* CTA FINAL */}
-      <section id="demo" className="max-w-4xl mx-auto px-4 py-24">
-        <motion.div className="bg-gradient-to-br from-orange-500/20 to-transparent border-2 border-orange-500 rounded-2xl p-12 text-center backdrop-blur-sm" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="text-5xl font-black mb-4">Quer saber a verdade?</h2>
-          <p className="text-xl text-slate-300 mb-4">Seu site está perdendo conversão POR FALTA DE NEUROCIÊNCIA</p>
-          <p className="text-lg text-slate-400 mb-12">Vamos fazer um diagnóstico grátis. Você recebe uma análise honesta: quanto está perdendo e como recuperar.</p>
-
+      <section className="max-w-4xl mx-auto px-6 py-32">
+        <motion.div className="bg-gradient-to-br from-orange-500/20 to-transparent border-2 border-orange-500 rounded-3xl p-12 text-center backdrop-blur-xl" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h2 className="text-5xl font-black font-serif mb-6">Quer saber a verdade?</h2>
+          <p className="text-xl text-slate-300 mb-12">Seu site está perdendo conversão por FALTA DE NEUROCIÊNCIA.</p>
           <LeadForm />
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
-            <a href="https://wa.me/55119xxxx" target="_blank" rel="noopener noreferrer" className="px-6 py-3 text-orange-400 hover:text-orange-300 transition">
+          <div className="mt-6 text-center">
+            <a href="https://wa.me/55119xxxx" className="text-orange-400 hover:text-orange-300 transition">
               Ou mande um WhatsApp
             </a>
           </div>
@@ -679,37 +424,36 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-orange-500/10 px-4 py-12 text-center text-slate-500">
+      <footer className="border-t border-border-light px-6 py-16 text-center text-slate-500">
         <div className="max-w-7xl mx-auto mb-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
-              <h3 className="font-bold text-white mb-4">Neuralabs</h3>
-              <p className="text-sm">Neurociência + IA + Design. Conversão elevada ao científico.</p>
+              <h3 className="font-bold text-white mb-4 font-serif">Neuralabs</h3>
+              <p className="text-sm">Neurociência + IA + Design = Conversão</p>
             </div>
             <div>
               <h3 className="font-bold text-white mb-4">Links</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#metodo" className="hover:text-orange-400 transition">Método</a></li>
-                <li><a href="#processo" className="hover:text-orange-400 transition">Processo</a></li>
+                <li><a href="#metodo" className="hover:text-orange-400">Método</a></li>
+                <li><a href="#precos" className="hover:text-orange-400">Preços</a></li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-white mb-4">Legal</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-orange-400 transition">Privacy</a></li>
-                <li><a href="#" className="hover:text-orange-400 transition">Terms</a></li>
+                <li><a href="#" className="hover:text-orange-400">Privacy</a></li>
+                <li><a href="#" className="hover:text-orange-400">Terms</a></li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-white mb-4">Contato</h3>
               <p className="text-sm">ola@neuralabs.online</p>
-              <p className="text-sm">WhatsApp: +55 11 9xxxx</p>
+              <p className="text-sm">+55 11 9xxxx</p>
             </div>
           </div>
         </div>
-
-        <div className="border-t border-orange-500/10 pt-8">
-          <p className="text-xs">© 2026 Neuralabs. Neurociência + IA + Design = Conversão.</p>
+        <div className="border-t border-border-light pt-8">
+          <p className="text-xs">© 2026 Neuralabs. Neurociência + IA + Design.</p>
         </div>
       </footer>
     </div>
