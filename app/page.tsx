@@ -440,6 +440,78 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* NEUROCIÊNCIA EM AÇÃO */}
+      <section className="max-w-7xl mx-auto px-6 py-32">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
+          <h2 className="text-6xl font-black font-serif mb-6">Neurociência em Ação</h2>
+          <p className="text-xl text-slate-400">Veja como os gatilhos mentais funcionam em tempo real</p>
+        </motion.div>
+
+        <motion.div className="grid md:grid-cols-2 gap-12" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          {[
+            {
+              title: 'GATILHO: Escassez',
+              desc: 'Quando algo é limitado, ativa urgência no cérebro.',
+              example: '"Apenas 2 spots disponíveis este mês"',
+              effect: 'Conversão +18-25%',
+            },
+            {
+              title: 'GATILHO: Prova Social',
+              desc: 'Vemos que outros confiam, nós também confiamos.',
+              example: '"500+ empresas já usam"',
+              effect: 'Conversão +15-20%',
+            },
+            {
+              title: 'GATILHO: Urgência',
+              desc: 'Prazo curto força decisão rápida (sem análise paralisa).',
+              example: 'Countdown 24h para aplicar',
+              effect: 'Conversão +12-18%',
+            },
+            {
+              title: 'GATILHO: Autoridade',
+              desc: 'Certificações e prova de expertise aumentam confiança.',
+              example: 'Badges, depoimentos, certificados',
+              effect: 'Conversão +10-15%',
+            },
+          ].map((item, i) => (
+            <motion.div key={i} variants={itemVariants}>
+              <Card variant="glass">
+                <div className="mb-4">
+                  <h3 className="text-2xl font-bold font-serif text-orange-400 mb-2">{item.title}</h3>
+                  <p className="text-slate-300">{item.desc}</p>
+                </div>
+
+                <motion.div
+                  className="bg-slate-900/50 border border-orange-500/30 rounded-lg p-4 my-6"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  <p className="text-sm text-slate-300 italic">"{item.example}"</p>
+                </motion.div>
+
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                  <p className="text-sm font-bold text-green-400">{item.effect}</p>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          className="mt-20 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-8">
+            <span className="text-orange-400 font-bold">Combine esses 4 gatilhos</span> e você tem um site que <span className="text-orange-400 font-bold">vende de verdade</span>.
+          </p>
+          <p className="text-slate-400">Neurociência não é magia. É ciência aplicada. Funciona porque é assim que o cérebro humano REALMENTE funciona.</p>
+        </motion.div>
+      </section>
+
       {/* FAQ */}
       <section id="faq" className="max-w-4xl mx-auto px-6 py-32">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
