@@ -74,7 +74,7 @@ export default function Home() {
       description: 'Site de marca com foco em atmosfera e experiência de produto.'
     },
     {
-      name: 'Órbita',
+      name: 'Orbita',
       category: 'E-commerce / DTC',
       description: 'Loja enxuta, três produtos, foco total em decisão rápida.'
     }
