@@ -6,6 +6,7 @@ import { ChevronDown, Menu, X, Brain, Zap, BarChart3, Lock, ArrowRight } from 'l
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { EcommerceMockup, SaasMockup } from '@/components/PortfolioMockup';
 
 const NeuralNetwork = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -311,6 +312,69 @@ export default function Home() {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
+      </section>
+
+      {/* PORTFÓLIO */}
+      <section id="portfolio" className="max-w-7xl mx-auto px-6 py-32 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
+          <h2 className="text-6xl font-black font-serif mb-6">Exemplos de Design Neuromarketing</h2>
+          <p className="text-xl text-slate-400">Dois tipos de negócios. Psicologia científica aplicada.</p>
+        </motion.div>
+
+        <motion.div className="grid md:grid-cols-2 gap-16 items-center" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <motion.div variants={itemVariants}>
+            <h3 className="text-3xl font-bold font-serif mb-6 text-orange-400">E-commerce: Cosméticos Naturais</h3>
+            <div className="space-y-4 mb-8">
+              <div>
+                <p className="text-sm text-slate-400 uppercase tracking-wide mb-2">Gatilhos Aplicados</p>
+                <ul className="space-y-2 text-slate-300">
+                  <li>✓ <span className="text-orange-400">Escassez:</span> "Apenas 3 em estoque"</li>
+                  <li>✓ <span className="text-orange-400">Urgência:</span> Countdown 24h</li>
+                  <li>✓ <span className="text-orange-400">Prova Social:</span> "42 pessoas hoje"</li>
+                  <li>✓ <span className="text-orange-400">Autoridade:</span> Certificações</li>
+                </ul>
+              </div>
+              <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4 mt-6">
+                <p className="text-sm text-slate-300">
+                  <span className="text-orange-400 font-bold">Resultado esperado:</span> +25-35% conversão vs design genérico
+                </p>
+              </div>
+            </div>
+            <Badge variant="primary">Modelo STARTER</Badge>
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <EcommerceMockup />
+          </motion.div>
+        </motion.div>
+
+        {/* SaaS */}
+        <motion.div className="grid md:grid-cols-2 gap-16 items-center mt-32" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <motion.div variants={itemVariants} className="md:order-2">
+            <h3 className="text-3xl font-bold font-serif mb-6 text-orange-400">SaaS: Plataforma de BI</h3>
+            <div className="space-y-4 mb-8">
+              <div>
+                <p className="text-sm text-slate-400 uppercase tracking-wide mb-2">Gatilhos Aplicados</p>
+                <ul className="space-y-2 text-slate-300">
+                  <li>✓ <span className="text-orange-400">FOMO:</span> "500+ empresas usam"</li>
+                  <li>✓ <span className="text-orange-400">Reciprocidade:</span> "Trial 30 dias"</li>
+                  <li>✓ <span className="text-orange-400">Autoridade:</span> Logos clientes</li>
+                  <li>✓ <span className="text-orange-400">Urgência:</span> "Limite 10 trials"</li>
+                </ul>
+              </div>
+              <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4 mt-6">
+                <p className="text-sm text-slate-300">
+                  <span className="text-orange-400 font-bold">Resultado esperado:</span> +40-50% lead quality vs genérico
+                </p>
+              </div>
+            </div>
+            <Badge variant="primary">Modelo PROFESSIONAL</Badge>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="md:order-1">
+            <SaasMockup />
+          </motion.div>
         </motion.div>
       </section>
 
