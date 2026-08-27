@@ -1,8 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+
+const AnimatedNumber = ({ value, suffix = '' }) => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const end = parseInt(value);
+    const duration = 2000;
+    const increment = end / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [value]);
+  return <>{count}{suffix}</>;
+};
 
 export default function Home() {
   const [openFAQ, setOpenFAQ] = useState(null);
@@ -190,25 +212,25 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <p className="text-orange-500 font-bold mb-6 text-sm tracking-widest">NEUROCIÊNCIA APLICADA</p>
+        <motion.div className="max-w-4xl mx-auto text-center relative z-10" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <motion.p className="text-orange-500 font-bold mb-6 text-sm tracking-widest" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>NEUROCIÊNCIA APLICADA</motion.p>
 
-          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight">
+          <motion.h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }}>
             Onde Neurociência<br />Vira <span className="text-orange-500">Conversão</span>
-          </h1>
+          </motion.h1>
 
           <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             A Neuralabs cria sites prototados em torno de como o cérebro do seu cliente realmente decide — não o que parece bonito.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a href="#cta" className="px-8 py-4 bg-orange-500 hover:bg-orange-600 rounded-full font-bold text-lg transition transform hover:scale-105 shadow-lg shadow-orange-600/40">
+          <motion.div className="flex flex-col sm:flex-row gap-4 justify-center mb-16" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+            <motion.a href="#cta" className="px-8 py-4 bg-orange-500 hover:bg-orange-600 rounded-full font-bold text-lg transition transform hover:scale-105 shadow-lg shadow-orange-600/40" whileHover={{ scale: 1.1, boxShadow: '0 0 30px rgba(249, 115, 22, 0.6)' }} whileTap={{ scale: 0.95 }}>
               Fale Comigo →
-            </a>
-            <a href="#precos" className="px-8 py-4 border-2 border-white/30 hover:border-white rounded-full font-bold text-lg transition">
+            </motion.a>
+            <motion.a href="#precos" className="px-8 py-4 border-2 border-white/30 hover:border-white rounded-full font-bold text-lg transition" whileHover={{ scale: 1.05, borderColor: 'white' }} whileTap={{ scale: 0.95 }}>
               Ver Preços
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
 
           <p className="text-sm text-slate-400">
             95% das decisões de compra são inconscientes. Decodificamos isso.
@@ -223,14 +245,14 @@ export default function Home() {
           A maioria das empresas trata conversão como um problema de design ou de tráfego — quando, na verdade, é um problema de neurociência.
         </p>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <motion.div className="grid md:grid-cols-3 gap-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
           {problems.map((problem, i) => (
-            <div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-orange-500/50 transition transform hover:scale-105">
+            <motion.div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-orange-500/50 transition transform hover:scale-105" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1, duration: 0.5 }} viewport={{ once: true }} whileHover={{ scale: 1.05 }}>
               <h3 className="text-xl font-bold mb-3 text-orange-500">{problem.title}</h3>
               <p className="text-slate-300 leading-relaxed">{problem.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Solution Section */}
@@ -240,14 +262,14 @@ export default function Home() {
           Combinamos neurociência comportamental, dados quantitativos e inteligência artificial em um método prova de resultado.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <motion.div className="grid md:grid-cols-2 gap-8" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
           {solutions.map((solution, i) => (
-            <div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-orange-500/50 transition transform hover:scale-105">
+            <motion.div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-orange-500/50 transition transform hover:scale-105" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1, duration: 0.5 }} viewport={{ once: true }} whileHover={{ scale: 1.05 }}>
               <h3 className="text-xl font-bold mb-3 text-orange-500">{solution.title}</h3>
               <p className="text-slate-300">{solution.description}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Audiences */}
@@ -292,20 +314,20 @@ export default function Home() {
         <h2 className="text-4xl font-bold mb-4 text-center">Um processo claro, do diagnóstico à entrega</h2>
         <p className="text-center text-slate-400 mb-12">Como funciona</p>
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <motion.div className="grid md:grid-cols-4 gap-6" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
           {process.map((step, i) => (
-            <div key={i} className="relative">
+            <motion.div key={i} className="relative" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15, duration: 0.5 }} viewport={{ once: true }}>
               {i < process.length - 1 && (
-                <div className="hidden md:block absolute top-12 -right-4 w-8 h-px bg-gradient-to-r from-orange-600 to-transparent"></div>
+                <motion.div className="hidden md:block absolute top-12 -right-4 w-8 h-px bg-gradient-to-r from-orange-600 to-transparent" initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} transition={{ delay: i * 0.15 + 0.3, duration: 0.6 }} viewport={{ once: true }}></motion.div>
               )}
-              <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 hover:border-orange-500/50 transition">
+              <motion.div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 hover:border-orange-500/50 transition" whileHover={{ scale: 1.05, borderColor: '#f97316' }}>
                 <div className="text-3xl font-black text-orange-500 mb-3">{i + 1}</div>
                 <h3 className="font-bold mb-2">{step.title}</h3>
                 <p className="text-sm text-slate-300">{step.description}</p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* FAQ */}
