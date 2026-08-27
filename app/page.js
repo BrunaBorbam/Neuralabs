@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, Brain, ArrowRight, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
   const [openFAQ, setOpenFAQ] = useState(null);
@@ -111,86 +112,107 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-slate-950 text-white min-h-screen">
+    <div className="bg-slate-950 text-white min-h-screen overflow-hidden">
+      {/* Neural Network Background Animation */}
+      <div className="fixed inset-0 pointer-events-none opacity-30">
+        <svg className="w-full h-full" viewBox="0 0 1200 1200">
+          <defs>
+            <style>{`
+              @keyframes pulse-dot {
+                0%, 100% { r: 3; opacity: 0.8; }
+                50% { r: 6; opacity: 0.4; }
+              }
+              .neural-dot {
+                fill: #f59e0b;
+                animation: pulse-dot 3s infinite;
+              }
+              .neural-line {
+                stroke: #f59e0b;
+                stroke-width: 1;
+                opacity: 0.3;
+              }
+            `}</style>
+          </defs>
+
+          {/* Lines */}
+          <line x1="100" y1="100" x2="600" y2="400" className="neural-line" />
+          <line x1="600" y1="400" x2="900" y2="200" className="neural-line" />
+          <line x1="900" y1="200" x2="1000" y2="600" className="neural-line" />
+          <line x1="600" y1="400" x2="400" y2="800" className="neural-line" />
+          <line x1="400" y1="800" x2="800" y2="900" className="neural-line" />
+
+          {/* Dots */}
+          <circle cx="100" cy="100" className="neural-dot" style={{ animationDelay: '0s' }} />
+          <circle cx="600" cy="400" className="neural-dot" style={{ animationDelay: '0.5s' }} />
+          <circle cx="900" cy="200" className="neural-dot" style={{ animationDelay: '1s' }} />
+          <circle cx="1000" cy="600" className="neural-dot" style={{ animationDelay: '1.5s' }} />
+          <circle cx="400" cy="800" className="neural-dot" style={{ animationDelay: '2s' }} />
+          <circle cx="800" cy="900" className="neural-dot" style={{ animationDelay: '2.5s' }} />
+        </svg>
+      </div>
+
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-slate-900 bg-slate-950/95 backdrop-blur">
         <nav className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="text-2xl font-black">Neuralabs</div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+            <div className="text-xl font-black">NEURALABS</div>
+          </div>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#solucao" className="text-sm hover:text-blue-400 transition">Solução</a>
-            <a href="#diferenciais" className="text-sm hover:text-blue-400 transition">Diferenciais</a>
-            <a href="#trabalhos" className="text-sm hover:text-blue-400 transition">Trabalhos</a>
-            <a href="#processo" className="text-sm hover:text-blue-400 transition">Processo</a>
-            <a href="#faq" className="text-sm hover:text-blue-400 transition">FAQ</a>
-            <a href="#cta" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-semibold transition">
-              Solicitar diagnóstico
+            <a href="#problema" className="text-sm hover:text-orange-500 transition">Problema</a>
+            <a href="#solucao" className="text-sm hover:text-orange-500 transition">Solução</a>
+            <a href="#precos" className="text-sm hover:text-orange-500 transition">Preços</a>
+            <a href="#resultados" className="text-sm hover:text-orange-500 transition">Resultados</a>
+            <a href="#processo" className="text-sm hover:text-orange-500 transition">Processo</a>
+            <a href="#faq" className="text-sm hover:text-orange-500 transition">FAQ</a>
+            <a href="#cta" className="px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded-full text-sm font-bold transition transform hover:scale-105">
+              Vamos Começar
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden">
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </nav>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-slate-900 px-4 py-4 space-y-3">
-            <a href="#solucao" className="block text-sm py-2 hover:text-blue-400">Solução</a>
-            <a href="#diferenciais" className="block text-sm py-2 hover:text-blue-400">Diferenciais</a>
-            <a href="#trabalhos" className="block text-sm py-2 hover:text-blue-400">Trabalhos</a>
-            <a href="#processo" className="block text-sm py-2 hover:text-blue-400">Processo</a>
-            <a href="#faq" className="block text-sm py-2 hover:text-blue-400">FAQ</a>
-            <a href="#cta" className="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-semibold text-center">
-              Solicitar diagnóstico
+            <a href="#problema" className="block text-sm py-2 hover:text-orange-500">Problema</a>
+            <a href="#solucao" className="block text-sm py-2 hover:text-orange-500">Solução</a>
+            <a href="#faq" className="block text-sm py-2 hover:text-orange-500">FAQ</a>
+            <a href="#cta" className="block px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded-full text-sm font-bold text-center">
+              Vamos Começar
             </a>
           </div>
         )}
       </header>
 
       {/* Hero */}
-      <section id="top" className="min-h-screen flex items-center justify-center px-4 py-20 bg-gradient-to-b from-slate-950 via-slate-900/50 to-slate-950 relative">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
-        </div>
+      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <p className="text-orange-500 font-bold mb-6 text-sm tracking-widest">NEUROCIÊNCIA APLICADA</p>
 
-        <div className="max-w-4xl mx-auto relative z-10">
-          <div className="text-center mb-12">
-            <p className="text-blue-400 font-semibold mb-4">NEUROCIÊNCIA APLICADA A PERFORMANCE</p>
-            <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
-              Onde Neurociência<br /><span className="text-blue-400">Vira Conversão</span>
-            </h1>
-            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              95% das decisões de compra são inconscientes. A Neuralabs decodifica o cérebro do seu usuário e transforma comportamento em receita.
-            </p>
+          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight">
+            Onde Neurociência<br />Vira <span className="text-orange-500">Conversão</span>
+          </h1>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <a href="#cta" className="px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition transform hover:scale-105">
-                Solicitar diagnóstico gratuito
-              </a>
-              <a href="#solucao" className="px-8 py-4 border-2 border-blue-600 hover:bg-blue-600/10 rounded-lg font-bold transition">
-                Ver como funciona
-              </a>
-            </div>
+          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+            A Neuralabs cria sites prototados em torno de como o cérebro do seu cliente realmente decide — não o que parece bonito.
+          </p>
 
-            <div className="grid grid-cols-3 gap-8 mt-16 border-t border-slate-800 pt-8">
-              <div>
-                <p className="text-3xl font-black text-blue-400">100%</p>
-                <p className="text-sm text-slate-400 mt-2">método baseado em neurociência</p>
-              </div>
-              <div>
-                <p className="text-3xl font-black text-blue-400">30 dias</p>
-                <p className="text-sm text-slate-400 mt-2">de suporte incluso</p>
-              </div>
-              <div>
-                <p className="text-3xl font-black text-blue-400">24h</p>
-                <p className="text-sm text-slate-400 mt-2">tempo médio de resposta</p>
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <a href="#cta" className="px-8 py-4 bg-orange-500 hover:bg-orange-600 rounded-full font-bold text-lg transition transform hover:scale-105 shadow-lg shadow-orange-600/40">
+              Fale Comigo →
+            </a>
+            <a href="#precos" className="px-8 py-4 border-2 border-white/30 hover:border-white rounded-full font-bold text-lg transition">
+              Ver Preços
+            </a>
           </div>
+
+          <p className="text-sm text-slate-400">
+            95% das decisões de compra são inconscientes. Decodificamos isso.
+          </p>
         </div>
       </section>
 
@@ -203,8 +225,8 @@ export default function Home() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {problems.map((problem, i) => (
-            <div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-blue-600/50 transition">
-              <h3 className="text-xl font-bold mb-3 text-blue-400">{problem.title}</h3>
+            <div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-orange-500/50 transition transform hover:scale-105">
+              <h3 className="text-xl font-bold mb-3 text-orange-500">{problem.title}</h3>
               <p className="text-slate-300 leading-relaxed">{problem.description}</p>
             </div>
           ))}
@@ -218,19 +240,13 @@ export default function Home() {
           Combinamos neurociência comportamental, dados quantitativos e inteligência artificial em um método prova de resultado.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {solutions.map((solution, i) => (
-            <div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg">
-              <h3 className="text-xl font-bold mb-3 text-blue-400">{solution.title}</h3>
+            <div key={i} className="p-8 bg-slate-900/50 border border-slate-800 rounded-lg hover:border-orange-500/50 transition transform hover:scale-105">
+              <h3 className="text-xl font-bold mb-3 text-orange-500">{solution.title}</h3>
               <p className="text-slate-300">{solution.description}</p>
             </div>
           ))}
-        </div>
-
-        <div className="text-center">
-          <a href="#processo" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold">
-            Ver o processo completo <ArrowRight className="w-4 h-4" />
-          </a>
         </div>
       </section>
 
@@ -239,7 +255,7 @@ export default function Home() {
         <h3 className="text-center text-slate-400 text-sm mb-8">Feito para quem vende online</h3>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
           {audiences.map((audience, i) => (
-            <div key={i} className="text-center py-4 px-3 bg-slate-900/50 rounded-lg border border-slate-800">
+            <div key={i} className="text-center py-4 px-3 bg-slate-900/50 rounded-lg border border-slate-800 hover:border-orange-500/50 transition">
               <p className="text-sm font-medium">{audience}</p>
             </div>
           ))}
@@ -247,69 +263,27 @@ export default function Home() {
       </section>
 
       {/* Portfolio */}
-      <section id="trabalhos" className="max-w-6xl mx-auto px-4 py-20">
+      <section id="resultados" className="max-w-6xl mx-auto px-4 py-20">
         <h2 className="text-4xl font-bold mb-4 text-center">Trabalhos</h2>
         <p className="text-center text-slate-400 mb-12 max-w-2xl mx-auto">
-          Conceitos que mostram o método na prática. Como somos uma agência nova, estes são projetos de demonstração — não clientes reais.
+          Conceitos que mostram o método na prática. Como somos uma agência nova, estes são projetos de demonstração.
         </p>
 
         <div className="grid md:grid-cols-2 gap-8">
           {portfolio.map((work, i) => (
-            <a key={i} href={`/trabalhos/${work.name.toLowerCase()}`} className="group">
-              <div className="bg-slate-900 rounded-lg overflow-hidden border border-slate-800 hover:border-blue-600 transition">
-                <div className="bg-gradient-to-br from-blue-600/20 to-slate-900 h-48 flex items-center justify-center">
-                  <div className="text-center">
-                    <h3 className="text-2xl font-bold">{work.name}</h3>
-                  </div>
+            <Link key={i} href={`/trabalhos/${work.name.toLowerCase()}`}>
+              <div className="group bg-slate-900 rounded-lg overflow-hidden border border-slate-800 hover:border-orange-500 transition cursor-pointer transform hover:scale-105">
+                <div className="bg-gradient-to-br from-orange-600/20 to-slate-900 h-48 flex items-center justify-center">
+                  <h3 className="text-3xl font-bold text-orange-500">{work.name}</h3>
                 </div>
                 <div className="p-6">
-                  <p className="text-blue-400 text-sm font-semibold mb-2">{work.category}</p>
+                  <p className="text-orange-500 text-sm font-semibold mb-2">{work.category}</p>
                   <h4 className="text-lg font-bold mb-2">{work.name}</h4>
                   <p className="text-slate-300">{work.description}</p>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
-        </div>
-      </section>
-
-      {/* Diferenciais */}
-      <section id="diferenciais" className="max-w-6xl mx-auto px-4 py-20">
-        <h2 className="text-4xl font-bold mb-4 text-center">Direto ao ponto, rigoroso no método</h2>
-
-        <div className="grid md:grid-cols-2 gap-12 mb-12 mt-12">
-          <div className="space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="text-3xl font-black text-blue-400">4</div>
-              <div>
-                <p className="font-semibold">pilares no Método Neuralabs</p>
-                <p className="text-slate-400 text-sm">Diagnóstico, mapeamento, design e suporte</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="text-3xl font-black text-blue-400">30</div>
-              <div>
-                <p className="font-semibold">dias de suporte incluso em cada entrega</p>
-                <p className="text-slate-400 text-sm">Ajustes, refinamentos e treinamento</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="text-3xl font-black text-blue-400">24h</div>
-              <div>
-                <p className="font-semibold">tempo médio de primeira resposta</p>
-                <p className="text-slate-400 text-sm">Comunicação rápida e assíncrona</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-8">
-            <p className="text-slate-300 mb-4">
-              Somos uma agência nova — e isso trabalha a seu favor. Sem fila de espera, sem conta gerenciada por junior.
-            </p>
-            <p className="text-slate-300">
-              <span className="font-bold text-blue-400">Turma de fundação</span> com condição especial e vagas limitadas por mês.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -322,10 +296,10 @@ export default function Home() {
           {process.map((step, i) => (
             <div key={i} className="relative">
               {i < process.length - 1 && (
-                <div className="hidden md:block absolute top-12 right-0 w-full h-px bg-gradient-to-r from-blue-600 to-transparent" style={{left: '100%', width: 'calc(100% + 1.5rem)'}}></div>
+                <div className="hidden md:block absolute top-12 -right-4 w-8 h-px bg-gradient-to-r from-orange-600 to-transparent"></div>
               )}
-              <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 relative z-10">
-                <div className="text-3xl font-black text-blue-400 mb-2">{i + 1}</div>
+              <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6 hover:border-orange-500/50 transition">
+                <div className="text-3xl font-black text-orange-500 mb-3">{i + 1}</div>
                 <h3 className="font-bold mb-2">{step.title}</h3>
                 <p className="text-sm text-slate-300">{step.description}</p>
               </div>
@@ -344,8 +318,8 @@ export default function Home() {
                 onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
                 className="w-full p-6 bg-slate-900 hover:bg-slate-800/50 flex justify-between items-center transition text-left"
               >
-                <span className="font-semibold text-base">{faq.q}</span>
-                <ChevronDown className={`w-5 h-5 text-blue-400 transition flex-shrink-0 ${openFAQ === i ? 'rotate-180' : ''}`} />
+                <span className="font-semibold">{faq.q}</span>
+                <ChevronDown className={`w-5 h-5 text-orange-500 transition ${openFAQ === i ? 'rotate-180' : ''}`} />
               </button>
               {openFAQ === i && (
                 <div className="p-6 bg-slate-950 border-t border-slate-800">
@@ -359,7 +333,7 @@ export default function Home() {
 
       {/* CTA Form */}
       <section id="cta" className="max-w-2xl mx-auto px-4 py-20">
-        <div className="bg-gradient-to-br from-blue-900/30 to-slate-900 border-2 border-blue-600 rounded-lg p-8">
+        <div className="bg-gradient-to-br from-orange-600/20 to-slate-900 border-2 border-orange-600 rounded-lg p-8">
           <h2 className="text-3xl font-bold mb-2">Pronto para transformar comportamento em receita?</h2>
           <p className="text-slate-300 mb-8">
             Preencha os campos abaixo e nosso time entra em contato pelo WhatsApp ou e-mail com seu diagnóstico neurocognitivo.
@@ -373,7 +347,7 @@ export default function Home() {
                 placeholder="Seu nome"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-blue-600 focus:outline-none text-white"
+                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-orange-600 focus:outline-none text-white"
                 required
               />
             </div>
@@ -385,7 +359,7 @@ export default function Home() {
                 placeholder="(11) 91234-5678"
                 value={formData.whatsapp}
                 onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-blue-600 focus:outline-none text-white"
+                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-orange-600 focus:outline-none text-white"
                 required
               />
             </div>
@@ -397,7 +371,7 @@ export default function Home() {
                 placeholder="voce@empresa.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-blue-600 focus:outline-none text-white"
+                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-orange-600 focus:outline-none text-white"
                 required
               />
             </div>
@@ -408,7 +382,7 @@ export default function Home() {
                 placeholder="Ex: tenho uma loja de suplementos e quero aumentar a conversão do checkout"
                 value={formData.business}
                 onChange={(e) => setFormData({ ...formData, business: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-blue-600 focus:outline-none text-white resize-none"
+                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:border-orange-600 focus:outline-none text-white resize-none"
                 rows="3"
               ></textarea>
             </div>
@@ -416,13 +390,13 @@ export default function Home() {
             <label className="flex items-start gap-3">
               <input type="checkbox" required className="mt-1" />
               <span className="text-sm text-slate-300">
-                Concordo com o uso dos meus dados para contato, conforme a <a href="/politica-de-privacidade" className="text-blue-400 hover:underline">Política de Privacidade</a>
+                Concordo com o uso dos meus dados para contato, conforme a <a href="/politica-de-privacidade" className="text-orange-500 hover:underline">Política de Privacidade</a>
               </span>
             </label>
 
             <button
               type="submit"
-              className="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold text-lg transition transform hover:scale-105"
+              className="w-full px-6 py-4 bg-orange-600 hover:bg-orange-700 rounded-lg font-bold text-lg transition transform hover:scale-105"
             >
               Solicitar diagnóstico gratuito
             </button>
@@ -439,29 +413,28 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-bold mb-4">Neuralabs</h3>
+              <h3 className="font-bold mb-4 flex items-center gap-2"><div className="w-2 h-2 bg-orange-500 rounded-full"></div>Neuralabs</h3>
               <p className="text-slate-400 text-sm">Neurociência comportamental aplicada a produtos digitais. Diagnóstico, gatilhos cognitivos e design que converte.</p>
             </div>
             <div>
               <h4 className="font-bold mb-4">Empresa</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#solucao" className="text-slate-400 hover:text-blue-400 transition">Solução</a></li>
-                <li><a href="#diferenciais" className="text-slate-400 hover:text-blue-400 transition">Diferenciais</a></li>
-                <li><a href="#processo" className="text-slate-400 hover:text-blue-400 transition">Processo</a></li>
+                <li><a href="#solucao" className="text-slate-400 hover:text-orange-500 transition">Solução</a></li>
+                <li><a href="#processo" className="text-slate-400 hover:text-orange-500 transition">Processo</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Suporte</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#faq" className="text-slate-400 hover:text-blue-400 transition">FAQ</a></li>
-                <li><a href="#cta" className="text-slate-400 hover:text-blue-400 transition">Contato</a></li>
+                <li><a href="#faq" className="text-slate-400 hover:text-orange-500 transition">FAQ</a></li>
+                <li><a href="#cta" className="text-slate-400 hover:text-orange-500 transition">Contato</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="/politica-de-privacidade" className="text-slate-400 hover:text-blue-400 transition">Política de Privacidade</a></li>
-                <li><a href="/termos-de-uso" className="text-slate-400 hover:text-blue-400 transition">Termos de Uso</a></li>
+                <li><a href="/politica-de-privacidade" className="text-slate-400 hover:text-orange-500 transition">Política de Privacidade</a></li>
+                <li><a href="/termos-de-uso" className="text-slate-400 hover:text-orange-500 transition">Termos de Uso</a></li>
               </ul>
             </div>
           </div>
