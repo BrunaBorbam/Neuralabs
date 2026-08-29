@@ -206,7 +206,7 @@ const LeadForm = () => {
 
       {error && <motion.p className="text-red-400 text-sm font-medium" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{error}</motion.p>}
 
-      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!formData.consent && formData.name && formData.email}>
+      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!formData.consent || !formData.name || !formData.email}>
         {submitted ? '✓ Diagnóstico chegando em 24h' : 'Receber Diagnóstico Grátis'}
       </Button>
     </form>
