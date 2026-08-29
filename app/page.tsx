@@ -758,62 +758,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PORTFÓLIO VISUAL */}
-        <section id="portfolio" className="portfolio">
-          <h2 className="section-title">Portfólio: Sites que Vendem</h2>
-          <p style={{ maxWidth: '800px', marginLeft: 'auto', marginRight: 'auto', textAlign: 'center', fontSize: '1.1rem', marginBottom: 'var(--spacing-2xl)', color: 'var(--color-text)' }}>
-            Desenvolvidos por <strong>Bruna Borba</strong>, especialista em Neuromarketing. Cada projeto utiliza psicologia do consumidor para aumentar conversão.
-          </p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--spacing-2xl)', maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto' }}>
-            {/* Case 1 */}
-            <div style={{ background: 'var(--color-light)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', border: '1px solid var(--color-border)' }}>
-              <div style={{ background: 'linear-gradient(135deg, #FFE5D9, #FFF4E6)', padding: 'var(--spacing-2xl)', textAlign: 'center' }}>
-                <div style={{ fontSize: '3rem', marginBottom: 'var(--spacing-md)' }}>🛍️</div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--color-text)', margin: '0 0 var(--spacing-sm) 0' }}>E-commerce Cosméticos</h3>
-                <p style={{ color: '#666', margin: '0' }}>Sérum Anti-Idade</p>
-              </div>
-              <div style={{ padding: 'var(--spacing-lg)' }}>
-                <div style={{ marginBottom: 'var(--spacing-md)' }}>
-                  <strong style={{ color: 'var(--color-primary)', fontSize: '1.3rem' }}>+28% Conversão</strong>
-                  <p style={{ margin: 'var(--spacing-sm) 0 0 0', color: '#666', fontSize: '0.9rem' }}>em 90 dias</p>
-                </div>
-                <ul style={{ listStyle: 'none', padding: '0', margin: '0' }}>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Urgência ("3 em estoque")</li>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Prova Social (892 reviews)</li>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Preço Estratégico (R$89 vs R$149)</li>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Trust Signals (garantia + frete)</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Case 2 */}
-            <div style={{ background: 'var(--color-light)', borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', border: '1px solid var(--color-border)' }}>
-              <div style={{ background: 'linear-gradient(135deg, #E0E7FF, #F0F4FF)', padding: 'var(--spacing-2xl)', textAlign: 'center' }}>
-                <div style={{ fontSize: '3rem', marginBottom: 'var(--spacing-md)' }}>📊</div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--color-text)', margin: '0 0 var(--spacing-sm) 0' }}>SaaS Analytics</h3>
-                <p style={{ color: '#666', margin: '0' }}>Dashboard Inteligente</p>
-              </div>
-              <div style={{ padding: 'var(--spacing-lg)' }}>
-                <div style={{ marginBottom: 'var(--spacing-md)' }}>
-                  <strong style={{ color: 'var(--color-primary)', fontSize: '1.3rem' }}>+34% Conversão</strong>
-                  <p style={{ margin: 'var(--spacing-sm) 0 0 0', color: '#666', fontSize: '0.9rem' }}>4.2x ROI</p>
-                </div>
-                <ul style={{ listStyle: 'none', padding: '0', margin: '0' }}>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Design Intuitivo</li>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Métricas de Impacto Visíveis</li>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Trial 14 Dias (sem cartão)</li>
-                  <li style={{ padding: 'var(--spacing-sm) 0', color: '#666', fontSize: '0.95rem' }}>✓ Psicologia Decisória</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: 'var(--spacing-2xl)', padding: 'var(--spacing-2xl)', background: '#FFF4E6', borderRadius: 'var(--radius-lg)' }}>
-            <p style={{ margin: '0', color: 'var(--color-text)', fontSize: '1.1rem' }}>Quer um resultado como esse para seu negócio?</p>
-            <a href={`https://wa.me/5551981234567`} className="btn-primary" style={{ marginTop: 'var(--spacing-lg)' }} onClick={() => trackButtonClick('portfolio_cta')}>Conversar sobre seu projeto</a>
-          </div>
-        </section>
 
         {/* PREÇO */}
         <section id="preco" className="pricing">
