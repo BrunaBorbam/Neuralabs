@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import { EcommerceMockup, SaasMockup } from '@/components/PortfolioMockup';
 import { trackFormSubmit, trackButtonClick, trackEvent, initScrollTracking, trackPageDuration } from '@/lib/ga';
 
 export default function Home() {
@@ -504,6 +505,50 @@ export default function Home() {
           margin: 0;
         }
 
+        /* PORTFOLIO */
+        .portfolio {
+          background: var(--color-light);
+          padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .portfolio .section-title {
+          margin-bottom: var(--spacing-xl);
+        }
+
+        .portfolio-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: var(--spacing-2xl);
+          max-width: 1200px;
+          margin: 0 auto;
+          align-items: center;
+        }
+
+        .portfolio-text h3 {
+          font-family: var(--font-display);
+          font-size: 2rem;
+          font-weight: 700;
+          color: var(--color-text);
+          margin-bottom: var(--spacing-lg);
+        }
+
+        .portfolio-text p {
+          font-size: 1.1rem;
+          line-height: 1.8;
+          color: var(--color-text);
+          margin-bottom: var(--spacing-md);
+        }
+
+        .portfolio-text strong {
+          color: var(--color-primary);
+        }
+
+        .mockups-container {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--spacing-2xl);
+        }
+
         /* CTA FINAL */
         .final-cta {
           background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
@@ -614,6 +659,7 @@ export default function Home() {
             <ul className="nav-links">
               <li><a href="#sobre">Sobre</a></li>
               <li><a href="#metodologia">Metodologia</a></li>
+              <li><a href="#portfolio">Portfólio</a></li>
               <li><a href="#preco">Preço</a></li>
               <li><a href="#dashboard">Dashboard</a></li>
             </ul>
@@ -709,6 +755,26 @@ export default function Home() {
               <div className="method-icon">🤖</div>
               <h3>IA Customizada</h3>
               <p>Agentes de IA automatizando busca de leads, suporte ao cliente, análise de dados. Você cresce sem dobrar o trabalho.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* PORTFÓLIO */}
+        <section id="portfolio" className="portfolio">
+          <h2 className="section-title">Exemplos de Trabalho: Neuromarketing em Ação</h2>
+
+          <div className="portfolio-grid">
+            <div className="portfolio-text">
+              <h3>Sites que Vendem</h3>
+              <p>Abaixo estão <strong>dois exemplos reais</strong> de como aplico neuromarketing nos sites que desenvolvimento:</p>
+              <p><strong>✓ E-commerce:</strong> Sérum de beleza com urgência ("3 em estoque"), prova social (892 reviews), preço estratégico (R$89 vs R$149) e trust signals. <strong>Resultado: +28% conversão</strong></p>
+              <p><strong>✓ SaaS B2B:</strong> Dashboard intuitivo que foca em resultados (conversões +34%, ROI 4.2x), design focado em psicologia decisória, trial sem cartão. <strong>Resultado: +34% conversão</strong></p>
+              <p style={{ marginTop: 'var(--spacing-lg)', fontSize: '1.1rem', color: 'var(--color-primary)', fontWeight: '700' }}>Clique em qualquer mockup para ver a experiência completa →</p>
+            </div>
+
+            <div className="mockups-container">
+              <div><EcommerceMockup /></div>
+              <div><SaasMockup /></div>
             </div>
           </div>
         </section>
