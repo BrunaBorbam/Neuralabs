@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { EcommerceMockup, SaasMockup } from '@/components/PortfolioMockup';
-import { trackFormSubmit, trackButtonClick, trackEvent } from '@/lib/ga';
+import { trackFormSubmit, trackButtonClick, trackEvent, initScrollTracking, trackPageDuration } from '@/lib/ga';
 
 const NeuralNetwork = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -221,6 +221,11 @@ const LeadForm = () => {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+
+  useEffect(() => {
+    initScrollTracking();
+    trackPageDuration();
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
