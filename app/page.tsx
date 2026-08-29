@@ -653,9 +653,9 @@ export default function Home() {
       `}</style>
 
       <div className="min-h-screen">
-        {/* TEST BANNER - Remove after testing */}
+        {/* BRUNA BORBA PORTFOLIO v2.0 - 29/08/2026 18:16 */}
         <div style={{ background: '#FF6B35', color: 'white', padding: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
-          🔧 TESTE VERCEL - Se vê isso, o deploy funcionou! (29/08 17:50)
+          ✅ PORTFOLIO BRUNA BORBA AO VIVO! (Cosméticos +32% | SaaS -23% | Consultoria +156%)
         </div>
 
         {/* HEADER */}
