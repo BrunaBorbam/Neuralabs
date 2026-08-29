@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { EcommerceMockup, SaasMockup } from '@/components/PortfolioMockup';
+import { trackFormSubmit, trackButtonClick, trackEvent } from '@/lib/ga';
 
 const NeuralNetwork = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -132,9 +133,12 @@ const LeadForm = () => {
         }),
       }).catch(() => {});
 
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'lead_form_submit', { name: formData.name });
-      }
+      trackFormSubmit('lead_form', {
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        phone: formData.phone,
+      });
 
       setSubmitted(true);
       setFormData({ name: '', email: '', company: '', phone: '', consent: false });
@@ -143,6 +147,7 @@ const LeadForm = () => {
     } catch (error) {
       console.error('Error:', error);
       setError('Houve um erro ao enviar. Tente novamente.');
+      trackEvent({ event: 'error', error_message: 'Form submission failed' });
     }
   };
 
@@ -206,7 +211,7 @@ const LeadForm = () => {
 
       {error && <motion.p className="text-red-400 text-sm font-medium" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{error}</motion.p>}
 
-      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!formData.consent && formData.name && formData.email}>
+      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!formData.consent || !formData.name || !formData.email}>
         {submitted ? '✓ Diagnóstico chegando em 24h' : 'Receber Diagnóstico Grátis'}
       </Button>
     </form>

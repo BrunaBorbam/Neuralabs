@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import { CookieConsent } from "@/components/CookieConsent";
+import { PWAInstaller } from "@/components/PWAInstaller";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,6 +45,12 @@ export const metadata: Metadata = {
     title: "Neuralabs | Onde Neurociência Vira Conversão",
     description: "Websites premium que vendem. Design 3D + neuromarketing + SEO.",
   },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Neuralabs",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -70,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-[#0A0E27]">
         {children}
         <CookieConsent />
+        <PWAInstaller />
       </body>
     </html>
   );
