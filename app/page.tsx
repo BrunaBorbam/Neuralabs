@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { trackFormSubmit, trackButtonClick, trackEvent, initScrollTracking, trackPageDuration } from '@/lib/ga';
 
 export default function Home() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
-  const whatsappNumber = '5551981234567'; // Bruna's WhatsApp number
+  const whatsappNumber = '5551981234567';
 
   useEffect(() => {
     initScrollTracking();
@@ -66,7 +67,7 @@ export default function Home() {
         }
 
         html {
-          scroll-behavior: smooth;
+          scroll-behavior: auto;
         }
 
         body {
@@ -198,7 +199,7 @@ export default function Home() {
           display: inline-flex;
           align-items: center;
           gap: var(--spacing-sm);
-          transition: all 0.3s ease;
+          transition: background-color 0.2s ease, color 0.2s ease;
           border: none;
           cursor: pointer;
         }
@@ -209,8 +210,7 @@ export default function Home() {
         }
 
         .btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(255, 107, 53, 0.3);
+          background: #E55A27;
         }
 
         .btn-secondary {
@@ -332,13 +332,12 @@ export default function Home() {
           padding: var(--spacing-xl);
           border-radius: var(--radius-lg);
           text-align: center;
-          transition: all 0.3s ease;
+          transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
         .method-card:hover {
           background: rgba(255, 107, 53, 0.1);
           border-color: var(--color-primary);
-          transform: translateY(-5px);
         }
 
         .method-icon {
@@ -539,14 +538,13 @@ export default function Home() {
           display: inline-flex;
           align-items: center;
           gap: var(--spacing-md);
-          transition: all 0.3s ease;
+          transition: background-color 0.2s ease;
           border: none;
           cursor: pointer;
         }
 
         .whatsapp-btn:hover {
-          transform: scale(1.05);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          background: #F0F0F0;
         }
 
         /* FOOTER */
@@ -626,10 +624,10 @@ export default function Home() {
         {/* HERO */}
         <section className="hero">
           <div className="hero-content">
-            <div className="urgency-badge">⏰ Apenas 3 vagas disponíveis este mês</div>
-            <h1>Websites que <span className="highlight">aumentam conversão</span> em 20-40%</h1>
-            <p>Eu sou Bruna Borba. Criei Neuralabs para resolver um problema: a maioria dos sites não vende porque ignora como o cérebro realmente funciona.</p>
-            <p>Com <strong>Neuromarketing + Design Premium + IA Customizado</strong>, transformo sua presença online em máquina de gerar leads.</p>
+            <div className="urgency-badge">🧠 Neuromarketing com Garantia de Resultado</div>
+            <h1>Seu site não vende porque <span className="highlight">ignora o cérebro</span> do cliente</h1>
+            <p>Eu sou Bruna Borba. Descobri que 95% das decisões de compra são inconscientes. A maioria dos sites? Ignora isso completamente.</p>
+            <p>Com <strong>Neuromarketing Científico + Design Premium + IA Agents</strong>, garanto aumento de 10-20% em conversão. <strong>Ou devolvo 50% do valor.</strong></p>
 
             <div className="hero-cta">
               <a href={`https://wa.me/${whatsappNumber}`} className="btn-primary" onClick={() => trackButtonClick('whatsapp_hero_primary')}>
@@ -641,8 +639,8 @@ export default function Home() {
 
           <div className="hero-image">
             <div className="profile-circle">
-              <div className="profile-image" style={{ background: 'linear-gradient(135deg, #FF6B35, #F4A261)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '2rem' }}>
-                👩‍💼 Bruna
+              <div className="profile-image" style={{ background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem', fontWeight: 'bold' }}>
+                B
               </div>
             </div>
           </div>
@@ -717,48 +715,51 @@ export default function Home() {
 
         {/* PREÇO */}
         <section id="preco" className="pricing">
-          <h2 className="section-title">Investimento e Vagas</h2>
+          <h2 className="section-title">Investimento com Garantia</h2>
 
           <div className="pricing-content">
             <div className="price-box" style={{ borderColor: 'var(--color-primary)', borderWidth: '3px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                <h3 style={{ margin: '0' }}>R$ 5.000</h3>
-                <span style={{ background: 'var(--color-primary)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', fontWeight: '700' }}>RECOMENDADO</span>
+                <h3 style={{ margin: '0' }}>R$ 8-15k</h3>
+                <span style={{ background: 'var(--color-primary)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', fontWeight: '700' }}>ÚNICO MODELO</span>
               </div>
-              <p style={{ color: 'var(--color-text)', marginBottom: 'var(--spacing-lg)' }}><strong>Modelo Recorrente</strong> - Mantença contínua + otimização com IA agents</p>
+              <p style={{ color: 'var(--color-text)', marginBottom: 'var(--spacing-lg)' }}><strong>/mês</strong> - Neuromarketing + Otimização Contínua + Garantia</p>
+              <div style={{ background: '#FFF4E6', padding: 'var(--spacing-md)', borderRadius: 'var(--radius-md)', marginBottom: 'var(--spacing-lg)', borderLeft: '4px solid var(--color-primary)' }}>
+                <p style={{ color: '#D97706', margin: '0', fontWeight: '700' }}>✅ Garanto 10-20% aumento de conversão ou devolvo 50% do valor</p>
+              </div>
               <ul>
-                <li>Website personalizado com design premium</li>
-                <li>Neuromarketing integrado (conversão otimizada)</li>
-                <li>Formulários com IA buscando leads 24/7</li>
+                <li>Website com Neuromarketing científico</li>
+                <li>Design premium + psicologia das cores</li>
                 <li>Dashboard próprio (você controla tudo)</li>
+                <li>A/B testing e otimização mensal</li>
+                <li>IA agents buscando leads 24/7</li>
                 <li>Chat integrado no dashboard</li>
-                <li>Suporte mensal via WhatsApp</li>
-                <li>Otimização contínua + A/B testing</li>
-                <li>Relatórios mensais de performance e leads</li>
+                <li>Relatórios mensais com métricas reais</li>
+                <li>Suporte via WhatsApp (incluso)</li>
               </ul>
-              <a href={`https://wa.me/${whatsappNumber}`} className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 'var(--spacing-lg)' }} onClick={() => trackButtonClick('whatsapp_pricing')}>Começar Agora</a>
+              <a href={`https://wa.me/${whatsappNumber}`} className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 'var(--spacing-lg)' }} onClick={() => trackButtonClick('whatsapp_pricing')}>Conversar com Bruna</a>
             </div>
 
             <div className="vagas-info">
-              <h3>⏰ Vagas Limitadas</h3>
+              <h3>⏰ Vagas Limitadas (Meses Próximos)</h3>
 
               <div className="vaga-item">
-                <strong>Setembro: 1 vaga restante</strong>
-                <p>Prioridade para projetos de e-commerce e serviços B2C</p>
+                <strong>Setembro 2026: 1 vaga</strong>
+                <p>Prioridade: e-commerce e SaaS</p>
               </div>
 
               <div className="vaga-item">
-                <strong>Outubro: 3 vagas abertas</strong>
-                <p>Aceitando qualquer tipo de negócio</p>
+                <strong>Outubro 2026: 3 vagas</strong>
+                <p>Qualquer segmento (e-commerce, SaaS, serviços, B2B)</p>
               </div>
 
               <div className="vaga-item">
-                <strong style={{ color: 'var(--color-text)' }}>Opção Alternativa</strong>
-                <p><strong>R$ 25.000</strong> - Projeto web único com 30 dias de suporte (sem recorrência)</p>
+                <strong>Especialidades da Neuralabs</strong>
+                <p>E-commerce • SaaS B2B • Negócios de Serviços • Local Services</p>
               </div>
 
               <div style={{ background: '#FFF4E6', padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-md)', marginTop: 'var(--spacing-lg)' }}>
-                <p style={{ color: '#D97706', margin: '0' }}><strong>💡 Early Adopter?</strong> Primeiros 5 clientes ganham 15% de desconto permanente no modelo recorrente.</p>
+                <p style={{ color: '#D97706', margin: '0' }}><strong>💡 Por que só R$8-15k/mês?</strong> Queremos clientes que realmente querem crescer. Ninguém que não acredita em ciência. Logo você vai entender por que funciona.</p>
               </div>
             </div>
           </div>
