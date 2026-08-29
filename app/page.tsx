@@ -651,6 +651,11 @@ export default function Home() {
       `}</style>
 
       <div className="min-h-screen">
+        {/* TEST BANNER - Remove after testing */}
+        <div style={{ background: '#FF6B35', color: 'white', padding: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+          🔧 TESTE VERCEL - Se vê isso, o deploy funcionou! (29/08 17:50)
+        </div>
+
         {/* HEADER */}
         <header>
           <nav>
