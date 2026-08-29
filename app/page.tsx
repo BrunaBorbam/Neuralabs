@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { trackFormSubmit, trackButtonClick, trackEvent, initScrollTracking, trackPageDuration } from '@/lib/ga';
+import { PortfolioSection } from '@/components/PortfolioSection';
 
 export default function Home() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
@@ -504,6 +505,50 @@ export default function Home() {
           margin: 0;
         }
 
+        /* PORTFOLIO */
+        .portfolio {
+          background: var(--color-light);
+          padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .portfolio .section-title {
+          margin-bottom: var(--spacing-xl);
+        }
+
+        .portfolio-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: var(--spacing-2xl);
+          max-width: 1200px;
+          margin: 0 auto;
+          align-items: center;
+        }
+
+        .portfolio-text h3 {
+          font-family: var(--font-display);
+          font-size: 2rem;
+          font-weight: 700;
+          color: var(--color-text);
+          margin-bottom: var(--spacing-lg);
+        }
+
+        .portfolio-text p {
+          font-size: 1.1rem;
+          line-height: 1.8;
+          color: var(--color-text);
+          margin-bottom: var(--spacing-md);
+        }
+
+        .portfolio-text strong {
+          color: var(--color-primary);
+        }
+
+        .mockups-container {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: var(--spacing-2xl);
+        }
+
         /* CTA FINAL */
         .final-cta {
           background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
@@ -607,6 +652,11 @@ export default function Home() {
       `}</style>
 
       <div className="min-h-screen">
+        {/* TEST BANNER - Remove after testing */}
+        <div style={{ background: '#FF6B35', color: 'white', padding: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+          🔧 TESTE VERCEL - Se vê isso, o deploy funcionou! (29/08 17:50)
+        </div>
+
         {/* HEADER */}
         <header>
           <nav>
@@ -614,6 +664,7 @@ export default function Home() {
             <ul className="nav-links">
               <li><a href="#sobre">Sobre</a></li>
               <li><a href="#metodologia">Metodologia</a></li>
+              <li><a href="#portfolio">Portfólio</a></li>
               <li><a href="#preco">Preço</a></li>
               <li><a href="#dashboard">Dashboard</a></li>
             </ul>
@@ -712,6 +763,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <PortfolioSection />
 
         {/* PREÇO */}
         <section id="preco" className="pricing">
