@@ -42,7 +42,7 @@ const nextConfig = {
           },
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, stale-while-revalidate=31536000'
+            value: 'public, max-age=3600, stale-while-revalidate=86400'
           },
           {
             key: 'Content-Encoding',
