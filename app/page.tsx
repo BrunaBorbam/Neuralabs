@@ -720,20 +720,23 @@ export default function Home() {
           <h2 className="section-title">Investimento e Vagas</h2>
 
           <div className="pricing-content">
-            <div className="price-box">
-              <h3>R$ 25.000</h3>
-              <p style={{ color: 'var(--color-text)', marginBottom: 'var(--spacing-lg)' }}>Projeto Web Completo + 30 dias de suporte</p>
+            <div className="price-box" style={{ borderColor: 'var(--color-primary)', borderWidth: '3px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
+                <h3 style={{ margin: '0' }}>R$ 5.000</h3>
+                <span style={{ background: 'var(--color-primary)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', fontWeight: '700' }}>RECOMENDADO</span>
+              </div>
+              <p style={{ color: 'var(--color-text)', marginBottom: 'var(--spacing-lg)' }}><strong>Modelo Recorrente</strong> - Mantença contínua + otimização com IA agents</p>
               <ul>
                 <li>Website personalizado com design premium</li>
                 <li>Neuromarketing integrado (conversão otimizada)</li>
-                <li>Formulários com IA buscando leads</li>
+                <li>Formulários com IA buscando leads 24/7</li>
                 <li>Dashboard próprio (você controla tudo)</li>
                 <li>Chat integrado no dashboard</li>
-                <li>30 dias de suporte via WhatsApp</li>
-                <li>Otimização SEO e performance</li>
-                <li>Garantia: aumento de 20% em leads ou devolvo 50% do valor</li>
+                <li>Suporte mensal via WhatsApp</li>
+                <li>Otimização contínua + A/B testing</li>
+                <li>Relatórios mensais de performance e leads</li>
               </ul>
-              <a href={`https://wa.me/${whatsappNumber}`} className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 'var(--spacing-lg)' }} onClick={() => trackButtonClick('whatsapp_pricing')}>Contratar Agora</a>
+              <a href={`https://wa.me/${whatsappNumber}`} className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 'var(--spacing-lg)' }} onClick={() => trackButtonClick('whatsapp_pricing')}>Começar Agora</a>
             </div>
 
             <div className="vagas-info">
@@ -750,8 +753,8 @@ export default function Home() {
               </div>
 
               <div className="vaga-item">
-                <strong>Modelo Recorrente</strong>
-                <p><strong>R$ 5.000/mês</strong> - Mantença contínua + otimização com IA agents</p>
+                <strong style={{ color: 'var(--color-text)' }}>Opção Alternativa</strong>
+                <p><strong>R$ 25.000</strong> - Projeto web único com 30 dias de suporte (sem recorrência)</p>
               </div>
 
               <div style={{ background: '#FFF4E6', padding: 'var(--spacing-lg)', borderRadius: 'var(--radius-md)', marginTop: 'var(--spacing-lg)' }}>
