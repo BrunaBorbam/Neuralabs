@@ -7,6 +7,7 @@ import { trackFormSubmit, trackButtonClick, trackEvent, initScrollTracking, trac
 
 // v2.0: Portfolio with Bruna Borba showcase
 export default function Home() {
+  // 🔥 BRUNA BORBA PORTFOLIO v3.0 - FORCE REBUILD 2026-08-29 18:20
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const whatsappNumber = '5551981234567';
 
