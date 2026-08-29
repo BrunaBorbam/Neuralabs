@@ -10,8 +10,7 @@ const nextConfig = {
   },
 
   productionBrowserSourceMaps: false,
-  optimizeFonts: true,
-  
+
   headers: async () => {
     return [
       {
@@ -74,16 +73,12 @@ const nextConfig = {
 
   compress: true,
   reactStrictMode: true,
-  swcMinify: true,
 
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
 
-  webpack: (config) => {
-    config.optimization.usedExports = true;
-    return config;
-  },
+  turbopack: {},
 };
 
 module.exports = nextConfig;
