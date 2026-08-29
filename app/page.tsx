@@ -111,11 +111,18 @@ const Counter = ({ end, suffix }: { end: number; suffix: string }) => {
 };
 
 const LeadForm = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', company: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', company: '', phone: '', consent: false });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.consent) {
+      setError('Por favor, aceite o termo de privacidade para continuar.');
+      return;
+    }
+
     try {
       await fetch(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK || '', {
         method: 'POST',
@@ -130,10 +137,12 @@ const LeadForm = () => {
       }
 
       setSubmitted(true);
-      setFormData({ name: '', email: '', company: '', phone: '' });
+      setFormData({ name: '', email: '', company: '', phone: '', consent: false });
+      setError('');
       setTimeout(() => setSubmitted(false), 5000);
     } catch (error) {
       console.error('Error:', error);
+      setError('Houve um erro ao enviar. Tente novamente.');
     }
   };
 
@@ -169,7 +178,23 @@ const LeadForm = () => {
         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:border-orange-500 focus:outline-none text-white placeholder-white/50"
       />
-      <Button type="submit" variant="primary" size="lg" className="w-full">
+
+      <label className="flex items-start gap-3 p-3 bg-slate-900/50 rounded-lg border border-slate-700 cursor-pointer hover:border-orange-500/50 transition">
+        <input
+          type="checkbox"
+          required
+          checked={formData.consent}
+          onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+          className="mt-1 w-4 h-4 accent-orange-500"
+        />
+        <span className="text-sm text-slate-300">
+          Concordo em receber o diagnóstico e entendo que meus dados serão protegidos conforme a <a href="/privacy" target="_blank" rel="noopener" className="text-orange-400 hover:text-orange-300 underline">LGPD</a>.
+        </span>
+      </label>
+
+      {error && <p className="text-red-400 text-sm">{error}</p>}
+
+      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!formData.consent && formData.name && formData.email}>
         {submitted ? '✓ Diagnóstico chegando em 24h' : 'Receber Diagnóstico Grátis'}
       </Button>
     </form>
@@ -577,8 +602,8 @@ export default function Home() {
             <div>
               <h3 className="font-bold text-white mb-4">Legal</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-orange-400">Privacy</a></li>
-                <li><a href="#" className="hover:text-orange-400">Terms</a></li>
+                <li><a href="/privacy" className="hover:text-orange-400">Política de Privacidade</a></li>
+                <li><a href="mailto:ola@neuralabs.online" className="hover:text-orange-400">Contato</a></li>
               </ul>
             </div>
             <div>

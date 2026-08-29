@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
+import { CookieConsent } from "@/components/CookieConsent";
 import "./globals.css";
 
 const inter = Inter({
@@ -57,12 +58,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {`window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied'
+              });
               gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');`}
             </Script>
           </>
         )}
       </head>
-      <body className="min-h-screen bg-[#0A0E27]">{children}</body>
+      <body className="min-h-screen bg-[#0A0E27]">
+        {children}
+        <CookieConsent />
+      </body>
     </html>
   );
 }
