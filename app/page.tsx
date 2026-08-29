@@ -111,11 +111,18 @@ const Counter = ({ end, suffix }: { end: number; suffix: string }) => {
 };
 
 const LeadForm = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', company: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', company: '', phone: '', consent: false });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.consent) {
+      setError('Por favor, aceite o termo de privacidade para continuar.');
+      return;
+    }
+
     try {
       await fetch(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK || '', {
         method: 'POST',
@@ -130,46 +137,76 @@ const LeadForm = () => {
       }
 
       setSubmitted(true);
-      setFormData({ name: '', email: '', company: '', phone: '' });
+      setFormData({ name: '', email: '', company: '', phone: '', consent: false });
+      setError('');
       setTimeout(() => setSubmitted(false), 5000);
     } catch (error) {
       console.error('Error:', error);
+      setError('Houve um erro ao enviar. Tente novamente.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        type="text"
-        placeholder="Seu nome"
-        required
-        value={formData.name}
-        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:border-orange-500 focus:outline-none text-white placeholder-white/50"
-      />
-      <input
-        type="email"
-        placeholder="seu@email.com"
-        required
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:border-orange-500 focus:outline-none text-white placeholder-white/50"
-      />
-      <input
-        type="text"
-        placeholder="Sua empresa"
-        value={formData.company}
-        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:border-orange-500 focus:outline-none text-white placeholder-white/50"
-      />
-      <input
-        type="tel"
-        placeholder="(11) 9xxxx-xxxx"
-        value={formData.phone}
-        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:border-orange-500 focus:outline-none text-white placeholder-white/50"
-      />
-      <Button type="submit" variant="primary" size="lg" className="w-full">
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <label className="block text-sm font-semibold text-white mb-2">Nome completo</label>
+        <input
+          type="text"
+          placeholder="Seu nome"
+          required
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          className="w-full px-4 py-3 bg-white/5 border border-white/15 rounded-lg focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 text-white placeholder-white/40 transition-all"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-white mb-2">Email</label>
+        <input
+          type="email"
+          placeholder="seu@email.com"
+          required
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          className="w-full px-4 py-3 bg-white/5 border border-white/15 rounded-lg focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 text-white placeholder-white/40 transition-all"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-white mb-2">Empresa (opcional)</label>
+        <input
+          type="text"
+          placeholder="Sua empresa"
+          value={formData.company}
+          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+          className="w-full px-4 py-3 bg-white/5 border border-white/15 rounded-lg focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 text-white placeholder-white/40 transition-all"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-white mb-2">WhatsApp</label>
+        <input
+          type="tel"
+          placeholder="(11) 9xxxx-xxxx"
+          value={formData.phone}
+          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          className="w-full px-4 py-3 bg-white/5 border border-white/15 rounded-lg focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 text-white placeholder-white/40 transition-all"
+        />
+      </div>
+
+      <label className="flex items-start gap-3 p-4 bg-orange-500/10 rounded-lg border border-orange-500/30 cursor-pointer hover:border-orange-500/60 hover:bg-orange-500/15 transition-all">
+        <input
+          type="checkbox"
+          required
+          checked={formData.consent}
+          onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+          className="mt-1 w-5 h-5 accent-orange-500 cursor-pointer"
+        />
+        <span className="text-sm text-slate-200 leading-relaxed">
+          Concordo em receber o diagnóstico gratuito e entendo que meus dados serão protegidos conforme a <a href="/privacy" target="_blank" rel="noopener" className="text-orange-400 hover:text-orange-300 font-semibold underline">Lei Geral de Proteção de Dados (LGPD)</a>.
+        </span>
+      </label>
+
+      {error && <motion.p className="text-red-400 text-sm font-medium" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{error}</motion.p>}
+
+      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={!formData.consent && formData.name && formData.email}>
         {submitted ? '✓ Diagnóstico chegando em 24h' : 'Receber Diagnóstico Grátis'}
       </Button>
     </form>
@@ -223,11 +260,11 @@ export default function Home() {
         <div className="relative z-10 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
-              <Badge variant="primary">Ciência aplicada a conversão</Badge>
+              <Badge variant="primary">✨ Ciência aplicada a conversão</Badge>
             </motion.div>
 
             <motion.h1
-              className="text-7xl md:text-8xl font-black font-serif mb-6 leading-tight mt-6"
+              className="text-7xl md:text-8xl font-black font-serif mb-8 leading-tight mt-8"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -238,7 +275,7 @@ export default function Home() {
             </motion.h1>
 
             <motion.p
-              className="text-xl text-slate-300 mb-12 max-w-xl leading-relaxed"
+              className="text-xl text-slate-300 mb-12 max-w-xl leading-relaxed font-light"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -247,32 +284,36 @@ export default function Home() {
             </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-4 mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Button variant="primary" size="lg">Diagnóstico Grátis</Button>
+              <Button variant="primary" size="lg" className="group">
+                Diagnóstico Grátis <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
               <Button variant="outline" size="lg">Como funciona</Button>
             </motion.div>
 
             <motion.p
-              className="text-sm text-orange-400 mt-8 font-bold"
+              className="text-sm text-orange-400 font-bold tracking-wide"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              Somos novos. Mais ágeis. Menos caros.
+              🚀 Somos novos. Mais ágeis. Menos caros.
             </motion.p>
           </motion.div>
         </div>
       </section>
 
       {/* PROBLEMA */}
-      <section id="metodo" className="max-w-7xl mx-auto px-6 py-32">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-          <h2 className="text-6xl font-black font-serif mb-6">Por que seus clientes não compram?</h2>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">Sem entender a psicologia deles, é só chute.</p>
+      <section id="metodo" className="max-w-7xl mx-auto px-6 py-40">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <h2 className="text-6xl md:text-7xl font-black font-serif mb-8 leading-tight">Por que seus clientes não compram?</h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto font-light">Sem entender a psicologia deles, é só chute.</p>
+          </motion.div>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -292,10 +333,12 @@ export default function Home() {
       </section>
 
       {/* SOLUÇÃO */}
-      <section className="max-w-7xl mx-auto px-6 py-32 bg-gradient-to-b from-orange-500/5 to-transparent">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-          <h2 className="text-6xl font-black font-serif mb-6">Como funciona Neuralabs</h2>
-          <p className="text-xl text-slate-400">Neurociência + IA + Design Premium</p>
+      <section className="max-w-7xl mx-auto px-6 py-40 bg-gradient-to-b from-orange-500/5 to-transparent">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <h2 className="text-6xl md:text-7xl font-black font-serif mb-8 leading-tight">Como funciona Neuralabs</h2>
+            <p className="text-xl text-slate-400 font-light">Neurociência + IA + Design Premium</p>
+          </motion.div>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -316,10 +359,12 @@ export default function Home() {
       </section>
 
       {/* PORTFÓLIO */}
-      <section id="portfolio" className="max-w-7xl mx-auto px-6 py-32 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-          <h2 className="text-6xl font-black font-serif mb-6">Exemplos de Design Neuromarketing</h2>
-          <p className="text-xl text-slate-400">Dois tipos de negócios. Psicologia científica aplicada.</p>
+      <section id="portfolio" className="max-w-7xl mx-auto px-6 py-40 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <h2 className="text-6xl md:text-7xl font-black font-serif mb-8 leading-tight">Exemplos de Design Neuromarketing</h2>
+            <p className="text-xl text-slate-400 font-light">Dois tipos de negócios. Psicologia científica aplicada.</p>
+          </motion.div>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-2 gap-16 items-center" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -379,10 +424,12 @@ export default function Home() {
       </section>
 
       {/* PREÇOS */}
-      <section id="precos" className="max-w-7xl mx-auto px-6 py-32">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-          <h2 className="text-6xl font-black font-serif mb-6">Preços Realistas</h2>
-          <p className="text-xl text-slate-400">Sem enganação. Você recebe valor REAL.</p>
+      <section id="precos" className="max-w-7xl mx-auto px-6 py-40">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <h2 className="text-6xl md:text-7xl font-black font-serif mb-8 leading-tight">Preços Realistas</h2>
+            <p className="text-xl text-slate-400 font-light">Sem enganação. Você recebe valor REAL.</p>
+          </motion.div>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-3 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -413,10 +460,12 @@ export default function Home() {
       </section>
 
       {/* PROCESSO */}
-      <section id="processo" className="max-w-7xl mx-auto px-6 py-32">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-          <h2 className="text-6xl font-black font-serif mb-6">Processo: 21 dias</h2>
-          <p className="text-xl text-slate-400">Do briefing ao deploy em produção</p>
+      <section id="processo" className="max-w-7xl mx-auto px-6 py-40">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <h2 className="text-6xl md:text-7xl font-black font-serif mb-8 leading-tight">Processo: 21 dias</h2>
+            <p className="text-xl text-slate-400 font-light">Do briefing ao deploy em produção</p>
+          </motion.div>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-4 gap-6" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -441,10 +490,12 @@ export default function Home() {
       </section>
 
       {/* NEUROCIÊNCIA EM AÇÃO */}
-      <section className="max-w-7xl mx-auto px-6 py-32">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-          <h2 className="text-6xl font-black font-serif mb-6">Neurociência em Ação</h2>
-          <p className="text-xl text-slate-400">Veja como os gatilhos mentais funcionam em tempo real</p>
+      <section className="max-w-7xl mx-auto px-6 py-40">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <h2 className="text-6xl md:text-7xl font-black font-serif mb-8 leading-tight">Neurociência em Ação</h2>
+            <p className="text-xl text-slate-400 font-light">Veja como os gatilhos mentais funcionam em tempo real</p>
+          </motion.div>
         </motion.div>
 
         <motion.div className="grid md:grid-cols-2 gap-12" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -513,12 +564,14 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="max-w-4xl mx-auto px-6 py-32">
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-          <h2 className="text-6xl font-black font-serif">FAQ</h2>
+      <section id="faq" className="max-w-4xl mx-auto px-6 py-40">
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+            <h2 className="text-6xl md:text-7xl font-black font-serif leading-tight">Perguntas Frequentes</h2>
+          </motion.div>
         </motion.div>
 
-        <motion.div className="space-y-4" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        <motion.div className="space-y-3" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           {[
             { q: 'Como vocês usam IA?', a: 'Claude IA analisa psicologia do seu público. Identificamos gatilhos mentais e criamos estratégia customizada.' },
             { q: 'Quanto é o investimento?', a: 'STARTER R$ 9.990 | PROFESSIONAL R$ 19.990 | ENTERPRISE custom. Sem surpresas.' },
@@ -527,33 +580,41 @@ export default function Home() {
             { q: 'Como é o suporte?', a: '30-60 dias de email/WhatsApp. Depois é seu site, você mantém. Sem assinatura mensal.' },
             { q: 'Somos nova empresa, vale?', a: 'Vale MUITO. Novo = sem vícios. Sem "sempre fizemos assim". Ágeis. Aplicamos ciência atual.' },
           ].map((faq, i) => (
-            <motion.div key={i} className="border border-border-light rounded-lg overflow-hidden" variants={itemVariants}>
+            <motion.div key={i} className="border border-white/10 rounded-xl overflow-hidden bg-white/5 hover:bg-white/10 hover:border-orange-500/30 transition-all" variants={itemVariants}>
               <button
                 onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
-                className="w-full p-6 bg-slate-800/50 hover:bg-slate-800 flex justify-between items-center transition text-left"
+                className="w-full p-6 flex justify-between items-center text-left font-semibold hover:text-orange-400 transition-colors"
               >
-                <span className="font-bold">{faq.q}</span>
-                <ChevronDown className={`transition ${openFAQ === i ? 'rotate-180' : ''}`} />
-              </button>
-              {openFAQ === i && (
-                <motion.div className="p-6 bg-slate-900 border-t border-border-light" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  <p className="text-slate-300">{faq.a}</p>
+                <span className="text-lg">{faq.q}</span>
+                <motion.div animate={{ rotate: openFAQ === i ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                  <ChevronDown className="w-5 h-5" />
                 </motion.div>
-              )}
+              </button>
+              <motion.div
+                initial={false}
+                animate={{ height: openFAQ === i ? 'auto' : 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="p-6 pt-0 border-t border-white/10 text-slate-300">
+                  {faq.a}
+                </div>
+              </motion.div>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
       {/* CTA FINAL */}
-      <section className="max-w-4xl mx-auto px-6 py-32">
-        <motion.div className="bg-gradient-to-br from-orange-500/20 to-transparent border-2 border-orange-500 rounded-3xl p-12 text-center backdrop-blur-xl" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <h2 className="text-5xl font-black font-serif mb-6">Quer saber a verdade?</h2>
-          <p className="text-xl text-slate-300 mb-12">Seu site está perdendo conversão por FALTA DE NEUROCIÊNCIA.</p>
+      <section className="max-w-4xl mx-auto px-6 py-40">
+        <motion.div className="bg-gradient-to-br from-orange-500/15 via-orange-500/5 to-transparent border-2 border-orange-500/40 rounded-3xl p-16 text-center backdrop-blur-xl hover:border-orange-500/60 hover:from-orange-500/20 transition-all" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <h2 className="text-5xl md:text-6xl font-black font-serif mb-6 leading-tight">Quer saber a verdade?</h2>
+          <p className="text-xl text-slate-300 mb-16 font-light">Seu site está perdendo conversão por FALTA DE NEUROCIÊNCIA. Deixe-nos fazer o diagnóstico gratuito.</p>
           <LeadForm />
-          <div className="mt-6 text-center">
-            <a href="https://wa.me/55119xxxx" className="text-orange-400 hover:text-orange-300 transition">
-              Ou mande um WhatsApp
+          <div className="mt-8 text-center">
+            <p className="text-slate-400 text-sm mb-3">Preferir conversar direto?</p>
+            <a href="https://wa.me/55119xxxx" className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 font-semibold transition-colors">
+              💬 Iniciar conversa no WhatsApp
             </a>
           </div>
         </motion.div>
@@ -577,8 +638,8 @@ export default function Home() {
             <div>
               <h3 className="font-bold text-white mb-4">Legal</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-orange-400">Privacy</a></li>
-                <li><a href="#" className="hover:text-orange-400">Terms</a></li>
+                <li><a href="/privacy" className="hover:text-orange-400">Política de Privacidade</a></li>
+                <li><a href="mailto:ola@neuralabs.online" className="hover:text-orange-400">Contato</a></li>
               </ul>
             </div>
             <div>
