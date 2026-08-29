@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -21,11 +21,15 @@ const jetbrainsMonoFont = JetBrains_Mono({
   weight: ["400", "500", "600"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Neuralabs | Onde Neurociência Vira Conversão",
   description: "Websites que aumentam conversão em 20-40% usando 3D, neuromarketing e IA. Neuralabs é especialista em design premium e psicologia do consumidor.",
   keywords: "neuromarketing, design web, conversão, 3D, websites premium, agência digital",
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
   openGraph: {
     title: "Neuralabs | Onde Neurociência Vira Conversão",
