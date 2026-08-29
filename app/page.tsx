@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { trackFormSubmit, trackButtonClick, trackEvent, initScrollTracking, trackPageDuration } from '@/lib/ga';
-import { PortfolioSection } from '@/components/PortfolioSection';
+// import { PortfolioSection } from '@/components/PortfolioSection';
 
 export default function Home() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
@@ -764,7 +764,7 @@ export default function Home() {
           </div>
         </section>
 
-        <PortfolioSection />
+        {/* <PortfolioSection /> */}
 
         {/* PREÇO */}
         <section id="preco" className="pricing">
