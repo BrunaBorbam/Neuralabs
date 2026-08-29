@@ -772,9 +772,9 @@ export default function Home() {
               <p style={{ marginTop: 'var(--spacing-lg)', fontSize: '1.1rem', color: 'var(--color-primary)', fontWeight: '700' }}>Clique em qualquer mockup para ver a experiência completa →</p>
             </div>
 
-            <div className="mockups-container">
-              <div><EcommerceMockup /></div>
-              <div><SaasMockup /></div>
+            <div className="mockups-container" style={{ background: '#f0f0f0', padding: 'var(--spacing-2xl)', borderRadius: 'var(--radius-lg)', textAlign: 'center', color: '#666' }}>
+              <p style={{ margin: '0', fontSize: '1.1rem' }}>🎨 Mockups interativos carregando...</p>
+              <p style={{ margin: 'var(--spacing-md) 0 0 0', fontSize: '0.9rem' }}>Seção visual com exemplos de E-commerce e SaaS</p>
             </div>
           </div>
         </section>
