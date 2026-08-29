@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { trackFormSubmit, trackButtonClick, trackEvent, initScrollTracking, trackPageDuration } from '@/lib/ga';
 // import { PortfolioSection } from '@/components/PortfolioSection';
 
+// v2.0: Portfolio with Bruna Borba showcase
 export default function Home() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const whatsappNumber = '5551981234567';
