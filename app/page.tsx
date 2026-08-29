@@ -764,7 +764,64 @@ export default function Home() {
           </div>
         </section>
 
-        {/* <PortfolioSection /> */}
+        {/* PORTFÓLIO */}
+        <section id="portfolio" className="portfolio">
+          <h2 className="section-title">Casos de Sucesso</h2>
+          <p style={{ textAlign: 'center', marginBottom: 'var(--spacing-2xl)', fontSize: '1.1rem', color: '#666' }}>
+            Projetos que Bruna Borba criou e otimizou com neuromarketing
+          </p>
+
+          <div className="portfolio-grid">
+            <div className="portfolio-case">
+              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>✨</div>
+              <h3>Cosméticos Natural</h3>
+              <p><strong>+32% conversão</strong> | E-commerce</p>
+              <ul style={{ fontSize: '0.9rem', marginTop: 'var(--spacing-md)' }}>
+                <li>✓ Psicologia das cores</li>
+                <li>✓ Social proof estratégico</li>
+                <li>✓ Urgência visual</li>
+              </ul>
+            </div>
+
+            <div className="portfolio-case">
+              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>📊</div>
+              <h3>SaaS Analytics Pro</h3>
+              <p><strong>-23% churn</strong> | Software</p>
+              <ul style={{ fontSize: '0.9rem', marginTop: 'var(--spacing-md)' }}>
+                <li>✓ Dashboard intuitivo</li>
+                <li>✓ Onboarding com IA</li>
+                <li>✓ +45% engagement</li>
+              </ul>
+            </div>
+
+            <div className="portfolio-case">
+              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>💰</div>
+              <h3>Consultoria Financeira</h3>
+              <p><strong>+156% leads</strong> | Serviços</p>
+              <ul style={{ fontSize: '0.9rem', marginTop: 'var(--spacing-md)' }}>
+                <li>✓ SEO estratégico</li>
+                <li>✓ Lead magnet IA</li>
+                <li>✓ -52% custo/lead</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, var(--color-primary) 0%, #FF8C5A 100%)',
+            padding: 'var(--spacing-2xl)',
+            borderRadius: 'var(--radius-lg)',
+            color: 'white',
+            textAlign: 'center',
+            marginTop: 'var(--spacing-2xl)'
+          }}>
+            <p style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: 'var(--spacing-md)', fontFamily: 'var(--font-display)' }}>
+              Bruna Borba - Design Expert
+            </p>
+            <p style={{ margin: '0', lineHeight: '1.6' }}>
+              Especialista em neuromarketing, psicologia do consumidor e websites que vendem.
+            </p>
+          </div>
+        </section>
 
         {/* PREÇO */}
         <section id="preco" className="pricing">
