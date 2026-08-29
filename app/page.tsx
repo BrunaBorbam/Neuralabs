@@ -765,9 +765,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PORTFÓLIO */}
+        {/* PORTFÓLIO - Bruna Borba Expertise */}
         <section id="portfolio" className="portfolio">
-          <h2 className="section-title">Casos de Sucesso</h2>
+          <h2 className="section-title">📈 Casos de Sucesso - Bruna Borba</h2>
           <p style={{ textAlign: 'center', marginBottom: 'var(--spacing-2xl)', fontSize: '1.1rem', color: '#666' }}>
             Projetos que Bruna Borba criou e otimizou com neuromarketing
           </p>
