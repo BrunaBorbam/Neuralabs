@@ -1,36 +1,202 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 Neuralabs - Websites com Neurociência
 
-## Getting Started
+Criamos sites que entendem o cérebro do seu cliente. **Neurociência + Design + SEO + LGPD**
 
-First, run the development server:
+## 🚀 Quick Start
+
+### Local Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Open browser
+# http://localhost:3000 → Landing Page
+# http://localhost:3000/dashboard → Admin Dashboard
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Deployment to Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Option 1: Using Vercel CLI
+npm install -g vercel
+vercel deploy --prod
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Option 2: GitHub Integration
+# 1. git push origin main
+# 2. Connect repo at vercel.com
+# 3. Auto-deploy on every push
+```
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+neuralabs/
+├── app/
+│   ├── page.tsx                 # Landing page
+│   ├── layout.tsx              # Root layout
+│   ├── globals.css             # Global styles
+│   └── dashboard/
+│       ├── page.tsx            # Admin dashboard
+│       └── layout.tsx
+├── components/
+│   ├── Button.tsx              # Reusable button component
+│   └── Navbar.tsx              # Navigation bar
+├── public/                      # Static assets
+├── assets-effects/             # Design reference guides
+├── package.json                # Dependencies
+├── tailwind.config.ts          # Tailwind CSS config
+├── tsconfig.json               # TypeScript config
+├── vercel.json                 # Vercel deployment config
+└── README.md                   # This file
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: Next.js 16 (React 19)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion, GSAP
+- **3D Graphics**: Three.js
+- **Deployment**: Vercel
+- **Database**: Supabase (planned)
+- **AI**: Claude API (planned)
+- **Payments**: Stripe (planned)
+- **Email**: Resend (planned)
 
-## Deploy on Vercel
+## 🔧 Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create `.env.local` in the root:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+
+# Supabase (Database) - Add when ready
+NEXT_PUBLIC_SUPABASE_URL=your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Claude API (AI Agents)
+CLAUDE_API_KEY=your-claude-api-key
+
+# Stripe (Payments)
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=your-stripe-public-key
+STRIPE_SECRET_KEY=your-stripe-secret-key
+
+# Resend (Email)
+RESEND_API_KEY=your-resend-api-key
+```
+
+## 📱 Pages & Routes
+
+| Page | Route | Purpose |
+|------|-------|---------|
+| Landing | `/` | Marketing page + lead capture |
+| Dashboard | `/dashboard` | Admin panel for leads/projects |
+| Coming Soon | `/api/leads` | Lead submission API |
+| Coming Soon | `/api/chat` | AI chatbot API |
+| Coming Soon | `/api/stripe` | Payment webhook |
+
+## 🤖 AI Agents (Roadmap)
+
+- [ ] **Lead Qualification** - 24/7 automated chatbot
+- [ ] **Proposal Generator** - Auto-create project proposals
+- [ ] **Email Automation** - Automated follow-ups
+- [ ] **Lead Scoring** - Qualify hot leads automatically
+- [ ] **Customer Support** - AI-powered support agent
+
+## ✨ Features
+
+✅ **Responsive Design** - Mobile-first approach
+✅ **Dark Mode** - Full dark mode support
+✅ **SEO Optimized** - Meta tags, Open Graph, sitemap
+✅ **Performance Focused** - Optimized images, code splitting
+✅ **Accessibility** - WCAG AA compliant
+✅ **Component Library** - Reusable UI components
+✅ **TypeScript** - Full type safety
+✅ **Tailwind CSS** - Utility-first styling
+
+## 🚀 Development Workflow
+
+1. **Local Development**
+   ```bash
+   npm run dev
+   ```
+
+2. **Build for Production**
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+3. **Linting & Formatting**
+   ```bash
+   npm run lint
+   ```
+
+## 📊 Next Steps
+
+### Phase 1 (Week 1-2)
+- [x] Create landing page
+- [x] Setup dashboard
+- [ ] Deploy to Vercel
+- [ ] Setup custom domain (neuralabs.online)
+
+### Phase 2 (Week 2-3)
+- [ ] Integrate Supabase
+- [ ] Build lead form
+- [ ] Email notifications (Resend)
+- [ ] Lead database
+
+### Phase 3 (Week 3-4)
+- [ ] AI agents (Claude API)
+- [ ] Chatbot on site
+- [ ] Stripe integration
+- [ ] Payment processing
+
+### Phase 4 (Week 4+)
+- [ ] Analytics & tracking
+- [ ] SEO optimization
+- [ ] Performance tuning
+- [ ] Scale to 24/7 leads
+
+## 🎯 Business Model
+
+- **Price**: R$ 5.000 - R$ 8.000 per site
+- **Support**: R$ 800 - R$ 1.200/month (optional)
+- **Target**: PMEs with <R$ 1M revenue
+- **Timeline**: 30 days per project
+
+## 👨‍💼 Team
+
+👤 **Bruna Borba** - Founder, Product Lead
+- Woman in tech
+- Neurociência specialist
+- Design + Development
+
+## 📞 Support & Contact
+
+- Email: bruna@neuralabs.online (planned)
+- WhatsApp: Form on website
+- Dashboard: Internal lead management
+
+## 📄 Legal
+
+- **LGPD Compliant** ✅
+- **Privacy Policy** (planned)
+- **Terms of Service** (planned)
+
+## 🔗 Links
+
+- **Website**: https://neuralabs.online (live soon)
+- **GitHub**: (private repo)
+- **Dashboard**: https://neuralabs.online/dashboard (after auth)
+
+---
+
+**Made with 🧠 by Bruna Borba** © 2026 Neuralabs. All rights reserved.
