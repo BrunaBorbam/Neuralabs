@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Read(//c/Users/insti/Downloads/**)",
+      "Bash(Expand-Archive -Path files.zip -DestinationPath \"C:\\\\Users\\\\insti\\\\OneDrive\\\\Desktop\\\\neuralabs\\\\assets-effects\" -Force)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\insti\\\\OneDrive\\\\Desktop\\\\neuralabs\\\\assets-effects\" -Recurse -Force | Select-Object FullName, @{Name=\"Size\";Expression={$_.Length}} | Format-Table -AutoSize)",
+      "Bash(git init *)",
+      "Bash(npm create *)",
+      "Bash(mkdir -p /tmp/neuralabs-temp)",
+      "Read(//tmp/**)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
