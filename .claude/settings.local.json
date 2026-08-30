@@ -14,7 +14,12 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(vercel --version)",
-      "Bash(vercel deploy *)"
+      "Bash(vercel deploy *)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill -9)",
+      "Bash(taskkill /PID 20044 /F)",
+      "Bash(mkdir -p \"C:\\\\Users\\\\insti\\\\OneDrive\\\\Desktop\\\\neuralabs\\\\.claude\")",
+      "Bash(git push *)"
     ]
   }
 }

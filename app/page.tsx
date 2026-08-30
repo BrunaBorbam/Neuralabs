@@ -147,7 +147,7 @@ export default function Home() {
 
       {/* FEATURES SECTION */}
       <section id="services" className="py-20 md:py-40 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2
               className="text-5xl md:text-7xl font-black mb-6"
@@ -199,9 +199,9 @@ export default function Home() {
             background: 'linear-gradient(to right, #2563eb, #7c3aed, #db2777)',
           }}
         />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white relative z-10">
-          <h2 className="text-5xl md:text-6xl font-black mb-6">Pronto para transformar seu site?</h2>
-          <p className="text-xl mb-10 opacity-95 font-light">Vamos fazer uma análise profunda do seu cliente e criar a solução perfeita</p>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white relative z-10">
+          <h2 className="text-4xl md:text-5xl font-black mb-6">Pronto para transformar seu site?</h2>
+          <p className="text-lg mb-10 opacity-95 font-light">Vamos fazer uma análise profunda do seu cliente e criar a solução perfeita</p>
           <button
             className="px-8 py-3 rounded-lg font-bold text-lg text-blue-600 transition-all duration-300 hover:shadow-2xl"
             style={{
@@ -215,7 +215,7 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="bg-slate-950 text-slate-300 py-12 border-t border-white/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
               <h3 className="font-bold text-lg text-white mb-4">Neuralabs</h3>
