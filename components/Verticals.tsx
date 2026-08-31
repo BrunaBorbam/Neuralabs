@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { Home, Ruler, UtensilsCrossed, ShoppingBag } from 'lucide-react';
+import Link from 'next/link';
+import { Home, Ruler, UtensilsCrossed, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { useLanguage } from '@/context/LanguageContext';
@@ -11,21 +12,25 @@ const VERTICAL_MEDIA = [
     icon: Home,
     image:
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+    demoHref: '/demo/airbnb',
   },
   {
     icon: Ruler,
     image:
       'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80',
+    demoHref: undefined,
   },
   {
     icon: UtensilsCrossed,
     image:
       'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
+    demoHref: undefined,
   },
   {
     icon: ShoppingBag,
     image:
       'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
+    demoHref: undefined,
   },
 ];
 
@@ -76,13 +81,22 @@ export const Verticals = () => {
                     <p className="text-pearl-300/70 leading-relaxed mb-6 flex-1">
                       {vertical.proposal}
                     </p>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 mb-2">
                       {vertical.tags.map((tag) => (
                         <Badge key={tag} variant="primary">
                           {tag}
                         </Badge>
                       ))}
                     </div>
+                    {media.demoHref && (
+                      <Link
+                        href={media.demoHref}
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-blush-300 hover:text-blush-200 transition-colors mt-4 w-fit"
+                      >
+                        Ver Demo Interativa
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    )}
                   </div>
                 </div>
               </ScrollReveal>

@@ -149,7 +149,8 @@ const pt: Dictionary = {
       'Unimos SEO de intenção de compra e psicologia do consumidor para atrair quem já está pronto para comprar — e conduzi-lo, sem fricção, até o WhatsApp.',
     ctaPrimary: 'Diagnóstico no WhatsApp',
     ctaSecondary: 'Ver Nichos Atendidos',
-    waMessage: 'Olá! Quero solicitar um diagnóstico de conversão do meu site.',
+    waMessage:
+      'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o site da minha empresa.',
   },
   heroStudio: {
     badgeSpeed: '⚡ 0.7s • Core Web Vitals 99',
@@ -289,7 +290,8 @@ const pt: Dictionary = {
           'Conformidade com a LGPD',
         ],
         cta: 'Solicitar Proposta no WhatsApp →',
-        waMessage: 'Olá! Tenho interesse na Landing Page de Alta Conversão.',
+        waMessage:
+          'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o site da minha empresa.',
       },
       {
         name: 'Plataforma Web Premium',
@@ -306,7 +308,8 @@ const pt: Dictionary = {
           'Processo 100% assíncrono (sem reuniões longas)',
         ],
         cta: 'Solicitar Proposta no WhatsApp →',
-        waMessage: 'Olá! Tenho interesse na Plataforma Web Premium.',
+        waMessage:
+          'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o site da minha empresa.',
       },
     ],
   },
@@ -324,7 +327,8 @@ const pt: Dictionary = {
     error: 'Não foi possível enviar agora. Tente novamente ou use o WhatsApp.',
     asideText: 'Prefere resposta imediata? Fale direto com a gente pelo WhatsApp.',
     waButton: 'Diagnóstico no WhatsApp',
-    waMessage: 'Olá! Quero solicitar um diagnóstico de conversão do meu site.',
+    waMessage:
+      'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o site da minha empresa.',
   },
   footer: {
     tagline:
@@ -357,7 +361,8 @@ const en: Dictionary = {
       'We merge high-end visual aesthetics, behavioral psychology, and cutting-edge tech to turn visitors into high-ticket clients.',
     ctaPrimary: 'Get Diagnosis on WhatsApp',
     ctaSecondary: 'See Niches We Serve',
-    waMessage: "Hi! I'd like to request a conversion diagnosis for my website.",
+    waMessage:
+      "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
   },
   heroStudio: {
     badgeSpeed: '⚡ 0.7s • Core Web Vitals 99',
@@ -496,7 +501,8 @@ const en: Dictionary = {
           'LGPD Compliance',
         ],
         cta: 'Request Proposal on WhatsApp →',
-        waMessage: "Hi! I'm interested in the High-Conversion Landing Page.",
+        waMessage:
+          "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
       },
       {
         name: 'Premium Web Platform',
@@ -513,7 +519,8 @@ const en: Dictionary = {
           '100% Async Process (no long meetings)',
         ],
         cta: 'Request Proposal on WhatsApp →',
-        waMessage: "Hi! I'm interested in the Premium Web Platform.",
+        waMessage:
+          "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
       },
     ],
   },
@@ -531,7 +538,8 @@ const en: Dictionary = {
     error: 'Could not send right now. Please try again or use WhatsApp.',
     asideText: 'Prefer an immediate reply? Talk to us directly on WhatsApp.',
     waButton: 'WhatsApp Diagnosis',
-    waMessage: "Hi! I'd like to request a conversion diagnosis for my website.",
+    waMessage:
+      "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
   },
   footer: {
     tagline:
