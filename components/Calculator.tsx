@@ -5,19 +5,25 @@ import { Calculator as CalculatorIcon, TrendingDown } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ScrollReveal } from '@/components/HeroAnimations';
+import { useLanguage } from '@/context/LanguageContext';
 
 const POTENTIAL_CONVERSION_RATE = 4.5; // % — média alcançável com site otimizado por neuromarketing
 
-const currency = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-  maximumFractionDigits: 0,
-});
-
 export const Calculator = () => {
+  const { t } = useLanguage();
   const [visitors, setVisitors] = useState(3000);
   const [conversionRate, setConversionRate] = useState(1.2);
   const [ticket, setTicket] = useState(450);
+
+  const currency = useMemo(
+    () =>
+      new Intl.NumberFormat(t.calculator.locale, {
+        style: 'currency',
+        currency: t.calculator.currency,
+        maximumFractionDigits: 0,
+      }),
+    [t.calculator.locale, t.calculator.currency]
+  );
 
   const { monthlyLoss, annualLoss } = useMemo(() => {
     const gap = Math.max(0, POTENTIAL_CONVERSION_RATE - conversionRate) / 100;
@@ -31,14 +37,13 @@ export const Calculator = () => {
         <ScrollReveal>
           <div className="text-center mb-14">
             <Badge variant="primary" className="mb-4">
-              Diagnóstico Rápido
+              {t.calculator.badge}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-serif font-black text-pearl-100 mb-4">
-              Quanto seu déficit digital está custando?
+              {t.calculator.heading}
             </h2>
             <p className="text-pearl-300/70 max-w-2xl mx-auto leading-relaxed">
-              Estime a receita perdida por não converter no padrão de um site desenhado para
-              decisão de compra.
+              {t.calculator.subheading}
             </p>
           </div>
         </ScrollReveal>
@@ -48,8 +53,8 @@ export const Calculator = () => {
             <div className="flex flex-col gap-6">
               <div>
                 <label className="flex justify-between text-sm text-pearl-300/70 mb-2">
-                  <span>Visitantes por mês</span>
-                  <span className="font-semibold text-pearl-100">{visitors.toLocaleString('pt-BR')}</span>
+                  <span>{t.calculator.visitorsLabel}</span>
+                  <span className="font-semibold text-pearl-100">{visitors.toLocaleString(t.calculator.locale)}</span>
                 </label>
                 <input
                   type="range"
@@ -64,7 +69,7 @@ export const Calculator = () => {
 
               <div>
                 <label className="flex justify-between text-sm text-pearl-300/70 mb-2">
-                  <span>Taxa de conversão atual</span>
+                  <span>{t.calculator.conversionLabel}</span>
                   <span className="font-semibold text-pearl-100">{conversionRate.toFixed(1)}%</span>
                 </label>
                 <input
@@ -80,7 +85,7 @@ export const Calculator = () => {
 
               <div>
                 <label className="flex justify-between text-sm text-pearl-300/70 mb-2">
-                  <span>Ticket médio</span>
+                  <span>{t.calculator.ticketLabel}</span>
                   <span className="font-semibold text-pearl-100">{currency.format(ticket)}</span>
                 </label>
                 <input
@@ -99,13 +104,13 @@ export const Calculator = () => {
               <span className="w-12 h-12 rounded-full bg-blush-500/10 border border-blush-500/30 flex items-center justify-center mb-4">
                 <TrendingDown className="w-6 h-6 text-blush-300" />
               </span>
-              <p className="text-sm text-pearl-300/60 mb-2">Perda mensal estimada</p>
+              <p className="text-sm text-pearl-300/60 mb-2">{t.calculator.monthlyLossLabel}</p>
               <p className="text-3xl md:text-4xl font-serif font-black text-pearl-100 mb-4">
                 {currency.format(monthlyLoss)}
               </p>
               <div className="flex items-center gap-2 text-sm text-pearl-300/60">
                 <CalculatorIcon className="w-4 h-4" />
-                <span>{currency.format(annualLoss)} perdidos por ano</span>
+                <span>{currency.format(annualLoss)} {t.calculator.annualLossSuffix}</span>
               </div>
             </div>
           </Card>

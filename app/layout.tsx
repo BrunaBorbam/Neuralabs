@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import { CookieConsent } from "@/components/CookieConsent";
 import { PWAInstaller } from "@/components/PWAInstaller";
+import { LanguageProvider } from "@/context/LanguageContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -113,9 +114,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body className="min-h-screen bg-[#0B0A0E] text-pearl-200">
-        {children}
-        <CookieConsent />
-        <PWAInstaller />
+        <LanguageProvider>
+          {children}
+          <CookieConsent />
+          <PWAInstaller />
+        </LanguageProvider>
       </body>
     </html>
   );

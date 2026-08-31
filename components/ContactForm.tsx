@@ -8,10 +8,12 @@ import { Button } from '@/components/ui/Button';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick, trackFormSubmit } from '@/lib/ga';
+import { useLanguage } from '@/context/LanguageContext';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export const ContactForm = () => {
+  const { t } = useLanguage();
   const [status, setStatus] = useState<Status>('idle');
   const [form, setForm] = useState({ name: '', email: '', company: '', phone: '' });
 
@@ -46,14 +48,13 @@ export const ContactForm = () => {
         <ScrollReveal>
           <div className="text-center mb-14">
             <Badge variant="primary" className="mb-4">
-              Vamos Conversar
+              {t.contact.badge}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-serif font-black text-pearl-100 mb-4">
-              Peça seu diagnóstico de conversão
+              {t.contact.heading}
             </h2>
             <p className="text-pearl-300/70 max-w-2xl mx-auto leading-relaxed">
-              Conte um pouco sobre seu negócio e retornamos com uma análise em até 24 horas —
-              ou fale agora mesmo pelo WhatsApp.
+              {t.contact.subheading}
             </p>
           </div>
         </ScrollReveal>
@@ -64,7 +65,7 @@ export const ContactForm = () => {
               <input
                 type="text"
                 required
-                placeholder="Seu nome"
+                placeholder={t.contact.namePlaceholder}
                 value={form.name}
                 onChange={handleChange('name')}
                 className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
@@ -72,21 +73,21 @@ export const ContactForm = () => {
               <input
                 type="email"
                 required
-                placeholder="Seu e-mail"
+                placeholder={t.contact.emailPlaceholder}
                 value={form.email}
                 onChange={handleChange('email')}
                 className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
               />
               <input
                 type="text"
-                placeholder="Empresa (opcional)"
+                placeholder={t.contact.companyPlaceholder}
                 value={form.company}
                 onChange={handleChange('company')}
                 className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
               />
               <input
                 type="tel"
-                placeholder="WhatsApp (opcional)"
+                placeholder={t.contact.phonePlaceholder}
                 value={form.phone}
                 onChange={handleChange('phone')}
                 className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
@@ -99,14 +100,14 @@ export const ContactForm = () => {
                 loading={status === 'loading'}
                 disabled={status === 'loading'}
               >
-                Enviar diagnóstico
+                {t.contact.submit}
               </Button>
 
               {status === 'success' && (
-                <p className="text-sm text-blush-300">Recebemos sua mensagem! Em breve entramos em contato.</p>
+                <p className="text-sm text-blush-300">{t.contact.success}</p>
               )}
               {status === 'error' && (
-                <p className="text-sm text-red-400">Não foi possível enviar agora. Tente novamente ou use o WhatsApp.</p>
+                <p className="text-sm text-red-400">{t.contact.error}</p>
               )}
             </form>
 
@@ -114,16 +115,14 @@ export const ContactForm = () => {
               <span className="w-12 h-12 rounded-full bg-blush-500/10 border border-blush-500/30 flex items-center justify-center">
                 <MessageCircle className="w-6 h-6 text-blush-300" />
               </span>
-              <p className="text-pearl-300/70 leading-relaxed">
-                Prefere resposta imediata? Fale direto com a gente pelo WhatsApp.
-              </p>
+              <p className="text-pearl-300/70 leading-relaxed">{t.contact.asideText}</p>
               <a
-                href={getWhatsAppLink('Olá! Quero solicitar um diagnóstico de conversão do meu site.')}
+                href={getWhatsAppLink(t.contact.waMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackButtonClick('diagnostico_whatsapp', 'contact_form')}
               >
-                <Button variant="secondary">Diagnóstico no WhatsApp</Button>
+                <Button variant="secondary">{t.contact.waButton}</Button>
               </a>
             </div>
           </Card>

@@ -5,17 +5,37 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
+import { useLanguage } from '@/context/LanguageContext';
 
-const NAV_LINKS = [
-  { label: 'Pilares', href: '#pilares' },
-  { label: 'Nichos', href: '#nichos' },
-  { label: 'Antes & Depois', href: '#comparativo' },
-  { label: 'Preços', href: '#precos' },
-  { label: 'Contato', href: '#contato' },
-];
+const LanguageSwitcher = ({ className = '' }: { className?: string }) => {
+  const { language, setLanguage } = useLanguage();
+
+  return (
+    <div
+      className={`inline-flex items-center gap-1 rounded-full border border-pearl-100/15 bg-pearl-100/5 p-1 text-xs font-bold tracking-wide ${className}`}
+    >
+      {(['pt', 'en'] as const).map((lang) => (
+        <button
+          key={lang}
+          type="button"
+          onClick={() => setLanguage(lang)}
+          aria-pressed={language === lang}
+          className={`px-3 py-1.5 rounded-full transition-colors ${
+            language === lang
+              ? 'bg-pearl-100 text-obsidian-900'
+              : 'text-pearl-300/60 hover:text-pearl-100'
+          }`}
+        >
+          {lang.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+};
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
 
   const handleCtaClick = () => {
     trackButtonClick('diagnostico_whatsapp', 'navbar');
@@ -30,7 +50,7 @@ export const Navbar = () => {
         </a>
 
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
+          {t.nav.links.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -41,31 +61,35 @@ export const Navbar = () => {
           ))}
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-4">
+          <LanguageSwitcher />
           <a
-            href={getWhatsAppLink('Olá! Quero solicitar um diagnóstico de conversão do meu site.')}
+            href={getWhatsAppLink(t.hero.waMessage)}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleCtaClick}
           >
             <Button variant="primary" size="sm">
-              Diagnóstico no WhatsApp
+              {t.nav.cta}
             </Button>
           </a>
         </div>
 
-        <button
-          className="md:hidden text-pearl-100"
-          onClick={() => setIsOpen((v) => !v)}
-          aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex md:hidden items-center gap-3">
+          <LanguageSwitcher />
+          <button
+            className="text-pearl-100"
+            onClick={() => setIsOpen((v) => !v)}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </nav>
 
       {isOpen && (
         <div className="md:hidden px-6 pb-6 flex flex-col gap-4 border-t border-pearl-100/10 pt-4">
-          {NAV_LINKS.map((link) => (
+          {t.nav.links.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -76,13 +100,13 @@ export const Navbar = () => {
             </a>
           ))}
           <a
-            href={getWhatsAppLink('Olá! Quero solicitar um diagnóstico de conversão do meu site.')}
+            href={getWhatsAppLink(t.hero.waMessage)}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleCtaClick}
           >
             <Button variant="primary" size="sm" className="w-full">
-              Diagnóstico no WhatsApp
+              {t.nav.cta}
             </Button>
           </a>
         </div>
