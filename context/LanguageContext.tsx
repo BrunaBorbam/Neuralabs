@@ -9,9 +9,13 @@ interface NavLink {
   href: string;
 }
 
-interface Metric {
+interface StudioTabCopy {
+  emoji: string;
   label: string;
-  value: string;
+  headline: string;
+  cta: string;
+  metricLabel: string;
+  metricValue: string;
 }
 
 interface PillarCopy {
@@ -49,10 +53,12 @@ export interface Dictionary {
     subheadline: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    panelTitle: string;
-    panelLive: string;
-    metrics: Metric[];
     waMessage: string;
+  };
+  heroStudio: {
+    badgeSpeed: string;
+    badgeNeuro: string;
+    tabs: StudioTabCopy[];
   };
   pillars: {
     badge: string;
@@ -138,20 +144,50 @@ const pt: Dictionary = {
   hero: {
     badge: 'Neurociência aplicada à conversão',
     headlinePrefix: 'Websites desenhados pela',
-    headlineHighlight: 'neurociência da decisão humana',
+    headlineHighlight: 'neurociência da decisão humana.',
     subheadline:
       'Unimos SEO de intenção de compra e psicologia do consumidor para atrair quem já está pronto para comprar — e conduzi-lo, sem fricção, até o WhatsApp.',
     ctaPrimary: 'Diagnóstico no WhatsApp',
     ctaSecondary: 'Ver Nichos Atendidos',
-    panelTitle: 'Painel de Conversão',
-    panelLive: 'ao vivo',
-    metrics: [
-      { label: 'Velocidade & Core Web Vitals', value: '0.7s • Score 99' },
-      { label: 'Taxa de Conversão Média', value: '+38%' },
-      { label: 'Decisão de Compra', value: '0.8s' },
-      { label: 'Tráfego de Intenção', value: 'Alta prontidão' },
-    ],
     waMessage: 'Olá! Quero solicitar um diagnóstico de conversão do meu site.',
+  },
+  heroStudio: {
+    badgeSpeed: '⚡ 0.7s • Core Web Vitals 99',
+    badgeNeuro: '🧠 Neuromarketing & Alta Conversão',
+    tabs: [
+      {
+        emoji: '🏨',
+        label: 'Airbnb / Praia',
+        headline: 'Reserve sua estadia dos sonhos',
+        cta: 'Reservar Agora',
+        metricLabel: 'Conversão de Reservas',
+        metricValue: '+42%',
+      },
+      {
+        emoji: '🪵',
+        label: 'Marcenaria',
+        headline: 'Projetos sob medida, feitos pra durar',
+        cta: 'Solicitar Orçamento',
+        metricLabel: 'Leads Qualificados',
+        metricValue: '+58%',
+      },
+      {
+        emoji: '🍽️',
+        label: 'Gastronomia',
+        headline: 'Sabores que enchem mesas',
+        cta: 'Reservar Mesa',
+        metricLabel: 'Reservas Online',
+        metricValue: '+35%',
+      },
+      {
+        emoji: '💎',
+        label: 'E-commerce',
+        headline: 'Da vitrine ao carrinho, sem fricção',
+        cta: 'Comprar Agora',
+        metricLabel: 'Ticket Médio',
+        metricValue: '+27%',
+      },
+    ],
   },
   pillars: {
     badge: 'Os Dois Pilares Neuralabs',
@@ -321,15 +357,45 @@ const en: Dictionary = {
       'We merge high-end visual aesthetics, behavioral psychology, and cutting-edge tech to turn visitors into high-ticket clients.',
     ctaPrimary: 'Get Diagnosis on WhatsApp',
     ctaSecondary: 'See Niches We Serve',
-    panelTitle: 'Conversion Panel',
-    panelLive: 'live',
-    metrics: [
-      { label: 'Speed & Core Web Vitals', value: '0.7s • Score 99' },
-      { label: 'Average Conversion Rate', value: '+38%' },
-      { label: 'Purchase Decision', value: '0.8s' },
-      { label: 'Intent Traffic', value: 'High readiness' },
-    ],
     waMessage: "Hi! I'd like to request a conversion diagnosis for my website.",
+  },
+  heroStudio: {
+    badgeSpeed: '⚡ 0.7s • Core Web Vitals 99',
+    badgeNeuro: '🧠 Neuromarketing & High Conversion',
+    tabs: [
+      {
+        emoji: '🏨',
+        label: 'Airbnb / Beach',
+        headline: 'Book your dream stay',
+        cta: 'Book Now',
+        metricLabel: 'Booking Conversion',
+        metricValue: '+42%',
+      },
+      {
+        emoji: '🪵',
+        label: 'Woodwork',
+        headline: 'Custom projects, built to last',
+        cta: 'Request a Quote',
+        metricLabel: 'Qualified Leads',
+        metricValue: '+58%',
+      },
+      {
+        emoji: '🍽️',
+        label: 'Fine Dining',
+        headline: 'Flavors that fill tables',
+        cta: 'Reserve a Table',
+        metricLabel: 'Online Reservations',
+        metricValue: '+35%',
+      },
+      {
+        emoji: '💎',
+        label: 'E-commerce',
+        headline: 'From showcase to cart, frictionless',
+        cta: 'Buy Now',
+        metricLabel: 'Average Order Value',
+        metricValue: '+27%',
+      },
+    ],
   },
   pillars: {
     badge: 'The Two Neuralabs Pillars',
