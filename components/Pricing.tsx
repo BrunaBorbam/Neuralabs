@@ -8,48 +8,19 @@ import { ScrollReveal } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
 
-interface Plan {
-  name: string;
-  price: string;
-  period?: string;
-  description: string;
-  features: string[];
-  highlight?: boolean;
-}
-
-const plans: Plan[] = [
-  {
-    name: 'Website Premium',
-    price: 'R$ 5.000 – R$ 8.000',
-    description: 'Projeto único: da estratégia de conversão ao lançamento.',
-    features: [
-      'Design exclusivo na psicologia do seu nicho',
-      'SEO de intenção de compra + GEO para IAs',
-      'Copywriting com gatilhos de neuromarketing',
-      'Performance: 0.7s de carregamento, Score 99',
-      'Integração direta com WhatsApp',
-    ],
-    highlight: true,
-  },
-  {
-    name: 'Gestão Contínua',
-    price: 'R$ 800 – R$ 1.200',
-    period: '/mês',
-    description: 'Otimização, conteúdo e evolução constante após o lançamento.',
-    features: [
-      'Monitoramento de conversão e Core Web Vitals',
-      'Atualizações de conteúdo e SEO recorrentes',
-      'Testes de novos gatilhos de decisão',
-      'Relatório mensal de performance',
-      'Suporte prioritário via WhatsApp',
-    ],
-  },
+const DELIVERABLES = [
+  'Projeto exclusivo e sob medida (sem templates prontos)',
+  'Arquitetura de Neuromarketing & Psicologia de Compra',
+  'SEO de Intenção no Google & Otimização para IAs (ChatGPT/Gemini)',
+  '30 dias de suporte dedicado e revisões ilimitadas inclusas',
+  'Processo 100% assíncrono e direto por WhatsApp e E-mail (sem reuniões longas)',
+  '100% responsivo para celular e conformidade total com a LGPD',
 ];
 
 export const Pricing = () => {
   return (
     <section id="precos" className="py-24 px-6 bg-obsidian-900">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-2xl mx-auto">
         <ScrollReveal>
           <div className="text-center mb-14">
             <Badge variant="primary" className="mb-4">
@@ -59,52 +30,52 @@ export const Pricing = () => {
               Sem letras miúdas, sem surpresas
             </h2>
             <p className="text-pearl-300/70 max-w-2xl mx-auto leading-relaxed">
-              Um projeto sob medida e, se fizer sentido, gestão contínua para manter a
-              conversão evoluindo.
+              Um único projeto sob medida, sem mensalidades — pensado para converter desde o
+              primeiro dia no ar.
             </p>
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {plans.map((plan) => (
-            <ScrollReveal key={plan.name}>
-              <Card
-                variant={plan.highlight ? 'accent' : 'surface'}
-                className="h-full flex flex-col"
-              >
-                <h3 className="text-lg font-bold text-pearl-100 mb-1">{plan.name}</h3>
-                <p className="text-sm text-pearl-300/60 mb-6">{plan.description}</p>
+        <ScrollReveal>
+          <Card variant="accent" className="flex flex-col text-center items-center">
+            <h3 className="text-lg font-bold text-pearl-100 mb-1">
+              Website Premium (Projeto Completo Sob Medida)
+            </h3>
+            <p className="text-sm text-pearl-300/60 mb-6">
+              Investimento único • Entrega ágil em 7 a 10 dias úteis
+            </p>
 
-                <div className="mb-6">
-                  <span className="text-2xl md:text-3xl font-serif font-black text-pearl-100">
-                    {plan.price}
-                  </span>
-                  {plan.period && <span className="text-pearl-300/60">{plan.period}</span>}
-                </div>
+            <div className="mb-2">
+              <span className="text-3xl md:text-4xl font-serif font-black text-pearl-100">
+                R$ 5.000 – R$ 8.000
+              </span>
+            </div>
+            <p className="text-xs text-pearl-300/50 mb-8">
+              ou $1,500 – $2,500 USD para clientes internacionais
+            </p>
 
-                <ul className="flex flex-col gap-3 mb-8 flex-1">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm text-pearl-300/80">
-                      <Check className="w-4 h-4 text-blush-400 flex-shrink-0 mt-0.5" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+            <ul className="flex flex-col gap-3 mb-8 text-left w-full max-w-md">
+              {DELIVERABLES.map((feature) => (
+                <li key={feature} className="flex items-start gap-3 text-sm text-pearl-300/80">
+                  <Check className="w-4 h-4 text-blush-400 flex-shrink-0 mt-0.5" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
 
-                <a
-                  href={getWhatsAppLink(`Olá! Tenho interesse no plano ${plan.name}.`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackButtonClick('pricing_cta', plan.name)}
-                >
-                  <Button variant={plan.highlight ? 'primary' : 'outline'} className="w-full">
-                    Falar no WhatsApp
-                  </Button>
-                </a>
-              </Card>
-            </ScrollReveal>
-          ))}
-        </div>
+            <a
+              href={getWhatsAppLink('Olá! Quero solicitar um diagnóstico e proposta para o Website Premium.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackButtonClick('pricing_cta', 'Website Premium')}
+              className="w-full"
+            >
+              <Button variant="primary" className="w-full">
+                Solicitar Diagnóstico e Proposta no WhatsApp →
+              </Button>
+            </a>
+          </Card>
+        </ScrollReveal>
       </div>
     </section>
   );
