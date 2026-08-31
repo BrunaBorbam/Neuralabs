@@ -12,7 +12,7 @@ export const Hero = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="top" className="relative overflow-hidden bg-obsidian-900 pt-20 pb-28 px-6">
+    <section id="top" className="relative overflow-hidden bg-obsidian-900 pt-28 md:pt-44 pb-28 px-6">
       <div className="absolute -top-10 -left-10 opacity-60">
         <FloatingOrb color="blush" />
       </div>
@@ -21,7 +21,7 @@ export const Hero = () => {
       </div>
 
       <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-        <div>
+        <div className="min-w-0">
           <Badge variant="primary" className="mb-6">
             {t.hero.badge}
           </Badge>
@@ -43,13 +43,14 @@ export const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackButtonClick('diagnostico_whatsapp', 'hero')}
+              className="w-full sm:w-auto"
             >
-              <Button variant="primary" size="lg">
+              <Button variant="primary" size="lg" className="w-full sm:w-auto justify-center py-4 !text-base min-h-[48px]">
                 {t.hero.ctaPrimary}
               </Button>
             </a>
-            <a href="#nichos">
-              <Button variant="secondary" size="lg">
+            <a href="#nichos" className="w-full sm:w-auto">
+              <Button variant="secondary" size="lg" className="w-full sm:w-auto justify-center py-4 !text-base min-h-[48px]">
                 {t.hero.ctaSecondary}
               </Button>
             </a>

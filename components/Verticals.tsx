@@ -61,6 +61,7 @@ export const Verticals = () => {
                       src={media.image}
                       alt={vertical.name}
                       fill
+                      loading="lazy"
                       sizes="(min-width: 768px) 50vw, 100vw"
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />

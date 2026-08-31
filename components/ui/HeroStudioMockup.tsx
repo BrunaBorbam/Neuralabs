@@ -19,7 +19,7 @@ export const HeroStudioMockup = () => {
   const activeTab = tabs[active];
 
   return (
-    <div className="relative">
+    <div className="relative min-w-0">
       <motion.div
         className="hidden sm:flex absolute -top-5 left-8 z-20 items-center gap-2 px-4 py-2 rounded-full bg-obsidian-800/90 border border-pearl-100/15 backdrop-blur-md text-xs font-semibold text-pearl-100 shadow-lg whitespace-nowrap"
         animate={{ y: [0, -8, 0] }}
@@ -76,9 +76,9 @@ export const HeroStudioMockup = () => {
                 src={TAB_IMAGES[active]}
                 alt={activeTab.label}
                 fill
-                sizes="(min-width: 1024px) 560px, 100vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
-                priority={active === 0}
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent" />
 

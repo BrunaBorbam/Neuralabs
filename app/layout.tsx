@@ -3,6 +3,8 @@ import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import { CookieConsent } from "@/components/CookieConsent";
 import { PWAInstaller } from "@/components/PWAInstaller";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { LanguageProvider } from "@/context/LanguageContext";
 import "./globals.css";
 
@@ -115,9 +117,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen bg-[#0B0A0E] text-pearl-200">
         <LanguageProvider>
+          <SmoothScroll />
           {children}
           <CookieConsent />
           <PWAInstaller />
+          <FloatingWhatsApp />
         </LanguageProvider>
       </body>
     </html>
