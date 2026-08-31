@@ -71,7 +71,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${playfairDisplay.variable} ${jetbrainsMonoFont.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`overflow-x-hidden max-w-full w-full ${inter.variable} ${playfairDisplay.variable} ${jetbrainsMonoFont.variable}`}
+    >
       <head>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
@@ -115,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </>
         )}
       </head>
-      <body className="min-h-screen bg-[#0B0A0E] text-pearl-200">
+      <body className="min-h-screen overflow-x-hidden max-w-full w-full bg-[#0B0A0E] text-pearl-200">
         <LanguageProvider>
           <SmoothScroll />
           {children}

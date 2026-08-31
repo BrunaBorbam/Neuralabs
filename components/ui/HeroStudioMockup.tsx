@@ -36,20 +36,20 @@ export const HeroStudioMockup = () => {
         {t.heroStudio.badgeNeuro}
       </motion.div>
 
-      <div className="bg-[#121019]/90 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/90">
+      <div className="w-full max-w-full bg-[#121019]/90 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/90">
         <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
           <div className="flex gap-1.5 flex-shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
             <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
             <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
           </div>
-          <div className="flex gap-1.5 overflow-x-auto">
+          <div className="flex flex-nowrap gap-1.5 overflow-x-auto scrollbar-none py-1">
             {tabs.map((tab, idx) => (
               <button
                 key={tab.label}
                 type="button"
                 onClick={() => setActive(idx)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                   idx === active
                     ? 'bg-blush-500/15 border border-blush-500/40 text-pearl-100'
                     : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'

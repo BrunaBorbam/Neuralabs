@@ -1,8 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { HeroStudioMockup } from '@/components/ui/HeroStudioMockup';
+import { Badge } from '@/components/ui/Badge';
 import { FloatingOrb } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
@@ -12,7 +11,10 @@ export const Hero = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="top" className="relative overflow-hidden bg-obsidian-900 pt-28 md:pt-44 pb-28 px-6">
+    <section
+      id="top"
+      className="relative overflow-hidden max-w-full w-full bg-obsidian-900 pt-28 md:pt-44 pb-28 px-5 sm:px-8"
+    >
       <div className="absolute -top-10 -left-10 opacity-60">
         <FloatingOrb color="blush" />
       </div>
@@ -26,33 +28,32 @@ export const Hero = () => {
             {t.hero.badge}
           </Badge>
 
-          <h1 className="font-sans font-light tracking-tight text-4xl md:text-5xl lg:text-6xl text-pearl-100 leading-[1.15] text-balance mb-6">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.2] break-words text-balance text-[#FAF7F2] mb-6">
             {t.hero.headlinePrefix}{' '}
             <span className="font-normal text-[#FAF7F2] bg-gradient-to-r from-[#FAF7F2] via-[#EFE8DE] to-[#D8C2B8] bg-clip-text text-transparent">
               {t.hero.headlineHighlight}
             </span>
           </h1>
 
-          <p className="text-[#9CA3AF] max-w-xl text-base md:text-lg leading-relaxed mt-5 mb-10">
+          <p className="text-sm sm:text-base md:text-lg text-[#9CA3AF] leading-relaxed mt-4 max-w-xl mb-8">
             {t.hero.subheadline}
           </p>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-8 w-full sm:w-auto">
             <a
               href={getWhatsAppLink(t.hero.waMessage)}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackButtonClick('diagnostico_whatsapp', 'hero')}
-              className="w-full sm:w-auto"
+              className="inline-flex items-center w-full sm:w-auto text-center justify-center py-4 px-6 rounded-full bg-[#FAF7F2] text-[#0B0A0E] text-sm font-semibold shadow-md"
             >
-              <Button variant="primary" size="lg" className="w-full sm:w-auto justify-center py-4 !text-base min-h-[48px]">
-                {t.hero.ctaPrimary}
-              </Button>
+              {t.hero.ctaPrimary}
             </a>
-            <a href="#nichos" className="w-full sm:w-auto">
-              <Button variant="secondary" size="lg" className="w-full sm:w-auto justify-center py-4 !text-base min-h-[48px]">
-                {t.hero.ctaSecondary}
-              </Button>
+            <a
+              href="#nichos"
+              className="inline-flex items-center w-full sm:w-auto text-center justify-center py-4 px-6 rounded-full border border-white/20 bg-white/5 text-[#FAF7F2] text-sm font-medium"
+            >
+              {t.hero.ctaSecondary}
             </a>
           </div>
         </div>
