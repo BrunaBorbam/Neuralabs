@@ -14,7 +14,7 @@ export const Pricing = () => {
 
   return (
     <section id="precos" className="py-24 px-6 bg-obsidian-900">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <ScrollReveal>
           <div className="text-center mb-14">
             <Badge variant="primary" className="mb-4">
@@ -29,40 +29,65 @@ export const Pricing = () => {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal>
-          <Card variant="accent" className="flex flex-col text-center items-center">
-            <h3 className="text-lg font-bold text-pearl-100 mb-1">{t.pricing.planName}</h3>
-            <p className="text-sm text-pearl-300/60 mb-6">{t.pricing.planSubtitle}</p>
+        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+          {t.pricing.plans.map((plan, idx) => {
+            const highlight = idx === 1;
+            return (
+              <ScrollReveal key={plan.name}>
+                <Card
+                  variant={highlight ? 'accent' : 'surface'}
+                  className={`relative h-full flex flex-col text-center items-center ${
+                    highlight ? 'ring-2 ring-blush-500/50 shadow-blush-glow-lg' : ''
+                  }`}
+                >
+                  {plan.badge && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-blush-500 text-obsidian-900 text-xs font-bold tracking-wide uppercase whitespace-nowrap">
+                      {plan.badge}
+                    </span>
+                  )}
 
-            <div className="mb-2">
-              <span className="text-3xl md:text-4xl font-serif font-black text-pearl-100">
-                {t.pricing.price}
-              </span>
-            </div>
-            <p className="text-xs text-pearl-300/50 mb-8">{t.pricing.priceNote}</p>
+                  <h3 className="text-lg font-bold text-pearl-100 mb-1 mt-2">{plan.name}</h3>
+                  <p className="text-sm text-pearl-300/60 mb-6">{plan.subtitle}</p>
 
-            <ul className="flex flex-col gap-3 mb-8 text-left w-full max-w-md">
-              {t.pricing.deliverables.map((feature) => (
-                <li key={feature} className="flex items-start gap-3 text-sm text-pearl-300/80">
-                  <Check className="w-4 h-4 text-blush-400 flex-shrink-0 mt-0.5" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
+                  <div className="mb-1">
+                    <span className="text-3xl md:text-4xl font-serif font-black text-pearl-100">
+                      {plan.price}
+                    </span>
+                  </div>
+                  <p className="text-xs text-pearl-300/50 mb-8">{plan.priceNote}</p>
 
-            <a
-              href={getWhatsAppLink(t.pricing.waMessage)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackButtonClick('pricing_cta', 'Website Premium')}
-              className="w-full"
-            >
-              <Button variant="primary" className="w-full">
-                {t.pricing.cta}
-              </Button>
-            </a>
-          </Card>
-        </ScrollReveal>
+                  <ul className="flex flex-col gap-3 mb-8 text-left w-full max-w-sm flex-1">
+                    {plan.deliverables.map((feature) => (
+                      <li key={feature} className="flex items-start gap-3 text-sm text-pearl-300/80">
+                        <Check className="w-4 h-4 text-blush-400 flex-shrink-0 mt-0.5" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a
+                    href={getWhatsAppLink(plan.waMessage)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackButtonClick('pricing_cta', plan.name)}
+                    className="w-full"
+                  >
+                    <Button
+                      variant={highlight ? 'primary' : 'outline'}
+                      className={`w-full ${
+                        highlight
+                          ? '!bg-gradient-to-r !from-pearl-100 !to-pearl-300 !text-obsidian-900 !shadow-[0_0_24px_rgba(250,247,242,0.35)]'
+                          : ''
+                      }`}
+                    >
+                      {plan.cta}
+                    </Button>
+                  </a>
+                </Card>
+              </ScrollReveal>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

@@ -26,6 +26,17 @@ interface VerticalCopy {
   tags: string[];
 }
 
+interface PricingPlanCopy {
+  name: string;
+  badge?: string;
+  price: string;
+  priceNote: string;
+  subtitle: string;
+  deliverables: string[];
+  cta: string;
+  waMessage: string;
+}
+
 export interface Dictionary {
   nav: {
     links: NavLink[];
@@ -86,13 +97,7 @@ export interface Dictionary {
     badge: string;
     heading: string;
     subheading: string;
-    planName: string;
-    planSubtitle: string;
-    price: string;
-    priceNote: string;
-    deliverables: string[];
-    cta: string;
-    waMessage: string;
+    plans: PricingPlanCopy[];
   };
   contact: {
     badge: string;
@@ -205,16 +210,16 @@ const pt: Dictionary = {
     heading: 'Arraste e veja a diferença de uma decisão de design',
     subheading:
       'Do site genérico à experiência desenhada para conversão — a mesma empresa, dois resultados completamente diferentes.',
-    afterBrand: 'Neuralabs',
+    afterBrand: 'Padrão de Luxo',
     afterHeadline: 'Elegância que conduz à decisão',
     afterBody: 'Hierarquia visual clara, prova social estratégica e um único caminho até o WhatsApp.',
     afterCta: 'Falar Agora',
-    beforeSite: 'site-generico.com',
+    beforeSite: 'Site Comum',
     beforeHeadline: 'Bem-vindo ao nosso site',
     beforeBody: 'Lorem ipsum dolor sit amet, texto genérico sem hierarquia nem direção clara de ação.',
     beforeCta: 'Saiba Mais',
-    labelBefore: 'Antes',
-    labelAfter: 'Depois',
+    labelBefore: 'Sem Neuralabs',
+    labelAfter: 'Com Neuralabs',
   },
   calculator: {
     badge: 'Diagnóstico Rápido',
@@ -233,21 +238,41 @@ const pt: Dictionary = {
     badge: 'Investimento Transparente',
     heading: 'Sem letras miúdas, sem surpresas',
     subheading:
-      'Um único projeto sob medida, sem mensalidades — pensado para converter desde o primeiro dia no ar.',
-    planName: 'Website Premium (Projeto Completo Sob Medida)',
-    planSubtitle: 'Investimento único • Entrega ágil em 7 a 10 dias úteis',
-    price: 'R$ 5.000 – R$ 8.000',
-    priceNote: 'ou $1,500 – $2,500 USD para clientes internacionais',
-    deliverables: [
-      'Projeto exclusivo e sob medida (sem templates prontos)',
-      'Arquitetura de Neuromarketing & Psicologia de Compra',
-      'SEO de Intenção no Google & Otimização para IAs (ChatGPT/Gemini)',
-      '30 dias de suporte dedicado e revisões ilimitadas inclusas',
-      'Processo 100% assíncrono e direto por WhatsApp e E-mail (sem reuniões longas)',
-      '100% responsivo para celular e conformidade total com a LGPD',
+      'Dois formatos de projeto sob medida, sempre em investimento único — sem mensalidades.',
+    plans: [
+      {
+        name: 'Landing Page de Alta Conversão',
+        price: 'R$ 5.000',
+        priceNote: 'ou $1,500 USD',
+        subtitle: 'Investimento único • Entrega em 7 dias úteis',
+        deliverables: [
+          '1 Página de Alto Impacto com Neuromarketing',
+          'Otimização para Mobile e WhatsApp',
+          'Integração de Formulário Direto',
+          '30 dias de suporte e revisões inclusas',
+          'Conformidade com a LGPD',
+        ],
+        cta: 'Solicitar Proposta no WhatsApp →',
+        waMessage: 'Olá! Tenho interesse na Landing Page de Alta Conversão.',
+      },
+      {
+        name: 'Plataforma Web Premium',
+        badge: 'MAIS ESCOLHIDO',
+        price: 'R$ 8.000',
+        priceNote: 'ou $2,500 USD',
+        subtitle: 'Investimento único • Entrega em 10 dias úteis',
+        deliverables: [
+          'Projeto Completo e Exclusivo Sob Medida',
+          'Arquitetura de Neuromarketing & Psicologia de Compra',
+          'SEO de Intenção no Google & Otimização para IAs (GEO)',
+          'Interações e Animações 3D de Alto Padrão',
+          '30 dias de suporte dedicado e revisões ilimitadas',
+          'Processo 100% assíncrono (sem reuniões longas)',
+        ],
+        cta: 'Solicitar Proposta no WhatsApp →',
+        waMessage: 'Olá! Tenho interesse na Plataforma Web Premium.',
+      },
     ],
-    cta: 'Solicitar Diagnóstico e Proposta no WhatsApp →',
-    waMessage: 'Olá! Quero solicitar um diagnóstico e proposta para o Website Premium.',
   },
   contact: {
     badge: 'Vamos Conversar',
@@ -363,16 +388,16 @@ const en: Dictionary = {
     heading: 'Drag to see the difference a design decision makes',
     subheading:
       'From a generic site to a conversion-engineered experience — same company, two completely different results.',
-    afterBrand: 'Neuralabs',
+    afterBrand: 'Luxury Standard',
     afterHeadline: 'Elegance that drives the decision',
     afterBody: 'Clear visual hierarchy, strategic social proof, and a single path to WhatsApp.',
     afterCta: 'Talk Now',
-    beforeSite: 'generic-site.com',
+    beforeSite: 'Common Website',
     beforeHeadline: 'Welcome to our website',
     beforeBody: 'Lorem ipsum dolor sit amet, generic copy with no hierarchy or clear call to action.',
     beforeCta: 'Learn More',
-    labelBefore: 'Before',
-    labelAfter: 'After',
+    labelBefore: 'Without Neuralabs',
+    labelAfter: 'With Neuralabs',
   },
   calculator: {
     badge: 'Quick Diagnosis',
@@ -390,21 +415,41 @@ const en: Dictionary = {
   pricing: {
     badge: 'Transparent Investment',
     heading: 'No fine print, no surprises',
-    subheading: 'A single tailor-made project, no monthly fees — built to convert from day one live.',
-    planName: 'Premium Website (Complete Custom Project)',
-    planSubtitle: 'One-time investment • Fast delivery in 7 to 10 business days',
-    price: '$1,500 – $2,500 USD',
-    priceNote: 'or R$ 5.000 – R$ 8.000 BRL for Brazilian clients',
-    deliverables: [
-      'Exclusive, fully custom project (no pre-made templates)',
-      'Neuromarketing & Purchase Psychology architecture',
-      'Google Intent SEO & AI Optimization (ChatGPT/Gemini)',
-      '30 days of dedicated support and unlimited revisions included',
-      '100% async process, direct via WhatsApp and email (no long meetings)',
-      '100% mobile responsive and fully LGPD-compliant',
+    subheading: 'Two tailor-made project formats, always a one-time investment — no monthly fees.',
+    plans: [
+      {
+        name: 'High-Conversion Landing Page',
+        price: '$1,500 USD',
+        priceNote: 'or R$ 5,000 BRL',
+        subtitle: 'One-time investment • Delivered in 7 business days',
+        deliverables: [
+          '1 High-Impact Page with Neuromarketing',
+          'Mobile & WhatsApp Optimization',
+          'Direct Form Integration',
+          '30 days of support and revisions included',
+          'LGPD Compliance',
+        ],
+        cta: 'Request Proposal on WhatsApp →',
+        waMessage: "Hi! I'm interested in the High-Conversion Landing Page.",
+      },
+      {
+        name: 'Premium Web Platform',
+        badge: 'MOST CHOSEN',
+        price: '$2,500 USD',
+        priceNote: 'or R$ 8,000 BRL',
+        subtitle: 'One-time investment • Delivered in 10 business days',
+        deliverables: [
+          'Complete, Exclusive Custom Project',
+          'Neuromarketing & Purchase Psychology Architecture',
+          'Google Intent SEO & AI Optimization (GEO)',
+          'High-End 3D Interactions & Animations',
+          '30 days of dedicated support and unlimited revisions',
+          '100% Async Process (no long meetings)',
+        ],
+        cta: 'Request Proposal on WhatsApp →',
+        waMessage: "Hi! I'm interested in the Premium Web Platform.",
+      },
     ],
-    cta: 'Request Diagnosis & Proposal on WhatsApp →',
-    waMessage: "Hi! I'd like to request a diagnosis and proposal for the Premium Website.",
   },
   contact: {
     badge: "Let's Talk",

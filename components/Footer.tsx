@@ -1,6 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/context/LanguageContext';
+import { Logo } from '@/components/Logo';
 
 export const Footer = () => {
   const { t } = useLanguage();
@@ -9,9 +10,7 @@ export const Footer = () => {
     <footer className="bg-obsidian-900 border-t border-pearl-100/10 px-6 py-14">
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
         <div>
-          <span className="text-lg font-serif font-bold tracking-[0.15em] text-pearl-100">
-            NEURALABS
-          </span>
+          <Logo />
           <p className="text-sm text-pearl-300/60 mt-3 leading-relaxed max-w-xs">
             {t.footer.tagline}
           </p>

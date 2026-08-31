@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Logo } from '@/components/Logo';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
 import { useLanguage } from '@/context/LanguageContext';
@@ -45,9 +46,7 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 bg-obsidian-900/85 backdrop-blur-lg border-b border-pearl-100/10">
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#top" className="text-xl font-serif font-bold tracking-[0.15em] text-pearl-100">
-          NEURALABS
-        </a>
+        <Logo />
 
         <div className="hidden md:flex items-center gap-8">
           {t.nav.links.map((link) => (
