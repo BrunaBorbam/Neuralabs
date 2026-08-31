@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export const FloatingOrb = ({ delay = 0, color = 'orange' }: { delay?: number; color?: string }) => {
+export const FloatingOrb = ({ delay = 0, color = 'blush' }: { delay?: number; color?: string }) => {
   const colors = {
-    orange: 'from-orange-500 to-orange-600',
-    violet: 'from-violet-500 to-violet-600',
-    slate: 'from-slate-700 to-slate-800',
+    blush: 'from-blush-500 to-blush-700',
+    pearl: 'from-pearl-200 to-pearl-400',
+    slate: 'from-obsidian-600 to-obsidian-700',
   };
 
   return (
@@ -34,11 +34,11 @@ export const GlowingText = ({ text }: { text: string }) => {
       transition={{ duration: 1, delay: 0.5 }}
     >
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-orange-500/50 to-violet-500/50 blur-2xl"
+        className="absolute inset-0 bg-gradient-to-r from-blush-500/40 to-pearl-200/30 blur-2xl"
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 3, repeat: Infinity }}
       />
-      <span className="relative bg-gradient-to-r from-orange-400 to-violet-400 bg-clip-text text-transparent font-black">
+      <span className="relative bg-gradient-to-r from-blush-300 to-pearl-200 bg-clip-text text-transparent font-black">
         {text}
       </span>
     </motion.div>
@@ -76,7 +76,7 @@ export const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?
   return (
     <motion.div
       ref={ref}
-      className="text-5xl md:text-7xl font-black font-serif text-orange-500"
+      className="text-5xl md:text-7xl font-black font-serif text-blush-400"
       initial={{ opacity: 0, scale: 0.5 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6 }}
@@ -101,10 +101,10 @@ export const ScrollReveal = ({ children, delay = 0 }: { children: React.ReactNod
   );
 };
 
-export const PulseGlow = ({ children, color = 'orange' }: { children: React.ReactNode; color?: string }) => {
+export const PulseGlow = ({ children, color = 'blush' }: { children: React.ReactNode; color?: string }) => {
   const colors = {
-    orange: 'shadow-orange-glow hover:shadow-orange-glow-lg',
-    violet: 'shadow-violet-glow',
+    blush: 'shadow-blush-glow hover:shadow-blush-glow-lg',
+    pearl: 'shadow-blush-glow',
   };
 
   return (

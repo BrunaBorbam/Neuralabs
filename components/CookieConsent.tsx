@@ -47,7 +47,7 @@ export function CookieConsent() {
             <h3 className="font-bold text-white mb-2">Respeito à sua privacidade</h3>
             <p className="text-sm text-slate-300 mb-4">
               Usamos cookies e ferramentas de análise para melhorar sua experiência e entender como o site é usado.
-              Seus dados pessoais são protegidos conforme a LGPD. Veja nossa <a href="/privacy" className="text-orange-400 hover:text-orange-300 underline">política de privacidade</a>.
+              Seus dados pessoais são protegidos conforme a LGPD. Veja nossa <a href="/privacy" className="text-blush-400 hover:text-blush-300 underline">política de privacidade</a>.
             </p>
           </div>
           <button onClick={() => setIsVisible(false)} className="text-slate-400 hover:text-white">

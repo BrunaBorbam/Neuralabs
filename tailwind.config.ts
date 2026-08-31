@@ -9,6 +9,40 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // DELICATE LUXURY — obsidian base
+        obsidian: {
+          DEFAULT: '#0B0A0E',
+          900: '#0B0A0E',
+          800: '#141319',
+          700: '#1D1B24',
+          600: '#2A2733',
+          500: '#3A3645',
+        },
+
+        // DELICATE LUXURY — blush nude accent
+        blush: {
+          50: '#FAF3EF',
+          100: '#F3E4DB',
+          200: '#EAD3C5',
+          300: '#E0C1AF',
+          400: '#DCC5B9',
+          500: '#D8C2B8', // Blush Nude primary
+          600: '#C2A896',
+          700: '#A88972',
+          800: '#8A6D59',
+          900: '#6B5445',
+        },
+
+        // DELICATE LUXURY — pérola
+        pearl: {
+          DEFAULT: '#FAF7F2',
+          50: '#FFFFFF',
+          100: '#FDFCFA',
+          200: '#FAF7F2', // Pérola primary
+          300: '#F0EAE1',
+          400: '#E3D9CB',
+        },
+
         // PRIMARY DARK
         slate: {
           900: '#0F172A',
@@ -104,19 +138,6 @@ const config: Config = {
         'mobile-heading-lg': ['24px', { lineHeight: '1.3', fontWeight: '700' }],
       },
 
-      spacing: {
-        // 8px grid system
-        xs: '4px',
-        sm: '8px',
-        md: '16px',
-        lg: '24px',
-        xl: '32px',
-        '2xl': '48px',
-        '3xl': '64px',
-        '4xl': '96px',
-        '5xl': '128px',
-      },
-
       borderRadius: {
         'xs': '4px',
         'sm': '8px',
@@ -141,6 +162,8 @@ const config: Config = {
         'orange-glow': '0 0 20px rgba(255, 140, 0, 0.3)',
         'orange-glow-lg': '0 0 40px rgba(255, 140, 0, 0.4)',
         'violet-glow': '0 0 20px rgba(139, 92, 246, 0.3)',
+        'blush-glow': '0 0 24px rgba(216, 194, 184, 0.25)',
+        'blush-glow-lg': '0 0 48px rgba(216, 194, 184, 0.35)',
       },
 
       backdropBlur: {
@@ -183,6 +206,8 @@ const config: Config = {
         'gradient-orange': 'linear-gradient(135deg, rgba(255, 140, 0, 0.2) 0%, transparent 100%)',
         'gradient-dark': 'linear-gradient(180deg, #0A0E27 0%, #0F172A 100%)',
         'gradient-orange-dark': 'linear-gradient(135deg, #FF8C00 0%, #EA580C 100%)',
+        'gradient-obsidian': 'linear-gradient(180deg, #0B0A0E 0%, #141319 100%)',
+        'gradient-blush': 'linear-gradient(135deg, #D8C2B8 0%, #C2A896 100%)',
       },
 
       fontFamily: {

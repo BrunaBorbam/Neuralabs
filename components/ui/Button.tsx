@@ -27,10 +27,10 @@ export const Button: React.FC<ButtonProps> = ({
   const baseStyles = 'font-bold transition-all duration-200 flex items-center justify-center gap-2 rounded-lg relative';
 
   const variants = {
-    primary: 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 disabled:from-slate-700 disabled:to-slate-800 disabled:shadow-none',
-    secondary: 'bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-sm disabled:opacity-50',
-    ghost: 'text-orange-400 hover:text-orange-300 hover:bg-orange-500/5 disabled:opacity-50',
-    outline: 'border-2 border-orange-500 text-orange-400 hover:bg-orange-500/10 hover:text-orange-300 disabled:border-slate-600 disabled:text-slate-600',
+    primary: 'bg-gradient-to-r from-blush-500 to-blush-600 hover:from-blush-400 hover:to-blush-500 text-obsidian-900 shadow-lg shadow-blush-500/20 hover:shadow-blush-500/40 disabled:from-obsidian-600 disabled:to-obsidian-700 disabled:shadow-none',
+    secondary: 'bg-pearl-100/10 hover:bg-pearl-100/20 text-pearl-100 border border-pearl-100/30 backdrop-blur-sm disabled:opacity-50',
+    ghost: 'text-blush-400 hover:text-blush-300 hover:bg-blush-500/5 disabled:opacity-50',
+    outline: 'border-2 border-blush-500 text-blush-400 hover:bg-blush-500/10 hover:text-blush-300 disabled:border-obsidian-600 disabled:text-obsidian-500',
   };
 
   const sizes = {

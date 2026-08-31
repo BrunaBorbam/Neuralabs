@@ -1,4 +1,35 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
+
+@theme {
+  /* Delicate Luxury palette — obsidian base */
+  --color-obsidian: #0B0A0E;
+  --color-obsidian-900: #0B0A0E;
+  --color-obsidian-800: #141319;
+  --color-obsidian-700: #1D1B24;
+  --color-obsidian-600: #2A2733;
+  --color-obsidian-500: #3A3645;
+
+  /* Delicate Luxury palette — blush nude accent */
+  --color-blush-50: #FAF3EF;
+  --color-blush-100: #F3E4DB;
+  --color-blush-200: #EAD3C5;
+  --color-blush-300: #E0C1AF;
+  --color-blush-400: #DCC5B9;
+  --color-blush-500: #D8C2B8;
+  --color-blush-600: #C2A896;
+  --color-blush-700: #A88972;
+  --color-blush-800: #8A6D59;
+  --color-blush-900: #6B5445;
+
+  /* Delicate Luxury palette — pérola */
+  --color-pearl: #FAF7F2;
+  --color-pearl-50: #FFFFFF;
+  --color-pearl-100: #FDFCFA;
+  --color-pearl-200: #FAF7F2;
+  --color-pearl-300: #F0EAE1;
+  --color-pearl-400: #E3D9CB;
+}
 
 :root {
   --background: #ffffff;

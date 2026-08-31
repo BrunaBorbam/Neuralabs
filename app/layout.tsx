@@ -112,7 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </>
         )}
       </head>
-      <body className="min-h-screen bg-[#0A0E27]">
+      <body className="min-h-screen bg-[#0B0A0E] text-pearl-200">
         {children}
         <CookieConsent />
         <PWAInstaller />

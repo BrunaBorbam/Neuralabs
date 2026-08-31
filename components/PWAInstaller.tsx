@@ -76,7 +76,7 @@ export const PWAInstaller = () => {
           {deferredPrompt && !isIOS && (
             <button
               onClick={handleInstall}
-              className="text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-full font-semibold transition-colors"
+              className="text-xs bg-blush-500 hover:bg-blush-600 text-obsidian-900 px-3 py-1 rounded-full font-semibold transition-colors"
             >
               Instalar Agora
             </button>

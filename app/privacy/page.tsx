@@ -8,9 +8,9 @@ export const metadata = {
 
 export default function Privacy() {
   return (
-    <div className="min-h-screen bg-slate-850 text-white pt-32 pb-16">
+    <div className="min-h-screen bg-obsidian-900 text-white pt-32 pb-16">
       <div className="max-w-4xl mx-auto px-6">
-        <Link href="/" className="text-orange-400 hover:text-orange-300 mb-8 inline-block">
+        <Link href="/" className="text-blush-300 hover:text-blush-200 mb-8 inline-block">
           ← Voltar
         </Link>
 
@@ -18,7 +18,7 @@ export default function Privacy() {
 
         <div className="space-y-12 text-slate-300">
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">1. Sobre a Neuralabs</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">1. Sobre a Neuralabs</h2>
             <p>
               A Neuralabs ("empresa", "nós" ou "nosso") é comprometida em proteger sua privacidade. Esta Política de Privacidade
               explica como coletamos, usamos, divulgamos e protegemos suas informações.
@@ -26,7 +26,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">2. Informações que Coletamos</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">2. Informações que Coletamos</h2>
             <p className="mb-4">Coletamos informações que você nos fornece voluntariamente:</p>
             <ul className="space-y-2 ml-6">
               <li>• <strong>Formulário de Lead:</strong> Nome, email, empresa, telefone</li>
@@ -36,7 +36,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">3. Como Usamos Suas Informações</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">3. Como Usamos Suas Informações</h2>
             <ul className="space-y-2 ml-6">
               <li>• Para responder suas consultas e enviar diagnóstico</li>
               <li>• Para melhorar o site através de análise de comportamento</li>
@@ -46,7 +46,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">4. Compartilhamento de Dados</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">4. Compartilhamento de Dados</h2>
             <p className="mb-4">Seus dados são compartilhados apenas com:</p>
             <ul className="space-y-2 ml-6">
               <li>• <strong>Google Analytics:</strong> Para análise anônima de tráfego</li>
@@ -56,7 +56,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">5. Consentimento e Cookies</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">5. Consentimento e Cookies</h2>
             <p className="mb-4">
               O cookie banner exibe na primeira visita. Ao aceitar, você permite:
             </p>
@@ -70,7 +70,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">6. Segurança de Dados</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">6. Segurança de Dados</h2>
             <ul className="space-y-2 ml-6">
               <li>• Usamos HTTPS para encriptar dados em trânsito</li>
               <li>• Dados armazenados com proteção apropriada</li>
@@ -79,7 +79,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">7. Seus Direitos (LGPD)</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">7. Seus Direitos (LGPD)</h2>
             <p>Conforme a Lei Geral de Proteção de Dados, você tem direito a:</p>
             <ul className="space-y-2 ml-6 mt-4">
               <li>• <strong>Acesso:</strong> Ver que dados temos sobre você</li>
@@ -89,12 +89,12 @@ export default function Privacy() {
               <li>• <strong>Revogação:</strong> Retirar consentimento</li>
             </ul>
             <p className="mt-4">
-              Para exercer esses direitos, entre em contato conosco em: <a href="mailto:ola@neuralabs.online" className="text-orange-400 hover:text-orange-300 underline">ola@neuralabs.online</a>
+              Para exercer esses direitos, entre em contato conosco em: <a href="mailto:ola@neuralabs.online" className="text-blush-300 hover:text-blush-200 underline">ola@neuralabs.online</a>
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">8. Retenção de Dados</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">8. Retenção de Dados</h2>
             <ul className="space-y-2 ml-6">
               <li>• <strong>Leads:</strong> Mantidos por 2 anos ou até revogar consentimento</li>
               <li>• <strong>Analytics:</strong> Agregados e mantidos por 26 meses</li>
@@ -103,17 +103,17 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">9. Alterações nesta Política</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">9. Alterações nesta Política</h2>
             <p>
               Podemos atualizar esta política. A data de última atualização está no final. Recomendamos revisar periodicamente.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold font-serif text-orange-400 mb-4">10. Contato</h2>
+            <h2 className="text-2xl font-bold font-serif text-blush-300 mb-4">10. Contato</h2>
             <p>Dúvidas? Entre em contato:</p>
             <ul className="space-y-2 ml-6 mt-4">
-              <li>• Email: <a href="mailto:ola@neuralabs.online" className="text-orange-400 hover:text-orange-300 underline">ola@neuralabs.online</a></li>
+              <li>• Email: <a href="mailto:ola@neuralabs.online" className="text-blush-300 hover:text-blush-200 underline">ola@neuralabs.online</a></li>
               <li>• WhatsApp: Disponível no site</li>
               <li>• Enreço: Estamos no Brasil (São Paulo, SP)</li>
             </ul>

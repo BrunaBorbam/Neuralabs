@@ -1,53 +1,96 @@
 'use client';
 
-import { Zap, TrendingUp, Brain } from 'lucide-react';
+import { Zap, TrendingUp, MousePointerClick, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
 import { FloatingOrb, GlowingText } from '@/components/HeroAnimations';
+import { getWhatsAppLink } from '@/lib/whatsapp';
+import { trackButtonClick } from '@/lib/ga';
+
+const PANEL_METRICS = [
+  { icon: Zap, label: 'Velocidade & Core Web Vitals', value: '0.7s • Score 99' },
+  { icon: TrendingUp, label: 'Taxa de Conversão Média', value: '+38%' },
+  { icon: MousePointerClick, label: 'Decisão de Compra', value: '0.8s' },
+  { icon: Activity, label: 'Tráfego de Intenção', value: 'Alta prontidão' },
+];
 
 export const Hero = () => {
   return (
-    <section className="relative overflow-hidden py-24 px-6 bg-[#0A0E27]">
-      <div className="absolute top-10 left-10">
-        <FloatingOrb color="orange" />
+    <section id="top" className="relative overflow-hidden bg-obsidian-900 pt-20 pb-28 px-6">
+      <div className="absolute -top-10 -left-10 opacity-60">
+        <FloatingOrb color="blush" />
       </div>
-      <div className="absolute bottom-10 right-10">
-        <FloatingOrb color="violet" delay={2} />
+      <div className="absolute bottom-0 right-0 opacity-40">
+        <FloatingOrb color="pearl" delay={2} />
       </div>
 
-      <div className="relative max-w-4xl mx-auto text-center">
-        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-6">
-          Websites que aumentam conversão usando{' '}
-          <GlowingText text="Neuromarketing & IA" />
-        </h1>
-        <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Criamos websites premium que vendem. Combinamos SEO de intenção de compra, psicologia
-          do consumidor e design de alta performance para transformar visitantes em clientes.
-        </p>
+      <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <Badge variant="primary" className="mb-6">
+            Neurociência aplicada à conversão
+          </Badge>
 
-        <div className="flex justify-center gap-4 mb-14">
-          <Button variant="primary" size="lg">
-            Falar no WhatsApp
-          </Button>
-          <Button variant="secondary" size="lg">
-            Ver Portfólio
-          </Button>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-black text-pearl-100 leading-[1.1] mb-6">
+            Websites desenhados pela{' '}
+            <GlowingText text="neurociência da decisão humana" />
+          </h1>
+
+          <p className="text-lg text-pearl-300/70 max-w-xl mb-10 leading-relaxed">
+            Unimos SEO de intenção de compra e psicologia do consumidor para atrair quem já
+            está pronto para comprar — e conduzi-lo, sem fricção, até o WhatsApp.
+          </p>
+
+          <div className="flex flex-wrap gap-4">
+            <a
+              href={getWhatsAppLink('Olá! Quero solicitar um diagnóstico de conversão do meu site.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackButtonClick('diagnostico_whatsapp', 'hero')}
+            >
+              <Button variant="primary" size="lg">
+                Diagnóstico no WhatsApp
+              </Button>
+            </a>
+            <a href="#nichos">
+              <Button variant="secondary" size="lg">
+                Ver Nichos Atendidos
+              </Button>
+            </a>
+          </div>
         </div>
 
-        <Card variant="glass" className="inline-flex flex-wrap justify-center gap-3 !p-4 md:!p-5">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/30 text-sm font-semibold text-orange-300">
-            <Zap className="w-4 h-4" />
-            0.7s • Score 99 Google SEO &amp; Core Web Vitals
-          </span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/30 text-sm font-semibold text-violet-300">
-            <Brain className="w-4 h-4" />
-            Neuromarketing Aplicado
-          </span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-semibold text-slate-300">
-            <TrendingUp className="w-4 h-4" />
-            SEO de Intenção de Compra
-          </span>
-        </Card>
+        <div className="relative">
+          <div className="rounded-2xl border border-pearl-100/10 bg-obsidian-800/60 backdrop-blur-xl shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-pearl-100/10">
+              <span className="text-xs font-semibold tracking-widest uppercase text-pearl-300/60">
+                Painel de Conversão
+              </span>
+              <span className="flex items-center gap-2 text-xs text-blush-300">
+                <span className="w-2 h-2 rounded-full bg-blush-400 animate-pulse-soft" />
+                ao vivo
+              </span>
+            </div>
+
+            <div className="p-6 flex flex-col gap-5">
+              {PANEL_METRICS.map((metric) => (
+                <div
+                  key={metric.label}
+                  className="flex items-center justify-between gap-4 rounded-xl bg-pearl-100/[0.03] border border-pearl-100/5 px-4 py-3"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-9 h-9 rounded-lg bg-blush-500/10 border border-blush-500/20 flex items-center justify-center flex-shrink-0">
+                      <metric.icon className="w-4 h-4 text-blush-300" />
+                    </span>
+                    <span className="text-sm text-pearl-300/70">{metric.label}</span>
+                  </div>
+                  <span className="text-sm font-bold text-pearl-100 whitespace-nowrap">
+                    {metric.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
