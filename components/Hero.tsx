@@ -1,11 +1,19 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { HeroStudioMockup } from '@/components/ui/HeroStudioMockup';
 import { Badge } from '@/components/ui/Badge';
 import { FloatingOrb } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
 import { useLanguage } from '@/context/LanguageContext';
+
+// R3F needs the browser (WebGL context), so it's loaded client-only and
+// never blocks the LCP text/CTA — the Hero reads perfectly without it.
+const HeroScene3D = dynamic(
+  () => import('@/components/HeroScene3D').then((mod) => mod.HeroScene3D),
+  { ssr: false }
+);
 
 export const Hero = () => {
   const { t } = useLanguage();
@@ -58,7 +66,10 @@ export const Hero = () => {
           </div>
         </div>
 
-        <HeroStudioMockup />
+        <div className="relative min-w-0">
+          <HeroScene3D />
+          <HeroStudioMockup />
+        </div>
       </div>
     </section>
   );
