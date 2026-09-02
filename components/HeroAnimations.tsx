@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export const FloatingOrb = ({ delay = 0, color = 'blush' }: { delay?: number; color?: string }) => {
@@ -89,12 +89,52 @@ export const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?
 };
 
 export const ScrollReveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    if (revealed) return;
+    const el = ref.current;
+    if (!el) return;
+
+    // Driven off scroll position directly rather than IntersectionObserver:
+    // under Lenis's eased fast-scroll (or any main-thread jank that makes it
+    // catch up in one jump), an element can cross the viewport between two
+    // observer callbacks and never register as intersecting — leaving it
+    // permanently opacity:0. Reading the live rect on every scroll/resize
+    // frame can't miss it that way; worst case it reveals a frame late.
+    const check = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100 && rect.bottom > 100) {
+        setRevealed(true);
+      }
+    };
+    check(); // already in view on mount (above the fold)
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        check();
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [revealed]);
+
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={revealed ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.6, delay }}
-      viewport={{ once: true, margin: '-100px' }}
     >
       {children}
     </motion.div>
