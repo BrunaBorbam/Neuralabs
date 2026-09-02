@@ -1,20 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { MeshDistortMaterial, Sphere, Torus } from '@react-three/drei';
+import { Sphere, Torus } from '@react-three/drei';
 import * as THREE from 'three';
-
-/**
- * Ambient 3D proof-of-capability piece for the main Neuralabs Hero.
- * Renders behind the existing HeroStudioMockup panel — a slow-drifting
- * glass sphere orbited by a thin ring, reacting subtly to the pointer.
- * Kept intentionally quiet (no bloom, no fast motion): the site sells a
- * "padrão de luxo", so this proves the 3D/motion capability without
- * competing with the copy or the CTA for attention.
- */
-
-const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 function DriftingGlass() {
   const group = useRef<THREE.Group>(null);
@@ -34,11 +23,8 @@ function DriftingGlass() {
     if (!group.current) return;
     const t = state.clock.getElapsedTime();
 
-    // Gentle continuous drift, independent of pointer input.
     group.current.position.y = Math.sin(t * 0.4) * 0.18;
     group.current.rotation.z = Math.sin(t * 0.25) * 0.12;
-
-    // Soft parallax toward the pointer — eased, never snappy.
     group.current.rotation.y += (target.current.x * 0.4 - group.current.rotation.y) * 0.02;
     group.current.rotation.x += (-target.current.y * 0.25 - group.current.rotation.x) * 0.02;
   });
@@ -48,48 +34,35 @@ function DriftingGlass() {
   return (
     <group ref={group} scale={scale}>
       <Sphere args={[1, 64, 64]}>
-        <MeshDistortMaterial
+        <meshPhysicalMaterial
           color="#D8C2B8"
           roughness={0.15}
           metalness={0.1}
-          transparent
-          opacity={0.45}
-          distort={0.35}
-          speed={1.5}
+          transmission={0.9}
+          opacity={0.7}
         />
       </Sphere>
       <Torus args={[1.65, 0.012, 16, 100]} rotation={[Math.PI / 2.4, 0, 0]}>
-        <meshBasicMaterial color="#FAF7F2" transparent opacity={0.65} />
+        <meshStandardMaterial color="#FAF7F2" emissive="#A89084" emissiveIntensity={0.4} />
       </Torus>
     </group>
   );
 }
 
 export const HeroScene3D = () => {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const mql = window.matchMedia(REDUCED_MOTION_QUERY);
-    setEnabled(!mql.matches);
-    const handleChange = () => setEnabled(!mql.matches);
-    mql.addEventListener('change', handleChange);
-    return () => mql.removeEventListener('change', handleChange);
-  }, []);
-
-  if (!enabled) return null;
-
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 opacity-100"
+      className="pointer-events-none absolute inset-0 -z-10"
     >
       <Canvas
         camera={{ position: [0, 0, 4.2], fov: 40 }}
         gl={{ alpha: true, antialias: true }}
         dpr={[1, 1.5]}
       >
-        <ambientLight intensity={0.6} />
-        <pointLight position={[3, 2, 4]} intensity={0.8} color="#D8C2B8" />
+        <ambientLight intensity={0.8} />
+        <pointLight position={[3, 2, 4]} intensity={1.2} color="#D8C2B8" />
+        <pointLight position={[-3, -2, 2]} intensity={0.6} color="#FAF7F2" />
         <DriftingGlass />
       </Canvas>
     </div>
