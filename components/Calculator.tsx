@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { Calculator as CalculatorIcon, TrendingDown } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -105,12 +106,14 @@ export const Calculator = () => {
                 <TrendingDown className="w-6 h-6 text-blush-300" />
               </span>
               <p className="text-sm text-pearl-300/60 mb-2">{t.calculator.monthlyLossLabel}</p>
-              <p className="text-3xl md:text-4xl font-serif font-black text-pearl-100 mb-4">
-                {currency.format(monthlyLoss)}
+              <p className="text-3xl md:text-4xl font-serif font-black text-pearl-100 mb-4 tabular-nums">
+                <AnimatedNumber value={monthlyLoss} format={currency.format} />
               </p>
-              <div className="flex items-center gap-2 text-sm text-pearl-300/60">
+              <div className="flex items-center gap-2 text-sm text-pearl-300/60 tabular-nums">
                 <CalculatorIcon className="w-4 h-4" />
-                <span>{currency.format(annualLoss)} {t.calculator.annualLossSuffix}</span>
+                <span>
+                  <AnimatedNumber value={annualLoss} format={currency.format} /> {t.calculator.annualLossSuffix}
+                </span>
               </div>
             </div>
           </Card>

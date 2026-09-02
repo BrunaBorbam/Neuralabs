@@ -36,8 +36,8 @@ export const Pricing = () => {
               <ScrollReveal key={plan.name}>
                 <Card
                   variant={highlight ? 'accent' : 'surface'}
-                  className={`relative h-full flex flex-col text-center items-center ${
-                    highlight ? 'ring-2 ring-blush-500/50 shadow-blush-glow-lg' : ''
+                  className={`relative h-full flex flex-col text-center items-center transition-shadow duration-500 ${
+                    highlight ? 'ring-2 ring-blush-500/50 shadow-blush-glow-lg hover:animate-glow' : ''
                   }`}
                 >
                   {plan.badge && (
