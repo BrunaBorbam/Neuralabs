@@ -180,6 +180,11 @@ const config: Config = {
         'float': 'float 3s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite',
         'shimmer': 'shimmer 2s linear infinite',
+
+        // Villa Serena (Coastal Sunset Luxury) micro-interactions
+        'drift-slow': 'drift-slow 18s ease-in-out infinite',
+        'ring': 'ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'marquee': 'marquee 32s linear infinite',
       },
 
       keyframes: {
@@ -198,6 +203,21 @@ const config: Config = {
         'shimmer': {
           '0%': { backgroundPosition: '-1000px 0' },
           '100%': { backgroundPosition: '1000px 0' },
+        },
+
+        // Villa Serena (Coastal Sunset Luxury)
+        'drift-slow': {
+          '0%, 100%': { transform: 'translate3d(0,0,0) scale(1)' },
+          '50%': { transform: 'translate3d(2%,-3%,0) scale(1.05)' },
+        },
+        'ring': {
+          '0%': { boxShadow: '0 0 0 0 rgba(212, 163, 115, 0.45)' },
+          '70%': { boxShadow: '0 0 0 14px rgba(212, 163, 115, 0)' },
+          '100%': { boxShadow: '0 0 0 0 rgba(212, 163, 115, 0)' },
+        },
+        'marquee': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
 
