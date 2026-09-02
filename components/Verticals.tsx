@@ -1,36 +1,41 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { Home, Ruler, UtensilsCrossed, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { TiltCard } from '@/components/ui/TiltCard';
+import { HoverRevealVideo } from '@/components/ui/HoverRevealVideo';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { useLanguage } from '@/context/LanguageContext';
 
-// Imagens geradas por IA (não são fotos de banco genéricas nem trabalho
-// real de cliente) — daí o selo "Conceito Ilustrativo" no card. Guardadas
-// localmente em public/ para não depender de um host externo (Unsplash)
-// e para carregar mais rápido.
+// Imagens e vídeos gerados por IA (não são fotos de banco genéricas nem
+// trabalho real de cliente) — daí o selo "Conceito Ilustrativo" no card.
+// Guardados localmente em public/ para não depender de host externo e
+// carregar rápido. O vídeo (um "reveal" de card 2D estourando em 3D) só
+// carrega e toca no hover — a imagem é o que chega no primeiro load.
 const VERTICAL_MEDIA = [
   {
     icon: Home,
     image: '/images/verticals/airbnb.jpg',
+    video: '/videos/verticals/airbnb',
     demoHref: '/demo/airbnb',
   },
   {
     icon: Ruler,
     image: '/images/verticals/marcenaria.jpg',
+    video: '/videos/verticals/marcenaria',
     demoHref: undefined,
   },
   {
     icon: UtensilsCrossed,
     image: '/images/verticals/gastronomia.jpg',
+    video: '/videos/verticals/gastronomia',
     demoHref: undefined,
   },
   {
     icon: ShoppingBag,
     image: '/images/verticals/ecommerce.jpg',
+    video: '/videos/verticals/ecommerce',
     demoHref: undefined,
   },
 ];
@@ -64,19 +69,21 @@ export const Verticals = () => {
                 <TiltCard>
                   <div className="rounded-2xl overflow-hidden border border-pearl-100/10 bg-obsidian-800/60 h-full flex flex-col transition-[border-color,box-shadow] duration-300 group-hover/tilt:border-blush-500/40 group-hover/tilt:shadow-[0_20px_60px_-15px_rgba(216,194,184,0.25)]">
                     <div className="group relative aspect-[16/9] overflow-hidden">
-                      <Image
-                        src={media.image}
+                      <HoverRevealVideo
+                        image={media.image}
+                        video={media.video}
                         alt={vertical.name}
-                        fill
-                        loading="lazy"
-                        sizes="(min-width: 768px) 50vw, 100vw"
-                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                        className="object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0A0E]/60 via-[#0B0A0E]/10 to-transparent" />
-                      <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-obsidian-900/70 border border-blush-500/30 flex items-center justify-center backdrop-blur-sm">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B0A0E]/60 via-[#0B0A0E]/10 to-transparent pointer-events-none" />
+                      {/* pointer-events-none on these two decorative badges: they sit
+                          on top of the hover-video's hit area but aren't interactive
+                          themselves, so hovering directly over them should still count
+                          as hovering the card and trigger the video. */}
+                      <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-obsidian-900/70 border border-blush-500/30 flex items-center justify-center backdrop-blur-sm pointer-events-none">
                         <Icon className="w-6 h-6 text-blush-300" />
                       </div>
-                      <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-wide text-pearl-300/80">
+                      <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-wide text-pearl-300/80 pointer-events-none">
                         {t.verticals.conceptTag}
                       </span>
                     </div>
