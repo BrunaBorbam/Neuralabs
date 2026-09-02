@@ -43,12 +43,12 @@ function DriftingGlass() {
           roughness={0.2}
           metalness={0.05}
           transmission={0.95}
-          opacity={0.35}
+          opacity={0.48}
           transparent
         />
       </Sphere>
       <Torus args={[1.65, 0.01, 16, 100]} rotation={[Math.PI / 2.4, 0, 0]}>
-        <meshStandardMaterial color="#FAF7F2" emissive="#A89084" emissiveIntensity={0.3} />
+        <meshStandardMaterial color="#FAF7F2" emissive="#A89084" emissiveIntensity={0.4} />
       </Torus>
     </group>
   );

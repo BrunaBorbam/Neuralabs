@@ -56,6 +56,9 @@ export const ContactForm = () => {
             <p className="text-pearl-300/70 max-w-2xl mx-auto leading-relaxed">
               {t.contact.subheading}
             </p>
+            <p className="inline-block mt-4 px-4 py-1.5 rounded-full bg-blush-500/10 border border-blush-500/25 text-xs font-semibold text-blush-300">
+              {t.contact.urgencyLine}
+            </p>
           </div>
         </ScrollReveal>
 

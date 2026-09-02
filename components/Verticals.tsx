@@ -76,6 +76,9 @@ export const Verticals = () => {
                       <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-obsidian-900/70 border border-blush-500/30 flex items-center justify-center backdrop-blur-sm">
                         <Icon className="w-6 h-6 text-blush-300" />
                       </div>
+                      <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-wide text-pearl-300/80">
+                        {t.verticals.conceptTag}
+                      </span>
                     </div>
 
                     <div className="p-8 flex flex-col flex-1">
