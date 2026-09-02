@@ -53,7 +53,7 @@ export const HeroScene3D = () => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10"
+      className="pointer-events-none absolute inset-0 z-0"
     >
       <Canvas
         camera={{ position: [0, 0, 4.2], fov: 40 }}
