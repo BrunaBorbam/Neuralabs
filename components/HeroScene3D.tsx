@@ -53,13 +53,13 @@ function DriftingGlass() {
           roughness={0.15}
           metalness={0.1}
           transparent
-          opacity={0.22}
-          distort={0.28}
-          speed={1.1}
+          opacity={0.45}
+          distort={0.35}
+          speed={1.5}
         />
       </Sphere>
       <Torus args={[1.65, 0.012, 16, 100]} rotation={[Math.PI / 2.4, 0, 0]}>
-        <meshBasicMaterial color="#FAF7F2" transparent opacity={0.35} />
+        <meshBasicMaterial color="#FAF7F2" transparent opacity={0.65} />
       </Torus>
     </group>
   );
@@ -81,7 +81,7 @@ export const HeroScene3D = () => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 opacity-80"
+      className="pointer-events-none absolute inset-0 -z-10 opacity-100"
     >
       <Canvas
         camera={{ position: [0, 0, 4.2], fov: 40 }}
