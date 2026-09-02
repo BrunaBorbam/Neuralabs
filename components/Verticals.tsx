@@ -8,29 +8,29 @@ import { TiltCard } from '@/components/ui/TiltCard';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { useLanguage } from '@/context/LanguageContext';
 
+// Imagens geradas por IA (não são fotos de banco genéricas nem trabalho
+// real de cliente) — daí o selo "Conceito Ilustrativo" no card. Guardadas
+// localmente em public/ para não depender de um host externo (Unsplash)
+// e para carregar mais rápido.
 const VERTICAL_MEDIA = [
   {
     icon: Home,
-    image:
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+    image: '/images/verticals/airbnb.jpg',
     demoHref: '/demo/airbnb',
   },
   {
     icon: Ruler,
-    image:
-      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80',
+    image: '/images/verticals/marcenaria.jpg',
     demoHref: undefined,
   },
   {
     icon: UtensilsCrossed,
-    image:
-      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
+    image: '/images/verticals/gastronomia.jpg',
     demoHref: undefined,
   },
   {
     icon: ShoppingBag,
-    image:
-      'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
+    image: '/images/verticals/ecommerce.jpg',
     demoHref: undefined,
   },
 ];
