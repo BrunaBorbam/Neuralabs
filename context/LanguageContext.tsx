@@ -70,6 +70,7 @@ export interface Dictionary {
     badge: string;
     heading: string;
     subheading: string;
+    conceptTag: string;
     items: VerticalCopy[];
   };
   comparison: {
@@ -109,6 +110,7 @@ export interface Dictionary {
     badge: string;
     heading: string;
     subheading: string;
+    urgencyLine: string;
     namePlaceholder: string;
     emailPlaceholder: string;
     companyPlaceholder: string;
@@ -215,6 +217,7 @@ const pt: Dictionary = {
     heading: 'Especialistas em quatro mercados de alto ticket',
     subheading:
       'Cada nicho tem sua própria psicologia de compra. Desenhamos cada site para o comportamento específico do seu cliente.',
+    conceptTag: 'Conceito Ilustrativo',
     items: [
       {
         name: 'Hospitalidade & Airbnb',
@@ -318,6 +321,7 @@ const pt: Dictionary = {
     heading: 'Peça seu diagnóstico de conversão',
     subheading:
       'Conte um pouco sobre seu negócio e retornamos com uma análise em até 24 horas — ou fale agora mesmo pelo WhatsApp.',
+    urgencyLine: 'Começando esta semana, seu site fica pronto em até 10 dias úteis.',
     namePlaceholder: 'Seu nome',
     emailPlaceholder: 'Seu e-mail',
     companyPlaceholder: 'Empresa (opcional)',
@@ -427,6 +431,7 @@ const en: Dictionary = {
     heading: 'Specialists in four high-ticket markets',
     subheading:
       "Every niche has its own buying psychology. We design each site around your specific customer's behavior.",
+    conceptTag: 'Concept Preview',
     items: [
       {
         name: 'Hospitality & Airbnb',
@@ -529,6 +534,7 @@ const en: Dictionary = {
     heading: 'Request your conversion diagnosis',
     subheading:
       "Tell us a bit about your business and we'll get back within 24 hours — or chat right now on WhatsApp.",
+    urgencyLine: 'Start this week and your site is ready in as little as 10 business days.',
     namePlaceholder: 'Your name',
     emailPlaceholder: 'Your email',
     companyPlaceholder: 'Company (optional)',
