@@ -52,17 +52,17 @@ function DriftingGlass() {
 export const HeroScene3D = () => {
   return (
     <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0"
+      className="absolute inset-0 z-10 pointer-events-none"
+      style={{ background: 'radial-gradient(circle at 50% 50%, rgba(216,194,184,0.15) 0%, transparent 70%)' }}
     >
       <Canvas
         camera={{ position: [0, 0, 4.2], fov: 40 }}
         gl={{ alpha: true, antialias: true }}
         dpr={[1, 1.5]}
       >
-        <ambientLight intensity={0.8} />
-        <pointLight position={[3, 2, 4]} intensity={1.2} color="#D8C2B8" />
-        <pointLight position={[-3, -2, 2]} intensity={0.6} color="#FAF7F2" />
+        <ambientLight intensity={1.0} />
+        <pointLight position={[3, 2, 4]} intensity={1.5} color="#D8C2B8" />
+        <pointLight position={[-3, -2, 2]} intensity={0.8} color="#FAF7F2" />
         <DriftingGlass />
       </Canvas>
     </div>
