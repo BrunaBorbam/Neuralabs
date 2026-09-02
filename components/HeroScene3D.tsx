@@ -29,21 +29,26 @@ function DriftingGlass() {
     group.current.rotation.x += (-target.current.y * 0.25 - group.current.rotation.x) * 0.02;
   });
 
-  const scale = Math.min(viewport.width / 6, 1.3);
+  // Sized to bleed past the mockup panel's edges (see Hero.tsx's bleed
+  // container) rather than fill it — the panel's opaque card covers the
+  // center, so only the sphere's rim shows, as an ambient accent instead
+  // of a disc sitting on top of the villa photo.
+  const scale = Math.min(viewport.width / 4.5, 1.85);
 
   return (
     <group ref={group} scale={scale}>
       <Sphere args={[1, 64, 64]}>
         <meshPhysicalMaterial
           color="#D8C2B8"
-          roughness={0.15}
-          metalness={0.1}
-          transmission={0.9}
-          opacity={0.7}
+          roughness={0.2}
+          metalness={0.05}
+          transmission={0.95}
+          opacity={0.35}
+          transparent
         />
       </Sphere>
-      <Torus args={[1.65, 0.012, 16, 100]} rotation={[Math.PI / 2.4, 0, 0]}>
-        <meshStandardMaterial color="#FAF7F2" emissive="#A89084" emissiveIntensity={0.4} />
+      <Torus args={[1.65, 0.01, 16, 100]} rotation={[Math.PI / 2.4, 0, 0]}>
+        <meshStandardMaterial color="#FAF7F2" emissive="#A89084" emissiveIntensity={0.3} />
       </Torus>
     </group>
   );
@@ -51,18 +56,14 @@ function DriftingGlass() {
 
 export const HeroScene3D = () => {
   return (
-    <div
-      className="absolute inset-0 z-10 pointer-events-none"
-      style={{ background: 'radial-gradient(circle at 50% 50%, rgba(216,194,184,0.15) 0%, transparent 70%)' }}
-    >
+    <div aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-80">
       <Canvas
         camera={{ position: [0, 0, 4.2], fov: 40 }}
         gl={{ alpha: true, antialias: true }}
         dpr={[1, 1.5]}
       >
-        <ambientLight intensity={1.0} />
-        <pointLight position={[3, 2, 4]} intensity={1.5} color="#D8C2B8" />
-        <pointLight position={[-3, -2, 2]} intensity={0.8} color="#FAF7F2" />
+        <ambientLight intensity={0.6} />
+        <pointLight position={[3, 2, 4]} intensity={0.8} color="#D8C2B8" />
         <DriftingGlass />
       </Canvas>
     </div>

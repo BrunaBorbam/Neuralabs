@@ -67,7 +67,13 @@ export const Hero = () => {
         </div>
 
         <div className="relative min-w-0">
-          <HeroScene3D />
+          {/* Sized larger than the mockup panel and inset negatively, behind
+              it in stacking order, so the glass sphere reads as a soft halo
+              bleeding out around the panel's rounded edges — not a flat
+              disc sitting on top of the villa photo. */}
+          <div className="absolute -inset-10 sm:-inset-16 -z-10">
+            <HeroScene3D />
+          </div>
           <HeroStudioMockup />
         </div>
       </div>
