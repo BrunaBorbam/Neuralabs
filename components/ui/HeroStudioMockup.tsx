@@ -5,11 +5,16 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 
+// Same AI-generated editorial set used in Nichos (public/images/verticals),
+// copied here rather than hotlinked from Unsplash: one less third-party
+// origin on the page's LCP image, and a consistent visual identity between
+// the Hero mockup and the Nichos cards instead of two unrelated stock-photo
+// styles.
 const TAB_IMAGES = [
-  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
+  '/images/hero-studio/airbnb.jpg',
+  '/images/hero-studio/marcenaria.jpg',
+  '/images/hero-studio/gastronomia.jpg',
+  '/images/hero-studio/ecommerce.jpg',
 ];
 
 export const HeroStudioMockup = () => {
@@ -81,6 +86,13 @@ export const HeroStudioMockup = () => {
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent" />
+
+              {/* Same honesty standard as the Nichos cards: this mockup and
+                  its metrics are an illustrative concept, not a real client
+                  result, so it carries the same disclosure they do. */}
+              <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-wide text-pearl-300/80">
+                {t.verticals.conceptTag}
+              </span>
 
               <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between gap-4">
                 <div>
