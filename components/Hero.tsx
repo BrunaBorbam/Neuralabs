@@ -5,6 +5,7 @@ import { motion, type Variants } from 'framer-motion';
 import { HeroStudioMockup } from '@/components/ui/HeroStudioMockup';
 import { TiltCard } from '@/components/ui/TiltCard';
 import { Badge } from '@/components/ui/Badge';
+import { NeuralMesh } from '@/components/ui/NeuralMesh';
 import { FloatingOrb } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
@@ -44,6 +45,9 @@ export const Hero = () => {
       <div className="absolute bottom-0 right-0 opacity-40">
         <FloatingOrb color="pearl" delay={2} />
       </div>
+      {/* Literal (but very quiet) echo of "neurociência" — a faint synapse
+          mesh behind the text column only, never behind the mockup panel. */}
+      <NeuralMesh className="absolute top-0 left-0 w-[600px] h-[500px] opacity-10" />
 
       <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         <motion.div className="min-w-0" variants={textColumn} initial="hidden" animate="show">
