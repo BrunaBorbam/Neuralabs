@@ -77,14 +77,26 @@ export const HeroStudioMockup = () => {
               transition={{ duration: 0.4 }}
               className="absolute inset-0"
             >
-              <Image
-                src={TAB_IMAGES[active]}
-                alt={activeTab.label}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover"
-                priority
-              />
+              {/* Slow continuous zoom (Ken Burns) instead of a static
+                  screenshot — the panel is meant to hint at the motion/3D
+                  craft the agency actually builds (see the Nichos hover
+                  cards and the Hero's own glass sphere), not read as a flat
+                  tab-switcher template. */}
+              <motion.div
+                className="absolute inset-0"
+                initial={{ scale: 1.08 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 6, ease: 'easeOut' }}
+              >
+                <Image
+                  src={TAB_IMAGES[active]}
+                  alt={activeTab.label}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
+                />
+              </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent" />
 
               {/* Same honesty standard as the Nichos cards: this mockup and
