@@ -155,7 +155,11 @@ const pt: Dictionary = {
       'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o site da minha empresa.',
   },
   heroStudio: {
-    badgeSpeed: '⚡ 0.7s • Core Web Vitals 99',
+    // Was '⚡ 0.7s • Core Web Vitals 99' — a specific, unverifiable
+    // performance number sitting outside the mockup's "Conceito
+    // Ilustrativo" disclosure. Replaced with a capability claim, same
+    // register as badgeNeuro below, instead of an invented benchmark.
+    badgeSpeed: '⚡ Design 3D & Alta Performance',
     badgeNeuro: '🧠 Neuromarketing & Alta Conversão',
     tabs: [
       {
@@ -369,7 +373,7 @@ const en: Dictionary = {
       "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
   },
   heroStudio: {
-    badgeSpeed: '⚡ 0.7s • Core Web Vitals 99',
+    badgeSpeed: '⚡ 3D Design & High Performance',
     badgeNeuro: '🧠 Neuromarketing & High Conversion',
     tabs: [
       {

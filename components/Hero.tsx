@@ -5,6 +5,7 @@ import { motion, type Variants } from 'framer-motion';
 import { HeroStudioMockup } from '@/components/ui/HeroStudioMockup';
 import { TiltCard } from '@/components/ui/TiltCard';
 import { Badge } from '@/components/ui/Badge';
+import { NeuralMesh } from '@/components/ui/NeuralMesh';
 import { FloatingOrb } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
@@ -44,6 +45,9 @@ export const Hero = () => {
       <div className="absolute bottom-0 right-0 opacity-40">
         <FloatingOrb color="pearl" delay={2} />
       </div>
+      {/* Literal (but very quiet) echo of "neurociência" — a faint synapse
+          mesh behind the text column only, never behind the mockup panel. */}
+      <NeuralMesh className="absolute top-0 left-0 w-[600px] h-[500px] opacity-10" />
 
       <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         <motion.div className="min-w-0" variants={textColumn} initial="hidden" animate="show">
@@ -55,7 +59,7 @@ export const Hero = () => {
 
           <motion.h1
             variants={textItem}
-            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.2] break-words text-balance text-[#FAF7F2] mb-6"
+            className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.2] break-words text-balance text-[#FAF7F2] mb-6"
           >
             {t.hero.headlinePrefix}{' '}
             <span className="font-normal text-[#FAF7F2] bg-gradient-to-r from-[#FAF7F2] via-[#EFE8DE] to-[#D8C2B8] bg-clip-text text-transparent">

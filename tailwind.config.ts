@@ -231,9 +231,15 @@ const config: Config = {
       },
 
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Fraunces', 'Georgia', 'serif'],
-        mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+        // These MUST reference the CSS variables next/font actually sets on
+        // <html> (see app/layout.tsx). Before this fix they were hardcoded
+        // font-name arrays disconnected from next/font — in particular
+        // serif pointed at 'Fraunces', a font never loaded anywhere in the
+        // project, so every font-serif heading site-wide (H1, all section
+        // titles) silently fell back to system Georgia instead of the
+        // intended Playfair Display.
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
       },
     },
   },

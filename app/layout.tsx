@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import { CookieConsent } from "@/components/CookieConsent";
 import { PWAInstaller } from "@/components/PWAInstaller";
@@ -8,22 +8,24 @@ import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { LanguageProvider } from "@/context/LanguageContext";
 import "./globals.css";
 
+// Weight lists trimmed to exactly what the site's Tailwind classes use
+// (audited via grep across components/app) — cuts font requests from 15
+// files to 8 and, more importantly, fixes every section heading: they all
+// use font-serif + font-black (900), which Playfair Display was NOT
+// loading before (it stopped at 800) — the browser was faux-bolding every
+// title on the site instead of rendering the real black weight.
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "900"],
 });
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const jetbrainsMonoFont = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  // Playfair Display has no true light (300) cut — the Hero's
+  // font-light headline just resolves to the nearest loaded weight (400).
+  weight: ["400", "700", "900"],
 });
 
 export const viewport: Viewport = {
@@ -69,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="pt-BR"
-      className={`overflow-x-hidden max-w-full w-full ${inter.variable} ${playfairDisplay.variable} ${jetbrainsMonoFont.variable}`}
+      className={`overflow-x-hidden max-w-full w-full ${inter.variable} ${playfairDisplay.variable}`}
     >
       <head>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
