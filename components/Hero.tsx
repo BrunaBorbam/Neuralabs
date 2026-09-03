@@ -59,7 +59,7 @@ export const Hero = () => {
 
           <motion.h1
             variants={textItem}
-            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.2] break-words text-balance text-[#FAF7F2] mb-6"
+            className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.2] break-words text-balance text-[#FAF7F2] mb-6"
           >
             {t.hero.headlinePrefix}{' '}
             <span className="font-normal text-[#FAF7F2] bg-gradient-to-r from-[#FAF7F2] via-[#EFE8DE] to-[#D8C2B8] bg-clip-text text-transparent">
