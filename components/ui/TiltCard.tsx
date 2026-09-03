@@ -15,19 +15,26 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 export const TiltCard = ({
   children,
   className = '',
+  intensity = 5,
 }: {
   children: React.ReactNode;
   className?: string;
+  /** Max rotation in degrees and glow strength multiplier. Default (5) is
+   * the original "subtle" feel; pass a lower value (e.g. 3) for an even
+   * more delicate touch on smaller/denser layouts like the Nichos grid. */
+  intensity?: number;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
   const springConfig = { stiffness: 150, damping: 18, mass: 0.6 };
-  const rotateX = useSpring(useTransform(mouseY, [0, 1], [5, -5]), springConfig);
-  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-5, 5]), springConfig);
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [intensity, -intensity]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-intensity, intensity]), springConfig);
   const glowX = useTransform(mouseX, [0, 1], ['0%', '100%']);
   const glowY = useTransform(mouseY, [0, 1], ['0%', '100%']);
+  const glowOpacity = Math.min(0.18, (intensity / 5) * 0.18);
+  const glowRadius = Math.round(220 + (intensity / 5) * 100);
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     const bounds = ref.current?.getBoundingClientRect();
@@ -57,7 +64,7 @@ export const TiltCard = ({
           background: useTransform(
             [glowX, glowY],
             ([x, y]) =>
-              `radial-gradient(320px circle at ${x} ${y}, rgba(216,194,184,0.18), transparent 70%)`
+              `radial-gradient(${glowRadius}px circle at ${x} ${y}, rgba(216,194,184,${glowOpacity}), transparent 70%)`
           ),
         }}
       />
