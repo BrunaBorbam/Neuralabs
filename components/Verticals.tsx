@@ -44,31 +44,31 @@ export const Verticals = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="nichos" className="py-24 px-6 bg-obsidian-800/40">
-      <div className="max-w-6xl mx-auto">
+    <section id="nichos" className="py-20 px-6 bg-obsidian-800/40">
+      <div className="max-w-5xl mx-auto">
         <ScrollReveal>
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <Badge variant="primary" className="mb-4">
               {t.verticals.badge}
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-serif font-black text-pearl-100 mb-4">
+            <h2 className="text-2xl md:text-3xl font-serif font-black text-pearl-100 mb-3">
               {t.verticals.heading}
             </h2>
-            <p className="text-pearl-300/70 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-pearl-300/70 max-w-2xl mx-auto leading-relaxed text-sm">
               {t.verticals.subheading}
             </p>
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {t.verticals.items.map((vertical, idx) => {
             const media = VERTICAL_MEDIA[idx];
             const Icon = media.icon;
             return (
               <ScrollReveal key={vertical.name}>
                 <TiltCard>
-                  <div className="rounded-2xl overflow-hidden border border-pearl-100/10 bg-obsidian-800/60 h-full flex flex-col transition-[border-color,box-shadow] duration-300 group-hover/tilt:border-blush-500/40 group-hover/tilt:shadow-[0_20px_60px_-15px_rgba(216,194,184,0.25)]">
-                    <div className="group relative aspect-[16/9] overflow-hidden">
+                  <div className="rounded-xl overflow-hidden border border-pearl-100/10 bg-obsidian-800/60 h-full flex flex-col transition-[border-color,box-shadow] duration-300 group-hover/tilt:border-blush-500/40 group-hover/tilt:shadow-[0_16px_40px_-15px_rgba(216,194,184,0.25)]">
+                    <div className="group relative aspect-[4/3] overflow-hidden">
                       <HoverRevealVideo
                         image={media.image}
                         video={media.video}
@@ -80,20 +80,20 @@ export const Verticals = () => {
                           on top of the hover-video's hit area but aren't interactive
                           themselves, so hovering directly over them should still count
                           as hovering the card and trigger the video. */}
-                      <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-obsidian-900/70 border border-blush-500/30 flex items-center justify-center backdrop-blur-sm pointer-events-none">
-                        <Icon className="w-6 h-6 text-blush-300" />
+                      <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-obsidian-900/70 border border-blush-500/30 flex items-center justify-center backdrop-blur-sm pointer-events-none">
+                        <Icon className="w-4 h-4 text-blush-300" />
                       </div>
-                      <span className="absolute top-4 right-4 px-3 py-1 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-wide text-pearl-300/80 pointer-events-none">
+                      <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wide text-pearl-300/80 pointer-events-none">
                         {t.verticals.conceptTag}
                       </span>
                     </div>
 
-                    <div className="p-8 flex flex-col flex-1">
-                      <h3 className="text-xl font-bold text-pearl-100 mb-3">{vertical.name}</h3>
-                      <p className="text-pearl-300/70 leading-relaxed mb-6 flex-1">
+                    <div className="p-4 flex flex-col flex-1">
+                      <h3 className="text-sm font-bold text-pearl-100 mb-1.5">{vertical.name}</h3>
+                      <p className="text-pearl-300/70 leading-relaxed mb-3 flex-1 text-xs">
                         {vertical.proposal}
                       </p>
-                      <div className="flex flex-wrap gap-2 mb-2">
+                      <div className="flex flex-wrap gap-1.5 mb-1">
                         {vertical.tags.map((tag) => (
                           <Badge key={tag} variant="primary">
                             {tag}
@@ -103,10 +103,10 @@ export const Verticals = () => {
                       {media.demoHref && (
                         <Link
                           href={media.demoHref}
-                          className="inline-flex items-center gap-1.5 text-sm font-semibold text-blush-300 hover:text-blush-200 transition-colors mt-4 w-fit"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-blush-300 hover:text-blush-200 transition-colors mt-3 w-fit"
                         >
                           Ver Demo Interativa
-                          <ArrowRight className="w-4 h-4" />
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                       )}
                     </div>
