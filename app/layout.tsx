@@ -42,14 +42,10 @@ export const metadata: Metadata = {
     url: "https://neuralabs.online",
     type: "website",
     locale: "pt_BR",
-    images: [
-      {
-        url: "https://neuralabs.online/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Neuralabs - Design 3D + Neuromarketing",
-      },
-    ],
+    // Image comes from app/opengraph-image.tsx (Next generates it and wires
+    // up og:image/twitter:image automatically) — this used to point at
+    // /og-image.jpg, which was never added to public/, so every link
+    // shared on WhatsApp, Instagram or LinkedIn showed no preview image.
   },
   twitter: {
     card: "summary_large_image",
