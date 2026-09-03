@@ -45,6 +45,11 @@ export interface Dictionary {
   nav: {
     links: NavLink[];
     cta: string;
+    /** Plain-language category label under the logo — "Neurociência
+     * aplicada à conversão" (the badge) is a value proposition, not a
+     * category; a first-time visitor should know in <1s that this is a
+     * web design agency, not just what it promises. */
+    tagline: string;
   };
   hero: {
     badge: string;
@@ -142,6 +147,7 @@ const pt: Dictionary = {
       { label: 'Contato', href: '#contato' },
     ],
     cta: 'Diagnóstico no WhatsApp',
+    tagline: 'Criação de Sites Premium',
   },
   hero: {
     badge: 'Neurociência aplicada à conversão',
@@ -360,6 +366,7 @@ const en: Dictionary = {
       { label: 'Contact', href: '#contato' },
     ],
     cta: 'WhatsApp Diagnosis',
+    tagline: 'Premium Website Design',
   },
   hero: {
     badge: 'Neuroscience applied to conversion',

@@ -46,7 +46,7 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 bg-obsidian-900/85 backdrop-blur-lg border-b border-pearl-100/10">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
-        <Logo />
+        <Logo tagline={t.nav.tagline} />
 
         <div className="hidden md:flex items-center gap-8">
           {t.nav.links.map((link) => (

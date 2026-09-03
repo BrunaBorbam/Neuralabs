@@ -50,7 +50,11 @@ export const Pricing = () => {
                   <p className="text-sm text-pearl-300/60 mb-6">{plan.subtitle}</p>
 
                   <div className="mb-1">
-                    <span className="text-3xl md:text-4xl font-serif font-black text-pearl-100">
+                    {/* Sans, not the display serif used for headings: the
+                        Playfair Display numerals are decorative enough to
+                        slow down reading a price, which should register
+                        instantly. */}
+                    <span className="text-3xl md:text-4xl font-sans font-black text-pearl-100 tracking-tight">
                       {plan.price}
                     </span>
                   </div>

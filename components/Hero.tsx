@@ -83,7 +83,7 @@ export const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackButtonClick('diagnostico_whatsapp', 'hero')}
-              className="inline-flex items-center w-full sm:w-auto text-center justify-center py-4 px-6 rounded-full bg-[#FAF7F2] text-[#0B0A0E] text-sm font-semibold shadow-md transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98]"
+              className="inline-flex items-center w-full sm:w-auto text-center justify-center py-4 px-6 rounded-full bg-gradient-to-r from-blush-500 to-blush-600 text-obsidian-900 text-sm font-semibold shadow-lg shadow-blush-500/20 transition-all duration-200 hover:scale-[1.03] hover:shadow-blush-500/40 active:scale-[0.98]"
             >
               {t.hero.ctaPrimary}
             </a>
