@@ -15,7 +15,7 @@ type Status = 'idle' | 'loading' | 'success' | 'error';
 export const ContactForm = () => {
   const { t } = useLanguage();
   const [status, setStatus] = useState<Status>('idle');
-  const [form, setForm] = useState({ name: '', email: '', company: '', phone: '' });
+  const [form, setForm] = useState({ name: '', email: '', company: '', phone: '', website: '' });
 
   const handleChange = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -36,7 +36,7 @@ export const ContactForm = () => {
 
       trackFormSubmit('contact_form', { company: form.company });
       setStatus('success');
-      setForm({ name: '', email: '', company: '', phone: '' });
+      setForm({ name: '', email: '', company: '', phone: '', website: '' });
     } catch {
       setStatus('error');
     }
@@ -65,6 +65,22 @@ export const ContactForm = () => {
         <ScrollReveal>
           <Card variant="glass" className="grid md:grid-cols-[1.2fr,1fr] gap-10">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {/* Honeypot anti-bot: real visitors never see this field (it's
+                  visually hidden, not just a small opacity trick a scraper
+                  could detect), but a bot filling every input on the page
+                  blindly will populate it. The API route rejects silently
+                  whenever it arrives non-empty. tabIndex/autoComplete keep
+                  it out of keyboard tab order and browser autofill too. */}
+              <input
+                type="text"
+                name="website"
+                value={form.website}
+                onChange={handleChange('website')}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute -left-[9999px] w-px h-px opacity-0"
+              />
               <input
                 type="text"
                 required

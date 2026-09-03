@@ -50,7 +50,11 @@ export function CookieConsent() {
               Seus dados pessoais são protegidos conforme a LGPD. Veja nossa <a href="/privacy" className="text-blush-400 hover:text-blush-300 underline">política de privacidade</a>.
             </p>
           </div>
-          <button onClick={() => setIsVisible(false)} className="text-slate-400 hover:text-white">
+          <button
+            onClick={() => setIsVisible(false)}
+            aria-label="Fechar aviso de cookies"
+            className="text-slate-400 hover:text-white"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
