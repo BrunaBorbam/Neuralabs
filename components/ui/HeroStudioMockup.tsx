@@ -148,6 +148,54 @@ export const HeroStudioMockup = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Responsive phone mockup, overlapping the desktop panel's corner.
+          The address bar already signals "this is a website", but the
+          single most recognizable visual shorthand for "we build websites"
+          (as opposed to "we sell one nice photo") is showing the SAME
+          product responsive across devices — the classic agency-portfolio
+          cue. Mirrors the active tab so the two frames always tell the
+          same story. Hidden on small screens: there's no spare room next
+          to an already phone-width panel, and the badges follow the same
+          sm-and-up rule. */}
+      <motion.div
+        className="hidden sm:block absolute -bottom-10 md:-bottom-14 -left-10 md:-left-16 z-20 w-16 md:w-20"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="rounded-[1.2rem] border-4 border-obsidian-800 bg-obsidian-800 shadow-2xl shadow-black/90 overflow-hidden">
+          {/* Notch */}
+          <div className="relative h-3 bg-obsidian-800 flex items-center justify-center">
+            <div className="w-6 h-1 rounded-full bg-obsidian-600" />
+          </div>
+          <div className="relative aspect-[9/17] overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={TAB_IMAGES[active]}
+                  alt=""
+                  fill
+                  sizes="120px"
+                  className="object-cover"
+                  aria-hidden="true"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/85 via-transparent to-obsidian-900/10" />
+                <span className="absolute inset-x-1.5 bottom-1.5 px-1.5 py-1 rounded bg-gold-500 text-obsidian-900 text-[8px] font-bold text-center leading-none">
+                  {activeTab.cta}
+                </span>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
