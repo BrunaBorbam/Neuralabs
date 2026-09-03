@@ -106,7 +106,11 @@ export const Calculator = () => {
                 <TrendingDown className="w-6 h-6 text-blush-300" />
               </span>
               <p className="text-sm text-pearl-300/60 mb-2">{t.calculator.monthlyLossLabel}</p>
-              <p className="text-3xl md:text-4xl font-serif font-black text-pearl-100 mb-4 tabular-nums">
+              {/* Same reasoning as Pricing: numbers stay in the sans, not
+                  the display serif — a price/loss figure needs to register
+                  instantly, and Playfair Display's ornate numerals fight
+                  that. */}
+              <p className="text-3xl md:text-4xl font-sans font-black text-pearl-100 mb-4 tabular-nums tracking-tight">
                 <AnimatedNumber value={monthlyLoss} format={currency.format} />
               </p>
               <div className="flex items-center gap-2 text-sm text-pearl-300/60 tabular-nums">
