@@ -15,9 +15,13 @@ export const InteractiveComparison = () => {
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+  // Same reasoning as TiltCard: measure the container once when the drag
+  // starts instead of forcing a layout recalculation on every pixel of
+  // pointer movement during the drag.
+  const dragBounds = useRef<DOMRect | null>(null);
 
   const updatePosition = (clientX: number) => {
-    const rect = containerRef.current?.getBoundingClientRect();
+    const rect = dragBounds.current ?? containerRef.current?.getBoundingClientRect();
     if (!rect) return;
     const pct = ((clientX - rect.left) / rect.width) * 100;
     setPosition(Math.min(100, Math.max(0, pct)));
@@ -25,6 +29,7 @@ export const InteractiveComparison = () => {
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     isDragging.current = true;
+    dragBounds.current = containerRef.current?.getBoundingClientRect() ?? null;
     containerRef.current?.setPointerCapture(e.pointerId);
     updatePosition(e.clientX);
   };
@@ -36,6 +41,7 @@ export const InteractiveComparison = () => {
 
   const handlePointerUp = () => {
     isDragging.current = false;
+    dragBounds.current = null;
   };
 
   return (

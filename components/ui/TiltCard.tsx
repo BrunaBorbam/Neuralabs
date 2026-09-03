@@ -36,21 +36,36 @@ export const TiltCard = ({
   const glowOpacity = Math.min(0.18, (intensity / 5) * 0.18);
   const glowRadius = Math.round(220 + (intensity / 5) * 100);
 
+  // getBoundingClientRect() forces the browser to recompute layout — cheap
+  // once, expensive if called on every pointermove (which can fire well
+  // over 60x/second). The card's position/size doesn't change mid-hover, so
+  // measure once on entry and reuse it for the whole gesture instead of
+  // re-measuring on every pixel of movement.
+  const bounds = useRef<DOMRect | null>(null);
+
+  const handlePointerEnter = () => {
+    bounds.current = ref.current?.getBoundingClientRect() ?? null;
+  };
+
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    const bounds = ref.current?.getBoundingClientRect();
-    if (!bounds) return;
-    mouseX.set((event.clientX - bounds.left) / bounds.width);
-    mouseY.set((event.clientY - bounds.top) / bounds.height);
+    if (!bounds.current) {
+      bounds.current = ref.current?.getBoundingClientRect() ?? null;
+    }
+    if (!bounds.current) return;
+    mouseX.set((event.clientX - bounds.current.left) / bounds.current.width);
+    mouseY.set((event.clientY - bounds.current.top) / bounds.current.height);
   };
 
   const handlePointerLeave = () => {
     mouseX.set(0.5);
     mouseY.set(0.5);
+    bounds.current = null;
   };
 
   return (
     <motion.div
       ref={ref}
+      onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
