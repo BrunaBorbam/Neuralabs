@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Lock } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 // Same AI-generated editorial set used in Nichos (public/images/verticals),
@@ -56,7 +57,7 @@ export const HeroStudioMockup = () => {
                 onClick={() => setActive(idx)}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                   idx === active
-                    ? 'bg-blush-500/15 border border-blush-500/40 text-pearl-100'
+                    ? 'bg-gold-500/15 border border-gold-500/40 text-pearl-100'
                     : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'
                 }`}
               >
@@ -65,6 +66,26 @@ export const HeroStudioMockup = () => {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Fake browser address bar — the single cheapest, most reliable
+            signal that this panel is "a website open in a browser" rather
+            than a photo with a caption on top. Direct feedback: the panel
+            didn't read as "isto é um site" at a glance. */}
+        <div className="flex items-center gap-2 px-4 py-2 border-b border-white/10 bg-obsidian-900/40">
+          <Lock className="w-3 h-3 text-pearl-300/40 flex-shrink-0" />
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={active}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="text-[11px] text-pearl-300/50 truncate"
+            >
+              {activeTab.domain}
+            </motion.span>
+          </AnimatePresence>
         </div>
 
         <div className="relative aspect-[4/3] sm:aspect-video overflow-hidden">
@@ -111,7 +132,7 @@ export const HeroStudioMockup = () => {
                   <p className="text-sm md:text-base font-semibold text-pearl-100 mb-3 max-w-[220px] leading-snug">
                     {activeTab.headline}
                   </p>
-                  <span className="inline-block px-4 py-2 rounded-lg bg-blush-500 text-obsidian-900 text-xs font-bold">
+                  <span className="inline-block px-4 py-2 rounded-lg bg-gold-500 text-obsidian-900 text-xs font-bold">
                     {activeTab.cta}
                   </span>
                 </div>
@@ -120,7 +141,7 @@ export const HeroStudioMockup = () => {
                   <p className="text-[10px] uppercase tracking-wide text-pearl-300/60 mb-0.5 whitespace-nowrap">
                     {activeTab.metricLabel}
                   </p>
-                  <p className="text-sm font-bold text-blush-300">{activeTab.metricValue}</p>
+                  <p className="text-sm font-bold text-gold-300">{activeTab.metricValue}</p>
                 </div>
               </div>
             </motion.div>

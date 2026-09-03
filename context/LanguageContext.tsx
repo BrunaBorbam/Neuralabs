@@ -16,6 +16,10 @@ interface StudioTabCopy {
   cta: string;
   metricLabel: string;
   metricValue: string;
+  /** Fake domain shown in the mockup's browser address bar — makes the
+   * panel read unmistakably as "a website in a browser" instead of a
+   * bare photo with a caption. */
+  domain: string;
 }
 
 interface PillarCopy {
@@ -175,6 +179,7 @@ const pt: Dictionary = {
         cta: 'Reservar Agora',
         metricLabel: 'Conversão de Reservas',
         metricValue: '+42%',
+        domain: 'suaestadia.com.br',
       },
       {
         emoji: '🪵',
@@ -183,6 +188,7 @@ const pt: Dictionary = {
         cta: 'Solicitar Orçamento',
         metricLabel: 'Leads Qualificados',
         metricValue: '+58%',
+        domain: 'marcenariadeluxo.com.br',
       },
       {
         emoji: '🍽️',
@@ -191,6 +197,7 @@ const pt: Dictionary = {
         cta: 'Reservar Mesa',
         metricLabel: 'Reservas Online',
         metricValue: '+35%',
+        domain: 'sabordamesa.com.br',
       },
       {
         emoji: '💎',
@@ -199,6 +206,7 @@ const pt: Dictionary = {
         cta: 'Comprar Agora',
         metricLabel: 'Ticket Médio',
         metricValue: '+27%',
+        domain: 'boutiqueonline.com.br',
       },
     ],
   },
@@ -390,6 +398,7 @@ const en: Dictionary = {
         cta: 'Book Now',
         metricLabel: 'Booking Conversion',
         metricValue: '+42%',
+        domain: 'yourstay.com',
       },
       {
         emoji: '🪵',
@@ -398,6 +407,7 @@ const en: Dictionary = {
         cta: 'Request a Quote',
         metricLabel: 'Qualified Leads',
         metricValue: '+58%',
+        domain: 'luxewoodwork.com',
       },
       {
         emoji: '🍽️',
@@ -406,6 +416,7 @@ const en: Dictionary = {
         cta: 'Reserve a Table',
         metricLabel: 'Online Reservations',
         metricValue: '+35%',
+        domain: 'tablesavor.com',
       },
       {
         emoji: '💎',
@@ -414,6 +425,7 @@ const en: Dictionary = {
         cta: 'Buy Now',
         metricLabel: 'Average Order Value',
         metricValue: '+27%',
+        domain: 'shopboutique.com',
       },
     ],
   },

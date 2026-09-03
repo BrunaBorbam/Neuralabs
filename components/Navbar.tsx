@@ -82,7 +82,7 @@ export const Navbar = () => {
             rel="noopener noreferrer"
             onClick={handleCtaClick}
             aria-label={t.nav.cta}
-            className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-blush-500 text-obsidian-900"
+            className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-gold-500 text-obsidian-900"
           >
             <MessageCircle className="w-4 h-4" />
           </a>

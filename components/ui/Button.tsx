@@ -27,7 +27,11 @@ export const Button: React.FC<ButtonProps> = ({
   const baseStyles = 'font-bold transition-all duration-200 flex items-center justify-center gap-2 rounded-lg relative';
 
   const variants = {
-    primary: 'bg-gradient-to-r from-blush-500 to-blush-600 hover:from-blush-400 hover:to-blush-500 text-obsidian-900 shadow-lg shadow-blush-500/20 hover:shadow-blush-500/40 disabled:from-obsidian-600 disabled:to-obsidian-700 disabled:shadow-none',
+    // Gold is now the primary action color (was blush) — a stronger, warmer
+    // accent used generously on the site's actual clicks, per the "AI Agent
+    // Website" Dribbble reference. Blush stays as the secondary accent
+    // (badges, icons, borders) rather than disappearing.
+    primary: 'bg-gradient-to-r from-gold-400 to-gold-600 hover:from-gold-300 hover:to-gold-500 text-obsidian-900 shadow-lg shadow-gold-500/25 hover:shadow-gold-500/45 disabled:from-obsidian-600 disabled:to-obsidian-700 disabled:shadow-none',
     secondary: 'bg-pearl-100/10 hover:bg-pearl-100/20 text-pearl-100 border border-pearl-100/30 backdrop-blur-sm disabled:opacity-50',
     ghost: 'text-blush-400 hover:text-blush-300 hover:bg-blush-500/5 disabled:opacity-50',
     outline: 'border-2 border-blush-500 text-blush-400 hover:bg-blush-500/10 hover:text-blush-300 disabled:border-obsidian-600 disabled:text-obsidian-500',

@@ -29,6 +29,21 @@
   --color-pearl-200: #FAF7F2;
   --color-pearl-300: #F0EAE1;
   --color-pearl-400: #E3D9CB;
+
+  /* Delicate Luxury palette — dourado (acento primário) — antigo latão/
+     champagne, não laranja saturado, pra continuar lendo "luxo" e não
+     "produto de tech genérico". Usado nos CTAs e nos glows ambiente;
+     blush vira acento secundário (badges, ícones, detalhes). */
+  --color-gold-50: #FBF4E7;
+  --color-gold-100: #F5E6C8;
+  --color-gold-200: #EACF9C;
+  --color-gold-300: #DEB873;
+  --color-gold-400: #D2A052;
+  --color-gold-500: #C58C3B;
+  --color-gold-600: #A8752F;
+  --color-gold-700: #895D26;
+  --color-gold-800: #6B481E;
+  --color-gold-900: #503617;
 }
 
 :root {

@@ -85,7 +85,7 @@ export const InteractiveComparison = () => {
                 <p className="text-sm text-pearl-100/80 max-w-xs ml-auto mb-6">
                   {t.comparison.afterBody}
                 </p>
-                <span className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-pearl-100 to-pearl-300 text-obsidian-900 text-sm font-bold shadow-[0_0_24px_rgba(250,247,242,0.45)]">
+                <span className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-900 text-sm font-bold shadow-[0_0_24px_rgba(197,140,59,0.45)]">
                   {t.comparison.afterCta}
                 </span>
               </div>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 export const FloatingOrb = ({ delay = 0, color = 'blush' }: { delay?: number; color?: string }) => {
   const colors = {
     blush: 'from-blush-500 to-blush-700',
+    gold: 'from-gold-400 to-gold-700',
     pearl: 'from-pearl-200 to-pearl-400',
     slate: 'from-obsidian-600 to-obsidian-700',
   };
