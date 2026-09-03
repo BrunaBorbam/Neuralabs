@@ -66,7 +66,7 @@ export const Verticals = () => {
             const Icon = media.icon;
             return (
               <ScrollReveal key={vertical.name}>
-                <TiltCard>
+                <TiltCard className="h-full" intensity={3}>
                   <div className="rounded-xl overflow-hidden border border-pearl-100/10 bg-obsidian-800/60 h-full flex flex-col transition-[border-color,box-shadow] duration-300 group-hover/tilt:border-blush-500/40 group-hover/tilt:shadow-[0_16px_40px_-15px_rgba(216,194,184,0.25)]">
                     <div className="group relative aspect-[4/3] overflow-hidden">
                       <HoverRevealVideo
@@ -89,8 +89,10 @@ export const Verticals = () => {
                     </div>
 
                     <div className="p-4 flex flex-col flex-1">
-                      <h3 className="text-sm font-bold text-pearl-100 mb-1.5">{vertical.name}</h3>
-                      <p className="text-pearl-300/70 leading-relaxed mb-3 flex-1 text-xs">
+                      <h3 className="text-sm font-bold text-pearl-100 mb-1.5 leading-snug min-h-[2.25rem]">
+                        {vertical.name}
+                      </h3>
+                      <p className="text-pearl-300/70 leading-relaxed mb-3 flex-1 text-xs line-clamp-4">
                         {vertical.proposal}
                       </p>
                       <div className="flex flex-wrap gap-1.5 mb-1">
