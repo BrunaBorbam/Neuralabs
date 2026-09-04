@@ -12,14 +12,23 @@ export const SmoothScroll = () => {
     if (window.innerWidth < MOBILE_BREAKPOINT) return;
 
     const lenis = new Lenis({
-      // 1.1s (with this expo-out curve) meant each wheel tick kept gliding
-      // for over a second after the input stopped — a long, shallow
-      // "still-moving" tail. That reads as the page not keeping up with the
-      // cursor, which is what "trava" (stutter) feels like even on frames
-      // that are technically rendering fine. 0.85s keeps the same eased,
-      // non-linear feel (nothing snaps) while cutting that lag noticeably.
-      duration: 0.85,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // duration/easing (tried before, down to 0.85s) means every wheel
+      // "click" starts its own fixed-length animation that runs to
+      // completion and decelerates to a stop. With a rodinha (notched mouse
+      // wheel, confirmed as what Bruna uses) input arrives in discrete
+      // ticks, not a continuous roll — so each tick's animation finishes
+      // and the page visibly stops before the next tick arrives. That
+      // jump→stop→jump→stop cadence is what read as "travamento", even
+      // though each individual animation was rendering smoothly.
+      //
+      // lerp mode instead: every frame the visible position eases toward
+      // whatever the current target is (position += (target - position) *
+      // lerp), and a new wheel tick just moves the target — there is no
+      // per-tick animation to "finish", so the motion never has a stop
+      // condition to expose between ticks. This is Lenis's own recommended
+      // mode for wheel-driven (non-touch) scrolling for exactly this
+      // reason. 0.1 is Lenis's default lerp factor.
+      lerp: 0.1,
       smoothWheel: true,
       syncTouch: false,
     });
