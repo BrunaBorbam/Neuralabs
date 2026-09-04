@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, type Variants } from 'framer-motion';
 import { HeroStudioMockup } from '@/components/ui/HeroStudioMockup';
@@ -18,6 +19,26 @@ const HeroScene3D = dynamic(
   { ssr: false }
 );
 
+// The sphere is a purely decorative rim-light (aria-hidden, no informational
+// role) whose only interaction — drifting toward the pointer — doesn't even
+// apply on touch. Below md it sits mounted anyway, pulling in the
+// react-three-fiber/three.js bundle and running a 60fps WebGL render loop
+// from the moment the Hero is on screen — real CPU/battery/bandwidth cost,
+// paid on exactly the throttled mobile CPU PageSpeed measures, for an effect
+// nobody on a phone can even nudge. Gate the whole import behind a
+// min-width match so mobile never fetches or runs it at all.
+const useIsDesktop = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    setIsDesktop(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return isDesktop;
+};
+
 // Text column reveals as one small choreographed beat on load — badge,
 // headline, subheadline and CTAs each step in a touch after the last —
 // rather than the whole block appearing at once. Kept quick (0.5s total)
@@ -33,6 +54,7 @@ const textItem: Variants = {
 
 export const Hero = () => {
   const { t } = useLanguage();
+  const isDesktop = useIsDesktop();
 
   return (
     <section
@@ -108,7 +130,7 @@ export const Hero = () => {
               bleeding out around the panel's rounded edges — not a flat
               disc sitting on top of the villa photo. */}
           <div className="absolute -inset-10 sm:-inset-16 -z-10">
-            <HeroScene3D />
+            {isDesktop && <HeroScene3D />}
           </div>
           {/* Subtle pointer-driven tilt on the panel itself, so the whole
               hero feels responsive to the cursor, not just the sphere. */}

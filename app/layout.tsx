@@ -79,8 +79,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* No preconnect to fonts.googleapis.com/fonts.gstatic.com: next/font
+            self-hosts Inter and Playfair Display at build time (see the
+            imports below), so the browser never actually opens a connection
+            to Google's font CDN in production — these were two unused
+            preconnects doing nothing but reserving a socket. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
