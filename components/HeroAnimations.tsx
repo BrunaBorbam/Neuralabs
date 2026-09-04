@@ -89,6 +89,41 @@ export const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?
   );
 };
 
+// Shared by every ScrollReveal instance below instead of each one adding its
+// own 'scroll'/'resize' listener and scheduling its own requestAnimationFrame.
+// Sections that stack several ScrollReveal-wrapped elements (Nichos: a
+// heading + 4 cards; Pilares: a heading + 2 cards) used to mean N separate
+// listeners and N separate rAF callbacks all firing back-to-back on every
+// single scroll frame while those elements were still off-screen — real,
+// measured stutter clustered almost exactly at those section boundaries.
+// This collapses it to exactly one listener and one rAF callback, no matter
+// how many ScrollReveal instances are mounted; each still does its own
+// getBoundingClientRect() check (same detection logic, same fast-scroll
+// safety as before), just from one shared loop instead of many.
+type RevealEntry = { check: () => void };
+const revealRegistry = new Set<RevealEntry>();
+let revealTicking = false;
+let revealListenersAttached = false;
+
+const runRevealChecks = () => {
+  revealRegistry.forEach((entry) => entry.check());
+};
+
+const ensureRevealListeners = () => {
+  if (revealListenersAttached || typeof window === 'undefined') return;
+  revealListenersAttached = true;
+  const onScroll = () => {
+    if (revealTicking) return;
+    revealTicking = true;
+    requestAnimationFrame(() => {
+      runRevealChecks();
+      revealTicking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+};
+
 export const ScrollReveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
@@ -112,21 +147,11 @@ export const ScrollReveal = ({ children, delay = 0 }: { children: React.ReactNod
     };
     check(); // already in view on mount (above the fold)
 
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        check();
-        ticking = false;
-      });
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    const entry: RevealEntry = { check };
+    revealRegistry.add(entry);
+    ensureRevealListeners();
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      revealRegistry.delete(entry);
     };
   }, [revealed]);
 
