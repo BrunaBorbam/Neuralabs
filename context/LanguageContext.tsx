@@ -34,6 +34,11 @@ interface VerticalCopy {
   tags: string[];
 }
 
+interface FaqItemCopy {
+  question: string;
+  answer: string;
+}
+
 interface PricingPlanCopy {
   name: string;
   badge?: string;
@@ -106,6 +111,11 @@ export interface Dictionary {
     ticketLabel: string;
     monthlyLossLabel: string;
     annualLossSuffix: string;
+    /** Discloses what the loss estimate is actually measured against —
+     * without this, "R$ 44.550/mês perdidos" reads as a scare number with
+     * no visible method, which undercuts trust with exactly the analytical
+     * buyer this calculator is meant to convince. */
+    benchmarkNote: string;
     locale: string;
     currency: string;
   };
@@ -114,6 +124,12 @@ export interface Dictionary {
     heading: string;
     subheading: string;
     plans: PricingPlanCopy[];
+  };
+  faq: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    items: FaqItemCopy[];
   };
   contact: {
     badge: string;
@@ -148,6 +164,7 @@ const pt: Dictionary = {
       { label: 'Nichos', href: '#nichos' },
       { label: 'Antes & Depois', href: '#comparativo' },
       { label: 'Preços', href: '#precos' },
+      { label: 'FAQ', href: '#faq' },
       { label: 'Contato', href: '#contato' },
     ],
     cta: 'Diagnóstico no WhatsApp',
@@ -289,6 +306,8 @@ const pt: Dictionary = {
     ticketLabel: 'Ticket médio',
     monthlyLossLabel: 'Perda mensal estimada',
     annualLossSuffix: 'perdidos por ano',
+    benchmarkNote:
+      'Comparado a uma taxa de conversão de referência de 4,5% — o padrão que buscamos entregar num site otimizado por neuromarketing.',
     locale: 'pt-BR',
     currency: 'BRL',
   },
@@ -326,11 +345,39 @@ const pt: Dictionary = {
           'SEO de Intenção no Google & Otimização para IAs (GEO)',
           'Interações e Animações 3D de Alto Padrão',
           '30 dias de suporte dedicado e revisões ilimitadas',
-          'Processo 100% assíncrono (sem reuniões longas)',
+          'Processo 100% assíncrono — atualizações objetivas direto no WhatsApp, sem reunião marcada',
         ],
         cta: 'Solicitar Proposta no WhatsApp →',
         waMessage:
           'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o site da minha empresa.',
+      },
+    ],
+  },
+  faq: {
+    badge: 'Perguntas Frequentes',
+    heading: 'Antes de decidir, as dúvidas mais comuns',
+    subheading:
+      'Sem letra miúda aqui também — se algo não estiver respondido, é só chamar no WhatsApp.',
+    items: [
+      {
+        question: 'O que acontece depois dos 30 dias de suporte incluídos?',
+        answer:
+          'O site continua seu, funcionando normalmente — 30 dias é o período de ajustes finos pós-entrega, não uma validade do projeto. Se precisar de suporte contínuo depois disso, oferecemos manutenção sob demanda, sem pacote obrigatório.',
+      },
+      {
+        question: 'Eu consigo editar texto e imagens sozinha, ou dependo de vocês pra tudo?',
+        answer:
+          'Depende do plano. Combinamos com você a melhor forma de manter o site atualizado — em muitos casos é mais rápido pedir o ajuste direto pra gente do que aprender um painel novo. Isso é definido antes de começar o projeto, sem surpresa depois.',
+      },
+      {
+        question: 'Onde o site fica hospedado? O domínio é meu?',
+        answer:
+          'O domínio é sempre seu, registrado no seu nome. A hospedagem fica em infraestrutura profissional (Vercel), com o custo incluso durante o suporte inicial — depois disso, é um valor baixo e você tem total controle sobre a conta.',
+      },
+      {
+        question: 'E se eu não gostar do resultado?',
+        answer:
+          'O processo inclui revisões justamente pra isso — você acompanha o andamento e pede ajustes antes da entrega final, não só depois de pronto.',
       },
     ],
   },
@@ -371,6 +418,7 @@ const en: Dictionary = {
       { label: 'Niches', href: '#nichos' },
       { label: 'Before & After', href: '#comparativo' },
       { label: 'Pricing', href: '#precos' },
+      { label: 'FAQ', href: '#faq' },
       { label: 'Contact', href: '#contato' },
     ],
     cta: 'WhatsApp Diagnosis',
@@ -508,6 +556,8 @@ const en: Dictionary = {
     ticketLabel: 'Average order value',
     monthlyLossLabel: 'Estimated monthly loss',
     annualLossSuffix: 'lost per year',
+    benchmarkNote:
+      'Compared to a 4.5% reference conversion rate — the benchmark we aim to deliver with a neuromarketing-optimized site.',
     locale: 'en-US',
     currency: 'USD',
   },
@@ -544,11 +594,38 @@ const en: Dictionary = {
           'Google Intent SEO & AI Optimization (GEO)',
           'High-End 3D Interactions & Animations',
           '30 days of dedicated support and unlimited revisions',
-          '100% Async Process (no long meetings)',
+          '100% Async Process — clear WhatsApp updates, no scheduled calls',
         ],
         cta: 'Request Proposal on WhatsApp →',
         waMessage:
           "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
+      },
+    ],
+  },
+  faq: {
+    badge: 'Frequently Asked Questions',
+    heading: 'Before you decide, the most common questions',
+    subheading: "No fine print here either — if something isn't covered, just message us on WhatsApp.",
+    items: [
+      {
+        question: 'What happens after the included 30 days of support?',
+        answer:
+          "Your site keeps running, no expiration date — the 30 days are for post-launch fine-tuning, not a project deadline. If you need ongoing support after that, we offer maintenance on demand, with no mandatory package.",
+      },
+      {
+        question: 'Can I edit text and images myself, or do I depend on you for everything?',
+        answer:
+          "It depends on the plan. We agree on the best way to keep your site updated together — in many cases it's faster to ask us directly than to learn a new dashboard. This gets defined before the project starts, no surprises later.",
+      },
+      {
+        question: 'Where is the site hosted? Is the domain mine?',
+        answer:
+          'The domain is always yours, registered in your name. Hosting runs on professional infrastructure (Vercel), covered during the initial support period — after that, it\'s a low cost and you keep full control of the account.',
+      },
+      {
+        question: "What if I don't like the result?",
+        answer:
+          "The process includes revisions for exactly that — you follow progress and request adjustments before final delivery, not only after it's done.",
       },
     ],
   },
