@@ -49,22 +49,30 @@ export const HeroStudioMockup = () => {
             <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
             <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
           </div>
-          <div className="flex flex-nowrap gap-1.5 overflow-x-auto scrollbar-none py-1">
-            {tabs.map((tab, idx) => (
-              <button
-                key={tab.label}
-                type="button"
-                onClick={() => setActive(idx)}
-                className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
-                  idx === active
-                    ? 'bg-gold-500/15 border border-gold-500/40 text-pearl-100'
-                    : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'
-                }`}
-              >
-                <span>{tab.emoji}</span>
-                {tab.label}
-              </button>
-            ))}
+          {/* min-w-0 lets this flex child actually shrink below its content
+              width so overflow-x-auto kicks in instead of stretching the
+              card; the gradient overlay hints more tabs are scrollable
+              off-screen, since the cut-off icon alone read as a layout bug
+              on mobile rather than an intentional scroll strip. */}
+          <div className="relative min-w-0 flex-1">
+            <div className="flex flex-nowrap gap-1.5 overflow-x-auto scrollbar-none py-1">
+              {tabs.map((tab, idx) => (
+                <button
+                  key={tab.label}
+                  type="button"
+                  onClick={() => setActive(idx)}
+                  className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                    idx === active
+                      ? 'bg-gold-500/15 border border-gold-500/40 text-pearl-100'
+                      : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'
+                  }`}
+                >
+                  <span>{tab.emoji}</span>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#121019] to-transparent" />
           </div>
         </div>
 
