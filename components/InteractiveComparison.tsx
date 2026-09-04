@@ -7,8 +7,11 @@ import { Badge } from '@/components/ui/Badge';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { useLanguage } from '@/context/LanguageContext';
 
+// w=1600&q=80 was heavier than this section ever needs — the comparison box
+// never renders wider than ~960px (see the `sizes` prop below), so 1200/65
+// still looks sharp at any real viewport while cutting the transfer weight.
 const COMPARISON_IMAGE =
-  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80';
+  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=65';
 
 export const InteractiveComparison = () => {
   const { t } = useLanguage();
@@ -70,7 +73,13 @@ export const InteractiveComparison = () => {
             onPointerLeave={handlePointerUp}
             className="relative w-full aspect-[3/4] sm:aspect-video rounded-2xl overflow-hidden border border-pearl-100/10 select-none cursor-ew-resize touch-none"
           >
-            {/* COM NEURALABS — base layer, full-quality editorial image */}
+            {/* COM NEURALABS — base layer, full-quality editorial image.
+                No `priority` here: this section sits well below the fold on
+                first load, so eagerly preloading a hotlinked 1200px photo
+                was competing for bandwidth with the actual hero image/LCP
+                candidate above it — a likely contributor to the 5.9s mobile
+                LCP PageSpeed flagged. Left to lazy-load like everything else
+                below the fold. */}
             <div className="absolute inset-0">
               <Image
                 src={COMPARISON_IMAGE}
@@ -78,7 +87,6 @@ export const InteractiveComparison = () => {
                 fill
                 sizes="(min-width: 1024px) 960px, 100vw"
                 className="object-cover"
-                priority
               />
               <div className="absolute inset-0 bg-gradient-to-l from-obsidian-900/90 via-obsidian-900/30 to-transparent" />
               {/* p-10/text-2xl fit fine once the box is wide (sm:aspect-video),
