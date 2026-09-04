@@ -68,7 +68,7 @@ export const InteractiveComparison = () => {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
-            className="relative w-full aspect-video rounded-2xl overflow-hidden border border-pearl-100/10 select-none cursor-ew-resize touch-none"
+            className="relative w-full aspect-[3/4] sm:aspect-video rounded-2xl overflow-hidden border border-pearl-100/10 select-none cursor-ew-resize touch-none"
           >
             {/* COM NEURALABS — base layer, full-quality editorial image */}
             <div className="absolute inset-0">
@@ -81,17 +81,22 @@ export const InteractiveComparison = () => {
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-l from-obsidian-900/90 via-obsidian-900/30 to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-center items-end text-right p-10">
-                <span className="text-xs tracking-widest uppercase text-blush-300 mb-3">
+              {/* p-10/text-2xl fit fine once the box is wide (sm:aspect-video),
+                  but at the mobile aspect-[3/4] the box is narrower and each
+                  side's badge+headline+body+button stack needs to fit in
+                  half that width without colliding with the other side's
+                  mirrored stack — smaller padding/type/max-width below sm. */}
+              <div className="absolute inset-0 flex flex-col justify-center items-end text-right p-5 sm:p-10">
+                <span className="text-[10px] sm:text-xs tracking-widest uppercase text-blush-300 mb-2 sm:mb-3">
                   {t.comparison.afterBrand}
                 </span>
-                <h3 className="text-2xl md:text-3xl font-serif font-bold text-pearl-100 mb-3 max-w-xs ml-auto">
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-serif font-bold text-pearl-100 mb-2 sm:mb-3 max-w-[160px] sm:max-w-xs ml-auto">
                   {t.comparison.afterHeadline}
                 </h3>
-                <p className="text-sm text-pearl-100/80 max-w-xs ml-auto mb-6">
+                <p className="hidden sm:block text-sm text-pearl-100/80 max-w-xs ml-auto mb-6">
                   {t.comparison.afterBody}
                 </p>
-                <span className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-900 text-sm font-bold shadow-[0_0_24px_rgba(197,140,59,0.45)]">
+                <span className="px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-900 text-xs sm:text-sm font-bold shadow-[0_0_24px_rgba(197,140,59,0.45)]">
                   {t.comparison.afterCta}
                 </span>
               </div>
@@ -110,15 +115,15 @@ export const InteractiveComparison = () => {
                 className="object-cover grayscale contrast-75 brightness-[0.45]"
               />
               <div className="absolute inset-0 bg-obsidian-900/50" />
-              <div className="absolute inset-0 flex flex-col justify-center items-start p-10">
-                <span className="text-xs uppercase text-slate-300/70 mb-3">{t.comparison.beforeSite}</span>
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-100 mb-3">
+              <div className="absolute inset-0 flex flex-col justify-center items-start p-5 sm:p-10">
+                <span className="text-[10px] sm:text-xs uppercase text-slate-300/70 mb-2 sm:mb-3">{t.comparison.beforeSite}</span>
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-bold text-slate-100 mb-2 sm:mb-3 max-w-[160px] sm:max-w-none">
                   {t.comparison.beforeHeadline}
                 </h3>
-                <p className="text-sm text-slate-300/70 max-w-xs mb-6">
+                <p className="hidden sm:block text-sm text-slate-300/70 max-w-xs mb-6">
                   {t.comparison.beforeBody}
                 </p>
-                <span className="px-5 py-2.5 rounded bg-slate-400 text-slate-700 text-sm font-semibold">
+                <span className="px-3 py-2 sm:px-5 sm:py-2.5 rounded bg-slate-400 text-slate-700 text-xs sm:text-sm font-semibold">
                   {t.comparison.beforeCta}
                 </span>
               </div>
