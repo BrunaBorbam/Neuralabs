@@ -164,6 +164,8 @@ const config: Config = {
         'violet-glow': '0 0 20px rgba(139, 92, 246, 0.3)',
         'blush-glow': '0 0 24px rgba(216, 194, 184, 0.25)',
         'blush-glow-lg': '0 0 48px rgba(216, 194, 184, 0.35)',
+        'gold-glow': '0 0 24px rgba(197, 140, 59, 0.35)',
+        'gold-glow-lg': '0 0 56px rgba(197, 140, 59, 0.45)',
       },
 
       backdropBlur: {

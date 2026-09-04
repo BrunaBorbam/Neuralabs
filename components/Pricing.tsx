@@ -37,11 +37,11 @@ export const Pricing = () => {
                 <Card
                   variant={highlight ? 'accent' : 'surface'}
                   className={`relative h-full flex flex-col text-center items-center transition-shadow duration-500 ${
-                    highlight ? 'ring-2 ring-blush-500/50 shadow-blush-glow-lg hover:animate-glow' : ''
+                    highlight ? 'ring-2 ring-gold-500/50 shadow-gold-glow-lg hover:animate-glow' : ''
                   }`}
                 >
                   {plan.badge && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-blush-500 text-obsidian-900 text-xs font-bold tracking-wide uppercase whitespace-nowrap">
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-gold-500 text-obsidian-900 text-xs font-bold tracking-wide uppercase whitespace-nowrap">
                       {plan.badge}
                     </span>
                   )}
@@ -76,14 +76,12 @@ export const Pricing = () => {
                     onClick={() => trackButtonClick('pricing_cta', plan.name)}
                     className="w-full"
                   >
-                    <Button
-                      variant={highlight ? 'primary' : 'outline'}
-                      className={`w-full ${
-                        highlight
-                          ? '!bg-gradient-to-r !from-pearl-100 !to-pearl-300 !text-obsidian-900 !shadow-[0_0_24px_rgba(250,247,242,0.35)]'
-                          : ''
-                      }`}
-                    >
+                    {/* No more pearl/white override here — Button's own
+                        primary variant is already the site's gold accent,
+                        so the highlighted plan's CTA now matches every
+                        other primary action instead of being the one
+                        white button on the page. */}
+                    <Button variant={highlight ? 'primary' : 'outline'} className="w-full">
                       {plan.cta}
                     </Button>
                   </a>

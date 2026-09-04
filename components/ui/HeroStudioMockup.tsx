@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Lock } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 // Same AI-generated editorial set used in Nichos (public/images/verticals),
@@ -56,7 +57,7 @@ export const HeroStudioMockup = () => {
                 onClick={() => setActive(idx)}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                   idx === active
-                    ? 'bg-blush-500/15 border border-blush-500/40 text-pearl-100'
+                    ? 'bg-gold-500/15 border border-gold-500/40 text-pearl-100'
                     : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'
                 }`}
               >
@@ -65,6 +66,26 @@ export const HeroStudioMockup = () => {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Fake browser address bar — the single cheapest, most reliable
+            signal that this panel is "a website open in a browser" rather
+            than a photo with a caption on top. Direct feedback: the panel
+            didn't read as "isto é um site" at a glance. */}
+        <div className="flex items-center gap-2 px-4 py-2 border-b border-white/10 bg-obsidian-900/40">
+          <Lock className="w-3 h-3 text-pearl-300/40 flex-shrink-0" />
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={active}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="text-[11px] text-pearl-300/50 truncate"
+            >
+              {activeTab.domain}
+            </motion.span>
+          </AnimatePresence>
         </div>
 
         <div className="relative aspect-[4/3] sm:aspect-video overflow-hidden">
@@ -111,7 +132,7 @@ export const HeroStudioMockup = () => {
                   <p className="text-sm md:text-base font-semibold text-pearl-100 mb-3 max-w-[220px] leading-snug">
                     {activeTab.headline}
                   </p>
-                  <span className="inline-block px-4 py-2 rounded-lg bg-blush-500 text-obsidian-900 text-xs font-bold">
+                  <span className="inline-block px-4 py-2 rounded-lg bg-gold-500 text-obsidian-900 text-xs font-bold">
                     {activeTab.cta}
                   </span>
                 </div>
@@ -120,13 +141,61 @@ export const HeroStudioMockup = () => {
                   <p className="text-[10px] uppercase tracking-wide text-pearl-300/60 mb-0.5 whitespace-nowrap">
                     {activeTab.metricLabel}
                   </p>
-                  <p className="text-sm font-bold text-blush-300">{activeTab.metricValue}</p>
+                  <p className="text-sm font-bold text-gold-300">{activeTab.metricValue}</p>
                 </div>
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Responsive phone mockup, overlapping the desktop panel's corner.
+          The address bar already signals "this is a website", but the
+          single most recognizable visual shorthand for "we build websites"
+          (as opposed to "we sell one nice photo") is showing the SAME
+          product responsive across devices — the classic agency-portfolio
+          cue. Mirrors the active tab so the two frames always tell the
+          same story. Hidden on small screens: there's no spare room next
+          to an already phone-width panel, and the badges follow the same
+          sm-and-up rule. */}
+      <motion.div
+        className="hidden sm:block absolute -bottom-10 md:-bottom-14 -left-10 md:-left-16 z-20 w-16 md:w-20"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="rounded-[1.2rem] border-4 border-obsidian-800 bg-obsidian-800 shadow-2xl shadow-black/90 overflow-hidden">
+          {/* Notch */}
+          <div className="relative h-3 bg-obsidian-800 flex items-center justify-center">
+            <div className="w-6 h-1 rounded-full bg-obsidian-600" />
+          </div>
+          <div className="relative aspect-[9/17] overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={TAB_IMAGES[active]}
+                  alt=""
+                  fill
+                  sizes="120px"
+                  className="object-cover"
+                  aria-hidden="true"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/85 via-transparent to-obsidian-900/10" />
+                <span className="absolute inset-x-1.5 bottom-1.5 px-1.5 py-1 rounded bg-gold-500 text-obsidian-900 text-[8px] font-bold text-center leading-none">
+                  {activeTab.cta}
+                </span>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

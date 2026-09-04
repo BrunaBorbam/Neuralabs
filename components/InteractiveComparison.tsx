@@ -15,9 +15,13 @@ export const InteractiveComparison = () => {
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+  // Same reasoning as TiltCard: measure the container once when the drag
+  // starts instead of forcing a layout recalculation on every pixel of
+  // pointer movement during the drag.
+  const dragBounds = useRef<DOMRect | null>(null);
 
   const updatePosition = (clientX: number) => {
-    const rect = containerRef.current?.getBoundingClientRect();
+    const rect = dragBounds.current ?? containerRef.current?.getBoundingClientRect();
     if (!rect) return;
     const pct = ((clientX - rect.left) / rect.width) * 100;
     setPosition(Math.min(100, Math.max(0, pct)));
@@ -25,6 +29,7 @@ export const InteractiveComparison = () => {
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     isDragging.current = true;
+    dragBounds.current = containerRef.current?.getBoundingClientRect() ?? null;
     containerRef.current?.setPointerCapture(e.pointerId);
     updatePosition(e.clientX);
   };
@@ -36,6 +41,7 @@ export const InteractiveComparison = () => {
 
   const handlePointerUp = () => {
     isDragging.current = false;
+    dragBounds.current = null;
   };
 
   return (
@@ -85,7 +91,7 @@ export const InteractiveComparison = () => {
                 <p className="text-sm text-pearl-100/80 max-w-xs ml-auto mb-6">
                   {t.comparison.afterBody}
                 </p>
-                <span className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-pearl-100 to-pearl-300 text-obsidian-900 text-sm font-bold shadow-[0_0_24px_rgba(250,247,242,0.45)]">
+                <span className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-900 text-sm font-bold shadow-[0_0_24px_rgba(197,140,59,0.45)]">
                   {t.comparison.afterCta}
                 </span>
               </div>

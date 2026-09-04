@@ -39,8 +39,14 @@ export const Hero = () => {
       id="top"
       className="relative overflow-hidden max-w-full w-full bg-obsidian-900 pt-28 md:pt-44 pb-28 px-5 sm:px-8"
     >
+      {/* Warm ambient glow wash — the reference site stays just as dark at
+          its base as we already were, but reads as alive rather than flat
+          black-and-white because of a broad, low-opacity color wash behind
+          the content, not just a pinprick accent. Gold carries it now,
+          since gold is the primary accent going forward. */}
+      <div className="absolute -top-32 left-1/4 w-[600px] h-[600px] bg-gold-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute -top-10 -left-10 opacity-60">
-        <FloatingOrb color="blush" />
+        <FloatingOrb color="gold" />
       </div>
       <div className="absolute bottom-0 right-0 opacity-40">
         <FloatingOrb color="pearl" delay={2} />
@@ -83,7 +89,7 @@ export const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackButtonClick('diagnostico_whatsapp', 'hero')}
-              className="inline-flex items-center w-full sm:w-auto text-center justify-center py-4 px-6 rounded-full bg-gradient-to-r from-blush-500 to-blush-600 text-obsidian-900 text-sm font-semibold shadow-lg shadow-blush-500/20 transition-all duration-200 hover:scale-[1.03] hover:shadow-blush-500/40 active:scale-[0.98]"
+              className="inline-flex items-center w-full sm:w-auto text-center justify-center py-4 px-6 rounded-full bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-900 text-sm font-semibold shadow-lg shadow-gold-500/25 transition-all duration-200 hover:scale-[1.03] hover:shadow-gold-500/45 active:scale-[0.98]"
             >
               {t.hero.ctaPrimary}
             </a>

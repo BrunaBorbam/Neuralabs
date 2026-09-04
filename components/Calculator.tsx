@@ -119,6 +119,11 @@ export const Calculator = () => {
                   <AnimatedNumber value={annualLoss} format={currency.format} /> {t.calculator.annualLossSuffix}
                 </span>
               </div>
+              {/* Discloses the reference rate the estimate is measured
+                  against — without this the number reads as a scare figure
+                  with no visible method, which works against exactly the
+                  analytical buyer this calculator is meant to convince. */}
+              <p className="text-xs text-pearl-300/40 mt-4 leading-relaxed">{t.calculator.benchmarkNote}</p>
             </div>
           </Card>
         </ScrollReveal>

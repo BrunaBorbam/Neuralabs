@@ -5,6 +5,7 @@ import { Verticals } from '@/components/Verticals';
 import { InteractiveComparison } from '@/components/InteractiveComparison';
 import { Calculator } from '@/components/Calculator';
 import { Pricing } from '@/components/Pricing';
+import { FAQ } from '@/components/FAQ';
 import { ContactForm } from '@/components/ContactForm';
 import { Footer } from '@/components/Footer';
 
@@ -19,6 +20,7 @@ export default function Home() {
         <InteractiveComparison />
         <Calculator />
         <Pricing />
+        <FAQ />
         <ContactForm />
       </main>
       <Footer />

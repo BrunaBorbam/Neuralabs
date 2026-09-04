@@ -12,7 +12,13 @@ export const SmoothScroll = () => {
     if (window.innerWidth < MOBILE_BREAKPOINT) return;
 
     const lenis = new Lenis({
-      duration: 1.1,
+      // 1.1s (with this expo-out curve) meant each wheel tick kept gliding
+      // for over a second after the input stopped — a long, shallow
+      // "still-moving" tail. That reads as the page not keeping up with the
+      // cursor, which is what "trava" (stutter) feels like even on frames
+      // that are technically rendering fine. 0.85s keeps the same eased,
+      // non-linear feel (nothing snaps) while cutting that lag noticeably.
+      duration: 0.85,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       syncTouch: false,
