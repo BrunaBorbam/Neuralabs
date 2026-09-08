@@ -4,19 +4,27 @@
  * VILLA SERENA — Boutique Retreat & Private Beach House
  * Demonstração Interativa • NEURALABS Studio
  *
- * Identidade autônoma "Coastal Sunset Luxury" (distinta da Delicate Luxury do
- * site-mãe): Obsidiana #0D0F12, Ouro Terracota #D4A373, Linho Marfim #F5EFE6,
- * Teca #2D241E — conforme o Guia Master de Inspirações da NEURALABS.
+ * Identidade autônoma "Coastal Sunset Luxury" (distinta da identidade do
+ * site-mãe): Obsidiana #0D0F12, Terracota-Ouro #D4A373, Linho-Marfim #F5EFE6,
+ * Teca #2D241E. Tipografia: Bodoni Moda (serifada editorial) + Plus Jakarta
+ * Sans (corpo/UI).
  *
- * Gatilhos de neuromarketing: prova social e âncora de preço no Hero,
- * aversão à perda (comparador em tempo real vs. Airbnb), escassez de datas,
- * reserva sem fricção (calendário simulado → WhatsApp).
+ * Gatilhos de neuromarketing (voltados ao hóspede — quem decide reservar,
+ * não quem contrataria a NEURALABS): prova social e âncora de status no
+ * Hero, aversão à perda (comparador em tempo real vs. plataforma), escassez
+ * de datas, redução de fricção na reserva (calendário → WhatsApp) e nas
+ * objeções pré-reserva (localização + política de cancelamento explícitas).
+ *
+ * Sem camada de portfólio dentro da demo: a única menção à NEURALABS é a
+ * barra discreta de atribuição no topo + o disclaimer no rodapé — a
+ * narrativa de venda para donos de imóvel mora na página de Portfólio do
+ * site principal, não aqui.
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
+import { Bodoni_Moda, Plus_Jakarta_Sans } from 'next/font/google';
 import {
   ArrowLeft,
   ArrowRight,
@@ -26,16 +34,17 @@ import {
   ChevronRight,
   Flame,
   MessageCircle,
+  Plus,
   Sparkles,
   Star,
-  Waves,
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 
-const serif = Cormorant_Garamond({
+const serif = Bodoni_Moda({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
   variable: '--font-villa-serif',
   display: 'swap',
 });
@@ -46,9 +55,14 @@ const sans = Plus_Jakarta_Sans({
   display: 'swap',
 });
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=85';
-const NIGHTLY_RATE = 1450;
+const HERO_IMAGE = '/images/villa-serena/hero.jpg';
+const HERO_VIDEO = '/videos/villa-serena/hero.mp4';
+const SUITE_IMAGE = '/images/villa-serena/suite.jpg';
+const DECK_IMAGE = '/images/villa-serena/deck.jpg';
+const GOURMET_IMAGE = '/images/villa-serena/gourmet.jpg';
+const REGIAO_IMAGE = '/images/villa-serena/regiao.jpg';
+
+const NIGHTLY_RATE = 1640;
 const AIRBNB_FEE_PCT = 0.2;
 
 const currency = new Intl.NumberFormat('pt-BR', {
@@ -59,56 +73,82 @@ const currency = new Intl.NumberFormat('pt-BR', {
 
 const AMBIENTES = [
   {
-    kicker: '01 — O Descanso',
-    title: 'Suíte Master com Linho Puro',
-    body: 'Roupa de cama em linho belga, brisa filtrada e a luz âmbar do amanhecer entrando pelas cortinas de voil. O silêncio aqui é curado.',
-    img: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1600&q=80',
+    kicker: '01 — Suíte master · Tarde',
+    title: 'A suíte que emoldura o pôr do sol',
+    body: '48 m², cama king, linho de 400 fios e portas que abrem inteiras para o mar. Às quatro da tarde a luz entra dourada e fica.',
+    img: SUITE_IMAGE,
     icon: Sparkles,
-    tag: 'Ala Poente',
+    tag: 'Vista frontal · Varanda privativa',
   },
   {
-    kicker: '02 — O Encontro',
-    title: 'Deck Privativo com Fogo de Chão',
-    body: 'A borda infinita encontra o horizonte. Ao entardecer, o fogo de chão acende e o mar vira trilha sonora.',
-    img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80',
+    kicker: '02 — Deck privativo · Anoitecer',
+    title: 'Deck privativo com fogo de chão',
+    body: 'Sofás baixos, lanternas e uma fogueira de pedra a poucos passos da areia. O vinho já está gelado quando o sol toca a água.',
+    img: DECK_IMAGE,
     icon: Flame,
-    tag: 'Infinity Deck',
+    tag: 'Lounge externo · Adega',
   },
   {
-    kicker: '03 — O Ritual',
-    title: 'Espaço Gourmet com Parrilla',
-    body: 'Parrilla argentina, adega climatizada e bancada de teca maciça. Onde os jantares se estendem até a última estrela aparecer.',
-    img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1600&q=80',
+    kicker: '03 — Espaço gourmet · Noite',
+    title: 'Espaço gourmet com parrilla e adega',
+    body: 'Parrilla argentina a lenha e uma adega climatizada com rótulos da Serra Gaúcha e do Vale do Maipo. A mesa de dez lugares fica de frente para o mar.',
+    img: GOURMET_IMAGE,
     icon: ChefHat,
-    tag: 'Cozinha de Chef',
+    tag: 'Parrilla a lenha · Mesa para 10',
   },
 ] as const;
 
 const DEPOIMENTOS = [
   {
-    q: 'Reservamos direto e economizamos quase R$3 mil na semana. O deck ao pôr do sol é surreal.',
-    n: 'Marina C.',
-    c: 'São Paulo · Réveillon',
+    q: 'Reservamos direto pelo WhatsApp e a Marina respondeu em oito minutos. Chegamos e tinha frutas, café e um bilhete escrito à mão.',
+    n: 'Camila R.',
+    c: 'São Paulo · Réveillon 2025',
   },
   {
-    q: 'Atendimento no WhatsApp impecável, respondiam em minutos. Sem taxa escondida, sem burocracia.',
-    n: 'Rafael & Bia',
-    c: 'Curitiba · Lua de mel',
+    q: 'Economizamos mais de mil reais em relação ao que tínhamos visto na plataforma. Usamos em um passeio de barco até Caraíva.',
+    n: 'Rodrigo & Ana',
+    c: 'Belo Horizonte · Julho 2025',
   },
   {
-    q: 'A parrilla e a adega fizeram nossos jantares. Sensação de casa própria à beira-mar.',
-    n: 'Eduardo M.',
-    c: 'Porto Alegre · Família',
+    q: 'O deck às 17h40 é o motivo pelo qual voltamos pelo terceiro ano seguido. Nada em Trancoso se compara.',
+    n: 'Família Duarte',
+    c: 'Rio de Janeiro · Hóspedes recorrentes',
   },
 ];
 
 const MARQUEE_ITEMS = [
-  'Reserva direta em minutos',
-  'Sem taxa de 20% do Airbnb',
-  'Anfitrião verificado',
-  'Piscina de borda infinita',
-  'Vista para o pôr do sol',
-  'Suporte no WhatsApp',
+  'Sem taxa de plataforma',
+  'Cancelamento flexível até 14 dias',
+  'Concierge por WhatsApp',
+  'Limpeza diária',
+  'Superhost desde 2019',
+  'Pagamento seguro Pix/cartão',
+];
+
+const DISTANCIAS = [
+  { valor: '40 m', desc: 'até a areia' },
+  { valor: '12 min', desc: 'a pé até o Quadrado de Trancoso' },
+  { valor: '45 min', desc: 'de carro até o Aeroporto de Porto Seguro' },
+  { valor: '25 min', desc: 'de barco até Caraíva' },
+];
+
+const FAQ_ITEMS = [
+  {
+    q: 'E se eu precisar cancelar?',
+    a: 'Cancelamento flexível: reembolso integral até 14 dias antes do check-in, via Pix ou estorno no cartão. Depois disso, 50% até 7 dias antes. A confirmação do cancelamento é feita por escrito, no mesmo WhatsApp da reserva.',
+  },
+  {
+    q: 'O pagamento é seguro sem passar pela plataforma?',
+    a: 'Sim — pagamento por Pix ou cartão em até 6x, processado por link de cobrança seguro. Você recebe um contrato simples de locação por temporada por e-mail antes de pagar qualquer valor.',
+  },
+  {
+    q: 'Existe caução ou alguma taxa escondida?',
+    a: 'Uma caução reembolsável é retida na reserva e devolvida em até 48h após o check-out, sem descontos além de danos comprovados. Sem taxa de limpeza extra, sem taxa de serviço — o valor que você vê é o valor final.',
+  },
+  {
+    q: 'Como funciona o check-in?',
+    a: 'Check-in a partir das 15h, com a anfitriã recebendo pessoalmente ou deixando tudo pronto para autoatendimento, como preferir. O endereço e as instruções de acesso chegam por WhatsApp 48h antes da chegada.',
+  },
 ];
 
 const MESES = [
@@ -116,7 +156,31 @@ const MESES = [
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
 ];
 const DIAS_SEMANA = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-const RESERVADOS = new Set([4, 5, 12, 18, 19, 25]);
+const RESERVADOS = new Set([4, 5, 18, 19, 25]);
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return isDesktop;
+}
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return reduced;
+}
 
 function useMagnetic() {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -145,8 +209,70 @@ function useMagnetic() {
   return ref;
 }
 
+/** Subtle pointer-tilt on the floating savings card — desktop, fine-pointer only. */
+function useTilt<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !window.matchMedia('(hover: hover)').matches) return;
+    const move = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `perspective(900px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 8).toFixed(2)}deg)`;
+    };
+    const leave = () => (el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)');
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', leave);
+    return () => {
+      el.removeEventListener('pointermove', move);
+      el.removeEventListener('pointerleave', leave);
+    };
+  }, []);
+  return ref;
+}
+
+/** Gentle vertical parallax, desktop + non-reduced-motion only, clamped so the layer never leaves its frame. */
+function useParallax<T extends HTMLElement>(strength: number, maxPx: number, enabled: boolean) {
+  const ref = useRef<T | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !enabled) return;
+    let raf = 0;
+    const tick = () => {
+      raf = 0;
+      const parent = el.parentElement;
+      if (!parent) return;
+      const box = parent.getBoundingClientRect();
+      const vh = window.innerHeight || 900;
+      const centre = box.top + box.height / 2 - vh / 2;
+      let v = centre * -strength;
+      if (v > maxPx) v = maxPx;
+      if (v < -maxPx) v = -maxPx;
+      el.style.transform = `translate3d(0, ${v.toFixed(1)}px, 0)`;
+    };
+    const onScroll = () => {
+      if (!raf) raf = window.requestAnimationFrame(tick);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    tick();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [strength, maxPx, enabled]);
+  return ref;
+}
+
 export default function VillaSerenaDemo() {
   const rootRef = useMagnetic();
+  const isDesktop = useIsDesktop();
+  const reducedMotion = usePrefersReducedMotion();
+  const showHeroVideo = isDesktop && !reducedMotion;
+  const heroParallaxRef = useParallax<HTMLDivElement>(0.18, 60, isDesktop && !reducedMotion);
+  const cardTiltRef = useTilt<HTMLDivElement>();
 
   return (
     <main
@@ -161,7 +287,7 @@ export default function VillaSerenaDemo() {
       </div>
 
       <div className="relative z-10">
-        {/* Selo NEURALABS */}
+        {/* Selo NEURALABS — única menção à marca dentro da demo */}
         <div className="flex items-center justify-between gap-4 border-b border-white/10 bg-black/40 px-5 py-2 text-[11px] tracking-wide text-[#F5EFE6]/70 backdrop-blur-sm sm:px-8">
           <span>
             <span className="text-[#D4A373]">✦</span> Demonstração desenvolvida por{' '}
@@ -181,6 +307,12 @@ export default function VillaSerenaDemo() {
             >
               VILLA <em className="text-[#D4A373] not-italic">Serena</em>
             </span>
+            <nav className="hidden items-center gap-7 text-[13px] font-medium tracking-wide text-[#F5EFE6]/85 md:flex">
+              <a href="#tour" className="hover:text-[#D4A373]">A Villa</a>
+              <a href="#tour" className="hover:text-[#D4A373]">Experiências</a>
+              <a href="#economia" className="hover:text-[#D4A373]">Tarifas</a>
+              <a href="#localizacao" className="hover:text-[#D4A373]">Localização</a>
+            </nav>
             <a
               href="#reserva"
               data-magnetic
@@ -193,18 +325,45 @@ export default function VillaSerenaDemo() {
 
         {/* Hero */}
         <section className="relative flex min-h-[92vh] items-center overflow-hidden">
-          <Image
-            src={HERO_IMAGE}
-            alt="Villa Serena — piscina de borda infinita ao entardecer, à beira-mar"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
+          <div ref={heroParallaxRef} className="absolute inset-0 -top-[8%] h-[118%] w-full">
+            {showHeroVideo ? (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster={HERO_IMAGE}
+                className="h-full w-full object-cover"
+              >
+                <source src={HERO_VIDEO} type="video/mp4" />
+              </video>
+            ) : (
+              <Image
+                src={HERO_IMAGE}
+                alt="Villa Serena — piscina de borda infinita ao entardecer, à beira-mar"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+              />
+            )}
+          </div>
           {/* Golden-hour: aquece a foto para casar com a promessa "pôr do sol" */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(224,140,60,.4),rgba(212,163,115,.16)_45%,rgba(13,15,18,.08))] mix-blend-soft-light" />
-          <div className="absolute inset-0 bg-[radial-gradient(38%_45%_at_72%_62%,rgba(233,170,95,.5),rgba(224,140,60,.12)_55%,transparent_72%)] mix-blend-screen" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(224,140,60,.28),rgba(212,163,115,.1)_45%,rgba(13,15,18,.08))] mix-blend-soft-light" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0D0F12] via-[#0D0F12]/55 to-[#0D0F12]/15" />
+
+          {/* Ondulação d'água — elemento-assinatura de motion da marca, desktop only */}
+          <svg
+            className="pointer-events-none absolute bottom-[-10%] right-[-4%] z-[1] hidden h-[380px] w-[380px] opacity-[0.16] motion-reduce:hidden md:block"
+            viewBox="0 0 600 600"
+          >
+            {[0, 1.75, 3.5, 5.25].map((delay) => (
+              <circle key={delay} cx="300" cy="300" r="40" fill="none" stroke="#E9C9A3" strokeWidth="0.8">
+                <animate attributeName="r" values="30;290" dur="7s" begin={`${delay}s`} repeatCount="indefinite" />
+                <animate attributeName="opacity" values="1;0" dur="7s" begin={`${delay}s`} repeatCount="indefinite" />
+              </circle>
+            ))}
+          </svg>
 
           <div className="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-32 sm:px-8 sm:pb-20">
             <ScrollReveal>
@@ -216,36 +375,51 @@ export default function VillaSerenaDemo() {
                   <Star className="h-3.5 w-3.5 fill-current" />
                   <Star className="h-3.5 w-3.5 fill-current" />
                 </span>
-                <span className="font-semibold">4,9</span>
-                <span className="text-[#F5EFE6]/55">· 128 hóspedes</span>
+                <span className="font-semibold">5,0</span>
+                <span className="text-[#F5EFE6]/55">· 212 avaliações</span>
                 <span className="h-3 w-px bg-white/15" />
                 <span className="flex items-center gap-1.5">
                   <BadgeCheck className="h-4 w-4 text-[#D4A373]" /> Anfitrião Verificado
                 </span>
                 <span className="h-3 w-px bg-white/15" />
-                <span>Resposta em minutos</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#7bd389] shadow-[0_0_8px_#7bd389]" /> Resposta em minutos
+                </span>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.08}>
-              <span className="mb-4 block text-xs uppercase tracking-[0.28em] text-[#D4A373] sm:text-sm">
-                Boutique Retreat &amp; Private Beach House
-              </span>
               <h1
                 className="max-w-3xl text-balance text-4xl leading-[1.08] sm:text-6xl md:text-7xl"
                 style={{ fontFamily: 'var(--font-villa-serif)' }}
               >
-                O pôr do sol é seu.
+                O pôr do sol de Trancoso,
                 <br />
-                <em className="text-[#D4A373] not-italic">A tarifa também.</em>
+                <em className="text-[#D4A373] not-italic">sem intermediários.</em>
               </h1>
             </ScrollReveal>
 
             <ScrollReveal delay={0.16}>
-              <p className="mb-8 mt-6 max-w-xl text-sm leading-relaxed text-[#F5EFE6]/80 sm:text-base md:text-lg">
-                Uma casa de praia autoral à beira-mar. Reserve direto com os anfitriões — sem
-                intermediários, sem taxas de 20%.
+              <p className="mb-6 mt-6 max-w-xl text-sm leading-relaxed text-[#F5EFE6]/80 sm:text-base md:text-lg">
+                Casa de praia com quatro suítes, piscina de borda infinita e acesso privativo à
+                areia. Reserve direto com o anfitrião e fique com o valor que as plataformas
+                cobram de taxa.
               </p>
+
+              <div className="mb-6 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/10 pt-5 text-sm">
+                <div>
+                  <span className="block text-2xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>4</span>
+                  <span className="text-[11px] uppercase tracking-wide text-[#F5EFE6]/55">suítes</span>
+                </div>
+                <div>
+                  <span className="block text-2xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>10</span>
+                  <span className="text-[11px] uppercase tracking-wide text-[#F5EFE6]/55">hóspedes</span>
+                </div>
+                <div>
+                  <span className="block text-2xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>40 m</span>
+                  <span className="text-[11px] uppercase tracking-wide text-[#F5EFE6]/55">até a areia</span>
+                </div>
+              </div>
 
               <div className="flex flex-wrap items-center gap-4">
                 <a
@@ -253,23 +427,18 @@ export default function VillaSerenaDemo() {
                   data-magnetic
                   className="inline-flex w-full items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-[#e9c9a3] to-[#D4A373] px-8 py-4 text-sm font-bold text-[#20160f] shadow-lg shadow-[#D4A373]/25 transition-shadow hover:shadow-[#D4A373]/45 sm:w-auto"
                 >
-                  Garantir Tarifa Direta
+                  Verificar disponibilidade
                 </a>
                 <a
                   href="#tour"
                   data-magnetic
                   className="inline-flex w-full items-center justify-center whitespace-nowrap rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-semibold text-[#F5EFE6] backdrop-blur-sm transition-colors hover:border-[#D4A373]/60 hover:text-[#D4A373] sm:w-auto"
                 >
-                  Conhecer a casa
+                  Conhecer a villa
                 </a>
               </div>
 
-              <p className="mt-4 text-xs text-[#F5EFE6]/60 sm:text-sm">
-                A partir de <b className="font-semibold text-[#F5EFE6]">{currency.format(NIGHTLY_RATE)}</b>
-                /noite — sem taxa de serviço, sem cartão para consultar.
-              </p>
-
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#e08c3c]/30 bg-[#e08c3c]/10 px-3.5 py-2 text-xs text-[#f0cba0]">
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#e08c3c]/30 bg-[#e08c3c]/10 px-3.5 py-2 text-xs text-[#f0cba0]">
                 <span className="h-2 w-2 rounded-full bg-[#e08c3c] animate-ring" />
                 Apenas <b className="text-white">3 fins de semana</b> livres na alta temporada
               </div>
@@ -279,7 +448,8 @@ export default function VillaSerenaDemo() {
           {/* Placa de vidro edge-lit + reflexo (elemento-assinatura da marca) */}
           <div className="absolute bottom-[10vh] right-[6vw] z-10 hidden w-[300px] md:block">
             <div
-              className="relative rounded-2xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-xl"
+              ref={cardTiltRef}
+              className="relative rounded-2xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-xl transition-transform duration-300"
               style={{ boxShadow: '0 30px 70px -30px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.15)' }}
             >
               <div
@@ -294,12 +464,13 @@ export default function VillaSerenaDemo() {
               </span>
               <span className="my-1 flex items-baseline gap-1" style={{ fontFamily: 'var(--font-villa-serif)' }}>
                 <span className="text-lg text-[#D4A373]/85">R$</span>
-                <span className="text-5xl font-medium text-[#D4A373]">2.900</span>
+                <span className="text-5xl font-medium text-[#D4A373]">1.640</span>
               </span>
-              <span className="block text-xs text-[#F5EFE6]/55">reservando direto vs. Airbnb</span>
-              <span className="mt-3 flex gap-2 border-t border-white/10 pt-3 text-xs text-[#F5EFE6]/75">
-                ✓ <b className="text-[#D4A373]">0% de taxa</b> de serviço
-              </span>
+              <span className="block text-xs text-[#F5EFE6]/55">reservando direto vs. plataforma</span>
+              <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-xs">
+                <span className="text-[#F5EFE6]/50 line-through">{currency.format(9840)}</span>
+                <span className="font-semibold text-[#D4A373]">{currency.format(8200)}</span>
+              </div>
             </div>
             <div
               className="h-14 rounded-2xl bg-white/[0.05] blur-[3px]"
@@ -327,9 +498,9 @@ export default function VillaSerenaDemo() {
         <section id="tour" className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-28">
           <ScrollReveal>
             <div className="mb-16 text-center">
-              <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">O Tour</span>
+              <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">A villa</span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
-                Três ambientes, um único horizonte.
+                Três horas do dia, três lugares para viver.
               </h2>
             </div>
           </ScrollReveal>
@@ -365,6 +536,51 @@ export default function VillaSerenaDemo() {
           </div>
         </section>
 
+        {/* Localização — reduz a incerteza de reservar direto num lugar desconhecido */}
+        <section id="localizacao" className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
+          <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+            <ScrollReveal>
+              <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Onde fica</span>
+              <h2 className="mb-5 max-w-lg text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
+                No coração de Trancoso, <em className="text-[#D4A373] not-italic">longe de tudo que atrapalha</em>.
+              </h2>
+              <p className="mb-7 max-w-md text-sm leading-relaxed text-[#F5EFE6]/75 sm:text-base">
+                Perto o suficiente pra tudo, isolada o bastante pra ninguém te encontrar sem
+                avisar antes. O endereço exato é enviado depois da confirmação da reserva.
+              </p>
+              <div className="flex flex-col gap-3.5">
+                {DISTANCIAS.map((d) => (
+                  <div key={d.desc} className="flex items-baseline gap-3.5">
+                    <span
+                      className="inline-block w-[62px] shrink-0 text-lg text-[#D4A373]"
+                      style={{ fontFamily: 'var(--font-villa-serif)' }}
+                    >
+                      {d.valor}
+                    </span>
+                    <span className="text-sm text-[#F5EFE6]/70">{d.desc}</span>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <div className="relative h-[320px] overflow-hidden rounded-2xl border border-white/15 sm:h-[420px]">
+                <Image
+                  src={REGIAO_IMAGE}
+                  alt=""
+                  fill
+                  loading="lazy"
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0D0F12]/70 via-[#0D0F12]/5 to-transparent" />
+                <span className="absolute bottom-5 left-5 text-[10px] uppercase tracking-[0.14em] text-[#F5EFE6]/65">
+                  Imagem ilustrativa da região
+                </span>
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+
         {/* Comparador de economia em tempo real */}
         <EconomySection />
 
@@ -374,7 +590,7 @@ export default function VillaSerenaDemo() {
             <div className="mb-12 text-center">
               <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Quem já ficou</span>
               <h2 className="text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
-                A experiência que os hóspedes levam pra vida.
+                212 avaliações, nota 5,0.
               </h2>
             </div>
           </ScrollReveal>
@@ -387,7 +603,7 @@ export default function VillaSerenaDemo() {
                       <Star key={i} className="h-3.5 w-3.5 fill-current" />
                     ))}
                   </div>
-                  <p className="mb-4 text-[15px] leading-relaxed" style={{ fontFamily: 'var(--font-villa-serif)' }}>
+                  <p className="mb-4 text-[15px] leading-relaxed italic" style={{ fontFamily: 'var(--font-villa-serif)' }}>
                     “{d.q}”
                   </p>
                   <p className="text-sm font-semibold">{d.n}</p>
@@ -400,6 +616,36 @@ export default function VillaSerenaDemo() {
 
         {/* Motor de reserva */}
         <BookingSection />
+
+        {/* Perguntas antes de reservar — resolve a objeção de reservar direto, sem a "garantia" da plataforma */}
+        <section className="mx-auto max-w-3xl px-5 py-20 sm:px-8 sm:py-24">
+          <ScrollReveal>
+            <div className="mb-10">
+              <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Antes de reservar</span>
+              <h2 className="text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
+                Reservar direto é tão seguro quanto pela plataforma{' '}
+                <em className="text-[#D4A373] not-italic">— só que sem a taxa</em>.
+              </h2>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal delay={0.08}>
+            <div className="flex flex-col">
+              {FAQ_ITEMS.map((item, i) => (
+                <details
+                  key={item.q}
+                  open={i === 0}
+                  className="group border-t border-white/10 py-5 last:border-b"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-base font-medium text-[#F5EFE6] marker:content-none">
+                    {item.q}
+                    <Plus className="h-4 w-4 flex-shrink-0 text-[#D4A373] transition-transform duration-300 group-open:rotate-45" />
+                  </summary>
+                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#F5EFE6]/65">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </ScrollReveal>
+        </section>
 
         {/* Concierge IA */}
         <section className="mx-auto max-w-3xl px-5 py-20 sm:px-8 sm:py-28">
@@ -440,11 +686,11 @@ export default function VillaSerenaDemo() {
         {/* Footer */}
         <footer className="border-t border-white/10 px-5 py-10 text-center sm:px-8">
           <p className="text-xs text-[#F5EFE6]/40">
-            Villa Serena é um projeto de demonstração fictício, criado por{' '}
+            Projeto fictício de demonstração criado por{' '}
             <Link href="/" className="underline hover:text-[#D4A373]">
               NEURALABS
             </Link>
-            .
+            . Marca, fotos e depoimentos são ilustrativos.
           </p>
         </footer>
       </div>
@@ -467,7 +713,7 @@ export default function VillaSerenaDemo() {
 /* ================================================================== */
 function EconomySection() {
   const [diaria, setDiaria] = useState(NIGHTLY_RATE);
-  const [noites, setNoites] = useState(10);
+  const [noites, setNoites] = useState(5);
 
   const total = diaria * noites;
   const economia = Math.round(total * AIRBNB_FEE_PCT);
@@ -478,15 +724,15 @@ function EconomySection() {
     <section id="economia" className="border-y border-white/10 bg-black/20 px-5 py-20 sm:px-8 sm:py-24">
       <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-20">
         <ScrollReveal>
-          <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Aversão à Perda</span>
+          <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Compare antes de reservar</span>
           <h2 className="mb-5 text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
-            Cada reserva pelo app
+            A mesma casa. As mesmas noites.
             <br />
-            deixa dinheiro na mesa.
+            Um preço diferente.
           </h2>
           <p className="mb-8 max-w-md text-sm leading-relaxed text-[#F5EFE6]/75 sm:text-base">
-            Ajuste a sua estadia e veja em tempo real quanto a comissão do Airbnb consome — e
-            quanto volta pro seu bolso reservando direto.
+            Plataformas somam cerca de 20% em taxas de serviço. Ajuste a estadia e veja quanto
+            fica com você.
           </p>
 
           <div className="mb-6">
@@ -496,9 +742,9 @@ function EconomySection() {
             </div>
             <input
               type="range"
-              min={500}
-              max={4000}
-              step={50}
+              min={900}
+              max={2500}
+              step={20}
               value={diaria}
               onChange={(e) => setDiaria(Number(e.target.value))}
               aria-label="Valor da diária"
@@ -515,7 +761,7 @@ function EconomySection() {
             <input
               type="range"
               min={2}
-              max={30}
+              max={14}
               step={1}
               value={noites}
               onChange={(e) => setNoites(Number(e.target.value))}
@@ -528,7 +774,7 @@ function EconomySection() {
         <ScrollReveal delay={0.1}>
           <div className="rounded-2xl border border-white/15 bg-white/[0.04] p-7 backdrop-blur-sm sm:p-9">
             <div className="mb-5">
-              <span className="mb-1 block text-sm text-[#F5EFE6]/65">Reservando pelo Airbnb</span>
+              <span className="mb-1 block text-sm text-[#F5EFE6]/65">Pela plataforma</span>
               <span className="block text-2xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
                 {currency.format(totalAirbnb)}
               </span>
@@ -551,7 +797,7 @@ function EconomySection() {
               </div>
             </div>
             <div className="mb-6 flex items-center justify-between border-y border-dashed border-white/15 py-4">
-              <span className="text-xs uppercase tracking-[0.14em] text-[#F5EFE6]/70">Você economiza</span>
+              <span className="text-xs uppercase tracking-[0.14em] text-[#F5EFE6]/70">Você fica com</span>
               <strong
                 className="bg-gradient-to-r from-[#D4A373] via-[#fff6ea] to-[#D4A373] bg-clip-text text-3xl text-transparent"
                 style={{ fontFamily: 'var(--font-villa-serif)', backgroundSize: '220% 100%' }}
@@ -583,8 +829,8 @@ function EconomySection() {
 function BookingSection() {
   const today = useMemo(() => new Date(), []);
   const [cursor, setCursor] = useState({ y: today.getFullYear(), m: today.getMonth() });
-  const [checkIn, setCheckIn] = useState<number | null>(11);
-  const [checkOut, setCheckOut] = useState<number | null>(16);
+  const [checkIn, setCheckIn] = useState<number | null>(12);
+  const [checkOut, setCheckOut] = useState<number | null>(17);
 
   const firstDay = new Date(cursor.y, cursor.m, 1).getDay();
   const daysInMonth = new Date(cursor.y, cursor.m + 1, 0).getDate();
@@ -634,13 +880,13 @@ function BookingSection() {
         <ScrollReveal>
           <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Reserva Direta</span>
           <h2 className="mb-5 text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
-            Escolha suas datas.
+            Escolha as datas.
             <br />
-            Feche pelo WhatsApp.
+            A gente cuida do resto.
           </h2>
           <p className="mb-7 max-w-md text-sm leading-relaxed text-[#F5EFE6]/75 sm:text-base">
-            Sem cadastro, sem burocracia, sem taxa de serviço. Selecione o período e confirme
-            direto com os anfitriões.
+            Confirmação pelo WhatsApp em minutos, pagamento por Pix ou cartão em até 6x, e um
+            concierge disponível do check-in ao check-out.
           </p>
 
           <div className="mb-6 flex flex-wrap items-end gap-5 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
@@ -670,7 +916,7 @@ function BookingSection() {
             data-magnetic
             className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#e9c9a3] to-[#D4A373] px-6 py-4 text-sm font-bold text-[#20160f] shadow-lg shadow-[#D4A373]/25 transition-shadow hover:shadow-[#D4A373]/45"
           >
-            {nights > 0 ? `Reservar ${nights} noites no WhatsApp` : 'Falar no WhatsApp'}
+            {nights > 0 ? `Reservar ${nights} noites pelo WhatsApp` : 'Falar no WhatsApp'}
           </a>
           <p className="mt-3 text-center text-xs text-[#F5EFE6]/50">
             Resposta em minutos • Diárias a partir de {currency.format(NIGHTLY_RATE)}
