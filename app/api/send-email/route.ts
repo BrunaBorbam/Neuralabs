@@ -96,14 +96,14 @@ export async function POST(req: NextRequest) {
       subject: '🧠 Recebemos sua solicitação de diagnóstico!',
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0B0A0E;">
-          <h1 style="color: #C58C3B; font-size: 24px; margin-bottom: 20px;">Obrigado, ${safeName}!</h1>
+          <h1 style="color: #B98CA8; font-size: 24px; margin-bottom: 20px;">Obrigado, ${safeName}!</h1>
 
           <p style="color: #FAF7F2; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
             Recebemos sua solicitação de diagnóstico de conversão 🎯
           </p>
 
           <div style="background: #1D1B24; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(250,247,242,0.1);">
-            <h2 style="color: #C58C3B; margin-top: 0;">Dados recebidos:</h2>
+            <h2 style="color: #B98CA8; margin-top: 0;">Dados recebidos:</h2>
             <p style="color: #FAF7F2;"><strong>Nome:</strong> ${safeName}</p>
             <p style="color: #FAF7F2;"><strong>Email:</strong> ${safeEmail}</p>
             ${safeCompany ? `<p style="color: #FAF7F2;"><strong>Empresa:</strong> ${safeCompany}</p>` : ''}
@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
             Nosso time vai analisar seu site e enviar um diagnóstico completo em até 24 horas.
           </p>
 
-          <div style="background: linear-gradient(135deg, #D2A052, #A8752F); color: #0B0A0E; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+          <div style="background: linear-gradient(135deg, #C89DB5, #9E7089); color: #0B0A0E; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
             <p style="margin: 0; font-size: 14px; font-weight: 600;">
               💡 Enquanto isso, qualquer dúvida é só chamar no WhatsApp — respondemos direto, sem robô.
             </p>

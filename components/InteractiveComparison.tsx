@@ -104,7 +104,7 @@ export const InteractiveComparison = () => {
                 <p className="hidden sm:block text-sm text-pearl-100/80 max-w-xs ml-auto mb-6">
                   {t.comparison.afterBody}
                 </p>
-                <span className="px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-900 text-xs sm:text-sm font-bold shadow-[0_0_24px_rgba(197,140,59,0.45)]">
+                <span className="px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-gradient-to-r from-gold-400 to-gold-600 text-obsidian-900 text-xs sm:text-sm font-bold shadow-[0_0_24px_rgba(185,140,168,0.45)]">
                   {t.comparison.afterCta}
                 </span>
               </div>

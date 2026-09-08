@@ -8,7 +8,7 @@ interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ variant = 'primary', children, className = '' }) => {
   const variants = {
-    primary: 'bg-blush-500/15 border border-blush-500/40 text-blush-200 hover:bg-blush-500/25 hover:border-blush-500/60',
+    primary: 'bg-gold-500/15 border border-gold-500/40 text-gold-200 hover:bg-gold-500/25 hover:border-gold-500/60',
     success: 'bg-green-500/15 border border-green-500/40 text-green-300 hover:bg-green-500/25 hover:border-green-500/60',
     warning: 'bg-amber-500/15 border border-amber-500/40 text-amber-300 hover:bg-amber-500/25 hover:border-amber-500/60',
     error: 'bg-red-500/15 border border-red-500/40 text-red-300 hover:bg-red-500/25 hover:border-red-500/60',

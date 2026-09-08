@@ -87,7 +87,7 @@ export const ContactForm = () => {
                 placeholder={t.contact.namePlaceholder}
                 value={form.name}
                 onChange={handleChange('name')}
-                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
+                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-graphite-500/60"
               />
               <input
                 type="email"
@@ -95,21 +95,21 @@ export const ContactForm = () => {
                 placeholder={t.contact.emailPlaceholder}
                 value={form.email}
                 onChange={handleChange('email')}
-                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
+                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-graphite-500/60"
               />
               <input
                 type="text"
                 placeholder={t.contact.companyPlaceholder}
                 value={form.company}
                 onChange={handleChange('company')}
-                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
+                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-graphite-500/60"
               />
               <input
                 type="tel"
                 placeholder={t.contact.phonePlaceholder}
                 value={form.phone}
                 onChange={handleChange('phone')}
-                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-blush-500/60"
+                className="bg-obsidian-900/60 border border-pearl-100/15 rounded-lg px-4 py-3 text-pearl-100 placeholder:text-pearl-300/40 focus:outline-none focus:border-graphite-500/60"
               />
 
               <Button
@@ -131,8 +131,8 @@ export const ContactForm = () => {
             </form>
 
             <div className="flex flex-col justify-center items-start gap-4 border-t md:border-t-0 md:border-l border-pearl-100/10 pt-8 md:pt-0 md:pl-10">
-              <span className="w-12 h-12 rounded-full bg-blush-500/10 border border-blush-500/30 flex items-center justify-center">
-                <MessageCircle className="w-6 h-6 text-blush-300" />
+              <span className="w-12 h-12 rounded-full bg-graphite-500/10 border border-graphite-500/30 flex items-center justify-center">
+                <MessageCircle className="w-6 h-6 text-graphite-300" />
               </span>
               <p className="text-pearl-300/70 leading-relaxed">{t.contact.asideText}</p>
               <a

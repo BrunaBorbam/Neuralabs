@@ -102,8 +102,8 @@ export const Calculator = () => {
             </div>
 
             <div className="rounded-xl bg-obsidian-900/60 border border-pearl-100/10 p-8 flex flex-col justify-center items-center text-center">
-              <span className="w-12 h-12 rounded-full bg-blush-500/10 border border-blush-500/30 flex items-center justify-center mb-4">
-                <TrendingDown className="w-6 h-6 text-blush-300" />
+              <span className="w-12 h-12 rounded-full bg-graphite-500/10 border border-graphite-500/30 flex items-center justify-center mb-4">
+                <TrendingDown className="w-6 h-6 text-graphite-300" />
               </span>
               <p className="text-sm text-pearl-300/60 mb-2">{t.calculator.monthlyLossLabel}</p>
               {/* Same reasoning as Pricing: numbers stay in the sans, not

@@ -9,8 +9,8 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ variant = 'glass', children, className = '' }) => {
   const variants = {
-    glass: 'bg-pearl-100/5 backdrop-filter backdrop-blur-md border border-pearl-100/10 shadow-lg hover:bg-pearl-100/[0.08] hover:border-blush-500/30 hover:shadow-xl hover:shadow-blush-500/10',
-    surface: 'bg-obsidian-800/60 border border-obsidian-600 shadow-lg hover:shadow-xl hover:border-blush-500/20',
+    glass: 'bg-pearl-100/5 backdrop-filter backdrop-blur-md border border-pearl-100/10 shadow-lg hover:bg-pearl-100/[0.08] hover:border-graphite-500/40 hover:shadow-xl hover:shadow-graphite-500/10',
+    surface: 'bg-obsidian-800/60 border border-obsidian-600 shadow-lg hover:shadow-xl hover:border-graphite-500/30',
     // "accent" = the highlighted/recommended card treatment (Pricing's
     // featured plan, a Pillars card) — moved to gold, the new primary
     // accent, so the strongest visual pull on the page consistently reads

@@ -35,7 +35,7 @@ export const FloatingWhatsApp = () => {
       aria-label={t.nav.cta}
       aria-hidden={hidden}
       tabIndex={hidden ? -1 : 0}
-      className={`fixed bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 border-2 border-gold-300/50 shadow-[0_0_20px_rgba(197,140,59,0.55)] active:scale-95 transition-all duration-300 ${
+      className={`fixed bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-gold-400 to-gold-600 border-2 border-gold-300/50 shadow-[0_0_20px_rgba(185,140,168,0.55)] active:scale-95 transition-all duration-300 ${
         hidden ? 'opacity-0 pointer-events-none translate-y-4' : 'opacity-100'
       }`}
     >

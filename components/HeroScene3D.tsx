@@ -46,7 +46,7 @@ function DriftingGlass() {
           the GPU cost. */}
       <Sphere args={[1, 64, 64]}>
         <meshPhysicalMaterial
-          color="#D8C2B8"
+          color="#B98CA8"
           roughness={0.25}
           metalness={0.05}
           opacity={0.22}
@@ -54,7 +54,7 @@ function DriftingGlass() {
         />
       </Sphere>
       <Torus args={[1.65, 0.01, 16, 100]} rotation={[Math.PI / 2.4, 0, 0]}>
-        <meshStandardMaterial color="#FAF7F2" emissive="#A89084" emissiveIntensity={0.4} />
+        <meshStandardMaterial color="#FAF7F2" emissive="#8C6F80" emissiveIntensity={0.4} />
       </Torus>
     </group>
   );
@@ -92,7 +92,7 @@ export const HeroScene3D = () => {
         frameloop={isVisible ? 'always' : 'never'}
       >
         <ambientLight intensity={0.6} />
-        <pointLight position={[3, 2, 4]} intensity={0.8} color="#D8C2B8" />
+        <pointLight position={[3, 2, 4]} intensity={0.8} color="#B98CA8" />
         <DriftingGlass />
       </Canvas>
     </div>

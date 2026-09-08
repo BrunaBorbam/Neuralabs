@@ -67,7 +67,7 @@ export const Verticals = () => {
             return (
               <ScrollReveal key={vertical.name}>
                 <TiltCard className="h-full" intensity={3}>
-                  <div className="rounded-xl overflow-hidden border border-pearl-100/10 bg-obsidian-800/60 h-full flex flex-col transition-[border-color,box-shadow] duration-300 group-hover/tilt:border-blush-500/40 group-hover/tilt:shadow-[0_16px_40px_-15px_rgba(216,194,184,0.25)]">
+                  <div className="rounded-xl overflow-hidden border border-pearl-100/10 bg-obsidian-800/60 h-full flex flex-col transition-[border-color,box-shadow] duration-300 group-hover/tilt:border-graphite-500/40 group-hover/tilt:shadow-[0_16px_40px_-15px_rgba(183,191,198,0.25)]">
                     <div className="group relative aspect-[4/3] overflow-hidden">
                       <HoverRevealVideo
                         image={media.image}
@@ -80,8 +80,8 @@ export const Verticals = () => {
                           on top of the hover-video's hit area but aren't interactive
                           themselves, so hovering directly over them should still count
                           as hovering the card and trigger the video. */}
-                      <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-obsidian-900/70 border border-blush-500/30 flex items-center justify-center backdrop-blur-sm pointer-events-none">
-                        <Icon className="w-4 h-4 text-blush-300" />
+                      <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-obsidian-900/70 border border-graphite-500/30 flex items-center justify-center backdrop-blur-sm pointer-events-none">
+                        <Icon className="w-4 h-4 text-graphite-300" />
                       </div>
                       <span className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wide text-pearl-300/80 pointer-events-none">
                         {t.verticals.conceptTag}
