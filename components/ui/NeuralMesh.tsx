@@ -35,7 +35,7 @@ export const NeuralMesh = ({ className = '' }: { className?: string }) => (
         y1={NODES[a].y}
         x2={NODES[b].x}
         y2={NODES[b].y}
-        stroke="#D8C2B8"
+        stroke="#B7BFC6"
         strokeWidth="1"
         strokeOpacity="0.35"
       />

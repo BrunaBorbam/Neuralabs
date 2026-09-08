@@ -63,7 +63,7 @@ export const Pricing = () => {
                   <ul className="flex flex-col gap-3 mb-8 text-left w-full max-w-sm flex-1">
                     {plan.deliverables.map((feature) => (
                       <li key={feature} className="flex items-start gap-3 text-sm text-pearl-300/80">
-                        <Check className="w-4 h-4 text-blush-400 flex-shrink-0 mt-0.5" />
+                        <Check className="w-4 h-4 text-graphite-400 flex-shrink-0 mt-0.5" />
                         {feature}
                       </li>
                     ))}

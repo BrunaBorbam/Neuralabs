@@ -17,7 +17,7 @@ export default async function Image() {
           justifyContent: 'space-between',
           padding: '72px 80px',
           background:
-            'radial-gradient(circle at 78% 18%, rgba(216,194,184,0.22), transparent 55%), radial-gradient(circle at 8% 92%, rgba(216,194,184,0.12), transparent 45%), #0B0A0E',
+            'radial-gradient(circle at 78% 18%, rgba(185,140,168,0.22), transparent 55%), radial-gradient(circle at 8% 92%, rgba(185,140,168,0.12), transparent 45%), #0B0A0E',
           fontFamily: 'sans-serif',
         }}
       >
@@ -28,12 +28,12 @@ export default async function Image() {
               width: 44,
               height: 44,
               borderRadius: 999,
-              border: '2px solid #D8C2B8',
+              border: '2px solid #B7BFC6',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: 22,
-              color: '#D8C2B8',
+              color: '#B7BFC6',
             }}
           >
             N
@@ -51,8 +51,8 @@ export default async function Image() {
               alignSelf: 'flex-start',
               padding: '10px 20px',
               borderRadius: 999,
-              border: '1px solid rgba(216,194,184,0.4)',
-              color: '#D8C2B8',
+              border: '1px solid rgba(185,140,168,0.4)',
+              color: '#B98CA8',
               fontSize: 20,
               letterSpacing: 1,
               textTransform: 'uppercase',
@@ -71,7 +71,7 @@ export default async function Image() {
             }}
           >
             Websites desenhados pela{' '}
-            <span style={{ color: '#D8C2B8', marginLeft: 16 }}>neurociência da decisão humana.</span>
+            <span style={{ color: '#B98CA8', marginLeft: 16 }}>neurociência da decisão humana.</span>
           </div>
         </div>
 

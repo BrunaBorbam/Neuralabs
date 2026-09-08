@@ -79,7 +79,7 @@ export const TiltCard = ({
           background: useTransform(
             [glowX, glowY],
             ([x, y]) =>
-              `radial-gradient(${glowRadius}px circle at ${x} ${y}, rgba(216,194,184,${glowOpacity}), transparent 70%)`
+              `radial-gradient(${glowRadius}px circle at ${x} ${y}, rgba(183,191,198,${glowOpacity}), transparent 70%)`
           ),
         }}
       />

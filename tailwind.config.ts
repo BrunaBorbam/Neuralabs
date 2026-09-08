@@ -19,18 +19,33 @@ const config: Config = {
           500: '#3A3645',
         },
 
-        // DELICATE LUXURY — blush nude accent
+        // DELICATE LUXURY — malva accent (cor de marca dominante, Set 2026)
         blush: {
-          50: '#FAF3EF',
-          100: '#F3E4DB',
-          200: '#EAD3C5',
-          300: '#E0C1AF',
-          400: '#DCC5B9',
-          500: '#D8C2B8', // Blush Nude primary
-          600: '#C2A896',
-          700: '#A88972',
-          800: '#8A6D59',
-          900: '#6B5445',
+          50: '#FAF3F7',
+          100: '#F3E4EC',
+          200: '#E3C3D2',
+          300: '#D2A8BC',
+          400: '#C89DB5',
+          500: '#B98CA8', // Malva primary
+          600: '#9E7089',
+          700: '#7A4F63',
+          800: '#5E3B4C',
+          900: '#452B38',
+        },
+
+        // DELICATE LUXURY — grafite/prata (detalhe de contraste, não é
+        // segunda cor de marca — só ícones isolados e bordas/divisores)
+        graphite: {
+          50: '#F6F7F8',
+          100: '#EBEDEF',
+          200: '#DBDFE2',
+          300: '#C9CFD3',
+          400: '#BFC5CA',
+          500: '#B7BFC6', // Grafite/prata primary
+          600: '#97A0A8',
+          700: '#767F87',
+          800: '#565C62',
+          900: '#383C40',
         },
 
         // DELICATE LUXURY — pérola
@@ -162,10 +177,11 @@ const config: Config = {
         'orange-glow': '0 0 20px rgba(255, 140, 0, 0.3)',
         'orange-glow-lg': '0 0 40px rgba(255, 140, 0, 0.4)',
         'violet-glow': '0 0 20px rgba(139, 92, 246, 0.3)',
-        'blush-glow': '0 0 24px rgba(216, 194, 184, 0.25)',
-        'blush-glow-lg': '0 0 48px rgba(216, 194, 184, 0.35)',
-        'gold-glow': '0 0 24px rgba(197, 140, 59, 0.35)',
-        'gold-glow-lg': '0 0 56px rgba(197, 140, 59, 0.45)',
+        'blush-glow': '0 0 24px rgba(185, 140, 168, 0.28)', // malva
+        'blush-glow-lg': '0 0 48px rgba(185, 140, 168, 0.38)', // malva
+        'gold-glow': '0 0 24px rgba(185, 140, 168, 0.32)', // malva
+        'gold-glow-lg': '0 0 56px rgba(185, 140, 168, 0.42)', // malva
+        'graphite-glow': '0 0 20px rgba(183, 191, 198, 0.3)', // grafite/prata
       },
 
       backdropBlur: {
@@ -229,7 +245,7 @@ const config: Config = {
         'gradient-dark': 'linear-gradient(180deg, #0A0E27 0%, #0F172A 100%)',
         'gradient-orange-dark': 'linear-gradient(135deg, #FF8C00 0%, #EA580C 100%)',
         'gradient-obsidian': 'linear-gradient(180deg, #0B0A0E 0%, #141319 100%)',
-        'gradient-blush': 'linear-gradient(135deg, #D8C2B8 0%, #C2A896 100%)',
+        'gradient-blush': 'linear-gradient(135deg, #B98CA8 0%, #9E7089 100%)', // malva
       },
 
       fontFamily: {

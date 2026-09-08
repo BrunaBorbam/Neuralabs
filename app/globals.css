@@ -10,17 +10,36 @@
   --color-obsidian-600: #2A2733;
   --color-obsidian-500: #3A3645;
 
-  /* Delicate Luxury palette — blush nude accent */
-  --color-blush-50: #FAF3EF;
-  --color-blush-100: #F3E4DB;
-  --color-blush-200: #EAD3C5;
-  --color-blush-300: #E0C1AF;
-  --color-blush-400: #DCC5B9;
-  --color-blush-500: #D8C2B8;
-  --color-blush-600: #C2A896;
-  --color-blush-700: #A88972;
-  --color-blush-800: #8A6D59;
-  --color-blush-900: #6B5445;
+  /* Delicate Luxury palette — malva (cor de marca dominante, Set 2026) —
+     "blush" era já o acento secundário de toda a base (links, textos,
+     ícones, badges); vira malva junto com "gold" pra manter o malva
+     dominante em quase tudo, como pedido. */
+  --color-blush-50: #FAF3F7;
+  --color-blush-100: #F3E4EC;
+  --color-blush-200: #E3C3D2;
+  --color-blush-300: #D2A8BC;
+  --color-blush-400: #C89DB5;
+  --color-blush-500: #B98CA8;
+  --color-blush-600: #9E7089;
+  --color-blush-700: #7A4F63;
+  --color-blush-800: #5E3B4C;
+  --color-blush-900: #452B38;
+
+  /* Delicate Luxury palette — grafite/prata (detalhe de contraste, Set 2026)
+     — NÃO é uma segunda cor viva da marca, é só a "linha fina metálica"
+     pedida: usado apenas em ícones isolados e bordas/divisores pontuais
+     (nunca em texto, fill ou CTA), pra dar toque de precisão/engenharia
+     sem tirar o malva do centro. */
+  --color-graphite-50: #F6F7F8;
+  --color-graphite-100: #EBEDEF;
+  --color-graphite-200: #DBDFE2;
+  --color-graphite-300: #C9CFD3;
+  --color-graphite-400: #BFC5CA;
+  --color-graphite-500: #B7BFC6;
+  --color-graphite-600: #97A0A8;
+  --color-graphite-700: #767F87;
+  --color-graphite-800: #565C62;
+  --color-graphite-900: #383C40;
 
   /* Delicate Luxury palette — pérola */
   --color-pearl: #FAF7F2;
@@ -30,20 +49,19 @@
   --color-pearl-300: #F0EAE1;
   --color-pearl-400: #E3D9CB;
 
-  /* Delicate Luxury palette — dourado (acento primário) — antigo latão/
-     champagne, não laranja saturado, pra continuar lendo "luxo" e não
-     "produto de tech genérico". Usado nos CTAs e nos glows ambiente;
-     blush vira acento secundário (badges, ícones, detalhes). */
-  --color-gold-50: #FBF4E7;
-  --color-gold-100: #F5E6C8;
-  --color-gold-200: #EACF9C;
-  --color-gold-300: #DEB873;
-  --color-gold-400: #D2A052;
-  --color-gold-500: #C58C3B;
-  --color-gold-600: #A8752F;
-  --color-gold-700: #895D26;
-  --color-gold-800: #6B481E;
-  --color-gold-900: #503617;
+  /* Delicate Luxury palette — malva (cor de marca dominante, Set 2026) —
+     substitui o antigo dourado. Usado nos CTAs primários, headings e glows
+     ambiente — é o papel que o dourado ocupava antes. */
+  --color-gold-50: #FAF3F7;
+  --color-gold-100: #F3E4EC;
+  --color-gold-200: #E3C3D2;
+  --color-gold-300: #D2A8BC;
+  --color-gold-400: #C89DB5;
+  --color-gold-500: #B98CA8;
+  --color-gold-600: #9E7089;
+  --color-gold-700: #7A4F63;
+  --color-gold-800: #5E3B4C;
+  --color-gold-900: #452B38;
 }
 
 :root {
