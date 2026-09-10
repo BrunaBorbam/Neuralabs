@@ -203,6 +203,11 @@ const config: Config = {
         'drift-slow': 'drift-slow 18s ease-in-out infinite',
         'ring': 'ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'marquee': 'marquee 32s linear infinite',
+
+        // CERNE (Luxo Silencioso) — Ken Burns substitui vídeo de hero (sem
+        // geração de vídeo por IA disponível nesta conta): zoom/pan lento
+        // sobre a foto estática, não um loop de vídeo real.
+        'ken-burns': 'ken-burns 22s ease-in-out infinite alternate',
       },
 
       keyframes: {
@@ -236,6 +241,12 @@ const config: Config = {
         'marquee': {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
+        },
+
+        // CERNE (Luxo Silencioso)
+        'ken-burns': {
+          '0%': { transform: 'scale(1) translate3d(0,0,0)' },
+          '100%': { transform: 'scale(1.08) translate3d(-1%,-1.5%,0)' },
         },
       },
 

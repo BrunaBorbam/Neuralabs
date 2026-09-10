@@ -24,13 +24,20 @@
  * Sem camada de portfólio dentro da demo: a única menção à NEURALABS é a
  * barra discreta de atribuição no topo + o disclaimer no rodapé.
  *
- * NOTA DE PRODUÇÃO: a geração de imagem por IA (Higgsfield) não estava
- * disponível nesta sessão (requer plano pago que a conta não tinha no
- * momento) — as fotos abaixo são placeholders reais do Unsplash (mesmo
- * padrão de fallback já usado no restante do projeto), genéricos de
- * interiores com tom de madeira, não fotografia real de marcenaria. Trocar
- * por fotografia real de projeto ou por imagem gerada por IA antes de usar
- * esta demo em prospecção com um lead real.
+ * NOTA DE PRODUÇÃO: a geração de imagem por IA (Higgsfield) segue
+ * indisponível nesta conta (o preflight de custo responde, mas o envio real
+ * do job retorna "Requires basic plan or higher") — as fotos abaixo são
+ * placeholders reais do Unsplash (mesmo padrão de fallback já usado no
+ * restante do projeto), genéricos de interiores com tom de madeira, não
+ * fotografia real de marcenaria. Vídeo por IA está sob a mesma restrição de
+ * plano; o "vídeo" do Hero é um Ken Burns em CSS sobre a foto estática, não
+ * um clipe gerado. Trocar por fotografia/vídeo real de projeto ou por
+ * ativos gerados por IA assim que o plano permitir, antes de usar esta demo
+ * em prospecção com um lead real.
+ *
+ * 3D: dois anéis concêntricos (CerneScene3D) remetendo aos anéis de
+ * crescimento da madeira — "cerne" é o núcleo da árvore. Só monta em
+ * desktop, atrás do mesmo hook useIsDesktop usado no restante do site.
  */
 
 import { useEffect, useRef, useState } from 'react';
@@ -39,6 +46,7 @@ import Link from 'next/link';
 import { Fraunces, Jost } from 'next/font/google';
 import { ArrowLeft, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
+import { CerneScene3D } from '@/components/CerneScene3D';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 
 const serif = Fraunces({
@@ -115,6 +123,46 @@ const ETAPAS = [
   },
 ] as const;
 
+const MATERIAIS = [
+  'Nogueira Maciça',
+  'Carvalho Fumê',
+  'Freijó',
+  'Cedro',
+  'Latão Escovado',
+  'Mármore Calacatta',
+  'Vidro Fosco',
+] as const;
+
+/** Botões com leve atração magnética ao cursor — mesma assinatura de motion
+ * usada na Villa Serena, aqui em intensidade mais discreta pra combinar com
+ * o registro editorial (nada "brincalhão"). Desktop com mouse fino apenas. */
+function useMagnetic() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || !window.matchMedia('(hover: hover)').matches) return;
+    const els = Array.from(root.querySelectorAll<HTMLElement>('[data-magnetic]'));
+    const cleanups: (() => void)[] = [];
+    els.forEach((el) => {
+      const move = (e: MouseEvent) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * 0.15}px, ${y * 0.2}px)`;
+      };
+      const leave = () => (el.style.transform = 'translate(0,0)');
+      el.addEventListener('mousemove', move);
+      el.addEventListener('mouseleave', leave);
+      cleanups.push(() => {
+        el.removeEventListener('mousemove', move);
+        el.removeEventListener('mouseleave', leave);
+      });
+    });
+    return () => cleanups.forEach((c) => c());
+  }, []);
+  return ref;
+}
+
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
@@ -167,9 +215,11 @@ export default function MarcenariaDemo() {
   const isDesktop = useIsDesktop();
   const reducedMotion = usePrefersReducedMotion();
   const heroParallaxRef = useParallax(0.08, isDesktop && !reducedMotion);
+  const rootRef = useMagnetic();
 
   return (
     <main
+      ref={rootRef}
       className={`relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#F5F4EE] text-[#2A2C22] ${serif.variable} ${sans.variable}`}
       style={{ fontFamily: 'var(--font-cerne-sans)' }}
     >
@@ -200,6 +250,7 @@ export default function MarcenariaDemo() {
           </nav>
           <a
             href="#contato"
+            data-magnetic
             className="inline-flex flex-shrink-0 items-center justify-center whitespace-nowrap rounded-sm border border-[#2A2C22] px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.15em] text-[#2A2C22] transition-colors hover:bg-[#2A2C22] hover:text-[#F5F4EE] sm:px-6 sm:py-3"
           >
             Solicitar Consulta
@@ -240,18 +291,41 @@ export default function MarcenariaDemo() {
 
         <div className="relative -mx-5 aspect-[4/5] overflow-hidden sm:mx-0 sm:rounded-sm md:aspect-auto md:h-[86vh] md:min-h-[560px]">
           <div ref={heroParallaxRef} className="absolute inset-0 -top-[6%] h-[112%] w-full">
-            <Image
-              src={HERO_IMAGE}
-              alt="Ambiente com marcenaria sob medida em tons de madeira, luz natural"
-              fill
-              priority
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-            />
+            {/* Ken Burns: substitui vídeo de hero (geração de vídeo por IA
+                indisponível nesta conta) — zoom/pan lento sobre a foto,
+                desligado com prefers-reduced-motion. */}
+            <div className={reducedMotion ? '' : 'h-full w-full animate-ken-burns'}>
+              <Image
+                src={HERO_IMAGE}
+                alt="Ambiente com marcenaria sob medida em tons de madeira, luz natural"
+                fill
+                priority
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
+          {/* Anéis de crescimento em 3D — desktop only, atrás da mesma
+              gate de useIsDesktop usada no site principal */}
+          {isDesktop && !reducedMotion && <CerneScene3D />}
           <div className="absolute inset-0 bg-gradient-to-t from-[#F5F4EE]/20 via-transparent to-transparent md:bg-gradient-to-l md:from-transparent md:via-transparent md:to-[#F5F4EE]/10" />
         </div>
       </section>
+
+      {/* Faixa de materiais — assinatura de motion da CERNE (marquee contínuo) */}
+      <div className="overflow-hidden border-y border-[#2A2C22]/10 bg-[#EDECE3] py-3.5">
+        <div className="flex w-max animate-marquee items-center gap-10 motion-reduce:animate-none">
+          {[...MATERIAIS, ...MATERIAIS].map((m, i) => (
+            <span
+              key={`${m}-${i}`}
+              className="flex items-center gap-10 text-[10.5px] uppercase tracking-[0.2em] text-[#576141]"
+            >
+              {m}
+              <span className="text-[#6B7A4E]/50">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* O Ofício */}
       <section id="oficio" className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-28">
@@ -427,6 +501,7 @@ export default function MarcenariaDemo() {
               )}
               target="_blank"
               rel="noopener noreferrer"
+              data-magnetic
               className="inline-flex items-center gap-2 rounded-sm bg-[#2A2C22] px-8 py-4 text-[12px] font-medium uppercase tracking-[0.15em] text-[#F5F4EE] transition-colors hover:bg-[#6B7A4E]"
             >
               <MessageCircle className="h-4 w-4" /> Solicitar Consulta
