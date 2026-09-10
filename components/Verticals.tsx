@@ -24,7 +24,7 @@ const VERTICAL_MEDIA = [
     icon: Ruler,
     image: '/images/verticals/marcenaria.jpg',
     video: '/videos/verticals/marcenaria',
-    demoHref: undefined,
+    demoHref: '/demo/marcenaria',
   },
   {
     icon: UtensilsCrossed,
