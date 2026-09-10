@@ -51,9 +51,15 @@
  * fotografia/vídeo real de projeto ou por ativos gerados por IA assim que o
  * plano permitir, antes de usar esta demo em prospecção com um lead real.
  *
- * 3D: dois anéis concêntricos (CerneScene3D) remetendo aos anéis de
- * crescimento da madeira — "cerne" é o núcleo da árvore. Só monta em
- * desktop, atrás do mesmo hook useIsDesktop usado no restante do site.
+ * 3D — v2: uma cadeira de encomenda em wireframe (CerneScene3D), girando
+ * devagar como "peça no torno". Trocamos os anéis concêntricos da v1
+ * porque esse motivo já tinha sido usado no site da NEURALABS (esfera +
+ * anel) e na Villa Serena (ondulação em SVG) — ver
+ * docs/IDENTIDADES-E-EFEITOS.md. Um objeto real do ofício da marcenaria é
+ * mais coerente com a marca do que uma forma abstrata, e reforça a
+ * mensagem de "projeto técnico antes do corte" da seção Processo. Só
+ * monta em desktop, atrás do mesmo hook useIsDesktop usado no restante do
+ * site.
  */
 
 import { useEffect, useRef, useState } from 'react';
@@ -452,7 +458,7 @@ export default function MarcenariaDemo() {
               />
             </div>
           </div>
-          {/* Anéis de crescimento em 3D — desktop only, atrás da mesma
+          {/* Cadeira em wireframe 3D — desktop only, atrás da mesma
               gate de useIsDesktop usada no site principal */}
           {isDesktop && !reducedMotion && <CerneScene3D />}
           <div className="absolute inset-0 bg-gradient-to-t from-[#F5F4EE]/20 via-transparent to-transparent md:bg-gradient-to-l md:from-transparent md:via-transparent md:to-[#F5F4EE]/10" />

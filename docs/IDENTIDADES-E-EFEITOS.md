@@ -108,10 +108,11 @@ Cada projeto usa **no máximo um** item desta lista como assinatura, e o
 item sai da lista depois de usado.
 
 - [x] Anéis/esferas concêntricos reagindo ao mouse — **usado 3x** (site,
-  Villa Serena, CERNE). Esgotado — não usar de novo.
+  Villa Serena, CERNE v1 — substituído em set/2026, ver registro).
+  Esgotado — não usar de novo.
 - [ ] Blob líquido morphing (SVG ou shader simples) reagindo a scroll
-- [ ] Wireframe 3D de um objeto real do negócio (cadeira, garrafa, prédio)
-  girando devagar
+- [x] Wireframe 3D de um objeto real do negócio (cadeira, garrafa, prédio)
+  girando devagar — **usado 1x** (CERNE v2: cadeira de encomenda).
 - [ ] Partículas seguindo o cursor (canvas 2D leve, sem WebGL)
 - [ ] Reveal com máscara de grade (grid-wipe) — imagem "monta" quadrado a
   quadrado ao entrar na viewport
@@ -150,8 +151,9 @@ E/F que não pedem serifada de destaque).
 |---|---|---|---|---|---|
 | 1 | Site NEURALABS | (pré-arquétipo — site institucional) | Obsidiana + Malva/Grafite | Playfair Display + Inter | Esfera + anel 3D orbitando |
 | 2 | Villa Serena (Airbnb) | B — Cinematic Full-Bleed | Noturno + dourado pôr-do-sol | Bodoni Moda + Plus Jakarta Sans | Ondulação SVG (ripple) |
-| 3 | CERNE (Marcenaria) | A — Editorial Split | Linho + Musgo | Fraunces + Jost | Anéis de crescimento 3D |
+| 3 | CERNE (Marcenaria) | A — Editorial Split | Linho + Musgo | Fraunces + Jost | Cadeira em wireframe 3D *(trocado dos anéis de crescimento em set/2026 — motivo esgotado)* |
 
 **Próximo projeto:** usar Arquétipo C, D, E ou F (nunca A ou B de novo tão
 cedo), fórmula tipográfica nova (seção 3), efeito de assinatura novo
-(seção 2 — nunca anéis/esferas concêntricos).
+(seção 2 — nunca anéis/esferas concêntricos, nunca wireframe de novo tão
+cedo).
