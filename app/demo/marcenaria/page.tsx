@@ -36,20 +36,18 @@
  * Sem camada de portfólio dentro da demo: a única menção à NEURALABS é a
  * barra discreta de atribuição no topo + o disclaimer no rodapé.
  *
- * NOTA DE PRODUÇÃO: a geração de imagem por IA (Higgsfield) segue
- * indisponível nesta conta (o preflight de custo responde, mas o envio real
- * do job retorna "Requires basic plan or higher") — as fotos abaixo são
- * placeholders reais do Unsplash (mesmo padrão de fallback já usado no
- * restante do projeto), genéricos de interiores/madeira, não fotografia
- * real de marcenaria. As buscas por fotos adicionais mais específicas de
- * oficina/artesão foram bloqueadas pela política de proveniência da sessão
- * (só reaproveita URLs já aprovadas nesta conversa) — por isso a expansão
- * desta versão reaproveita os mesmos 6 IDs do Unsplash já usados no
- * projeto, em recortes/tamanhos diferentes, em vez de trazer fotos novas.
- * Vídeo por IA está sob a mesma restrição de plano; o "vídeo" do Hero é um
- * Ken Burns em CSS sobre a foto estática, não um clipe gerado. Trocar por
- * fotografia/vídeo real de projeto ou por ativos gerados por IA assim que o
- * plano permitir, antes de usar esta demo em prospecção com um lead real.
+ * NOTA DE PRODUÇÃO — atualizada: Higgsfield seguia indisponível nesta conta
+ * (plano não permite geração real), mas a Bruna gera imagem/vídeo pelo
+ * Gemini/Google Flow do lado dela — resolvendo o gap. 8 dos 9 slots de foto
+ * abaixo já usam imagens reais geradas assim (hero, banner panorâmico,
+ * ofício + detalhe, biblioteca em destaque + detalhe, cozinha, escritório),
+ * servidas localmente de /public/images/cerne/. Só o Closet Boutique (grid
+ * de portfólio, projeto 04) segue com placeholder do Unsplash — pendente
+ * de gerar a foto correspondente (prompt 9 do documento
+ * docs/cerne-prompts-gemini.md).
+ * Vídeo por IA: o "vídeo" do Hero segue um Ken Burns em CSS sobre a foto
+ * estática — dá pra trocar por um clipe real do Google Flow quando a Bruna
+ * gerar um.
  *
  * 3D — v2: uma cadeira de encomenda em wireframe (CerneScene3D), girando
  * devagar como "peça no torno". Trocamos os anéis concêntricos da v1
@@ -88,13 +86,12 @@ const sans = Jost({
 const img = (id: string, w: number, h: number) =>
   `https://images.unsplash.com/${id}?w=${w}&h=${h}&q=80&auto=format&fit=crop`;
 
-// Os mesmos 6 IDs aprovados do projeto, reaproveitados em recortes
-// diferentes para cada uso — ver nota de produção acima.
-const HERO_IMAGE = img('photo-1585128792020-803d29415281', 1800, 2200);
-const HERO_BANNER_IMAGE = img('photo-1585128792020-803d29415281', 2400, 1000);
-const OFICIO_IMAGE = img('photo-1609081144289-eacc3108cd03', 1200, 1500);
-const OFICIO_DETAIL_IMAGE = img('photo-1724582586529-62622e50c0b3', 900, 1100);
-const FEATURED_SECONDARY_IMAGE = img('photo-1605774337664-7a846e9cdf17', 1000, 1250);
+// Fotos reais geradas pela Bruna no Gemini — ver nota de produção acima.
+const HERO_IMAGE = '/images/cerne/hero.jpg';
+const HERO_BANNER_IMAGE = '/images/cerne/banner.jpg';
+const OFICIO_IMAGE = '/images/cerne/oficio.jpg';
+const OFICIO_DETAIL_IMAGE = '/images/cerne/oficio-detalhe.jpg';
+const FEATURED_SECONDARY_IMAGE = '/images/cerne/biblioteca-detalhe.jpg';
 
 type Projeto = {
   idx: string;
@@ -116,7 +113,7 @@ const PROJETOS: Projeto[] = [
     materiais: ['Nogueira maciça', 'Latão escovado'],
     descricao:
       'Biblioteca de pé-direito duplo com escada suspensa e estante corrida em nogueira maciça — desenhada em conjunto com o arquiteto do projeto desde a planta baixa, não como reforma posterior.',
-    img: img('photo-1724582586529-62622e50c0b3', 1400, 1750),
+    img: '/images/cerne/biblioteca.jpg',
     featured: true,
   },
   {
@@ -125,7 +122,7 @@ const PROJETOS: Projeto[] = [
     local: 'Cobertura · Florianópolis',
     ano: '2024',
     materiais: ['Carvalho fumê', 'Mármore Calacatta'],
-    img: img('photo-1605774337664-7a846e9cdf17', 1400, 1750),
+    img: '/images/cerne/cozinha.jpg',
   },
   {
     idx: '03',
@@ -133,7 +130,7 @@ const PROJETOS: Projeto[] = [
     local: 'Sede Corporativa · Curitiba',
     ano: '2024',
     materiais: ['Freijó', 'Vidro fosco'],
-    img: img('photo-1583847268964-b28dc8f51f92', 1400, 1750),
+    img: '/images/cerne/escritorio.jpg',
   },
   {
     idx: '04',
