@@ -39,6 +39,11 @@ interface FaqItemCopy {
   answer: string;
 }
 
+interface BrandIdentityItemCopy {
+  title: string;
+  description: string;
+}
+
 interface PricingPlanCopy {
   name: string;
   badge?: string;
@@ -118,6 +123,12 @@ export interface Dictionary {
     benchmarkNote: string;
     locale: string;
     currency: string;
+  };
+  brandIdentity: {
+    badge: string;
+    heading: string;
+    subheading: string;
+    items: BrandIdentityItemCopy[];
   };
   pricing: {
     badge: string;
@@ -311,6 +322,34 @@ const pt: Dictionary = {
     locale: 'pt-BR',
     currency: 'BRL',
   },
+  brandIdentity: {
+    badge: 'Incluso em Todo Projeto',
+    heading: 'Você não recebe só um site. Recebe uma identidade visual própria.',
+    subheading:
+      'Antes de qualquer linha de código, pesquisamos seu negócio e seu cliente para criar uma identidade visual exclusiva — nunca um template com sua logo em cima.',
+    items: [
+      {
+        title: 'Paleta de Cor Exclusiva',
+        description:
+          'Cores escolhidas com base na psicologia de compra do seu público — nunca reaproveitadas de outro projeto ou cliente da NEURALABS.',
+      },
+      {
+        title: 'Logotipo em Alta Resolução',
+        description:
+          'Versões principal e monocromática, em PNG com fundo transparente, prontas para aplicar em qualquer material.',
+      },
+      {
+        title: 'Tipografia Sob Medida',
+        description:
+          'Par de fontes selecionado para equilibrar personalidade de marca e legibilidade de conversão — nunca a fonte padrão de um template.',
+      },
+      {
+        title: 'Guia de Aplicação',
+        description:
+          'Documento com hex, RGB e regras de uso — para manter a identidade consistente em redes sociais, materiais impressos e futuras peças.',
+      },
+    ],
+  },
   pricing: {
     badge: 'Investimento Transparente',
     heading: 'Sem letras miúdas, sem surpresas',
@@ -324,6 +363,7 @@ const pt: Dictionary = {
         subtitle: 'Investimento único • Entrega em 7 dias úteis',
         deliverables: [
           '1 Página de Alto Impacto com Neuromarketing',
+          'Direção Visual Exclusiva (paleta e tipografia sob medida)',
           'Otimização para Mobile e WhatsApp',
           'Integração de Formulário Direto',
           '30 dias de suporte e revisões inclusas',
@@ -341,6 +381,7 @@ const pt: Dictionary = {
         subtitle: 'Investimento único • Entrega em 10 dias úteis',
         deliverables: [
           'Projeto Completo e Exclusivo Sob Medida',
+          'Identidade Visual Completa (paleta, logotipo e tipografia exclusivos)',
           'Arquitetura de Neuromarketing & Psicologia de Compra',
           'SEO de Intenção no Google & Otimização para IAs (GEO)',
           'Interações e Animações 3D de Alto Padrão',
@@ -561,6 +602,34 @@ const en: Dictionary = {
     locale: 'en-US',
     currency: 'USD',
   },
+  brandIdentity: {
+    badge: 'Included in Every Project',
+    heading: "You don't just get a website. You get your own visual identity.",
+    subheading:
+      'Before a single line of code, we research your business and your customer to build an exclusive visual identity — never a template with your logo pasted on top.',
+    items: [
+      {
+        title: 'Exclusive Color Palette',
+        description:
+          "Colors chosen based on your audience's buying psychology — never recycled from another NEURALABS project or client.",
+      },
+      {
+        title: 'High-Resolution Logo',
+        description:
+          'Primary and monochrome versions, delivered as transparent-background PNGs, ready to apply anywhere.',
+      },
+      {
+        title: 'Custom Typography',
+        description:
+          'A font pairing chosen to balance brand personality with conversion-ready legibility — never a template default.',
+      },
+      {
+        title: 'Usage Guide',
+        description:
+          'A reference document with hex, RGB, and usage rules — to keep your identity consistent across social media, print, and future materials.',
+      },
+    ],
+  },
   pricing: {
     badge: 'Transparent Investment',
     heading: 'No fine print, no surprises',
@@ -573,6 +642,7 @@ const en: Dictionary = {
         subtitle: 'One-time investment • Delivered in 7 business days',
         deliverables: [
           '1 High-Impact Page with Neuromarketing',
+          'Exclusive Visual Direction (custom palette & typography)',
           'Mobile & WhatsApp Optimization',
           'Direct Form Integration',
           '30 days of support and revisions included',
@@ -590,6 +660,7 @@ const en: Dictionary = {
         subtitle: 'One-time investment • Delivered in 10 business days',
         deliverables: [
           'Complete, Exclusive Custom Project',
+          'Complete Visual Identity (custom palette, logo & typography)',
           'Neuromarketing & Purchase Psychology Architecture',
           'Google Intent SEO & AI Optimization (GEO)',
           'High-End 3D Interactions & Animations',
