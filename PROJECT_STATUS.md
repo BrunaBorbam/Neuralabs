@@ -4,6 +4,12 @@
 **Status:** ✅ FASE 1-3 COMPLETAS  
 **Última atualização:** Deploy premium redesign ao vivo  
 
+> ⚠️ **Antes de criar qualquer site/demo novo**, consulte
+> [`docs/IDENTIDADES-E-EFEITOS.md`](docs/IDENTIDADES-E-EFEITOS.md) —
+> registro de arquétipos, tipografia e efeitos 3D/motion já usados em
+> cada projeto, pra garantir que o próximo não repita a estrutura dos
+> anteriores. Atualize o registro depois de publicar.
+
 ---
 
 ## 🎯 RESUMO DO PROJETO
