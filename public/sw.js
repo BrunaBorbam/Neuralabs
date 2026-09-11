@@ -44,6 +44,15 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Deixa passar direto pra rede: a Cache API não lida bem com respostas
+  // parciais (206), e interceptar essas requisições quebra o carregamento
+  // de vídeo/áudio no Chrome (elemento fica preso em readyState 0 /
+  // networkState NETWORK_NO_SOURCE). Descoberto ao adicionar o vídeo real
+  // do hero da demo CERNE.
+  if (request.headers.has('range') || request.destination === 'video' || request.destination === 'audio') {
+    return;
+  }
+
   // Network first strategy for API calls
   if (request.url.includes('/api/')) {
     event.respondWith(

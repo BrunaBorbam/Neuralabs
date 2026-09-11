@@ -45,9 +45,11 @@
  * de portfólio, projeto 04) segue com placeholder do Unsplash — pendente
  * de gerar a foto correspondente (prompt 9 do documento
  * docs/cerne-prompts-gemini.md).
- * Vídeo por IA: o "vídeo" do Hero segue um Ken Burns em CSS sobre a foto
- * estática — dá pra trocar por um clipe real do Google Flow quando a Bruna
- * gerar um.
+ * Vídeo por IA — atualizado: o Hero agora usa um clipe real gerado no
+ * Google Flow (apara de madeira se desprendendo da plaina em câmera lenta,
+ * imagem-pra-vídeo a partir do HERO_IMAGE) em vez do Ken Burns em CSS —
+ * só em desktop (ver useIsDesktop), por custo de banda. Mobile e
+ * prefers-reduced-motion continuam no Ken Burns sobre a foto estática.
  *
  * 3D — v2: uma cadeira de encomenda em wireframe (CerneScene3D), girando
  * devagar como "peça no torno". Trocamos os anéis concêntricos da v1
@@ -441,19 +443,39 @@ export default function MarcenariaDemo() {
 
         <div className="relative -mx-5 aspect-[4/5] overflow-hidden sm:mx-0 sm:rounded-sm md:aspect-auto md:h-[86vh] md:min-h-[560px]">
           <div ref={heroParallaxRef} className="absolute inset-0 -top-[6%] h-[112%] w-full">
-            {/* Ken Burns: substitui vídeo de hero (geração de vídeo por IA
-                indisponível nesta conta) — zoom/pan lento sobre a foto,
-                desligado com prefers-reduced-motion. */}
-            <div className={reducedMotion ? '' : 'h-full w-full animate-ken-burns'}>
-              <Image
-                src={HERO_IMAGE}
-                alt="Ambiente com marcenaria sob medida em tons de madeira, luz natural"
-                fill
-                priority
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover"
-              />
-            </div>
+            {isDesktop && !reducedMotion ? (
+              // Vídeo real (gerado no Google Flow, imagem-pra-vídeo a partir
+              // do próprio HERO_IMAGE): apara de madeira se desprendendo da
+              // plaina em câmera lenta — assinatura sensorial do craft,
+              // trocando o Ken Burns em CSS. Só desktop: custo de banda de
+              // vídeo não compensa em mobile, mantém o Ken Burns lá (ver
+              // ramo abaixo). Mudo, sem controles, loop contínuo.
+              <video
+                key="hero-video"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster={HERO_IMAGE}
+                className="h-full w-full object-cover"
+              >
+                <source src="/videos/cerne/hero-shaving.webm" type="video/webm" />
+                <source src="/videos/cerne/hero-shaving.mp4" type="video/mp4" />
+              </video>
+            ) : (
+              // Fallback mobile e prefers-reduced-motion: Ken Burns em CSS
+              // sobre a foto estática — mesma lógica de antes.
+              <div className={reducedMotion ? '' : 'h-full w-full animate-ken-burns'}>
+                <Image
+                  src={HERO_IMAGE}
+                  alt="Ambiente com marcenaria sob medida em tons de madeira, luz natural"
+                  fill
+                  priority
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
           {/* Cadeira em wireframe 3D — desktop only, atrás da mesma
               gate de useIsDesktop usada no site principal */}
