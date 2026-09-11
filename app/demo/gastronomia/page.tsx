@@ -56,6 +56,14 @@
  * Bruna depois de ver um site de café que espalha grãos por quase toda
  * seção.
  *
+ * Parallax (pedido pela Bruna como forma de dar profundidade sem
+ * depender de foto real, enquanto ela não gera as imagens via
+ * docs/ardosia-prompts-gemini.md): via framer-motion `useScroll` +
+ * `useTransform`, sem lib nova. O emblema orbital do Hero se desloca
+ * mais devagar que o texto ao rolar a página; a palavra gigante
+ * "Ardósia" no fundo da seção de contato desliza na direção oposta ao
+ * formulário. Desktop-only, respeita prefers-reduced-motion.
+ *
  * Gatilhos de neuromarketing (duas camadas — quem janta e quem contrataria
  * a NEURALABS pra um restaurante real costumam ser a mesma pessoa aqui, o
  * dono, então os dois se somam): escassez diária real ("6 mesas hoje à
@@ -85,7 +93,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { Instrument_Serif, Space_Grotesk } from 'next/font/google';
 import {
   ArrowLeft,
@@ -561,6 +569,25 @@ export default function GastronomiaDemo() {
   const rootRef = useMagnetic();
   const [depoimentoIdx, setDepoimentoIdx] = useState(0);
 
+  // Parallax — pedido pela Bruna como saída pra dar profundidade visual
+  // sem depender de foto real: camadas que já existem (emblema orbital
+  // do Hero, palavra-fundo "Ardósia" no contato) se deslocam em
+  // velocidades diferentes do resto do conteúdo conforme o scroll, via
+  // framer-motion `useScroll`/`useTransform` (leve, sem lib nova).
+  const heroRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const orbitParallaxY = useTransform(heroProgress, [0, 1], [0, 90]);
+
+  const contatoRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress: contatoProgress } = useScroll({
+    target: contatoRef,
+    offset: ['start end', 'end start'],
+  });
+  const wordmarkParallaxX = useTransform(contatoProgress, [0, 1], [-50, 30]);
+
   // Cardápio editável via Notion (CMS leve — mesmo padrão da CERNE, ver
   // lib/notion.ts). Sem NOTION_DATABASE_ID_ARDOSIA configurada, ou se a
   // busca falhar, fica no fallback estático — a seção nunca fica vazia.
@@ -629,11 +656,17 @@ export default function GastronomiaDemo() {
           flutuando que a Bruna trouxe de referência) + cartão de
           escassez diária flutuante, em vez do "cartão de vidro sobre
           foto" já usado 3x. */}
-      <section className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-20 pt-16 sm:px-8 sm:pt-24">
+      <section
+        ref={heroRef}
+        className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-20 pt-16 sm:px-8 sm:pt-24"
+      >
         {isDesktop && !reducedMotion && (
-          <div className="pointer-events-none absolute right-[2%] top-[2%]">
+          <motion.div
+            className="pointer-events-none absolute right-[2%] top-[2%]"
+            style={{ y: orbitParallaxY }}
+          >
             <IngredientOrbit />
-          </div>
+          </motion.div>
         )}
 
         <div className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -884,16 +917,23 @@ export default function GastronomiaDemo() {
       {/* Contato / Reserva — CTA assimétrico (Arquétipo D): palavra gigante
           de fundo + formulário real ao lado, em vez do formulário
           centralizado da CERNE */}
-      <section id="contato" className="relative mx-auto max-w-6xl overflow-hidden px-5 py-20 sm:px-8 sm:py-24">
+      <section
+        id="contato"
+        ref={contatoRef}
+        className="relative mx-auto max-w-6xl overflow-hidden px-5 py-20 sm:px-8 sm:py-24"
+      >
         <FloatingDoodle Icon={Grape} color="#8A8478" className="right-[10%] top-[6%]" size={26} delay={1.8} />
         <FloatingDoodle Icon={Wine} color="#C1552C" className="bottom-[12%] left-[3%]" size={24} delay={0.3} />
-        <span
+        <motion.span
           aria-hidden="true"
           className="pointer-events-none absolute -left-4 top-0 select-none text-[120px] font-normal italic leading-none text-[#F3EDE1]/[0.04] sm:text-[220px]"
-          style={{ fontFamily: 'var(--font-ardosia-serif)' }}
+          style={{
+            fontFamily: 'var(--font-ardosia-serif)',
+            x: isDesktop && !reducedMotion ? wordmarkParallaxX : 0,
+          }}
         >
           Ardósia
-        </span>
+        </motion.span>
 
         <div className="relative grid gap-14 md:grid-cols-[0.85fr_1.15fr] md:gap-10">
           <ScrollReveal>
