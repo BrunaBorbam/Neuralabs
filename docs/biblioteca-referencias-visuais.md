@@ -1,29 +1,17 @@
 # Biblioteca de Referências Visuais — NEURALABS
 
-> Log cronológico de referências brutas (sites, vídeos, prints, GIFs) que a
-> Bruna manda ao longo do tempo. Diferente do `docs/IDENTIDADES-E-EFEITOS.md`
-> (que é o catálogo *curado* de efeitos, um item por projeto, "consumido" ao
-> ser usado), este arquivo é um **inbox que só cresce** — toda referência
-> enviada entra aqui, tenha sido aplicada ainda ou não. Ver
-> `.claude/skills/efeitos-neuralabs/SKILL.md` pro fluxo completo de como usar
-> isso.
-
-## Como registrar uma entrada nova
-
-Copiar o template abaixo, preencher, colar no topo da seção "Entradas"
-(mais recente primeiro). Não precisa de aprovação nem de aplicação
-imediata — o valor é não perder a referência.
-
-```
-### [AAAA-MM-DD] Título curto da referência
-- **Fonte:** link, nome do arquivo, ou "print enviado no chat"
-- **Tipo:** site / vídeo / imagem / GIF
-- **Projeto de origem (se enviado pensando nele):** Ardósia / CERNE / geral
-- **Técnica observada:** o mecanismo, não a aparência (ex: "scroll-jacking
-  horizontal com trilho de cards", não "site bonito de comida")
-- **Status:** catalogado (ainda não aplicado) / aplicado em [projeto] / descartado (motivo)
-- **Notas:** qualquer contexto que ajude a decidir depois
-```
+> **Migrado pro Notion (2026-09-11).** A imagem/vídeo de trabalho não podia
+> ficar salva neste PC, então o inbox de referências (com os arquivos de
+> verdade — screenshots, campo de imagem nativo) agora vive no banco de
+> dados Notion **🖼️ Biblioteca de Referências Visuais**, dentro da página
+> 🧠 NEURALABS: https://app.notion.com/p/9fed4a1a044347c5aed58b938327db33
+>
+> Esse arquivo fica só como **histórico** das entradas de antes da migração
+> (abaixo) e como ponte pro resto da biblioteca versionada no repo — o
+> catálogo curado (`docs/IDENTIDADES-E-EFEITOS.md`), a biblioteca técnica de
+> efeitos de animação/imagem, e a skill que amarra tudo
+> (`.claude/skills/efeitos-neuralabs/SKILL.md`). Novas referências (links,
+> prints, vídeos) entram direto no Notion, não aqui.
 
 ---
 
