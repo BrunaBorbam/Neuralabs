@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import { CookieConsent } from "@/components/CookieConsent";
 import { PWAInstaller } from "@/components/PWAInstaller";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -127,6 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PWAInstaller />
           <FloatingWhatsApp />
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
