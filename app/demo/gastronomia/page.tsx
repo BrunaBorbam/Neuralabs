@@ -98,7 +98,14 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import { Instrument_Serif, Space_Grotesk } from 'next/font/google';
 import {
   ArrowLeft,
@@ -437,6 +444,91 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
  * oposta na mesma velocidade, then o ícone nunca fica de cabeça pra
  * baixo — só translada em órbita.
  */
+/**
+ * Foto do Hero "viva" — a Bruna pediu mais movimento/vídeo na foto do
+ * quadro (ela não gerou vídeo, só foto, e as ferramentas de geração de
+ * vídeo desta sessão seguem bloqueadas por plano/crédito). Solução: dois
+ * efeitos dos catálogos que ela mandou pra salvar como referência —
+ * docs/referencia-31-efeitos-animacao.md e
+ * docs/references/50-efeitos-imagem-css.md.
+ *
+ * 1) Zoom lento contínuo (item 31 do catálogo de 50, "Zoom image with
+ *    scale" — Omar Dsooky / técnica Ken Burns): a foto respira devagar
+ *    (scale 1 → 1.07 → 1) num loop de 16s, sem nunca cortar a borda —
+ *    lê como filmagem sutil, não como foto parada, sem precisar de vídeo
+ *    de verdade.
+ * 2) Tilt de perspectiva ao passar o mouse (item 26 do catálogo de 50,
+ *    "Perspective tilty images" — Henry Desroches): a foto inclina em 3D
+ *    seguindo o cursor, reagindo como um objeto físico apoiado na mesa —
+ *    só desktop, só com o mouse sobre a foto.
+ * Ambos cortados em prefers-reduced-motion (o zoom não anima; o tilt
+ * simplesmente não liga o listener).
+ */
+function HeroPhoto({ active }: { active: boolean }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [9, -9]), {
+    stiffness: 160,
+    damping: 16,
+  });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-9, 9]), {
+    stiffness: 160,
+    damping: 16,
+  });
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  }
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <div
+      className="absolute right-[3%] top-[34%] hidden sm:block"
+      style={{ perspective: 900 }}
+    >
+      <motion.div
+        onMouseMove={active ? handleMouseMove : undefined}
+        onMouseLeave={active ? handleMouseLeave : undefined}
+        style={{
+          rotate: -3,
+          rotateX: active ? rotateX : 0,
+          rotateY: active ? rotateY : 0,
+          transformStyle: 'preserve-3d',
+        }}
+        className="w-[170px] border-4 border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_24px_48px_-20px_rgba(0,0,0,0.6)] lg:w-[190px]"
+      >
+        <div className="relative aspect-[2/3] w-full overflow-hidden">
+          <motion.div
+            className="absolute inset-0"
+            animate={active ? { scale: [1, 1.07, 1] } : undefined}
+            transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <Image
+              src="/images/gastronomia/hero-quadro.jpg"
+              alt="Quadro de ardósia sendo escrito à mão com o prato do dia"
+              fill
+              sizes="190px"
+              className="object-cover"
+            />
+          </motion.div>
+          {/* Vinheta sutil — reforça a leitura de "still de filme" em vez
+              de foto de banco, coerente com a direção de fotografia da
+              identidade (ver docs/ardosia-identidade-visual.md, seção 5). */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ boxShadow: 'inset 0 0 28px 8px rgba(0,0,0,0.4)' }}
+          />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 const ORBIT_ITEMS = [
   { Icon: Leaf, color: '#6B7A4E', angle: 0, size: 26 },
   { Icon: Wheat, color: '#D9A441', angle: 90, size: 32 },
@@ -713,25 +805,9 @@ export default function GastronomiaDemo() {
             Cartão de foto levemente rotacionado (moldura clara, sombra),
             lendo como uma polaroide pinada — não full-bleed, porque o
             Arquétipo D pede "hero tipográfico, sem foto ou foto pequena"
-            (ver docs/IDENTIDADES-E-EFEITOS.md). */}
-        {isDesktop && (
-          <div
-            className="pointer-events-none absolute right-[3%] top-[34%] hidden sm:block"
-            style={{ transform: 'rotate(-3deg)' }}
-          >
-            <div className="w-[170px] border-4 border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_24px_48px_-20px_rgba(0,0,0,0.6)] lg:w-[190px]">
-              <div className="relative aspect-[2/3] w-full overflow-hidden">
-                <Image
-                  src="/images/gastronomia/hero-quadro.jpg"
-                  alt="Quadro de ardósia sendo escrito à mão com o prato do dia"
-                  fill
-                  sizes="190px"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        )}
+            (ver docs/IDENTIDADES-E-EFEITOS.md). Zoom lento + tilt de
+            mouse via HeroPhoto (ver comentário no componente acima). */}
+        {isDesktop && <HeroPhoto active={!reducedMotion} />}
 
         <div className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
           <div className="flex items-center gap-3">
