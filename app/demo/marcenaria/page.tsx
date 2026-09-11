@@ -60,16 +60,27 @@
  * mensagem de "projeto técnico antes do corte" da seção Processo. Só
  * monta em desktop, atrás do mesmo hook useIsDesktop usado no restante do
  * site.
+ *
+ * Contato — formulário real (não só o botão de WhatsApp da v1): usa o
+ * mesmo endpoint /api/send-email (Resend) do site principal da NEURALABS,
+ * já configurado com RESEND_API_KEY/CONTACT_EMAIL na Vercel — sem setup
+ * extra. Envia com source: 'cerne', que troca a cópia do e-mail pra tom
+ * de marca da CERNE (a rota mantém o comportamento antigo intacto quando
+ * source não é enviado, então o formulário principal da NEURALABS não é
+ * afetado). Validação server-side, honeypot anti-bot, rate limit por IP e
+ * checkbox de consentimento LGPD obrigatório com link pra /privacy — ver
+ * components/CerneContactForm.tsx. Pensado como o padrão de referência
+ * pra reaproveitar em formulários de clientes reais.
  */
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fraunces, Jost } from 'next/font/google';
-import { ArrowLeft, ArrowUpRight, MessageCircle, Minus, Plus, Ruler } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Minus, Plus, Ruler } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { CerneScene3D } from '@/components/CerneScene3D';
-import { getWhatsAppLink } from '@/lib/whatsapp';
+import { CerneContactForm } from '@/components/CerneContactForm';
 
 const serif = Fraunces({
   subsets: ['latin'],
@@ -811,7 +822,9 @@ export default function MarcenariaDemo() {
         </ScrollReveal>
       </section>
 
-      {/* Contato */}
+      {/* Contato — formulário real (Resend, ver app/api/send-email/route.ts,
+          source: 'cerne') com validação, honeypot, rate limit e checkbox de
+          consentimento LGPD, + WhatsApp como alternativa rápida ao lado. */}
       <section id="contato" className="mx-auto max-w-3xl px-5 py-24 sm:px-8 sm:py-28">
         <ScrollReveal>
           <div className="mb-10 text-center">
@@ -831,22 +844,12 @@ export default function MarcenariaDemo() {
           </div>
         </ScrollReveal>
         <ScrollReveal>
-          <div className="flex flex-col items-center gap-4">
-            <a
-              href={getWhatsAppLink(
-                'Olá! Vi o portfólio da CERNE e gostaria de conversar sobre um projeto de marcenaria.'
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-magnetic
-              className="inline-flex items-center gap-2 rounded-sm bg-[#2A2C22] px-8 py-4 text-[12px] font-medium uppercase tracking-[0.15em] text-[#F5F4EE] transition-colors hover:bg-[#6B7A4E]"
-            >
-              <MessageCircle className="h-4 w-4" /> Solicitar Consulta
-            </a>
-            <p className="text-[11px] uppercase tracking-[0.16em] text-[#576141]/80">
-              Atendemos Rio Grande do Sul · Santa Catarina · Paraná
-            </p>
-          </div>
+          <CerneContactForm />
+        </ScrollReveal>
+        <ScrollReveal>
+          <p className="mt-10 text-center text-[11px] uppercase tracking-[0.16em] text-[#576141]/80">
+            Atendemos Rio Grande do Sul · Santa Catarina · Paraná
+          </p>
         </ScrollReveal>
       </section>
 
