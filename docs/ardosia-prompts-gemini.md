@@ -33,14 +33,27 @@ que já é a assinatura de motion do site (`ArdosiaInkStroke`).
 
 ```
 Vídeo em câmera lenta de uma mão escrevendo com giz branco num quadro-
-negro de ardósia, listando o nome de um prato do dia — traço fluido,
+negro de ardósia, em PORTUGUÊS (Brasil) — nunca francês, nunca inglês —
+escrevendo exatamente as palavras "Risoto de Cogumelos", traço fluido,
 poeira de giz voando sutilmente no ar, iluminada por uma luz quente
 lateral (tipo lâmpada pendente de bistrô). Fundo desfocado sugerindo um
 salão de restaurante pequeno e aconchegante, tons de madeira escura e
 luzes baixas. Sem rosto visível, só a mão e o antebraço. Composição
-vertical, atmosfera de bistrô de bairro à noite, nunca clínica ou de
-estúdio.
+vertical, atmosfera de bistrô de bairro brasileiro à noite — nunca
+bistrô parisiense/francês, nunca "Boeuf Bourguignon" ou qualquer prato
+em francês —, nunca clínica ou de estúdio.
 ```
+
+> Nota (set/2026): a primeira geração desse prompt saiu com o quadro
+> escrito em francês ("Boeuf Bourguignon", clichê de bistrô parisiense
+> de banco de imagem) — o prompt não travava idioma nem prato
+> específico, e o modelo assumiu o estereótipo errado. Se mesmo com o
+> prato e o idioma travados no prompt o texto sair ilegível/errado de
+> novo (limitação comum de modelos de vídeo pra soletrar texto
+> arbitrário), troque a instrução de "escrevendo as palavras X" por
+> "um traço gestual e fluido, sem se preocupar em formar letras
+> legíveis" — mantém a cena e a emoção sem depender do modelo acertar
+> ortografia.
 
 Se preferir foto estática em vez de vídeo (mais simples de gerar), use o
 mesmo prompt trocando "Vídeo em câmera lenta" por "Fotografia editorial",
