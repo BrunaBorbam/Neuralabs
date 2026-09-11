@@ -4,6 +4,11 @@
 > cliente real). Atualizar o Registro (seção 4) DEPOIS de publicar. Este
 > documento só funciona se for mantido — sem atualização ele vira só mais
 > um arquivo morto no repositório.
+>
+> Este é o documento raiz de uma biblioteca maior — ver
+> `.claude/skills/efeitos-neuralabs/SKILL.md` pro mapa completo (inclui
+> `docs/biblioteca-referencias-visuais.md`, o log de referências soltas que
+> a Bruna manda ao longo do tempo).
 
 ## Por que este documento existe
 
