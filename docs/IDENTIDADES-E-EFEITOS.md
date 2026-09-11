@@ -130,6 +130,12 @@ item sai da lista depois de usado.
 - [x] Efeito de "revelar tinta"/brush stroke SVG animado no traço de um
   título — **usado 1x** (Ardósia: traço de giz/tinta sob títulos e ao
   redor do prato do chef, via framer-motion `pathLength`).
+- [ ] "Renderização em tempo real" via CSS 3D puro (`perspective` +
+  `transform-style: preserve-3d`, sem WebGL) — objeto girando ao vivo no
+  Hero. Referência salva em `docs/referencia-31-efeitos-animacao.md` e
+  `docs/references/31-efeitos-animacao.html` (efeito #1 do catálogo). Bruna
+  pediu esse efeito pra Ardósia em set/2026 — ainda não implementado,
+  aguardando confirmação de qual objeto usar.
 
 O "cartão de vidro flutuante com borda iluminada" (usado nos 3 projetos
 até aqui) também deve ser tratado como recurso comum, não assinatura —

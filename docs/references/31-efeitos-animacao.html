@@ -1,0 +1,854 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<title>31 Efeitos de Animação</title>
+<style>
+  :root{
+    --bg:#F3F0EC; --surface:#FFFFFF; --surface-2:#ECE8E2;
+    --ink:#191520; --muted:#6E6675; --line:#DAD4CC;
+    --accent:#E1483A; --accent-2:#1F7C8C; --accent-3:#E8A33D;
+    --demo-bg:#141019; --demo-ink:#F2EEF6; --demo-muted:#8B8497;
+    --shadow:0 1px 2px rgba(20,15,25,.06),0 8px 24px rgba(20,15,25,.06);
+    --r:16px;
+    --dsp:'Bricolage Grotesque',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+    --mono:'Space Mono','SFMono-Regular',monospace;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --bg:#100D15; --surface:#1A1622; --surface-2:#231E2D;
+      --ink:#F1EDF6; --muted:#9A93A6; --line:#2E2838;
+      --accent:#FF6B5D; --accent-2:#4FC3D9; --accent-3:#F2B65A;
+      --demo-bg:#0A0710; --demo-ink:#F2EEF6; --demo-muted:#7D7689;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#100D15; --surface:#1A1622; --surface-2:#231E2D;
+    --ink:#F1EDF6; --muted:#9A93A6; --line:#2E2838;
+    --accent:#FF6B5D; --accent-2:#4FC3D9; --accent-3:#F2B65A;
+    --demo-bg:#0A0710; --demo-ink:#F2EEF6; --demo-muted:#7D7689;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:0}
+
+  /* ---------- Masthead ---------- */
+  header.top{padding-block:64px 40px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 18px}
+  h1{font-family:var(--dsp);font-weight:800;font-size:clamp(40px,8vw,84px);
+    line-height:.98;letter-spacing:-.02em;margin:0;text-wrap:balance;max-width:14ch}
+  h1 em{font-style:normal;color:var(--accent)}
+  .lede{max-width:56ch;color:var(--muted);font-size:clamp(15px,2.2vw,18px);
+    margin:22px 0 0}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:26px;
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.08em}
+  .meta-row b{color:var(--ink)}
+  .toolbar{display:flex;gap:10px;align-items:center;margin-top:30px;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:12px;letter-spacing:.08em;
+    text-transform:uppercase;padding:10px 15px;border-radius:999px;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink);
+    cursor:pointer;transition:.2s}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* ---------- Grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:22px;padding-bottom:80px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+    overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .stage{position:relative;height:210px;background:var(--demo-bg);color:var(--demo-ink);
+    overflow:hidden;display:grid;place-items:center;isolation:isolate}
+  .num{position:absolute;top:12px;left:14px;z-index:6;font-family:var(--mono);
+    font-size:12px;color:var(--demo-muted);letter-spacing:.05em}
+  .hint{position:absolute;bottom:10px;right:12px;z-index:6;font-family:var(--mono);
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--demo-muted);
+    background:rgba(255,255,255,.06);padding:4px 8px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.08)}
+  .info{padding:16px 18px 20px}
+  .info h3{font-family:var(--dsp);font-weight:600;font-size:18px;margin:0 0 6px;
+    letter-spacing:-.01em}
+  .info p{margin:0;color:var(--muted);font-size:13.5px}
+  .tag{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--accent-2);
+    border:1px solid color-mix(in srgb,var(--accent-2) 40%,transparent);
+    padding:3px 8px;border-radius:6px}
+
+  footer{border-top:1px solid var(--line);padding-block:34px 60px;color:var(--muted);
+    font-size:13px}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
+  footer b{color:var(--ink);font-family:var(--dsp)}
+  a.src{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  a.src:hover{border-color:var(--accent)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;
+      transition-duration:.001ms!important}
+  }
+
+  /* ============================================================
+     DEMOS
+     ============================================================ */
+
+  /* 1 — 3D em tempo real (cubo em perspectiva) */
+  .d1{perspective:600px}
+  .cube{width:96px;height:96px;position:relative;transform-style:preserve-3d;
+    animation:spin3d 9s linear infinite}
+  .cube span{position:absolute;inset:0;border:1px solid rgba(255,107,93,.55);
+    background:linear-gradient(140deg,rgba(255,107,93,.22),rgba(79,195,217,.18))}
+  .cube .f1{transform:translateZ(48px)} .cube .f2{transform:rotateY(180deg) translateZ(48px)}
+  .cube .f3{transform:rotateY(90deg) translateZ(48px)} .cube .f4{transform:rotateY(-90deg) translateZ(48px)}
+  .cube .f5{transform:rotateX(90deg) translateZ(48px)} .cube .f6{transform:rotateX(-90deg) translateZ(48px)}
+  @keyframes spin3d{to{transform:rotateX(-24deg) rotateY(360deg)}}
+
+  /* 2 — Scrollytelling (scroller interno) */
+  .scrolly{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory}
+  .scrolly::-webkit-scrollbar{width:5px}.scrolly::-webkit-scrollbar-thumb{background:#ffffff2a;border-radius:9px}
+  .scrolly .pane{height:210px;scroll-snap-align:start;display:grid;place-items:center;
+    text-align:center;padding:20px}
+  .scrolly .pane h4{font-family:var(--dsp);font-size:26px;margin:0;opacity:.25;
+    transform:translateY(14px);transition:.5s;letter-spacing:-.02em}
+  .scrolly .pane.on h4{opacity:1;transform:none}
+  .scrolly .pane small{display:block;color:var(--demo-muted);font-family:var(--mono);font-size:11px;margin-top:8px}
+
+  /* 3 — AR/VR (camadas com parallax flutuante) */
+  .arvr{position:relative;width:100%;height:100%}
+  .arvr .layer{position:absolute;border-radius:14px}
+  .arvr .l1{inset:30% 12% 30% 12%;background:linear-gradient(120deg,#4FC3D9,#1F7C8C);
+    animation:floaty 5s ease-in-out infinite}
+  .arvr .l2{width:60px;height:60px;top:28%;left:22%;background:#FF6B5D;
+    animation:floaty 4s ease-in-out infinite reverse}
+  .arvr .l3{width:38px;height:38px;bottom:26%;right:24%;background:#F2B65A;border-radius:50%;
+    animation:floaty 6s ease-in-out infinite}
+  .arvr .grid-ln{position:absolute;inset:0;background:
+    linear-gradient(#ffffff12 1px,transparent 1px) 0 0/100% 26px,
+    linear-gradient(90deg,#ffffff12 1px,transparent 1px) 0 0/26px 100%;
+    transform:perspective(400px) rotateX(55deg) translateY(30%);opacity:.5}
+  @keyframes floaty{50%{transform:translateY(-16px)}}
+
+  /* 4 — Tipografia cinética */
+  .kin{font-family:var(--dsp);font-weight:800;font-size:34px;letter-spacing:-.02em;
+    text-align:center;line-height:1.05}
+  .kin .roller{display:inline-grid;height:1.05em;overflow:hidden;vertical-align:bottom}
+  .kin .roller span{animation:roll 6s cubic-bezier(.7,0,.3,1) infinite;color:var(--accent)}
+  @keyframes roll{0%,14%{transform:translateY(0)}20%,34%{transform:translateY(-100%)}
+    40%,54%{transform:translateY(-200%)}60%,74%{transform:translateY(-300%)}
+    80%,100%{transform:translateY(-400%)}}
+
+  /* 5 — Colaboração em tempo real (cursores) */
+  .collab{position:absolute;inset:0}
+  .collab .doc{position:absolute;inset:22px;border:1px dashed #ffffff22;border-radius:10px;
+    background:#ffffff08}
+  .cursor{position:absolute;font-family:var(--mono);font-size:10px;display:flex;
+    align-items:flex-start;gap:3px;will-change:transform}
+  .cursor i{width:0;height:0;border-left:7px solid currentColor;
+    border-bottom:6px solid transparent;transform:rotate(-8deg)}
+  .cursor b{background:currentColor;color:#0A0710;padding:1px 5px;border-radius:5px;font-weight:700}
+  .c-a{color:#FF6B5D;animation:mv1 7s ease-in-out infinite}
+  .c-b{color:#4FC3D9;animation:mv2 8s ease-in-out infinite}
+  .c-c{color:#F2B65A;animation:mv3 6.5s ease-in-out infinite}
+  @keyframes mv1{0%{transform:translate(30px,140px)}30%{transform:translate(180px,40px)}
+    60%{transform:translate(90px,90px)}100%{transform:translate(30px,140px)}}
+  @keyframes mv2{0%{transform:translate(200px,30px)}35%{transform:translate(60px,120px)}
+    70%{transform:translate(210px,150px)}100%{transform:translate(200px,30px)}}
+  @keyframes mv3{0%{transform:translate(120px,160px)}40%{transform:translate(220px,70px)}
+    75%{transform:translate(50px,50px)}100%{transform:translate(120px,160px)}}
+
+  /* 6 — Movimento de fundo ambiente (blobs) */
+  .ambient{position:absolute;inset:0;filter:blur(14px)}
+  .ambient span{position:absolute;width:150px;height:150px;border-radius:50%;
+    mix-blend-mode:screen;opacity:.85}
+  .ambient .b1{background:#FF6B5D;top:-30px;left:-20px;animation:drift 9s ease-in-out infinite}
+  .ambient .b2{background:#4FC3D9;bottom:-40px;right:-10px;animation:drift 11s ease-in-out infinite reverse}
+  .ambient .b3{background:#7A5CFF;top:40px;right:50px;animation:drift 8s ease-in-out infinite}
+  @keyframes drift{50%{transform:translate(40px,30px) scale(1.25)}}
+
+  /* 7 — Animação de linhas */
+  .lines{width:180px;height:120px}
+  .lines path{fill:none;stroke:var(--accent-2);stroke-width:2.5;stroke-linecap:round}
+  .lines .w{stroke-dasharray:8 10;animation:march 2.2s linear infinite}
+  @keyframes march{to{stroke-dashoffset:-36}}
+
+  /* 8 — Autodesenho (stroke-path) */
+  .draw{width:150px;height:120px}
+  .draw path{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;
+    stroke-linejoin:round;stroke-dasharray:520;stroke-dashoffset:520;
+    animation:selfdraw 4.5s ease-in-out infinite}
+  @keyframes selfdraw{0%{stroke-dashoffset:520}45%,55%{stroke-dashoffset:0}100%{stroke-dashoffset:-520}}
+
+  /* 9 — Morphing (blob) */
+  .morph{width:120px;height:120px;background:
+    linear-gradient(135deg,var(--accent),var(--accent-3));
+    animation:blob 8s ease-in-out infinite}
+  @keyframes blob{
+    0%,100%{border-radius:42% 58% 63% 37%/42% 44% 56% 58%}
+    33%{border-radius:70% 30% 46% 54%/30% 60% 40% 70%}
+    66%{border-radius:34% 66% 33% 67%/60% 34% 66% 40%}}
+
+  /* 10 — Logo animado */
+  .logo{display:flex;align-items:center;gap:12px;font-family:var(--dsp);font-weight:800;
+    font-size:28px;letter-spacing:-.02em}
+  .logo .mk{width:40px;height:40px;border-radius:11px;background:var(--accent);
+    display:grid;place-items:center;overflow:hidden}
+  .logo .mk b{width:14px;height:14px;background:#fff;border-radius:3px;
+    animation:logospin 3s cubic-bezier(.6,0,.3,1) infinite}
+  @keyframes logospin{0%,20%{transform:rotate(0) scale(1)}
+    50%{transform:rotate(135deg) scale(.6);border-radius:50%}80%,100%{transform:rotate(360deg) scale(1)}}
+  .logo span u{color:var(--accent);text-decoration:none;display:inline-block;
+    animation:pop 3s ease infinite}
+  @keyframes pop{40%,60%{transform:translateY(-5px)}}
+
+  /* 11 — Ícones animados */
+  .icons{display:flex;gap:22px}
+  .icons .ic{width:44px;height:44px;display:grid;place-items:center;cursor:pointer}
+  .heart{width:26px;height:26px;position:relative;transform:rotate(-45deg);
+    background:var(--accent);animation:beat 1.4s ease-in-out infinite}
+  .heart::before,.heart::after{content:"";position:absolute;width:26px;height:26px;
+    background:var(--accent);border-radius:50%}
+  .heart::before{top:-13px;left:0}.heart::after{top:0;left:13px}
+  @keyframes beat{0%,100%,40%{transform:rotate(-45deg) scale(1)}20%{transform:rotate(-45deg) scale(1.25)}}
+  .bell{font-size:26px;transform-origin:top center;animation:ring 2.5s ease infinite}
+  @keyframes ring{0%,60%,100%{transform:rotate(0)}66%{transform:rotate(14deg)}72%{transform:rotate(-12deg)}78%{transform:rotate(8deg)}84%{transform:rotate(-4deg)}}
+  .spark{font-size:24px;animation:twinkle 2s ease infinite}
+  @keyframes twinkle{50%{transform:scale(1.35) rotate(20deg);opacity:.7}}
+
+  /* 12 — Microinterações (toggle + like) */
+  .micro{display:flex;flex-direction:column;gap:18px;align-items:center}
+  .switch{width:64px;height:34px;border-radius:999px;background:#ffffff1f;position:relative;
+    cursor:pointer;transition:.35s;border:1px solid #ffffff26}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;
+    border-radius:50%;background:#fff;transition:.35s cubic-bezier(.5,1.6,.4,1)}
+  .switch.on{background:var(--accent)}.switch.on::after{left:33px}
+  .likebtn{font-family:var(--mono);font-size:12px;color:var(--demo-ink);background:#ffffff12;
+    border:1px solid #ffffff22;padding:8px 14px;border-radius:999px;cursor:pointer;
+    display:flex;gap:8px;align-items:center;transition:.2s}
+  .likebtn:active{transform:scale(.94)}
+  .likebtn.liked{border-color:var(--accent);color:var(--accent)}
+
+  /* 13 — Personagem (piscando + acenando) */
+  .char{position:relative;width:96px;height:110px}
+  .char .head{position:absolute;top:6px;left:18px;width:60px;height:60px;border-radius:50%;
+    background:var(--accent-3)}
+  .char .eye{position:absolute;top:28px;width:9px;height:9px;border-radius:50%;background:#191520;
+    animation:blink 3.4s infinite}
+  .char .eye.l{left:32px}.char .eye.r{left:52px}
+  @keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+  .char .body{position:absolute;bottom:0;left:26px;width:44px;height:48px;border-radius:16px 16px 8px 8px;
+    background:var(--accent-2)}
+  .char .arm{position:absolute;bottom:28px;right:6px;width:34px;height:9px;border-radius:9px;
+    background:var(--accent-2);transform-origin:left center;animation:wave 2.2s ease-in-out infinite}
+  @keyframes wave{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-38deg)}}
+
+  /* 14 — Faux 3D (card com profundidade / tilt) */
+  .faux{width:150px;height:120px;transform-style:preserve-3d;
+    animation:tilt 6s ease-in-out infinite}
+  .faux .plate{position:absolute;inset:0;border-radius:14px;
+    background:linear-gradient(135deg,#4FC3D9,#1F7C8C)}
+  .faux .p2{transform:translateZ(-18px) translate(10px,10px);opacity:.55}
+  .faux .p3{transform:translateZ(-36px) translate(20px,20px);opacity:.28}
+  .faux .lbl{position:absolute;inset:0;display:grid;place-items:center;color:#fff;
+    font-family:var(--dsp);font-weight:800;font-size:26px}
+  @keyframes tilt{0%,100%{transform:perspective(600px) rotateY(-20deg) rotateX(8deg)}
+    50%{transform:perspective(600px) rotateY(20deg) rotateX(-8deg)}}
+
+  /* 15 — Scroll horizontal (snap) */
+  .hscroll{position:absolute;inset:0;display:flex;gap:12px;overflow-x:auto;
+    scroll-snap-type:x mandatory;padding:26px 22px;align-items:center}
+  .hscroll::-webkit-scrollbar{height:5px}.hscroll::-webkit-scrollbar-thumb{background:#ffffff2a;border-radius:9px}
+  .hscroll .slide{flex:0 0 130px;height:150px;border-radius:12px;scroll-snap-align:center;
+    display:grid;place-items:end;padding:12px;font-family:var(--dsp);font-weight:800;font-size:22px;color:#fff}
+  .hscroll .s1{background:linear-gradient(160deg,#FF6B5D,#B4342A)}
+  .hscroll .s2{background:linear-gradient(160deg,#4FC3D9,#1F7C8C)}
+  .hscroll .s3{background:linear-gradient(160deg,#F2B65A,#C77A1E)}
+  .hscroll .s4{background:linear-gradient(160deg,#7A5CFF,#3A2A99)}
+
+  /* 16 — Técnica mista (colagem + grão) */
+  .mixed{position:absolute;inset:0;background:#241c30;overflow:hidden}
+  .mixed .ph{position:absolute;width:80px;height:80px;border-radius:8px;
+    background:conic-gradient(from 0deg,#FF6B5D,#4FC3D9,#F2B65A,#FF6B5D);
+    top:34px;left:34px;animation:spinslow 12s linear infinite;filter:saturate(1.2)}
+  .mixed .cut{position:absolute;right:30px;bottom:26px;font-family:var(--dsp);font-weight:800;
+    font-size:30px;color:#fff;transform:rotate(-8deg)}
+  .mixed .tape{position:absolute;top:24px;right:50px;width:60px;height:20px;
+    background:#F2B65Acc;transform:rotate(18deg)}
+  .mixed .grain{position:absolute;inset:0;opacity:.4;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  @keyframes spinslow{to{transform:rotate(360deg)}}
+
+  /* 17 — Movimento líquido (goo) */
+  .liquid{position:relative;width:100%;height:100%;filter:url(#goo)}
+  .liquid span{position:absolute;left:50%;top:50%;width:46px;height:46px;border-radius:50%;
+    background:var(--accent);margin:-23px}
+  .liquid .g1{animation:orbit 4s ease-in-out infinite}
+  .liquid .g2{animation:orbit 4s ease-in-out infinite -1.3s;background:var(--accent-3)}
+  .liquid .g3{animation:orbit 4s ease-in-out infinite -2.6s;background:var(--accent-2)}
+  @keyframes orbit{0%,100%{transform:translate(-40px,0) scale(.9)}
+    50%{transform:translate(40px,0) scale(1.1)}}
+
+  /* 18 — Gradiente animado */
+  @property --gpos{syntax:'<percentage>';inherits:false;initial-value:0%}
+  .grad{width:170px;height:120px;border-radius:14px;
+    background:linear-gradient(120deg,#FF6B5D,#F2B65A,#4FC3D9,#7A5CFF,#FF6B5D);
+    background-size:300% 300%;animation:gwash 7s ease infinite}
+  @keyframes gwash{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+  /* 19 — Isométrico */
+  .iso{transform:rotateX(58deg) rotateZ(45deg);transform-style:preserve-3d;
+    animation:isobob 4s ease-in-out infinite}
+  .iso .blk{width:60px;height:60px;position:relative;transform-style:preserve-3d}
+  .iso .blk .t{position:absolute;inset:0;background:#4FC3D9}
+  .iso .blk .s{position:absolute;width:60px;height:22px;background:#1F7C8C;
+    transform:rotateX(-90deg);transform-origin:top;bottom:-22px}
+  .iso .blk .s2{position:absolute;width:22px;height:60px;background:#166370;
+    transform:rotateY(90deg);transform-origin:left;right:-22px;top:0}
+  @keyframes isobob{50%{transform:rotateX(58deg) rotateZ(45deg) translateZ(20px)}}
+
+  /* 20 — Fundo (padrão em movimento) */
+  .pattern{position:absolute;inset:-20px;
+    background-image:radial-gradient(circle,var(--accent-2) 3px,transparent 3.5px);
+    background-size:26px 26px;opacity:.55;animation:slidebg 6s linear infinite}
+  @keyframes slidebg{to{background-position:26px 26px}}
+  .pattern.two{background-image:radial-gradient(circle,var(--accent) 2px,transparent 2.5px);
+    background-size:34px 34px;animation-duration:9s;animation-direction:reverse;opacity:.4}
+
+  /* 21 — Doodle (tremor desenhado) */
+  .doodle{width:150px;height:110px}
+  .doodle path{fill:none;stroke:var(--accent-3);stroke-width:4;stroke-linecap:round}
+  .doodle .wob{animation:wobble .28s steps(2) infinite}
+  @keyframes wobble{0%{transform:translate(0,0) rotate(0)}
+    50%{transform:translate(1.5px,-1px) rotate(.6deg)}100%{transform:translate(-1px,1px) rotate(-.5deg)}}
+
+  /* 22 — Transição de página (wipe) */
+  .pt{position:absolute;inset:0}
+  .pt .page{position:absolute;inset:0;display:grid;place-items:center;
+    font-family:var(--dsp);font-weight:800;font-size:30px;color:#fff}
+  .pt .pageA{background:linear-gradient(140deg,#1F7C8C,#0e424b)}
+  .pt .pageB{background:linear-gradient(140deg,#E1483A,#7c2018);clip-path:inset(0 0 0 100%);
+    transition:clip-path .6s cubic-bezier(.7,0,.2,1)}
+  .pt.go .pageB{clip-path:inset(0 0 0 0%)}
+
+  /* 23 — Hero (entrada escalonada) */
+  .hero{text-align:center;padding:0 18px}
+  .hero .k{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--accent-2);opacity:0;transform:translateY(10px);animation:rise .6s .1s forwards}
+  .hero h4{font-family:var(--dsp);font-weight:800;font-size:30px;line-height:1;margin:8px 0;
+    letter-spacing:-.02em;opacity:0;transform:translateY(14px);animation:rise .6s .3s forwards}
+  .hero .btn2{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;
+    padding:7px 14px;border-radius:999px;background:var(--accent);color:#fff;
+    opacity:0;transform:translateY(14px);animation:rise .6s .55s forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* 24 — Skeleton */
+  .skel{width:210px;display:flex;flex-direction:column;gap:11px}
+  .skel .row{display:flex;gap:11px;align-items:center}
+  .sk{background:linear-gradient(100deg,#ffffff10 30%,#ffffff28 50%,#ffffff10 70%);
+    background-size:200% 100%;border-radius:7px;animation:shimmer 1.4s linear infinite}
+  .sk.circ{width:42px;height:42px;border-radius:50%;flex:none}
+  .sk.l1{height:12px;width:70%}.sk.l2{height:12px;width:90%}.sk.l3{height:12px;width:55%}
+  .sk.block{height:60px;width:100%}
+  @keyframes shimmer{to{background-position:-200% 0}}
+
+  /* 25 — Loader */
+  .loader{display:flex;gap:9px}
+  .loader span{width:15px;height:15px;border-radius:50%;background:var(--accent);
+    animation:bounce 1s ease-in-out infinite}
+  .loader span:nth-child(2){background:var(--accent-3);animation-delay:.15s}
+  .loader span:nth-child(3){background:var(--accent-2);animation-delay:.3s}
+  @keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-18px);opacity:1}}
+
+  /* 26 — Hover (revelar) */
+  .hovers{display:flex;flex-direction:column;gap:18px;align-items:center}
+  .hlink{position:relative;font-family:var(--dsp);font-weight:600;font-size:24px;
+    color:var(--demo-ink);cursor:pointer;text-decoration:none}
+  .hlink::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;
+    background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+  .hlink:hover::after{transform:scaleX(1)}
+  .himg{width:150px;height:70px;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;
+    background:linear-gradient(120deg,#4FC3D9,#1F7C8C)}
+  .himg .ov{position:absolute;inset:0;background:var(--accent);display:grid;place-items:center;
+    color:#fff;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    transform:translateY(100%);transition:transform .35s cubic-bezier(.6,0,.2,1)}
+  .himg:hover .ov{transform:translateY(0)}
+
+  /* 27 — Neumórfico */
+  .neu{background:#e0e5ec;border-radius:18px;padding:22px;display:flex;gap:18px;align-items:center}
+  .neu .np{width:56px;height:56px;border-radius:50%;background:#e0e5ec;
+    box-shadow:6px 6px 12px #b8bcc2,-6px -6px 12px #ffffff;cursor:pointer;transition:.2s;
+    display:grid;place-items:center;color:#5a6274;font-size:22px}
+  .neu .np:active,.neu .np.press{box-shadow:inset 5px 5px 10px #b8bcc2,inset -5px -5px 10px #ffffff}
+  .neu .npbar{width:90px;height:14px;border-radius:9px;background:#e0e5ec;
+    box-shadow:inset 3px 3px 6px #b8bcc2,inset -3px -3px 6px #ffffff;overflow:hidden}
+  .neu .npbar i{display:block;height:100%;width:40%;border-radius:9px;
+    background:linear-gradient(90deg,#FF6B5D,#F2B65A);animation:fill 3s ease-in-out infinite}
+  @keyframes fill{0%,100%{width:25%}50%{width:85%}}
+
+  /* 28 — Glassmórfico */
+  .glass{position:absolute;inset:0;display:grid;place-items:center;
+    background:linear-gradient(120deg,#7A5CFF,#FF6B5D 60%,#F2B65A)}
+  .glass .g-orb{position:absolute;width:80px;height:80px;border-radius:50%;background:#ffffff55;
+    filter:blur(2px);animation:floaty 5s ease-in-out infinite}
+  .glass .g-orb.two{width:50px;height:50px;background:#4FC3D966;right:40px;bottom:30px;
+    animation-duration:6s}
+  .glass .panel{position:relative;z-index:2;width:170px;padding:18px;border-radius:16px;
+    background:rgba(255,255,255,.16);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+    border:1px solid rgba(255,255,255,.35);color:#fff;font-family:var(--dsp);font-weight:600;
+    box-shadow:0 8px 30px rgba(0,0,0,.2)}
+  .glass .panel small{display:block;font-family:var(--mono);font-weight:400;font-size:10px;
+    opacity:.85;margin-top:4px}
+
+  /* 29 — Claymórfico */
+  .clay{display:flex;gap:20px;align-items:center}
+  .clay .cp{width:70px;height:70px;border-radius:26px;background:#FF8A7D;cursor:pointer;
+    box-shadow:8px 8px 16px #c76256,inset -5px -5px 10px #ff9d92,inset 5px 5px 12px #e26a5d;
+    transition:transform .25s cubic-bezier(.5,1.7,.4,1);display:grid;place-items:center;
+    color:#fff;font-size:28px;animation:squish 3s ease-in-out infinite}
+  .clay .cp.two{background:#7FD3E0;box-shadow:8px 8px 16px #4a9aa8,inset -5px -5px 10px #a3e3ec,inset 5px 5px 12px #5fbccb;animation-delay:.6s}
+  @keyframes squish{0%,100%{border-radius:26px;transform:scale(1)}50%{border-radius:30px 24px 28px 22px;transform:scale(1.05)}}
+
+  /* 30 — Flipbook (virar página) */
+  .flip{width:130px;height:96px;position:relative;perspective:700px}
+  .flip .sheet{position:absolute;inset:0;border-radius:4px 10px 10px 4px;
+    background:linear-gradient(90deg,#efe9df 0 6px,#fff 6px);border:1px solid #ddd2c2;
+    transform-origin:left center;box-shadow:var(--shadow)}
+  .flip .pg{animation:pageflip 3.4s ease-in-out infinite;transform-style:preserve-3d;
+    background:linear-gradient(90deg,#efe9df 0 6px,#f6f1e8 6px)}
+  .flip .lines-d{position:absolute;top:14px;left:16px;right:12px;height:6px;border-radius:3px;
+    background:#d8ccb8;box-shadow:0 16px #d8ccb8,0 32px #d8ccb8,0 48px #d8ccb8}
+  @keyframes pageflip{0%,15%{transform:rotateY(0)}55%,70%{transform:rotateY(-165deg)}100%{transform:rotateY(0)}}
+
+  /* 31 — Stop-motion (steps) */
+  .stop{font-size:46px;animation:hop 1.1s steps(1) infinite}
+  @keyframes hop{0%{transform:translateY(0) rotate(0)}20%{transform:translateY(-6px) rotate(-8deg)}
+    40%{transform:translateY(-24px) rotate(4deg)}60%{transform:translateY(-10px) rotate(10deg)}
+    80%{transform:translateY(-2px) rotate(-4deg)}100%{transform:translateY(0) rotate(0)}}
+  .stop-track{display:flex;gap:10px;align-items:flex-end}
+  .stop .dust{font-size:18px;animation:hop 1.1s steps(1) infinite .1s;opacity:.6}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Biblioteca de referência · Motion para web</p>
+    <h1>31 efeitos de <em>animação</em> ao vivo</h1>
+    <p class="lede">Cada cartão abaixo tem um demo funcionando de verdade — feito só com
+      HTML e CSS (mais um toque de JS). É a lista da SVGator, mas rodando, para você
+      ver o movimento, sentir o timing e reusar a técnica nos seus sites.</p>
+    <div class="meta-row">
+      <span><b>31</b> efeitos</span>
+      <span><b>100%</b> CSS / JS puro</span>
+      <span>Tema <b>claro + escuro</b></span>
+      <span>Passe o mouse · role · clique</span>
+    </div>
+    <div class="toolbar">
+      <button class="btn" id="themeBtn">Alternar tema</button>
+      <button class="btn" id="replayBtn">↻ Repetir entradas</button>
+    </div>
+  </header>
+
+  <main class="grid" id="grid">
+
+    <!-- 1 -->
+    <article class="card">
+      <div class="stage d1"><span class="num">01</span>
+        <div class="cube"><span class="f1"></span><span class="f2"></span><span class="f3"></span><span class="f4"></span><span class="f5"></span><span class="f6"></span></div>
+      </div>
+      <div class="info"><h3>Renderização em tempo real</h3>
+        <p>Ambientes 3D navegáveis, normalmente em WebGL. Aqui, um volume em perspectiva pura de CSS sugere a profundidade.</p>
+        <span class="tag">perspective · 3D transforms</span></div>
+    </article>
+
+    <!-- 2 -->
+    <article class="card">
+      <div class="stage"><span class="num">02</span>
+        <div class="scrolly" data-scrolly>
+          <div class="pane on"><div><h4>Role aqui dentro ↓</h4><small>o texto revela conforme avança</small></div></div>
+          <div class="pane"><div><h4>Cada cena entra</h4><small>parallax + reveal</small></div></div>
+          <div class="pane"><div><h4>E conta a história</h4><small>scrollytelling</small></div></div>
+        </div>
+        <span class="hint">role dentro</span>
+      </div>
+      <div class="info"><h3>Scrollytelling</h3>
+        <p>A rolagem guia o usuário por uma narrativa: cada cena aparece no momento certo.</p>
+        <span class="tag">scroll reveal</span></div>
+    </article>
+
+    <!-- 3 -->
+    <article class="card">
+      <div class="stage"><span class="num">03</span>
+        <div class="arvr"><div class="grid-ln"></div><div class="layer l1"></div><div class="layer l2"></div><div class="layer l3"></div></div>
+      </div>
+      <div class="info"><h3>Motion graphics em RA/RV</h3>
+        <p>Camadas que flutuam sobre um plano em perspectiva criam sensação de espaço imersivo.</p>
+        <span class="tag">camadas · parallax</span></div>
+    </article>
+
+    <!-- 4 -->
+    <article class="card">
+      <div class="stage"><span class="num">04</span>
+        <div class="kin">Vamos<br><span class="roller"><span>criar.<br>mover.<br>animar.<br>surpreender.<br>criar.</span></span></div>
+      </div>
+      <div class="info"><h3>Tipografia expressiva</h3>
+        <p>Letras cinéticas que trocam sozinhas — a tipografia vira o próprio movimento da marca.</p>
+        <span class="tag">kinetic type</span></div>
+    </article>
+
+    <!-- 5 -->
+    <article class="card">
+      <div class="stage"><span class="num">05</span>
+        <div class="collab"><div class="doc"></div>
+          <div class="cursor c-a"><i></i><b>Ana</b></div>
+          <div class="cursor c-b"><i></i><b>Bruna</b></div>
+          <div class="cursor c-c"><i></i><b>Guri</b></div>
+        </div>
+      </div>
+      <div class="info"><h3>Colaboração em tempo real</h3>
+        <p>Vários cursores animados no mesmo espaço — a cara de ferramentas colaborativas ao vivo.</p>
+        <span class="tag">cursores animados</span></div>
+    </article>
+
+    <!-- 6 -->
+    <article class="card">
+      <div class="stage"><span class="num">06</span>
+        <div class="ambient"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+      </div>
+      <div class="info"><h3>Fundo ambiente</h3>
+        <p>Manchas de cor que respiram devagar ao fundo, dando atmosfera sem roubar a cena.</p>
+        <span class="tag">blur · blend</span></div>
+    </article>
+
+    <!-- 7 -->
+    <article class="card">
+      <div class="stage"><span class="num">07</span>
+        <svg class="lines" viewBox="0 0 180 120">
+          <path class="w" d="M10,90 C50,90 40,30 90,30 C140,30 130,90 170,90"/>
+          <path class="w" d="M10,60 L170,60" style="animation-delay:-.7s"/>
+          <circle cx="90" cy="30" r="6" fill="var(--accent)"/>
+        </svg>
+      </div>
+      <div class="info"><h3>Animação de linhas</h3>
+        <p>Traços finos e contínuos que fluem — estilo leve e infinitamente versátil.</p>
+        <span class="tag">stroke-dasharray</span></div>
+    </article>
+
+    <!-- 8 -->
+    <article class="card">
+      <div class="stage"><span class="num">08</span>
+        <svg class="draw" viewBox="0 0 150 120">
+          <path d="M20,95 C20,40 60,20 75,60 C90,20 130,40 130,95"/>
+        </svg>
+      </div>
+      <div class="info"><h3>Autodesenho (self-drawing)</h3>
+        <p>O traço se desenha e se apaga sozinho — perfeito para wordmarks e ilustrações que "nascem" na tela.</p>
+        <span class="tag">stroke-path</span></div>
+    </article>
+
+    <!-- 9 -->
+    <article class="card">
+      <div class="stage"><span class="num">09</span><div class="morph"></div></div>
+      <div class="info"><h3>Morphing</h3>
+        <p>Formas que se transformam continuamente — de blob orgânico a qualquer silhueta.</p>
+        <span class="tag">border-radius morph</span></div>
+    </article>
+
+    <!-- 10 -->
+    <article class="card">
+      <div class="stage"><span class="num">10</span>
+        <div class="logo"><span class="mk"><b></b></span><span>Neura<u>·</u></span></div>
+      </div>
+      <div class="info"><h3>Logo animado</h3>
+        <p>O logotipo ganha um gesto de assinatura — memorável e reutilizável em todos os canais.</p>
+        <span class="tag">branding</span></div>
+    </article>
+
+    <!-- 11 -->
+    <article class="card">
+      <div class="stage"><span class="num">11</span>
+        <div class="icons"><div class="ic"><div class="heart"></div></div><div class="ic"><span class="bell">🔔</span></div><div class="ic"><span class="spark">✦</span></div></div>
+      </div>
+      <div class="info"><h3>Ícones animados</h3>
+        <p>Micro-gestos em ícones (batida, toque, brilho) que deixam a UI viva sem pesar.</p>
+        <span class="tag">ui icons</span></div>
+    </article>
+
+    <!-- 12 -->
+    <article class="card">
+      <div class="stage"><span class="num">12</span>
+        <div class="micro">
+          <div class="switch" data-toggle></div>
+          <button class="likebtn" data-like>♥ <span>Curtir</span> · <b>128</b></button>
+        </div>
+        <span class="hint">clique</span>
+      </div>
+      <div class="info"><h3>Microinterações</h3>
+        <p>Feedback imediato: o toggle desliza, o like reage. Confirma a ação e dá satisfação.</p>
+        <span class="tag">ui feedback</span></div>
+    </article>
+
+    <!-- 13 -->
+    <article class="card">
+      <div class="stage"><span class="num">13</span>
+        <div class="char"><div class="head"></div><div class="eye l"></div><div class="eye r"></div><div class="body"></div><div class="arm"></div></div>
+      </div>
+      <div class="info"><h3>Personagens</h3>
+        <p>Formas simples que piscam e acenam — dão voz e simpatia à marca.</p>
+        <span class="tag">character</span></div>
+    </article>
+
+    <!-- 14 -->
+    <article class="card">
+      <div class="stage"><span class="num">14</span>
+        <div class="faux"><div class="plate p3"></div><div class="plate p2"></div><div class="plate"></div><div class="lbl">3D</div></div>
+      </div>
+      <div class="info"><h3>Falso 3D</h3>
+        <p>Camadas, perspectiva e giro criam a ilusão de volume — leve e rápido como o 2D.</p>
+        <span class="tag">faux depth</span></div>
+    </article>
+
+    <!-- 15 -->
+    <article class="card">
+      <div class="stage"><span class="num">15</span>
+        <div class="hscroll">
+          <div class="slide s1">01</div><div class="slide s2">02</div><div class="slide s3">03</div><div class="slide s4">04</div>
+        </div>
+        <span class="hint">arraste →</span>
+      </div>
+      <div class="info"><h3>Rolagem horizontal</h3>
+        <p>Carrossel com scroll-snap: a rolagem lateral encaixa cada painel no lugar.</p>
+        <span class="tag">scroll-snap</span></div>
+    </article>
+
+    <!-- 16 -->
+    <article class="card">
+      <div class="stage"><span class="num">16</span>
+        <div class="mixed"><div class="tape"></div><div class="ph"></div><div class="cut">mix.</div><div class="grain"></div></div>
+      </div>
+      <div class="info"><h3>Técnica mista</h3>
+        <p>Colagem de formas, texto e grão — o visual "scrapbook" que a Gen Z adora.</p>
+        <span class="tag">collage · grain</span></div>
+    </article>
+
+    <!-- 17 -->
+    <article class="card">
+      <div class="stage"><span class="num">17</span>
+        <div class="liquid"><span class="g1"></span><span class="g2"></span><span class="g3"></span></div>
+      </div>
+      <div class="info"><h3>Movimento líquido</h3>
+        <p>Gotas que se fundem e separam com o efeito "goo" — transições orgânicas e fluidas.</p>
+        <span class="tag">svg goo filter</span></div>
+    </article>
+
+    <!-- 18 -->
+    <article class="card">
+      <div class="stage"><span class="num">18</span><div class="grad"></div></div>
+      <div class="info"><h3>Gradiente animado</h3>
+        <p>Transições de cor que definem o clima da página e guiam o olhar sozinhas.</p>
+        <span class="tag">gradient shift</span></div>
+    </article>
+
+    <!-- 19 -->
+    <article class="card">
+      <div class="stage"><span class="num">19</span>
+        <div class="iso"><div class="blk"><div class="t"></div><div class="s"></div><div class="s2"></div></div></div>
+      </div>
+      <div class="info"><h3>Isométrico</h3>
+        <p>Perspectiva a 120° que dá dimensão ao design plano, sem linhas convergentes.</p>
+        <span class="tag">isometric</span></div>
+    </article>
+
+    <!-- 20 -->
+    <article class="card">
+      <div class="stage"><span class="num">20</span>
+        <div class="pattern"></div><div class="pattern two"></div>
+      </div>
+      <div class="info"><h3>Fundo animado</h3>
+        <p>Padrões que deslizam devagar ao fundo — atmosfera e profundidade discretas.</p>
+        <span class="tag">pattern motion</span></div>
+    </article>
+
+    <!-- 21 -->
+    <article class="card">
+      <div class="stage"><span class="num">21</span>
+        <svg class="doodle" viewBox="0 0 150 110"><g class="wob">
+          <path d="M20,80 Q40,20 70,55 T130,40"/>
+          <path d="M30,95 q30,-10 60,0" style="stroke:var(--accent)"/>
+          <circle cx="120" cy="70" r="8" fill="none" stroke="var(--accent-2)" stroke-width="4"/>
+        </g></svg>
+      </div>
+      <div class="info"><h3>Doodle</h3>
+        <p>Rabiscos desenhados à mão que tremem de leve — leves, divertidos e cheios de personalidade.</p>
+        <span class="tag">hand-drawn</span></div>
+    </article>
+
+    <!-- 22 -->
+    <article class="card">
+      <div class="stage"><span class="num">22</span>
+        <div class="pt" data-pt><div class="page pageA">antes</div><div class="page pageB">depois</div></div>
+        <span class="hint">clique</span>
+      </div>
+      <div class="info"><h3>Transição de página</h3>
+        <p>A troca entre telas vira parte do design — aqui, um wipe que revela a próxima página.</p>
+        <span class="tag">page transition</span></div>
+    </article>
+
+    <!-- 23 -->
+    <article class="card">
+      <div class="stage"><span class="num">23</span>
+        <div class="hero" data-hero><span class="k">Coleção 2026</span><h4>Movimento<br>vende.</h4><span class="btn2">Ver mais</span></div>
+      </div>
+      <div class="info"><h3>Seção hero</h3>
+        <p>Entrada escalonada que fisga a atenção no primeiro segundo da página.</p>
+        <span class="tag">staggered entrance</span></div>
+    </article>
+
+    <!-- 24 -->
+    <article class="card">
+      <div class="stage"><span class="num">24</span>
+        <div class="skel">
+          <div class="row"><div class="sk circ"></div><div style="flex:1;display:flex;flex-direction:column;gap:8px"><div class="sk l1"></div><div class="sk l3"></div></div></div>
+          <div class="sk block"></div><div class="sk l2"></div>
+        </div>
+      </div>
+      <div class="info"><h3>Skeleton screens</h3>
+        <p>Placeholders que brilham enquanto o conteúdo carrega — a página parece mais rápida.</p>
+        <span class="tag">shimmer</span></div>
+    </article>
+
+    <!-- 25 -->
+    <article class="card">
+      <div class="stage"><span class="num">25</span>
+        <div class="loader"><span></span><span></span><span></span></div>
+      </div>
+      <div class="info"><h3>Loading / preloader</h3>
+        <p>Sinal claro de que algo está acontecendo — reduz a ansiedade da espera.</p>
+        <span class="tag">progress</span></div>
+    </article>
+
+    <!-- 26 -->
+    <article class="card">
+      <div class="stage"><span class="num">26</span>
+        <div class="hovers"><a class="hlink">Passe o mouse</a>
+          <div class="himg"><div class="ov">ver projeto</div></div>
+        </div>
+        <span class="hint">hover</span>
+      </div>
+      <div class="info"><h3>Efeitos de hover</h3>
+        <p>Revelam informação extra ao interagir — mantêm a interface limpa e viva.</p>
+        <span class="tag">hover reveal</span></div>
+    </article>
+
+    <!-- 27 -->
+    <article class="card">
+      <div class="stage" style="background:#e0e5ec"><span class="num" style="color:#8891a3">27</span>
+        <div class="neu"><div class="np" data-press>▶</div><div class="npbar"><i></i></div></div>
+        <span class="hint" style="color:#8891a3;background:#00000008;border-color:#00000012">clique</span>
+      </div>
+      <div class="info"><h3>Neumorfismo</h3>
+        <p>Elementos que parecem sair do fundo com sombras suaves — toque tátil e minimalista.</p>
+        <span class="tag">soft ui</span></div>
+    </article>
+
+    <!-- 28 -->
+    <article class="card">
+      <div class="stage"><span class="num">28</span>
+        <div class="glass"><div class="g-orb"></div><div class="g-orb two"></div>
+          <div class="panel">Vidro fosco<small>backdrop-filter: blur</small></div>
+        </div>
+      </div>
+      <div class="info"><h3>Glassmorfismo</h3>
+        <p>Painéis translúcidos e desfocados que criam profundidade em camadas.</p>
+        <span class="tag">frosted glass</span></div>
+    </article>
+
+    <!-- 29 -->
+    <article class="card">
+      <div class="stage"><span class="num">29</span>
+        <div class="clay"><div class="cp">✿</div><div class="cp two">★</div></div>
+      </div>
+      <div class="info"><h3>Claymorfismo</h3>
+        <p>Aparência de massinha: cantos gordos, sombras internas e cores pastel que dão vontade de apertar.</p>
+        <span class="tag">clay ui</span></div>
+    </article>
+
+    <!-- 30 -->
+    <article class="card">
+      <div class="stage"><span class="num">30</span>
+        <div class="flip"><div class="sheet"><div class="lines-d"></div></div><div class="sheet pg"></div></div>
+      </div>
+      <div class="info"><h3>Flipbook</h3>
+        <p>Catálogos com o virar de página realista em 3D — a experiência do papel na web.</p>
+        <span class="tag">page flip</span></div>
+    </article>
+
+    <!-- 31 -->
+    <article class="card">
+      <div class="stage"><span class="num">31</span>
+        <div class="stop-track"><span class="stop">🚲</span><span class="dust">···</span></div>
+      </div>
+      <div class="info"><h3>Stop-motion</h3>
+        <p>Quadro a quadro com timing "travado" (steps) — o charme nostálgico do frame a frame.</p>
+        <span class="tag">steps() timing</span></div>
+    </article>
+
+  </main>
+</div>
+
+<footer><div class="wrap">
+  <span><b>31 efeitos de animação</b> — biblioteca viva, feita em CSS/JS puro.</span>
+  <span>Baseado em <a class="src" href="https://www.svgator.com/blog/website-animation-examples-and-effects/" target="_blank" rel="noopener">31 Cool Website Animations · SVGator</a></span>
+</div></footer>
+
+<!-- SVG filter para o efeito líquido (goo) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="8" result="b"/>
+    <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"/></filter>
+</svg>
+
+<script>
+  // Tema
+  const root=document.documentElement, tb=document.getElementById('themeBtn');
+  function cur(){const s=root.getAttribute('data-theme');
+    if(s)return s; return matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';}
+  tb.addEventListener('click',()=>{root.setAttribute('data-theme',cur()==='dark'?'light':'dark');});
+
+  // Repetir entradas (hero + qualquer animação de entrada)
+  document.getElementById('replayBtn').addEventListener('click',()=>{
+    document.querySelectorAll('[data-hero]').forEach(h=>{
+      h.querySelectorAll('.k,h4,.btn2').forEach(el=>{el.style.animation='none';
+        void el.offsetWidth; el.style.animation='';});
+    });
+  });
+
+  // Toggle
+  document.querySelectorAll('[data-toggle]').forEach(s=>{
+    s.addEventListener('click',()=>s.classList.toggle('on'));});
+
+  // Like
+  document.querySelectorAll('[data-like]').forEach(b=>{
+    const n=b.querySelector('b'); let liked=false, base=128;
+    b.addEventListener('click',()=>{liked=!liked;b.classList.toggle('liked',liked);
+      n.textContent=base+(liked?1:0);
+      b.querySelector('span').textContent=liked?'Curtido':'Curtir';});
+  });
+
+  // Transição de página
+  document.querySelectorAll('[data-pt]').forEach(p=>{
+    p.addEventListener('click',()=>{p.classList.toggle('go');});});
+
+  // Neumórfico press
+  document.querySelectorAll('[data-press]').forEach(p=>{
+    p.addEventListener('click',()=>{p.classList.toggle('press');});});
+
+  // Scrollytelling — revelar painéis conforme rola dentro do scroller
+  document.querySelectorAll('[data-scrolly]').forEach(sc=>{
+    const panes=[...sc.querySelectorAll('.pane')];
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{
+      if(e.intersectionRatio>.6)e.target.classList.add('on');
+      else e.target.classList.remove('on');});},{root:sc,threshold:[.6]});
+    panes.forEach(p=>io.observe(p));
+  });
+</script>
+
+</body></html>
