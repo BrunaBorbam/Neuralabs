@@ -73,6 +73,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Instrument_Serif, Space_Grotesk } from 'next/font/google';
 import {
   ArrowLeft,
@@ -188,6 +189,40 @@ const PRATOS_PADRAO: Prato[] = [
     img: '',
   },
 ];
+
+// Palavra cíclica no Hero — device inspirado na referência internacional
+// pesquisada a pedido da Bruna (Qissa — A Tale of Food usa "Origin ✦ Spice
+// ✦ Aroma" trocando sozinho no Hero). Aqui, palavras que resumem o próprio
+// conceito da Ardósia em vez de copiadas da referência — reforça o "muda
+// todo dia" sem custar nenhum asset novo (só motion, framer-motion já é
+// dependência do projeto).
+const TAGLINE_WORDS = ['Estação', 'Fogo', 'Feira', 'Giz'];
+
+function RotatingTagline({ words, active }: { words: string[]; active: boolean }) {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    const id = setInterval(() => setIdx((i) => (i + 1) % words.length), 2200);
+    return () => clearInterval(id);
+  }, [active, words.length]);
+  return (
+    <span className="relative inline-flex h-[1.4em] w-[92px] items-baseline overflow-hidden align-baseline sm:w-[104px]">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={words[idx]}
+          initial={{ y: active ? 14 : 0, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: active ? -14 : 0, opacity: 0 }}
+          transition={{ duration: 0.45, ease: [0.65, 0, 0.35, 1] }}
+          className="absolute left-0 whitespace-nowrap"
+          style={{ color: '#D9A441', letterSpacing: '0.04em' }}
+        >
+          {words[idx]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
 const VALORES = [
   'PRODUTO DA ESTAÇÃO',
@@ -508,11 +543,17 @@ export default function GastronomiaDemo() {
           </>
         )}
 
-        <div className="mb-8 flex items-center gap-3">
-          <span className="h-px w-9 bg-[#C1552C]" />
-          <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
-            Bistrô de Bairro · Cidade Baixa
-          </span>
+        <div className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-9 bg-[#C1552C]" />
+            <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
+              Bistrô de Bairro · Cidade Baixa
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-[10.5px] uppercase tracking-[0.28em] text-[#8A8478]">
+            <span>Hoje tem</span>
+            <RotatingTagline words={TAGLINE_WORDS} active={!reducedMotion} />
+          </div>
         </div>
 
         <h1
