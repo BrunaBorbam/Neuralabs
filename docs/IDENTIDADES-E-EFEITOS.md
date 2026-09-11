@@ -73,7 +73,7 @@ direto, sem storytelling longo.
 Quando usar: e-commerce, moda de rua, produto técnico, arquitetura
 brutalista.
 
-### D. Assimétrico / Colagem Editorial — *ainda não usado*
+### D. Assimétrico / Colagem Editorial — *usado: Ardósia (Gastronomia)*
 Grid quebrado, elementos sobrepostos em ângulos, tipografia mista (display
 gigante + legendas pequenas rotacionadas), scroll horizontal em pelo menos
 uma seção.
@@ -112,7 +112,10 @@ item sai da lista depois de usado.
   Esgotado — não usar de novo.
 - [ ] Blob líquido morphing (SVG ou shader simples) reagindo a scroll
 - [x] Wireframe 3D de um objeto real do negócio (cadeira, garrafa, prédio)
-  girando devagar — **usado 1x** (CERNE v2: cadeira de encomenda).
+  girando devagar — usado 1x em CERNE v2, **removido em set/2026** (não
+  convenceu depois de 2 rodadas de ajuste; gerar um modelo real via IA
+  esbarrou em paywall). Hero da CERNE hoje é só vídeo + card. Livre pra
+  reuso futuro se algum dia houver um modelo 3D real bom o bastante.
 - [ ] Partículas seguindo o cursor (canvas 2D leve, sem WebGL)
 - [ ] Reveal com máscara de grade (grid-wipe) — imagem "monta" quadrado a
   quadrado ao entrar na viewport
@@ -124,8 +127,9 @@ item sai da lista depois de usado.
   brilho)
 - [ ] Extrusão isométrica de um ícone/logo ao rolar a página
 - [ ] Linha de scan/glitch discreta em hover (bom pra tech/dados)
-- [ ] Efeito de "revelar tinta"/brush stroke SVG animado no traço de um
-  título
+- [x] Efeito de "revelar tinta"/brush stroke SVG animado no traço de um
+  título — **usado 1x** (Ardósia: traço de giz/tinta sob títulos e ao
+  redor do prato do chef, via framer-motion `pathLength`).
 
 O "cartão de vidro flutuante com borda iluminada" (usado nos 3 projetos
 até aqui) também deve ser tratado como recurso comum, não assinatura —
@@ -151,9 +155,10 @@ E/F que não pedem serifada de destaque).
 |---|---|---|---|---|---|
 | 1 | Site NEURALABS | (pré-arquétipo — site institucional) | Obsidiana + Malva/Grafite | Playfair Display + Inter | Esfera + anel 3D orbitando |
 | 2 | Villa Serena (Airbnb) | B — Cinematic Full-Bleed | Noturno + dourado pôr-do-sol | Bodoni Moda + Plus Jakarta Sans | Ondulação SVG (ripple) |
-| 3 | CERNE (Marcenaria) | A — Editorial Split | Linho + Musgo | Fraunces + Jost | Cadeira em wireframe 3D *(trocado dos anéis de crescimento em set/2026 — motivo esgotado)* |
+| 3 | CERNE (Marcenaria) | A — Editorial Split | Linho + Musgo | Fraunces + Jost | *(3D removido em set/2026 — ver item 2 acima; Hero hoje é só vídeo + card)* |
+| 4 | Ardósia (Gastronomia) | D — Assimétrico/Colagem Editorial | Ardósia (carvão) + Giz + Terracota + Mostarda | Instrument Serif + Space Grotesk | Traço de tinta/giz revelando (SVG, framer-motion) |
 
-**Próximo projeto:** usar Arquétipo C, D, E ou F (nunca A ou B de novo tão
+**Próximo projeto:** usar Arquétipo C, E ou F (nunca A, B ou D de novo tão
 cedo), fórmula tipográfica nova (seção 3), efeito de assinatura novo
-(seção 2 — nunca anéis/esferas concêntricos, nunca wireframe de novo tão
-cedo).
+(seção 2 — nunca anéis/esferas concêntricos, nunca wireframe, nunca
+brush-stroke de novo tão cedo).

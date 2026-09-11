@@ -1,0 +1,806 @@
+'use client';
+
+/**
+ * ARDÓSIA — Bistrô de Bairro
+ * Demonstração Interativa • NEURALABS Studio
+ *
+ * Quarto projeto de portfólio (depois do site NEURALABS, Villa Serena e
+ * CERNE) — ver docs/IDENTIDADES-E-EFEITOS.md antes de mexer aqui. Esse
+ * documento existe justamente porque os três primeiros repetiam demais a
+ * mesma estrutura (Hero cinematográfico/split + cartão de vidro + anéis
+ * concêntricos). A Ardósia usa, de propósito, um arquétipo, uma paleta,
+ * uma tipografia e uma assinatura de motion que NENHUM projeto anterior
+ * usou — ver registro no fim daquele documento.
+ *
+ * Arquétipo: D — Assimétrico/Colagem Editorial (primeiro uso). Hero
+ * tipográfico gigante SEM fotografia grande (ao contrário de CERNE e Villa
+ * Serena, que são foto-centrados) — elementos "doodle" de ingredientes
+ * flutuando em ângulos, cartões rotacionados na seção de processo.
+ *
+ * NOTA DE PRODUÇÃO — sem fotografia real nesta versão: tentamos gerar
+ * fotos de prato/ambiente pelas ferramentas de imagem/3D equipadas nesta
+ * sessão (Higgsfield) e todas pediram crédito/plano pago no momento. Em
+ * vez de usar foto de banco genérica sem contexto (o que a NEURALABS evita
+ * por padrão), a solução foi virar a limitação em direção de design: o
+ * Arquétipo D já pede "hero tipográfico, sem foto ou foto pequena" — a
+ * Ardósia inteira é construída sem depender de fotografia, usando
+ * ilustração de linha (ícones), tipografia grande e o traço de tinta como
+ * elemento visual principal. Quando a Bruna tiver fotos reais de prato
+ * (gerada por IA ou fotografada), elas entram naturalmente nos cards do
+ * cardápio via o campo "Foto" do CMS Notion (ver abaixo) — a estrutura já
+ * está pronta pra isso, sem precisar refazer layout.
+ *
+ * Identidade "Quadro de Ardósia" — nome e conceito vêm do quadro-negro de
+ * giz onde bistrôs de bairro escrevem o cardápio do dia à mão. Paleta:
+ * Ardósia (carvão quente) #26241F, Giz #F3EDE1, Terracota #C1552C,
+ * Mostarda #D9A441. Tipografia: Instrument Serif (display, itálico com
+ * personalidade de caligrafia) + Space Grotesk (sans/UI contemporânea) —
+ * nenhuma das duas usada nos três projetos anteriores (Playfair+Inter,
+ * Bodoni Moda+Plus Jakarta Sans, Fraunces+Jost).
+ *
+ * Assinatura de motion: traço de tinta/giz se revelando sob títulos e
+ * ao redor da palavra-chave do prato em destaque (components/
+ * ArdosiaInkStroke.tsx, via framer-motion `pathLength`) — item do catálogo
+ * de efeitos ainda não usado por nenhum projeto. Nada de anéis
+ * concêntricos, nada de wireframe 3D (já usados 3x e 1x respectivamente).
+ *
+ * Gatilhos de neuromarketing (duas camadas — quem janta e quem contrataria
+ * a NEURALABS pra um restaurante real costumam ser a mesma pessoa aqui, o
+ * dono, então os dois se somam): escassez diária real ("6 mesas hoje à
+ * noite", não uma agenda anual abstrata — mais crível pro contexto de
+ * bistrô), transparência de cardápio antes da decisão (ver os pratos e
+ * preços do dia sem precisar entrar), prova social casual (depoimentos de
+ * clientes recorrentes pelo primeiro nome, tom de bairro — não autoridade
+ * formal como o depoimento de arquiteto da CERNE), redução de fricção
+ * pré-reserva (FAQ curto) e a narrativa "cardápio muda toda semana", que
+ * vira ao mesmo tempo gatilho de frescor E o argumento natural de venda
+ * pro CMS via Notion (o dono atualiza o quadro sem pedir deploy).
+ *
+ * Reserva — formulário real (mesmo endpoint /api/send-email, Resend, já
+ * configurado): envia com source: 'ardosia', que troca a cópia do e-mail
+ * pro tom da casa e inclui campos de reserva (pessoas/data/horário) que a
+ * CERNE não tinha — ver ArdosiaReservaForm.tsx e a branch isArdosia em
+ * app/api/send-email/route.ts. Honeypot, rate limit e consentimento LGPD
+ * seguem o mesmo padrão já estabelecido.
+ *
+ * Cardápio editável sem código — mesmo CMS leve via Notion da CERNE
+ * (lib/notion.ts: fetchArdosiaPratos, database separada via
+ * NOTION_DATABASE_ID_ARDOSIA, mesma NOTION_API_KEY), provando que o padrão
+ * é replicável pra qualquer cliente novo — aqui aplicado ao cardápio do
+ * dia em vez de um portfólio de projetos. Sem a variável configurada, usa
+ * PRATOS_PADRAO abaixo normalmente.
+ */
+
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { Instrument_Serif, Space_Grotesk } from 'next/font/google';
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  Minus,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Leaf,
+  Wheat,
+  Grape,
+  Fish,
+  Croissant,
+  Flame,
+  Cherry,
+  Wine,
+  UtensilsCrossed,
+  Quote,
+} from 'lucide-react';
+import { ScrollReveal } from '@/components/HeroAnimations';
+import { ArdosiaReservaForm } from '@/components/ArdosiaReservaForm';
+import { ArdosiaInkStroke } from '@/components/ArdosiaInkStroke';
+
+const display = Instrument_Serif({
+  subsets: ['latin'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  variable: '--font-ardosia-serif',
+  display: 'swap',
+});
+const sans = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-ardosia-sans',
+  display: 'swap',
+});
+
+type Prato = {
+  idx: string;
+  nome: string;
+  categoria: string;
+  preco: string;
+  descricao?: string;
+  img: string;
+  destaque?: boolean;
+};
+
+// Conteúdo estático de referência — usado enquanto nenhum CMS está ligado,
+// e como fallback se a busca no Notion falhar. Ver useEffect mais abaixo,
+// com fetch em /api/ardosia-pratos.
+const PRATOS_PADRAO: Prato[] = [
+  {
+    idx: '01',
+    nome: 'Pão de Fermentação Natural',
+    categoria: 'Entrada',
+    preco: 'R$ 24',
+    descricao: 'Manteiga de ervas da horta, flor de sal.',
+    img: '',
+  },
+  {
+    idx: '02',
+    nome: 'Burrata com Tomate da Estação',
+    categoria: 'Entrada',
+    preco: 'R$ 42',
+    descricao: 'Manjericão, azeite novo, pão tostado.',
+    img: '',
+  },
+  {
+    idx: '03',
+    nome: 'Risoto de Cogumelos da Serra',
+    categoria: 'Principal',
+    preco: 'R$ 68',
+    descricao: 'Parmesão de 24 meses, manteiga noisette.',
+    img: '',
+  },
+  {
+    idx: '04',
+    nome: 'Peixe do Dia na Brasa',
+    categoria: 'Principal',
+    preco: 'R$ 76',
+    descricao: 'Legumes da feira, beurre blanc de limão-siciliano.',
+    img: '',
+    destaque: true,
+  },
+  {
+    idx: '05',
+    nome: 'Tagliatelle ao Ragù de 6 Horas',
+    categoria: 'Principal',
+    preco: 'R$ 62',
+    descricao: 'Massa fresca do dia, pecorino.',
+    img: '',
+  },
+  {
+    idx: '06',
+    nome: 'Pavê de Doce de Leite da Vó',
+    categoria: 'Sobremesa',
+    preco: 'R$ 28',
+    img: '',
+  },
+  {
+    idx: '07',
+    nome: 'Sorbet da Fruta da Estação',
+    categoria: 'Sobremesa',
+    preco: 'R$ 24',
+    img: '',
+  },
+  {
+    idx: '08',
+    nome: 'Taça de Vinho Natural',
+    categoria: 'Bebida',
+    preco: 'R$ 32',
+    descricao: 'Curadoria da casa, rótulo muda toda semana.',
+    img: '',
+  },
+];
+
+const VALORES = [
+  'PRODUTO DA ESTAÇÃO',
+  'FEIRA DE TERÇA',
+  'SEM CONGELADOS',
+  'PÃO DO DIA',
+  'VINHO NATURAL',
+  'PRODUTOR LOCAL',
+  'CARDÁPIO QUE MUDA',
+  'FEITO NA HORA',
+];
+
+const ETAPAS = [
+  {
+    hora: '05h',
+    title: 'A Feira',
+    body: 'Compra é feita cedo, direto na feira — não no distribuidor. Se não tá bom, não entra no prato.',
+    rotate: '-2deg',
+  },
+  {
+    hora: '10h',
+    title: 'O Quadro',
+    body: 'O cardápio do dia é decidido na cozinha e escrito à mão no quadro de ardósia da entrada.',
+    rotate: '1.5deg',
+  },
+  {
+    hora: '12h',
+    title: 'A Mise en Place',
+    body: 'Cada prato é montado do zero, na hora do pedido — nada fica pronto esperando no balcão.',
+    rotate: '-1deg',
+  },
+  {
+    hora: '20h',
+    title: 'A Mesa',
+    body: 'Salão pequeno, ritmo de bairro — a gente costuma lembrar do seu nome já na segunda visita.',
+    rotate: '2deg',
+  },
+] as const;
+
+const DEPOIMENTOS = [
+  {
+    quote: 'Ardósia é meu lugar de quinta-feira. Nunca sei exatamente o que vou comer, e isso é ótimo.',
+    autor: 'Marina T.',
+    tag: 'Cliente desde 2024',
+  },
+  {
+    quote: 'Reservei pra 6 pessoas em cima da hora e o time resolveu numa boa. Comida sempre impecável.',
+    autor: 'Diego R.',
+    tag: 'Cliente desde 2023',
+  },
+  {
+    quote: 'O risoto de cogumelo mudou minha semana. Já voltei três vezes só pra comer ele de novo.',
+    autor: 'Camila S.',
+    tag: 'Cliente desde 2025',
+  },
+] as const;
+
+const FAQ = [
+  {
+    q: 'Preciso reservar ou dá pra chegar sem hora marcada?',
+    a: 'Recomendamos reservar, principalmente sexta e sábado — o salão é pequeno (28 lugares) e enche rápido.',
+  },
+  {
+    q: 'O cardápio muda mesmo toda semana?',
+    a: 'Sim — decidimos com base no que chega fresco da feira, então alguns pratos somem e voltam conforme a estação.',
+  },
+  {
+    q: 'Tem opção vegetariana?',
+    a: 'Sempre pelo menos duas opções no cardápio do dia, marcadas no quadro. Avise na reserva se precisar de algo específico.',
+  },
+  {
+    q: 'Aceitam grupos grandes?',
+    a: 'Até 10 pessoas sem problema, direto pelo formulário. Acima disso, chama no WhatsApp que a gente organiza um menu fechado.',
+  },
+] as const;
+
+function categoryIcon(categoria: string) {
+  switch (categoria) {
+    case 'Entrada':
+      return Croissant;
+    case 'Principal':
+      return Flame;
+    case 'Sobremesa':
+      return Cherry;
+    case 'Bebida':
+      return Wine;
+    default:
+      return UtensilsCrossed;
+  }
+}
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return isDesktop;
+}
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return reduced;
+}
+
+/** Mesma assinatura de motion (atração magnética discreta) da CERNE/Villa
+ * Serena — reaproveitada como recurso comum, não como diferenciador. */
+function useMagnetic() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || !window.matchMedia('(hover: hover)').matches) return;
+    const els = Array.from(root.querySelectorAll<HTMLElement>('[data-magnetic]'));
+    const cleanups: (() => void)[] = [];
+    els.forEach((el) => {
+      const move = (e: MouseEvent) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * 0.15}px, ${y * 0.2}px)`;
+      };
+      const leave = () => (el.style.transform = 'translate(0,0)');
+      el.addEventListener('mousemove', move);
+      el.addEventListener('mouseleave', leave);
+      cleanups.push(() => {
+        el.removeEventListener('mousemove', move);
+        el.removeEventListener('mouseleave', leave);
+      });
+    });
+    return () => cleanups.forEach((c) => c());
+  }, []);
+  return ref;
+}
+
+function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-[#F3EDE1]/12 py-6">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-6 text-left"
+      >
+        <span className="text-[14.5px] font-medium text-[#F3EDE1] sm:text-[15.5px]">{q}</span>
+        <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-[#F3EDE1]/20 text-[#D9A441] transition-colors">
+          {open ? <Minus className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+        </span>
+      </button>
+      <div
+        className="grid transition-[grid-template-rows] duration-300 ease-out"
+        style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
+      >
+        <div className="overflow-hidden">
+          <p className="max-w-xl pt-4 text-[13px] leading-[1.85] text-[#B6AF9E]">{a}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DishCard({ prato }: { prato: Prato }) {
+  const Icon = categoryIcon(prato.categoria);
+  return (
+    <div
+      className={`relative flex w-[240px] flex-shrink-0 flex-col justify-between rounded-sm border p-5 sm:w-[270px] ${
+        prato.destaque
+          ? 'border-[#C1552C]/50 bg-[#2E2B25]'
+          : 'border-[#F3EDE1]/10 bg-[#2A2722]'
+      }`}
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at 90% 10%, rgba(217,164,65,0.06), transparent 55%)',
+      }}
+    >
+      {prato.destaque && (
+        <span className="absolute -top-3 left-5 rounded-full bg-[#C1552C] px-3 py-1 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-[#F3EDE1]">
+          Prato do chef
+        </span>
+      )}
+      <div>
+        <div className="mb-4 flex items-center justify-between">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#F3EDE1]/15 text-[#D9A441]">
+            <Icon className="h-4 w-4" />
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.16em] text-[#8A8478]">{prato.categoria}</span>
+        </div>
+        <h3
+          className="relative mb-2 text-[19px] leading-tight text-[#F3EDE1]"
+          style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+        >
+          {prato.nome}
+          {prato.destaque && (
+            <ArdosiaInkStroke
+              variant="circle"
+              color="#C1552C"
+              className="pointer-events-none absolute -left-[10%] -top-[35%] h-[170%] w-[120%]"
+              delay={0.3}
+            />
+          )}
+        </h3>
+        {prato.descricao && (
+          <p className="text-[12px] leading-[1.7] text-[#B6AF9E]">{prato.descricao}</p>
+        )}
+      </div>
+      <span
+        className="mt-5 text-[15px] text-[#D9A441]"
+        style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+      >
+        {prato.preco}
+      </span>
+    </div>
+  );
+}
+
+export default function GastronomiaDemo() {
+  const isDesktop = useIsDesktop();
+  const reducedMotion = usePrefersReducedMotion();
+  const rootRef = useMagnetic();
+  const [depoimentoIdx, setDepoimentoIdx] = useState(0);
+
+  // Cardápio editável via Notion (CMS leve — mesmo padrão da CERNE, ver
+  // lib/notion.ts). Sem NOTION_DATABASE_ID_ARDOSIA configurada, ou se a
+  // busca falhar, fica no fallback estático — a seção nunca fica vazia.
+  const [pratos, setPratos] = useState<Prato[]>(PRATOS_PADRAO);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/ardosia-pratos')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && data?.configured && Array.isArray(data.pratos) && data.pratos.length > 0) {
+          setPratos(data.pratos);
+        }
+      })
+      .catch(() => {
+        // silencioso: fica no fallback estático
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <main
+      ref={rootRef}
+      className={`relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#26241F] text-[#F3EDE1] ${display.variable} ${sans.variable}`}
+      style={{ fontFamily: 'var(--font-ardosia-sans)' }}
+    >
+      {/* Selo NEURALABS — única menção à marca dentro da demo */}
+      <div className="flex items-center justify-between gap-4 border-b border-[#F3EDE1]/10 bg-[#201E19] px-5 py-2 text-[11px] tracking-wide text-[#F3EDE1]/60 sm:px-8">
+        <span>
+          <span className="text-[#D9A441]">✦</span> Demonstração desenvolvida por{' '}
+          <span className="font-semibold text-[#F3EDE1]">NEURALABS Studio</span>
+        </span>
+        <Link href="/" className="whitespace-nowrap font-medium hover:text-[#D9A441]">
+          ← Voltar
+        </Link>
+      </div>
+
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b border-[#F3EDE1]/10 bg-[#26241F]/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-5 sm:px-8">
+          <span
+            className="text-sm uppercase tracking-[0.3em] sm:text-base"
+            style={{ fontFamily: 'var(--font-ardosia-serif)' }}
+          >
+            Ardósia
+          </span>
+          <nav className="hidden items-center gap-8 text-[12.5px] font-medium tracking-wide text-[#F3EDE1]/70 md:flex">
+            <a href="#cardapio" className="hover:text-[#D9A441]">Cardápio</a>
+            <a href="#processo" className="hover:text-[#D9A441]">Como Funciona</a>
+            <a href="#faq" className="hover:text-[#D9A441]">Perguntas</a>
+          </nav>
+          <a
+            href="#contato"
+            data-magnetic
+            className="inline-flex flex-shrink-0 items-center justify-center whitespace-nowrap rounded-sm bg-[#C1552C] px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.15em] text-[#F3EDE1] transition-colors hover:bg-[#a84523] sm:px-6 sm:py-3"
+          >
+            Reservar Mesa
+          </a>
+        </div>
+      </header>
+
+      {/* Hero — tipográfico gigante, sem foto (Arquétipo D). Doodles de
+          ingredientes em ângulos + cartão de escassez diária flutuante,
+          em vez do "cartão de vidro sobre foto" já usado 3x. */}
+      <section className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-20 pt-16 sm:px-8 sm:pt-24">
+        {isDesktop && !reducedMotion && (
+          <>
+            <Leaf
+              aria-hidden="true"
+              className="pointer-events-none absolute right-[14%] top-[8%] h-7 w-7 text-[#6B7A4E]/50"
+              style={{ transform: 'rotate(-18deg)' }}
+            />
+            <Wheat
+              aria-hidden="true"
+              className="pointer-events-none absolute right-[6%] top-[26%] h-9 w-9 text-[#D9A441]/45"
+              style={{ transform: 'rotate(14deg)' }}
+            />
+            <Grape
+              aria-hidden="true"
+              className="pointer-events-none absolute right-[22%] top-[42%] h-6 w-6 text-[#8A8478]/40"
+              style={{ transform: 'rotate(-8deg)' }}
+            />
+            <Fish
+              aria-hidden="true"
+              className="pointer-events-none absolute right-[10%] top-[58%] h-8 w-8 text-[#C1552C]/40"
+              style={{ transform: 'rotate(10deg)' }}
+            />
+          </>
+        )}
+
+        <div className="mb-8 flex items-center gap-3">
+          <span className="h-px w-9 bg-[#C1552C]" />
+          <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
+            Bistrô de Bairro · Cidade Baixa
+          </span>
+        </div>
+
+        <h1
+          className="relative mb-8 max-w-[820px] text-[46px] leading-[1.05] sm:text-[68px] md:text-[84px]"
+          style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+        >
+          O cardápio muda.
+          <br />
+          <span className="relative inline-block">
+            <em style={{ fontStyle: 'italic', color: '#D9A441' }}>O capricho, não.</em>
+            <ArdosiaInkStroke
+              variant="underline"
+              color="#C1552C"
+              className="pointer-events-none absolute -bottom-2 left-0 h-3 w-full sm:h-4"
+              delay={0.5}
+            />
+          </span>
+        </h1>
+
+        <p className="mb-10 max-w-[440px] text-[14px] leading-[1.9] text-[#B6AF9E]">
+          Sem cardápio engessado. Compramos o que tá bom na feira de terça e escrevemos no
+          quadro — se o tomate não tava bom hoje, ele não entra no prato.
+        </p>
+
+        <div className="flex flex-wrap items-center gap-6">
+          <a
+            href="#contato"
+            data-magnetic
+            className="inline-flex w-fit items-center gap-2 rounded-sm bg-[#C1552C] px-7 py-3.5 text-[11.5px] font-medium uppercase tracking-[0.15em] text-[#F3EDE1] transition-colors hover:bg-[#a84523]"
+          >
+            Reservar Mesa
+          </a>
+          <a
+            href="#cardapio"
+            className="inline-flex w-fit items-center gap-2 border-b border-[#D9A441] pb-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[#F3EDE1] hover:text-[#D9A441]"
+          >
+            Ver Cardápio de Hoje <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
+
+        {/* Cartão de escassez diária — versão bistrô do "cartão de vidro
+            com escassez" (recurso comum aos três projetos anteriores):
+            aqui rotacionado, sem blur/vidro, pra ler como um recado de
+            quadro-negro afixado, não como widget de UI. */}
+        <div
+          className="relative mt-14 inline-flex max-w-[260px] flex-col gap-1 rounded-sm border border-[#F3EDE1]/12 bg-[#2E2B25] px-5 py-4 sm:mt-16"
+          style={{ transform: isDesktop ? 'rotate(-2deg)' : undefined, boxShadow: '0 20px 40px -20px rgba(0,0,0,.5)' }}
+        >
+          <span className="text-[10px] uppercase tracking-[0.16em] text-[#D9A441]">Hoje à noite</span>
+          <span
+            className="text-[20px] leading-none text-[#F3EDE1]"
+            style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+          >
+            6 mesas disponíveis
+          </span>
+        </div>
+      </section>
+
+      {/* Faixa de valores — marquee contínuo (recurso comum, mesma
+          animação CSS já usada em CERNE/Villa Serena) */}
+      <div className="overflow-hidden border-y border-[#F3EDE1]/10 bg-[#201E19] py-3.5">
+        <div className="flex w-max animate-marquee items-center gap-10 motion-reduce:animate-none">
+          {[...VALORES, ...VALORES].map((v, i) => (
+            <span
+              key={`${v}-${i}`}
+              className="flex items-center gap-10 text-[11px] uppercase tracking-[0.2em] text-[#B6AF9E]"
+            >
+              {v}
+              <span className="text-[#C1552C]">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Cardápio de hoje — trilho de scroll horizontal (Arquétipo D) em
+          vez de grid tradicional. Puxa do Notion quando configurado. */}
+      <section id="cardapio" className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
+        <ScrollReveal>
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+            <div className="max-w-lg">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="h-px w-9 bg-[#C1552C]" />
+                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">Cardápio</span>
+              </div>
+              <h2
+                className="text-[30px] leading-[1.15] sm:text-[36px]"
+                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+              >
+                O quadro de hoje
+              </h2>
+            </div>
+            <span className="hidden text-[11px] uppercase tracking-[0.14em] text-[#8A8478] sm:inline-flex items-center gap-1.5">
+              Arraste para o lado <ArrowUpRight className="h-3 w-3 rotate-90" />
+            </span>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal>
+          <div className="scrollbar-none -mx-5 flex gap-4 overflow-x-auto px-5 pb-4 sm:-mx-8 sm:px-8">
+            {pratos.map((p) => (
+              <DishCard key={p.idx} prato={p} />
+            ))}
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* Da feira à mesa — colagem tipográfica em cartões rotacionados
+          (Arquétipo D), sem fotografia */}
+      <section id="processo" className="border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
+        <div className="mx-auto max-w-6xl">
+          <ScrollReveal>
+            <div className="mb-16 max-w-lg">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="h-px w-9 bg-[#C1552C]" />
+                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">Como Funciona</span>
+              </div>
+              <h2
+                className="text-[30px] leading-[1.15] sm:text-[36px]"
+                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+              >
+                Da feira à mesa
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {ETAPAS.map((e, i) => (
+              <ScrollReveal key={e.hora} delay={i * 0.08}>
+                <div
+                  className="h-full rounded-sm border border-[#F3EDE1]/10 bg-[#2A2722] p-6"
+                  style={{ transform: isDesktop ? `rotate(${e.rotate})` : undefined }}
+                >
+                  <span
+                    className="mb-4 block text-[26px] leading-none text-[#D9A441]"
+                    style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+                  >
+                    {e.hora}
+                  </span>
+                  <h3 className="mb-3 text-[14.5px] font-medium text-[#F3EDE1]">{e.title}</h3>
+                  <p className="text-[12.5px] leading-[1.8] text-[#B6AF9E]">{e.body}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Depoimentos — carrossel manual (Arquétipo D), tom de bairro em
+          vez de credencial formal (diferente do depoimento de arquiteto
+          da CERNE) */}
+      <section className="mx-auto max-w-3xl px-5 py-20 text-center sm:px-8 sm:py-24">
+        <ScrollReveal>
+          <Quote className="mx-auto mb-6 h-7 w-7 text-[#C1552C]" />
+          <p
+            className="mb-6 min-h-[110px] text-[20px] leading-[1.55] sm:text-[24px]"
+            style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+          >
+            &ldquo;{DEPOIMENTOS[depoimentoIdx].quote}&rdquo;
+          </p>
+          <p className="mb-8 text-[11.5px] uppercase tracking-[0.18em] text-[#D9A441]">
+            {DEPOIMENTOS[depoimentoIdx].autor} — {DEPOIMENTOS[depoimentoIdx].tag}
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <button
+              aria-label="Depoimento anterior"
+              onClick={() =>
+                setDepoimentoIdx((i) => (i - 1 + DEPOIMENTOS.length) % DEPOIMENTOS.length)
+              }
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/15 text-[#F3EDE1]/70 transition-colors hover:border-[#D9A441]/50 hover:text-[#D9A441]"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <div className="flex items-center gap-1.5">
+              {DEPOIMENTOS.map((_, i) => (
+                <button
+                  key={i}
+                  aria-label={`Ver depoimento ${i + 1}`}
+                  onClick={() => setDepoimentoIdx(i)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    i === depoimentoIdx ? 'w-5 bg-[#D9A441]' : 'w-1.5 bg-[#F3EDE1]/20'
+                  }`}
+                />
+              ))}
+            </div>
+            <button
+              aria-label="Próximo depoimento"
+              onClick={() => setDepoimentoIdx((i) => (i + 1) % DEPOIMENTOS.length)}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/15 text-[#F3EDE1]/70 transition-colors hover:border-[#D9A441]/50 hover:text-[#D9A441]"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* FAQ — redução de fricção antes do CTA final */}
+      <section id="faq" className="border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
+        <div className="mx-auto max-w-3xl">
+          <ScrollReveal>
+            <div className="mb-12 max-w-lg">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="h-px w-9 bg-[#C1552C]" />
+                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">Perguntas Rápidas</span>
+              </div>
+              <h2
+                className="text-[30px] leading-[1.15] sm:text-[36px]"
+                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+              >
+                Antes de reservar
+              </h2>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal>
+            <div>
+              {FAQ.map((f, i) => (
+                <FaqItem key={f.q} q={f.q} a={f.a} defaultOpen={i === 0} />
+              ))}
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Contato / Reserva — CTA assimétrico (Arquétipo D): palavra gigante
+          de fundo + formulário real ao lado, em vez do formulário
+          centralizado da CERNE */}
+      <section id="contato" className="relative mx-auto max-w-6xl overflow-hidden px-5 py-20 sm:px-8 sm:py-24">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-4 top-0 select-none text-[120px] font-normal italic leading-none text-[#F3EDE1]/[0.04] sm:text-[220px]"
+          style={{ fontFamily: 'var(--font-ardosia-serif)' }}
+        >
+          Ardósia
+        </span>
+
+        <div className="relative grid gap-14 md:grid-cols-[0.85fr_1.15fr] md:gap-10">
+          <ScrollReveal>
+            <div>
+              <span className="mb-4 block text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
+                Reserva
+              </span>
+              <h2
+                className="mb-5 text-[32px] leading-[1.15] sm:text-[40px]"
+                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+              >
+                Bora marcar mesa?
+              </h2>
+              <p className="max-w-sm text-[13.5px] leading-[1.9] text-[#B6AF9E]">
+                Terça a sábado, 19h às 23h30. Salão pequeno — confirmamos cada reserva
+                pessoalmente, por telefone ou e-mail.
+              </p>
+              <p className="mt-6 text-[11px] uppercase tracking-[0.16em] text-[#8A8478]">
+                Cidade Baixa · Porto Alegre
+              </p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <ArdosiaReservaForm />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-[#F3EDE1]/10 px-5 py-10 sm:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center">
+          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11.5px] font-medium tracking-wide text-[#F3EDE1]/60">
+            <a href="#cardapio" className="hover:text-[#D9A441]">Cardápio</a>
+            <a href="#processo" className="hover:text-[#D9A441]">Como Funciona</a>
+            <a href="#faq" className="hover:text-[#D9A441]">Perguntas</a>
+          </nav>
+          <p className="text-[11px] text-[#F3EDE1]/35">
+            Projeto fictício de demonstração criado por{' '}
+            <Link href="/" className="underline hover:text-[#D9A441]">
+              NEURALABS
+            </Link>
+            . Marca, cardápio e depoimentos são ilustrativos.
+          </p>
+        </div>
+      </footer>
+
+      {/* Botão flutuante de voltar */}
+      <Link
+        href="/"
+        className="fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 rounded-full border border-[#F3EDE1]/15 bg-[#26241F]/95 px-4 py-3 text-xs font-semibold text-[#F3EDE1] shadow-lg backdrop-blur-md transition-colors hover:bg-[#2E2B25] sm:px-5 sm:text-sm"
+      >
+        <ArrowLeft className="h-4 w-4 flex-shrink-0" />
+        <span className="hidden sm:inline">Voltar para NEURALABS Studio</span>
+        <span className="sm:hidden">NEURALABS</span>
+      </Link>
+    </main>
+  );
+}

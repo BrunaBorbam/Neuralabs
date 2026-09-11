@@ -30,7 +30,7 @@ const VERTICAL_MEDIA = [
     icon: UtensilsCrossed,
     image: '/images/verticals/gastronomia.jpg',
     video: '/videos/verticals/gastronomia',
-    demoHref: undefined,
+    demoHref: '/demo/gastronomia',
   },
   {
     icon: ShoppingBag,

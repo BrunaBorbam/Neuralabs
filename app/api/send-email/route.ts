@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name, email, company, phone, website, message, source } = body;
+    const { name, email, company, phone, website, message, source, people, date, time } = body;
 
     // Honeypot: a field real visitors never see or fill (hidden off-screen
     // in ContactForm.tsx / CerneContactForm.tsx), but most bots fill every
@@ -103,10 +103,44 @@ export async function POST(req: NextRequest) {
     const safePhone = phone ? escapeHtml(phone) : '';
     const safeMessage = message ? escapeHtml(message).replace(/\n/g, '<br>') : '';
     const isCerne = source === 'cerne';
+    const isArdosia = source === 'ardosia';
+    const safePeople = people ? escapeHtml(people) : '';
+    const safeDate = date ? escapeHtml(date) : '';
+    const safeTime = time ? escapeHtml(time) : '';
+    const reservaLine =
+      safePeople || safeDate || safeTime
+        ? [safePeople && `${safePeople} pessoa(s)`, safeDate, safeTime].filter(Boolean).join(' · ')
+        : '';
 
     // Send email to user
     const userEmailResult = await resend.emails.send(
-      isCerne
+      isArdosia
+        ? {
+            from: 'Ardósia <onboarding@resend.dev>',
+            to: email,
+            subject: 'Recebemos seu pedido de reserva — Ardósia',
+            html: `
+              <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; background: #26241F; color: #F3EDE1;">
+                <h1 style="font-weight: 400; font-size: 24px; margin-bottom: 16px; color: #F3EDE1;">Obrigado, ${safeName}.</h1>
+                <p style="font-size: 15px; line-height: 1.8; margin-bottom: 20px; color: #D9D2C4;">
+                  Recebemos seu pedido de reserva. Confirmamos por telefone ou email em até
+                  algumas horas — nosso salão é pequeno, então gostamos de confirmar cada mesa
+                  pessoalmente.
+                </p>
+                <div style="background: #322F28; padding: 20px; border-radius: 2px; margin-bottom: 20px; border: 1px solid rgba(243,237,225,0.12);">
+                  <p style="margin: 0 0 8px;"><strong>Nome:</strong> ${safeName}</p>
+                  <p style="margin: 0 0 8px;"><strong>Email:</strong> ${safeEmail}</p>
+                  ${safePhone ? `<p style="margin: 0 0 8px;"><strong>Telefone:</strong> ${safePhone}</p>` : ''}
+                  ${reservaLine ? `<p style="margin: 0 0 8px;"><strong>Reserva:</strong> ${reservaLine}</p>` : ''}
+                  ${safeMessage ? `<p style="margin: 8px 0 0;"><strong>Observações:</strong><br>${safeMessage}</p>` : ''}
+                </div>
+                <p style="font-size: 12px; color: rgba(243,237,225,0.55); margin-top: 32px;">
+                  Demonstração de portfólio desenvolvida por NEURALABS Studio.
+                </p>
+              </div>
+            `,
+          }
+        : isCerne
         ? {
             from: 'CERNE <onboarding@resend.dev>',
             to: email,
@@ -179,16 +213,25 @@ export async function POST(req: NextRequest) {
     // Send notification to admin
     try {
       await resend.emails.send({
-        from: isCerne ? 'CERNE Demo <onboarding@resend.dev>' : 'Neuralabs <onboarding@resend.dev>',
+        from: isArdosia
+          ? 'Ardósia Demo <onboarding@resend.dev>'
+          : isCerne
+          ? 'CERNE Demo <onboarding@resend.dev>'
+          : 'Neuralabs <onboarding@resend.dev>',
         to: process.env.CONTACT_EMAIL || 'admin@neuralabs.online',
-        subject: isCerne ? `Novo contato via demo CERNE: ${safeName}` : `🧠 Novo Lead: ${safeName}`,
+        subject: isArdosia
+          ? `Nova reserva via demo Ardósia: ${safeName}`
+          : isCerne
+          ? `Novo contato via demo CERNE: ${safeName}`
+          : `🧠 Novo Lead: ${safeName}`,
         html: `
           <div style="font-family: Arial, sans-serif;">
-            <h2>${isCerne ? 'Novo contato (demo CERNE)' : 'Novo Lead Recebido'}</h2>
+            <h2>${isArdosia ? 'Nova reserva (demo Ardósia)' : isCerne ? 'Novo contato (demo CERNE)' : 'Novo Lead Recebido'}</h2>
             <p><strong>Nome:</strong> ${safeName}</p>
             <p><strong>Email:</strong> ${safeEmail}</p>
             ${safeCompany ? `<p><strong>Empresa:</strong> ${safeCompany}</p>` : ''}
             ${safePhone ? `<p><strong>WhatsApp:</strong> ${safePhone}</p>` : ''}
+            ${reservaLine ? `<p><strong>Reserva:</strong> ${reservaLine}</p>` : ''}
             ${safeMessage ? `<p><strong>Mensagem:</strong><br>${safeMessage}</p>` : ''}
             <hr>
             <p style="color: #999; font-size: 12px;">Enviado em: ${new Date().toLocaleString('pt-BR')}</p>

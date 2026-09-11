@@ -114,6 +114,64 @@ export async function fetchCerneProjetos(): Promise<CerneProjeto[] | null> {
   }
 }
 
+export type ArdosiaPrato = {
+  idx: string;
+  nome: string;
+  categoria: string;
+  preco: string;
+  descricao?: string;
+  img: string;
+  destaque?: boolean;
+};
+
+/**
+ * Mesmo padrão de fetchCerneProjetos, aplicado ao cardápio da demo
+ * Ardósia — database separada (NOTION_DATABASE_ID_ARDOSIA), mesma
+ * integração/API key. Fica claro aqui como replicar esse CMS pra
+ * qualquer cliente novo: cada um só precisa de um NOTION_DATABASE_ID_*
+ * próprio, o resto do fluxo (proxy de foto, fallback estático) é igual.
+ */
+export async function fetchArdosiaPratos(): Promise<ArdosiaPrato[] | null> {
+  if (!process.env.NOTION_API_KEY || !process.env.NOTION_DATABASE_ID_ARDOSIA) {
+    return null;
+  }
+
+  try {
+    const dataSourceId = await getDataSourceId(process.env.NOTION_DATABASE_ID_ARDOSIA);
+    if (!dataSourceId) return null;
+
+    const result = await notionFetch(`data_sources/${dataSourceId}/query`, {
+      method: 'POST',
+      body: JSON.stringify({
+        sorts: [{ property: 'Ordem', direction: 'ascending' }],
+      }),
+    });
+
+    const pratos: ArdosiaPrato[] = (result.results ?? [])
+      .filter((page: any) => page.properties?.Publicar?.checkbox !== false)
+      .map((page: any, i: number) => {
+        const p = page.properties ?? {};
+        return {
+          idx: String(i + 1).padStart(2, '0'),
+          nome: titleText(p.Nome),
+          categoria: p.Categoria?.select?.name ?? '',
+          preco: richText(p.Preço),
+          descricao: richText(p.Descrição) || undefined,
+          // Mesmo proxy de foto usado pela CERNE — genérico, funciona pra
+          // qualquer página do Notion, não só a database da CERNE.
+          img: fileUrl(p.Foto) ? `/api/cerne-photo/${page.id}` : '',
+          destaque: p.Destaque?.checkbox ?? false,
+        };
+      })
+      .filter((p: ArdosiaPrato) => p.nome && p.img);
+
+    return pratos.length > 0 ? pratos : null;
+  } catch (err) {
+    console.error('[notion] Erro ao buscar pratos da Ardósia:', err);
+    return null;
+  }
+}
+
 /** Busca a URL de foto (assinada, válida no momento) de uma página específica. */
 export async function fetchNotionPagePhotoUrl(pageId: string): Promise<string | null> {
   if (!process.env.NOTION_API_KEY) return null;
