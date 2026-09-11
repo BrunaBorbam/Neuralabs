@@ -130,12 +130,17 @@ item sai da lista depois de usado.
 - [x] Efeito de "revelar tinta"/brush stroke SVG animado no traço de um
   título — **usado 1x** (Ardósia: traço de giz/tinta sob títulos e ao
   redor do prato do chef, via framer-motion `pathLength`).
-- [ ] "Renderização em tempo real" via CSS 3D puro (`perspective` +
+- [x] "Renderização em tempo real" via CSS 3D puro (`perspective` +
   `transform-style: preserve-3d`, sem WebGL) — objeto girando ao vivo no
   Hero. Referência salva em `docs/referencia-31-efeitos-animacao.md` e
-  `docs/references/31-efeitos-animacao.html` (efeito #1 do catálogo). Bruna
-  pediu esse efeito pra Ardósia em set/2026 — ainda não implementado,
-  aguardando confirmação de qual objeto usar.
+  `docs/references/31-efeitos-animacao.html` (efeito #1 do catálogo).
+  **Usado 1x** (Ardósia, set/2026): cubo de ardósia com ícone/palavra a
+  giz em cada face (`SlateCube`, `app/demo/gastronomia/page.tsx`),
+  girando devagar e contínuo no canto do Hero. Elemento decorativo
+  secundário, complementar à assinatura principal da Ardósia (traço de
+  tinta/giz) — não conta como uma segunda assinatura do projeto, mas o
+  efeito em si sai da lista pra próximos projetos não repetirem a
+  técnica como *a* assinatura deles.
 
 O "cartão de vidro flutuante com borda iluminada" (usado nos 3 projetos
 até aqui) também deve ser tratado como recurso comum, não assinatura —

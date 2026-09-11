@@ -208,6 +208,11 @@ const config: Config = {
         // geração de vídeo por IA disponível nesta conta): zoom/pan lento
         // sobre a foto estática, não um loop de vídeo real.
         'ken-burns': 'ken-burns 22s ease-in-out infinite alternate',
+
+        // Ardósia (Bistrô Autoral) — cubo de ardósia girando em CSS 3D
+        // puro (perspective + preserve-3d + rotateY), efeito "renderização
+        // em tempo real" do catálogo (ver docs/IDENTIDADES-E-EFEITOS.md).
+        'slate-spin': 'slate-spin 26s linear infinite',
       },
 
       keyframes: {
@@ -247,6 +252,13 @@ const config: Config = {
         'ken-burns': {
           '0%': { transform: 'scale(1) translate3d(0,0,0)' },
           '100%': { transform: 'scale(1.08) translate3d(-1%,-1.5%,0)' },
+        },
+
+        // Ardósia (Bistrô Autoral) — tilt fixo em X, spin contínuo em Y
+        // (0deg e 360deg são o mesmo ângulo, então o loop não tem salto).
+        'slate-spin': {
+          '0%': { transform: 'rotateX(-16deg) rotateY(0deg)' },
+          '100%': { transform: 'rotateX(-16deg) rotateY(360deg)' },
         },
       },
 

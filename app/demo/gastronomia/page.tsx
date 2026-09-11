@@ -578,6 +578,68 @@ function IngredientOrbit() {
 }
 
 /**
+ * Cubo de ardósia girando em CSS 3D puro — `perspective` + `preserve-3d`
+ * + `rotateY` num loop infinito, sem WebGL/react-three-fiber. É o efeito
+ * #1 do catálogo ("renderização em tempo real", ver docs/
+ * referencia-31-efeitos-animacao.md e docs/references/
+ * 31-efeitos-animacao.html) — pedido pela Bruna em set/2026 (ver
+ * docs/IDENTIDADES-E-EFEITOS.md). Cada face é um quadrado de ardósia com
+ * ícone/palavra a giz, mesmo vocabulário do IngredientOrbit acima.
+ * Desktop-only (decorativo); com `prefers-reduced-motion`, para de girar
+ * e fica num ângulo fixo em vez de animar.
+ */
+const CUBE_SIZE = 104;
+const CUBE_FACES: { key: string; transform: string; Icon?: typeof Leaf; label: string }[] = [
+  { key: 'front', transform: `translateZ(${CUBE_SIZE / 2}px)`, Icon: UtensilsCrossed, label: 'Prato do dia' },
+  { key: 'right', transform: `rotateY(90deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Wheat, label: 'Pão do dia' },
+  { key: 'back', transform: `rotateY(180deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Wine, label: 'Vinho natural' },
+  { key: 'left', transform: `rotateY(-90deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Flame, label: 'Na brasa' },
+  { key: 'top', transform: `rotateX(90deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Leaf, label: 'Da feira' },
+  { key: 'bottom', transform: `rotateX(-90deg) translateZ(${CUBE_SIZE / 2}px)`, label: 'Feito à mão' },
+];
+
+function SlateCube({ reducedMotion }: { reducedMotion: boolean }) {
+  return (
+    <div aria-hidden="true" className="pointer-events-none" style={{ perspective: 560 }}>
+      <div
+        className={reducedMotion ? '' : 'animate-slate-spin'}
+        style={{
+          width: CUBE_SIZE,
+          height: CUBE_SIZE,
+          position: 'relative',
+          transformStyle: 'preserve-3d',
+          transform: reducedMotion ? 'rotateX(-16deg) rotateY(28deg)' : undefined,
+        }}
+      >
+        {CUBE_FACES.map(({ key, transform, Icon, label }) => (
+          <div
+            key={key}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 border border-dashed border-[#F3EDE1]/25 bg-[#201E19]"
+            style={{ transform }}
+          >
+            {Icon ? (
+              <>
+                <Icon className="h-4 w-4 text-[#D9A441]/80" />
+                <span className="px-2 text-center text-[7.5px] uppercase leading-tight tracking-[0.12em] text-[#B6AF9E]">
+                  {label}
+                </span>
+              </>
+            ) : (
+              <span
+                className="px-2 text-center text-[13px] italic leading-tight text-[#F3EDE1]/85"
+                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+              >
+                {label}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
  * Ícone decorativo flutuando, reaproveitado em várias seções além do
  * Hero — o "fio visual" que amarra a página inteira, pedido pela Bruna
  * depois de ver uma referência (site de café que espalha grãos/respingos
@@ -670,7 +732,7 @@ function DishCard({ prato }: { prato: Prato }) {
             style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
           >
             {prato.nome}
-            {prato.destaque && !hasPhoto && (
+            {prato.destaque && (
               <ArdosiaInkStroke
                 variant="circle"
                 color="#C1552C"
@@ -868,6 +930,11 @@ export default function GastronomiaDemo() {
           className="relative mt-14 inline-flex max-w-[260px] flex-col gap-1 rounded-sm border border-[#F3EDE1]/12 bg-[#2E2B25] px-5 py-4 sm:mt-16"
           style={{ transform: isDesktop ? 'rotate(-2deg)' : undefined, boxShadow: '0 20px 40px -20px rgba(0,0,0,.5)' }}
         >
+          {isDesktop && (
+            <div className="absolute -bottom-10 -left-14 -z-10 hidden sm:block">
+              <SlateCube reducedMotion={reducedMotion} />
+            </div>
+          )}
           <span className="text-[10px] uppercase tracking-[0.16em] text-[#D9A441]">Hoje à noite</span>
           <span
             className="text-[20px] leading-none text-[#F3EDE1]"
