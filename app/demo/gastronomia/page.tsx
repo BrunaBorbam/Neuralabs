@@ -398,6 +398,70 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
   );
 }
 
+/**
+ * Emblema orbital do Hero — ingredientes flutuando em órbita lenta ao
+ * redor de um emblema central. Substitui os doodles estáticos antigos
+ * (folha/trigo/uva/peixe parados em ângulos fixos) e dá ao Hero o
+ * "momento visual" que faltava, sem depender de foto real nenhuma.
+ *
+ * Referência trazida pela Bruna: um vídeo de feed do Pinterest mostrando
+ * um mockup de celular com objetos 3D flutuando ao redor da tela
+ * ("Flawless design. Frictionless sales.", Ouma Digital). Aqui a técnica
+ * é reaproduzida em CSS/framer-motion puro (sem WebGL/3D real — mantém a
+ * regra da Ardósia de nunca reusar wireframe 3D nem anéis concêntricos
+ * reagindo ao mouse): cada ingrediente vive num wrapper que gira ao
+ * redor do centro, com um segundo wrapper interno girando na direção
+ * oposta na mesma velocidade, then o ícone nunca fica de cabeça pra
+ * baixo — só translada em órbita.
+ */
+const ORBIT_ITEMS = [
+  { Icon: Leaf, color: '#6B7A4E', angle: 0, size: 26 },
+  { Icon: Wheat, color: '#D9A441', angle: 90, size: 32 },
+  { Icon: Grape, color: '#8A8478', angle: 180, size: 22 },
+  { Icon: Fish, color: '#C1552C', angle: 270, size: 28 },
+] as const;
+
+function IngredientOrbit() {
+  const duration = 46;
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none relative h-[280px] w-[280px]"
+    >
+      {/* Emblema central — o "selo" do quadro de ardósia */}
+      <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#F3EDE1]/15 bg-[#2A2722]/90 backdrop-blur-sm">
+        <UtensilsCrossed className="h-6 w-6 text-[#D9A441]/75" />
+        <ArdosiaInkStroke
+          variant="circle"
+          color="#C1552C"
+          className="pointer-events-none absolute -inset-3 opacity-70"
+        />
+      </div>
+
+      {ORBIT_ITEMS.map(({ Icon, color, angle, size }, i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0"
+          style={{ originX: 0.5, originY: 0.5 }}
+          initial={{ rotate: angle }}
+          animate={{ rotate: angle + 360 }}
+          transition={{ duration, repeat: Infinity, ease: 'linear' }}
+        >
+          <div className="absolute left-1/2 top-0 -translate-x-1/2">
+            <motion.div
+              initial={{ rotate: -angle }}
+              animate={{ rotate: -angle - 360 }}
+              transition={{ duration, repeat: Infinity, ease: 'linear' }}
+            >
+              <Icon style={{ width: size, height: size, color, opacity: 0.55 }} />
+            </motion.div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 function DishCard({ prato }: { prato: Prato }) {
   const Icon = categoryIcon(prato.categoria);
   return (
@@ -520,33 +584,17 @@ export default function GastronomiaDemo() {
         </div>
       </header>
 
-      {/* Hero — tipográfico gigante, sem foto (Arquétipo D). Doodles de
-          ingredientes em ângulos + cartão de escassez diária flutuante,
-          em vez do "cartão de vidro sobre foto" já usado 3x. */}
+      {/* Hero — tipográfico gigante, sem foto (Arquétipo D). Emblema
+          orbital de ingredientes (ver IngredientOrbit acima — órbita
+          lenta em CSS/framer-motion, inspirada num efeito de objetos
+          flutuando que a Bruna trouxe de referência) + cartão de
+          escassez diária flutuante, em vez do "cartão de vidro sobre
+          foto" já usado 3x. */}
       <section className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-20 pt-16 sm:px-8 sm:pt-24">
         {isDesktop && !reducedMotion && (
-          <>
-            <Leaf
-              aria-hidden="true"
-              className="pointer-events-none absolute right-[14%] top-[8%] h-7 w-7 text-[#6B7A4E]/50"
-              style={{ transform: 'rotate(-18deg)' }}
-            />
-            <Wheat
-              aria-hidden="true"
-              className="pointer-events-none absolute right-[6%] top-[26%] h-9 w-9 text-[#D9A441]/45"
-              style={{ transform: 'rotate(14deg)' }}
-            />
-            <Grape
-              aria-hidden="true"
-              className="pointer-events-none absolute right-[22%] top-[42%] h-6 w-6 text-[#8A8478]/40"
-              style={{ transform: 'rotate(-8deg)' }}
-            />
-            <Fish
-              aria-hidden="true"
-              className="pointer-events-none absolute right-[10%] top-[58%] h-8 w-8 text-[#C1552C]/40"
-              style={{ transform: 'rotate(10deg)' }}
-            />
-          </>
+          <div className="pointer-events-none absolute right-[2%] top-[2%]">
+            <IngredientOrbit />
+          </div>
         )}
 
         <div className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
