@@ -61,6 +61,14 @@
  * monta em desktop, atrás do mesmo hook useIsDesktop usado no restante do
  * site.
  *
+ * 3D — v3: o wireframe da cadeira morava direto em cima do vídeo inteiro
+ * (absolute inset-0 no container do Hero) e caía bem na parte mais "cheia"
+ * da cena (mão + apara de madeira) — lia como sujeira/glitch, não design.
+ * Agora vive num cartão próprio, menor, no canto superior direito
+ * (simétrico ao card "Agenda 2026" no canto inferior esquerdo), com o
+ * mesmo tratamento de vidro/blur — a cadeira fica legível como peça de
+ * design em vez de disputar espaço com o vídeo.
+ *
  * Contato — formulário real (não só o botão de WhatsApp da v1): usa o
  * mesmo endpoint /api/send-email (Resend) do site principal da NEURALABS,
  * já configurado com RESEND_API_KEY/CONTACT_EMAIL na Vercel — sem setup
@@ -528,9 +536,26 @@ export default function MarcenariaDemo() {
               </div>
             )}
           </div>
-          {/* Cadeira em wireframe 3D — desktop only, atrás da mesma
-              gate de useIsDesktop usada no site principal */}
-          {isDesktop && !reducedMotion && <CerneScene3D />}
+          {/* Cadeira em wireframe 3D — desktop only, atrás da mesma gate de
+              useIsDesktop usada no site principal. v3: antes cobria o vídeo
+              inteiro (absolute inset-0 direto no container do Hero) e ficava
+              exatamente em cima da parte mais "cheia" do vídeo (mão + apara
+              de madeira) — lendo como sujeira/glitch, não como elemento de
+              design. Agora mora num cartão próprio, menor, no canto oposto
+              ao "Agenda 2026", com o mesmo tratamento visual (vidro/blur) —
+              a Canvas do R3F preenche esse cartão (via inset-0 relativo a
+              ele) em vez do Hero inteiro, então a escala do modelo já se
+              ajusta sozinha (ver viewport.width em CerneScene3D.tsx). */}
+          {isDesktop && !reducedMotion && (
+            <div className="absolute right-6 top-6 h-[180px] w-[180px] sm:right-8 sm:top-8 sm:h-[210px] sm:w-[210px]">
+              <div
+                className="relative h-full w-full overflow-hidden rounded-sm border border-[#2A2C22]/10 bg-[#F5F4EE]/85 backdrop-blur-xl"
+                style={{ boxShadow: '0 24px 50px -24px rgba(42,44,34,.35)' }}
+              >
+                <CerneScene3D />
+              </div>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#F5F4EE]/20 via-transparent to-transparent md:bg-gradient-to-l md:from-transparent md:via-transparent md:to-[#F5F4EE]/10" />
 
           {/* Cartão de vidro editorial — assinatura de motion da CERNE,

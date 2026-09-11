@@ -98,9 +98,9 @@ export const CerneScene3D = () => {
   }, []);
 
   return (
-    <div ref={wrapperRef} aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-[0.6]">
+    <div ref={wrapperRef} aria-hidden="true" className="absolute inset-0 pointer-events-none opacity-90">
       <Canvas
-        camera={{ position: [0, 0, 4.2], fov: 40 }}
+        camera={{ position: [0, 0, 4.6], fov: 40 }}
         gl={{ alpha: true, antialias: true }}
         dpr={[1, 1.5]}
         frameloop={isVisible ? 'always' : 'never'}
