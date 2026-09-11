@@ -49,6 +49,12 @@
  * no scroll (referência trazida pela Bruna: mel escorrendo entre blocos
  * num site de apicultura — aqui reinterpretado só na técnica, com o
  * material/cor da própria identidade Ardósia, nunca a cor de mel).
+ * Os mesmos ingredientes do emblema orbital do Hero também reaparecem,
+ * discretos e flutuando (`FloatingDoodle`, reusa a keyframe `animate-float`
+ * já existente em tailwind.config.ts), em #processo, depoimentos e
+ * #contato — o "fio visual" que amarra a página inteira, pedido pela
+ * Bruna depois de ver um site de café que espalha grãos por quase toda
+ * seção.
  *
  * Gatilhos de neuromarketing (duas camadas — quem janta e quem contrataria
  * a NEURALABS pra um restaurante real costumam ser a mesma pessoa aqui, o
@@ -462,6 +468,39 @@ function IngredientOrbit() {
   );
 }
 
+/**
+ * Ícone decorativo flutuando, reaproveitado em várias seções além do
+ * Hero — o "fio visual" que amarra a página inteira, pedido pela Bruna
+ * depois de ver uma referência (site de café que espalha grãos/respingos
+ * de café em quase toda seção). Aqui: os mesmos ícones de ingrediente já
+ * usados no emblema orbital do Hero, bem discretos (opacidade baixa),
+ * com a animação `animate-float` que já existe em tailwind.config.ts
+ * (usada em outros projetos NEURALABS) — sem criar nenhum efeito novo,
+ * só repetindo o vocabulário visual da Ardósia pelo scroll inteiro.
+ * Desktop-only, como todo decorativo do projeto.
+ */
+function FloatingDoodle({
+  Icon,
+  color,
+  className,
+  size = 26,
+  delay = 0,
+}: {
+  Icon: typeof Leaf;
+  color: string;
+  className: string;
+  size?: number;
+  delay?: number;
+}) {
+  return (
+    <Icon
+      aria-hidden="true"
+      className={`pointer-events-none absolute hidden animate-float opacity-[0.16] motion-reduce:animate-none md:block ${className}`}
+      style={{ width: size, height: size, color, animationDelay: `${delay}s` }}
+    />
+  );
+}
+
 function DishCard({ prato }: { prato: Prato }) {
   const Icon = categoryIcon(prato.categoria);
   return (
@@ -723,7 +762,9 @@ export default function GastronomiaDemo() {
 
       {/* Da feira à mesa — colagem tipográfica em cartões rotacionados
           (Arquétipo D), sem fotografia */}
-      <section id="processo" className="border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
+      <section id="processo" className="relative overflow-hidden border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
+        <FloatingDoodle Icon={Cherry} color="#C1552C" className="right-[8%] top-[10%]" size={30} />
+        <FloatingDoodle Icon={Wheat} color="#D9A441" className="bottom-[14%] left-[4%]" size={24} delay={1.2} />
         <div className="mx-auto max-w-6xl">
           <ScrollReveal>
             <div className="mb-16 max-w-lg">
@@ -813,7 +854,8 @@ export default function GastronomiaDemo() {
       </section>
 
       {/* FAQ — redução de fricção antes do CTA final */}
-      <section id="faq" className="border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
+      <section id="faq" className="relative overflow-hidden border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
+        <FloatingDoodle Icon={Croissant} color="#D9A441" className="left-[6%] top-[8%]" size={26} delay={0.6} />
         <div className="mx-auto max-w-3xl">
           <ScrollReveal>
             <div className="mb-12 max-w-lg">
@@ -843,6 +885,8 @@ export default function GastronomiaDemo() {
           de fundo + formulário real ao lado, em vez do formulário
           centralizado da CERNE */}
       <section id="contato" className="relative mx-auto max-w-6xl overflow-hidden px-5 py-20 sm:px-8 sm:py-24">
+        <FloatingDoodle Icon={Grape} color="#8A8478" className="right-[10%] top-[6%]" size={26} delay={1.8} />
+        <FloatingDoodle Icon={Wine} color="#C1552C" className="bottom-[12%] left-[3%]" size={24} delay={0.3} />
         <span
           aria-hidden="true"
           className="pointer-events-none absolute -left-4 top-0 select-none text-[120px] font-normal italic leading-none text-[#F3EDE1]/[0.04] sm:text-[220px]"
