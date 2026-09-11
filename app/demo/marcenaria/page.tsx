@@ -71,6 +71,18 @@
  * checkbox de consentimento LGPD obrigatório com link pra /privacy — ver
  * components/CerneContactForm.tsx. Pensado como o padrão de referência
  * pra reaproveitar em formulários de clientes reais.
+ *
+ * Portfólio editável sem código — CMS leve via Notion (opcional, ver
+ * docs/cerne-cms-notion.md pro passo a passo): sem NOTION_API_KEY/
+ * NOTION_DATABASE_ID configuradas, o portfólio usa PROJETOS_PADRAO abaixo
+ * normalmente. Configurando, o useEffect logo no início do componente
+ * busca em /api/cerne-projects (lib/notion.ts) e troca pelo conteúdo que
+ * o cliente mantém numa database do Notion — sem precisar de novo deploy
+ * a cada alteração. As fotos passam por um proxy próprio
+ * (/api/cerne-photo/[pageId]) em vez de expor a URL assinada do Notion
+ * (que expira em ~1h) direto no HTML. Pensado como o padrão de
+ * referência pra dar autonomia de conteúdo a clientes reais sem abrir
+ * mão do layout/motion/3D controlados por código.
  */
 
 import { useEffect, useRef, useState } from 'react';
@@ -117,7 +129,11 @@ type Projeto = {
   featured?: boolean;
 };
 
-const PROJETOS: Projeto[] = [
+// Conteúdo estático de referência — usado direto enquanto nenhum CMS está
+// ligado, e como fallback se a busca no Notion falhar (ver useEffect mais
+// abaixo, com fetch em /api/cerne-projects). Nunca deixa a seção de
+// portfólio vazia por causa de configuração pendente ou fora do ar.
+const PROJETOS_PADRAO: Projeto[] = [
   {
     idx: '01',
     nome: 'Biblioteca em Nogueira',
@@ -369,6 +385,30 @@ export default function MarcenariaDemo() {
   const heroParallaxRef = useParallax(0.08, isDesktop && !reducedMotion);
   const bannerParallaxRef = useParallax(0.05, isDesktop && !reducedMotion);
   const rootRef = useMagnetic();
+
+  // Portfólio editável via Notion (CMS leve — ver lib/notion.ts e
+  // docs/cerne-cms-notion.md): busca em /api/cerne-projects ao montar e,
+  // só se vier configurado e com conteúdo, troca o array estático pelo
+  // que o cliente mantém no Notion. Qualquer falha (CMS não configurado,
+  // fora do ar, resposta vazia) mantém PROJETOS_PADRAO — a seção de
+  // portfólio nunca fica vazia nem quebra por causa disso.
+  const [projetos, setProjetos] = useState<Projeto[]>(PROJETOS_PADRAO);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/cerne-projects')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && data?.configured && Array.isArray(data.projetos) && data.projetos.length > 0) {
+          setProjetos(data.projetos);
+        }
+      })
+      .catch(() => {
+        // silencioso: fica no fallback estático
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <main
@@ -653,7 +693,7 @@ export default function MarcenariaDemo() {
           </ScrollReveal>
 
           {/* Case em destaque */}
-          {PROJETOS.filter((p) => p.featured).map((p) => (
+          {projetos.filter((p) => p.featured).map((p) => (
             <ScrollReveal key={p.idx}>
               <div className="mb-20 grid gap-10 md:grid-cols-2 md:gap-4">
                 <div className="group relative aspect-[4/5] overflow-hidden sm:rounded-sm md:aspect-auto">
@@ -707,7 +747,7 @@ export default function MarcenariaDemo() {
 
           {/* Grid dos demais projetos */}
           <div className="grid gap-x-8 gap-y-16 sm:grid-cols-3">
-            {PROJETOS.filter((p) => !p.featured).map((p, i) => (
+            {projetos.filter((p) => !p.featured).map((p, i) => (
               <ScrollReveal key={p.idx} delay={i * 0.06}>
                 <div className="group">
                   <div className="relative mb-5 aspect-[4/5] overflow-hidden sm:rounded-sm">
