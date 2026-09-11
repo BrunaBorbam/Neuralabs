@@ -925,23 +925,28 @@ export default function GastronomiaDemo() {
         {/* Cartão de escassez diária — versão bistrô do "cartão de vidro
             com escassez" (recurso comum aos três projetos anteriores):
             aqui rotacionado, sem blur/vidro, pra ler como um recado de
-            quadro-negro afixado, não como widget de UI. */}
-        <div
-          className="relative mt-14 inline-flex max-w-[260px] flex-col gap-1 rounded-sm border border-[#F3EDE1]/12 bg-[#2E2B25] px-5 py-4 sm:mt-16"
-          style={{ transform: isDesktop ? 'rotate(-2deg)' : undefined, boxShadow: '0 20px 40px -20px rgba(0,0,0,.5)' }}
-        >
+            quadro-negro afixado, não como widget de UI. Cubo de ardósia
+            (SlateCube) ao lado, lado a lado em flex — não atrás/sobre o
+            cartão, pra não brigar por espaço nem ser encoberto por ele
+            ou pelo widget de chat fixo no canto da tela. */}
+        <div className="mt-14 flex flex-wrap items-end gap-6 sm:mt-16">
           {isDesktop && (
-            <div className="absolute -bottom-10 -left-14 -z-10 hidden sm:block">
+            <div className="hidden pb-1 sm:block">
               <SlateCube reducedMotion={reducedMotion} />
             </div>
           )}
-          <span className="text-[10px] uppercase tracking-[0.16em] text-[#D9A441]">Hoje à noite</span>
-          <span
-            className="text-[20px] leading-none text-[#F3EDE1]"
-            style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+          <div
+            className="inline-flex max-w-[260px] flex-col gap-1 rounded-sm border border-[#F3EDE1]/12 bg-[#2E2B25] px-5 py-4"
+            style={{ transform: isDesktop ? 'rotate(-2deg)' : undefined, boxShadow: '0 20px 40px -20px rgba(0,0,0,.5)' }}
           >
-            6 mesas disponíveis
-          </span>
+            <span className="text-[10px] uppercase tracking-[0.16em] text-[#D9A441]">Hoje à noite</span>
+            <span
+              className="text-[20px] leading-none text-[#F3EDE1]"
+              style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+            >
+              6 mesas disponíveis
+            </span>
+          </div>
         </div>
       </section>
 
