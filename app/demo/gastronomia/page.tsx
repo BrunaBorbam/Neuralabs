@@ -43,6 +43,12 @@
  * ArdosiaInkStroke.tsx, via framer-motion `pathLength`) — item do catálogo
  * de efeitos ainda não usado por nenhum projeto. Nada de anéis
  * concêntricos, nada de wireframe 3D (já usados 3x e 1x respectivamente).
+ * A mesma técnica também conecta seções (variante "drip", componente
+ * ArdosiaSectionDrip) — um fio de giz "escorrendo" na emenda entre
+ * #cardapio→#processo e depoimentos→#faq, dando sensação de continuidade
+ * no scroll (referência trazida pela Bruna: mel escorrendo entre blocos
+ * num site de apicultura — aqui reinterpretado só na técnica, com o
+ * material/cor da própria identidade Ardósia, nunca a cor de mel).
  *
  * Gatilhos de neuromarketing (duas camadas — quem janta e quem contrataria
  * a NEURALABS pra um restaurante real costumam ser a mesma pessoa aqui, o
@@ -95,7 +101,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { ArdosiaReservaForm } from '@/components/ArdosiaReservaForm';
-import { ArdosiaInkStroke } from '@/components/ArdosiaInkStroke';
+import { ArdosiaInkStroke, ArdosiaSectionDrip } from '@/components/ArdosiaInkStroke';
 
 const display = Instrument_Serif({
   subsets: ['latin'],
@@ -630,7 +636,7 @@ export default function GastronomiaDemo() {
 
       {/* Cardápio de hoje — trilho de scroll horizontal (Arquétipo D) em
           vez de grid tradicional. Puxa do Notion quando configurado. */}
-      <section id="cardapio" className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
+      <section id="cardapio" className="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
         <ScrollReveal>
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-lg">
@@ -658,6 +664,13 @@ export default function GastronomiaDemo() {
             ))}
           </div>
         </ScrollReveal>
+
+        {/* Conector de seção — o "escorrer" que amarra o scroll (ver
+            components/ArdosiaInkStroke.tsx, variante "drip"), inspirado
+            num efeito de continuidade que a Bruna trouxe de referência
+            (mel escorrendo entre seções) — aqui reinterpretado com o
+            traço de giz/tinta que já é a assinatura da Ardósia. */}
+        <ArdosiaSectionDrip />
       </section>
 
       {/* Da feira à mesa — colagem tipográfica em cartões rotacionados
@@ -704,7 +717,7 @@ export default function GastronomiaDemo() {
       {/* Depoimentos — carrossel manual (Arquétipo D), tom de bairro em
           vez de credencial formal (diferente do depoimento de arquiteto
           da CERNE) */}
-      <section className="mx-auto max-w-3xl px-5 py-20 text-center sm:px-8 sm:py-24">
+      <section className="relative mx-auto max-w-3xl px-5 py-20 text-center sm:px-8 sm:py-24">
         <ScrollReveal>
           <Quote className="mx-auto mb-6 h-7 w-7 text-[#C1552C]" />
           <p
@@ -747,6 +760,8 @@ export default function GastronomiaDemo() {
             </button>
           </div>
         </ScrollReveal>
+
+        <ArdosiaSectionDrip />
       </section>
 
       {/* FAQ — redução de fricção antes do CTA final */}
