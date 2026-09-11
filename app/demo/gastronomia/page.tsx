@@ -17,18 +17,22 @@
  * Serena, que são foto-centrados) — elementos "doodle" de ingredientes
  * flutuando em ângulos, cartões rotacionados na seção de processo.
  *
- * NOTA DE PRODUÇÃO — sem fotografia real nesta versão: tentamos gerar
- * fotos de prato/ambiente pelas ferramentas de imagem/3D equipadas nesta
- * sessão (Higgsfield) e todas pediram crédito/plano pago no momento. Em
- * vez de usar foto de banco genérica sem contexto (o que a NEURALABS evita
- * por padrão), a solução foi virar a limitação em direção de design: o
- * Arquétipo D já pede "hero tipográfico, sem foto ou foto pequena" — a
- * Ardósia inteira é construída sem depender de fotografia, usando
- * ilustração de linha (ícones), tipografia grande e o traço de tinta como
- * elemento visual principal. Quando a Bruna tiver fotos reais de prato
- * (gerada por IA ou fotografada), elas entram naturalmente nos cards do
- * cardápio via o campo "Foto" do CMS Notion (ver abaixo) — a estrutura já
- * está pronta pra isso, sem precisar refazer layout.
+ * NOTA DE PRODUÇÃO — fotografia real integrada (set/2026): as ferramentas
+ * de imagem/3D equipadas nesta sessão (Higgsfield, Adobe) seguiram
+ * bloqueadas por crédito/plano em toda tentativa — a saída foi a Bruna
+ * gerar as fotos ela mesma via Gemini, usando os prompts prontos em
+ * docs/ardosia-prompts-gemini.md. As imagens ficam em
+ * public/images/gastronomia/ e entram: nos 4 cards do cardápio com foto
+ * (Burrata, Risoto, Peixe do Dia — prato em destaque — e Taça de Vinho,
+ * ver campo `img` em PRATOS_PADRAO/DishCard), como foto pequena rotacionada
+ * no Hero (o quadro de ardósia sendo escrito à mão — mantém o Arquétipo D,
+ * que pede "hero tipográfico, sem foto ou foto pequena", nunca full-bleed)
+ * e como fotos "pinadas" no canto dos cards de #processo ("A Feira" e "A
+ * Mesa" — reforça a leitura de colagem editorial do arquétipo). Os pratos
+ * sem foto ainda (Pão, Tagliatelle, Pavê, Sorbet) e as duas etapas do meio
+ * (O Quadro, A Mise en Place) seguem no fallback de ícone/tipografia —
+ * troca automática assim que a Bruna gerar o resto via o mesmo documento
+ * de prompts.
  *
  * Identidade "Quadro de Ardósia" — nome e conceito vêm do quadro-negro de
  * giz onde bistrôs de bairro escrevem o cardápio do dia à mão. Paleta:
@@ -92,6 +96,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { Instrument_Serif, Space_Grotesk } from 'next/font/google';
@@ -159,7 +164,7 @@ const PRATOS_PADRAO: Prato[] = [
     categoria: 'Entrada',
     preco: 'R$ 42',
     descricao: 'Manjericão, azeite novo, pão tostado.',
-    img: '',
+    img: '/images/gastronomia/burrata-tomate.jpg',
   },
   {
     idx: '03',
@@ -167,7 +172,7 @@ const PRATOS_PADRAO: Prato[] = [
     categoria: 'Principal',
     preco: 'R$ 68',
     descricao: 'Parmesão de 24 meses, manteiga noisette.',
-    img: '',
+    img: '/images/gastronomia/risoto-cogumelos.jpg',
   },
   {
     idx: '04',
@@ -175,7 +180,7 @@ const PRATOS_PADRAO: Prato[] = [
     categoria: 'Principal',
     preco: 'R$ 76',
     descricao: 'Legumes da feira, beurre blanc de limão-siciliano.',
-    img: '',
+    img: '/images/gastronomia/peixe-do-dia.jpg',
     destaque: true,
   },
   {
@@ -206,7 +211,7 @@ const PRATOS_PADRAO: Prato[] = [
     categoria: 'Bebida',
     preco: 'R$ 32',
     descricao: 'Curadoria da casa, rótulo muda toda semana.',
-    img: '',
+    img: '/images/gastronomia/vinho-natural.jpg',
   },
 ];
 
@@ -261,24 +266,28 @@ const ETAPAS = [
     title: 'A Feira',
     body: 'Compra é feita cedo, direto na feira — não no distribuidor. Se não tá bom, não entra no prato.',
     rotate: '-2deg',
+    img: '/images/gastronomia/a-feira.jpg',
   },
   {
     hora: '10h',
     title: 'O Quadro',
     body: 'O cardápio do dia é decidido na cozinha e escrito à mão no quadro de ardósia da entrada.',
     rotate: '1.5deg',
+    img: '',
   },
   {
     hora: '12h',
     title: 'A Mise en Place',
     body: 'Cada prato é montado do zero, na hora do pedido — nada fica pronto esperando no balcão.',
     rotate: '-1deg',
+    img: '',
   },
   {
     hora: '20h',
     title: 'A Mesa',
     body: 'Salão pequeno, ritmo de bairro — a gente costuma lembrar do seu nome já na segunda visita.',
     rotate: '2deg',
+    img: '/images/gastronomia/a-mesa.jpg',
   },
 ] as const;
 
@@ -511,54 +520,84 @@ function FloatingDoodle({
 
 function DishCard({ prato }: { prato: Prato }) {
   const Icon = categoryIcon(prato.categoria);
+  const hasPhoto = Boolean(prato.img);
   return (
     <div
-      className={`relative flex w-[240px] flex-shrink-0 flex-col justify-between rounded-sm border p-5 sm:w-[270px] ${
+      className={`relative flex w-[240px] flex-shrink-0 flex-col justify-between overflow-hidden rounded-sm border sm:w-[270px] ${
         prato.destaque
           ? 'border-[#C1552C]/50 bg-[#2E2B25]'
           : 'border-[#F3EDE1]/10 bg-[#2A2722]'
       }`}
-      style={{
-        backgroundImage:
-          'radial-gradient(circle at 90% 10%, rgba(217,164,65,0.06), transparent 55%)',
-      }}
+      style={
+        hasPhoto
+          ? undefined
+          : {
+              backgroundImage:
+                'radial-gradient(circle at 90% 10%, rgba(217,164,65,0.06), transparent 55%)',
+            }
+      }
     >
       {prato.destaque && (
-        <span className="absolute -top-3 left-5 rounded-full bg-[#C1552C] px-3 py-1 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-[#F3EDE1]">
+        <span className="absolute left-5 top-3 z-10 rounded-full bg-[#C1552C] px-3 py-1 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-[#F3EDE1]">
           Prato do chef
         </span>
       )}
-      <div>
-        <div className="mb-4 flex items-center justify-between">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#F3EDE1]/15 text-[#D9A441]">
-            <Icon className="h-4 w-4" />
+
+      {hasPhoto && (
+        <div className="relative h-[150px] w-full overflow-hidden sm:h-[170px]">
+          <Image
+            src={prato.img}
+            alt={prato.nome}
+            fill
+            sizes="(min-width: 640px) 270px, 240px"
+            className="object-cover"
+          />
+          <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/25 bg-[#191712]/70 text-[#D9A441] backdrop-blur-sm">
+            <Icon className="h-3.5 w-3.5" />
           </span>
-          <span className="text-[10px] uppercase tracking-[0.16em] text-[#8A8478]">{prato.categoria}</span>
         </div>
-        <h3
-          className="relative mb-2 text-[19px] leading-tight text-[#F3EDE1]"
+      )}
+
+      <div className={`flex flex-1 flex-col justify-between p-5 ${hasPhoto ? 'pt-4' : ''}`}>
+        <div>
+          {!hasPhoto && (
+            <div className="mb-4 flex items-center justify-between">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#F3EDE1]/15 text-[#D9A441]">
+                <Icon className="h-4 w-4" />
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.16em] text-[#8A8478]">{prato.categoria}</span>
+            </div>
+          )}
+          {hasPhoto && (
+            <span className="mb-2 block text-[10px] uppercase tracking-[0.16em] text-[#8A8478]">
+              {prato.categoria}
+            </span>
+          )}
+          <h3
+            className="relative mb-2 text-[19px] leading-tight text-[#F3EDE1]"
+            style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+          >
+            {prato.nome}
+            {prato.destaque && !hasPhoto && (
+              <ArdosiaInkStroke
+                variant="circle"
+                color="#C1552C"
+                className="pointer-events-none absolute -left-[10%] -top-[35%] h-[170%] w-[120%]"
+                delay={0.3}
+              />
+            )}
+          </h3>
+          {prato.descricao && (
+            <p className="text-[12px] leading-[1.7] text-[#B6AF9E]">{prato.descricao}</p>
+          )}
+        </div>
+        <span
+          className="mt-5 text-[15px] text-[#D9A441]"
           style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
         >
-          {prato.nome}
-          {prato.destaque && (
-            <ArdosiaInkStroke
-              variant="circle"
-              color="#C1552C"
-              className="pointer-events-none absolute -left-[10%] -top-[35%] h-[170%] w-[120%]"
-              delay={0.3}
-            />
-          )}
-        </h3>
-        {prato.descricao && (
-          <p className="text-[12px] leading-[1.7] text-[#B6AF9E]">{prato.descricao}</p>
-        )}
+          {prato.preco}
+        </span>
       </div>
-      <span
-        className="mt-5 text-[15px] text-[#D9A441]"
-        style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
-      >
-        {prato.preco}
-      </span>
     </div>
   );
 }
@@ -667,6 +706,31 @@ export default function GastronomiaDemo() {
           >
             <IngredientOrbit />
           </motion.div>
+        )}
+
+        {/* Foto real do Hero — o quadro de ardósia sendo escrito à mão,
+            gerada pela Bruna a partir de docs/ardosia-prompts-gemini.md.
+            Cartão de foto levemente rotacionado (moldura clara, sombra),
+            lendo como uma polaroide pinada — não full-bleed, porque o
+            Arquétipo D pede "hero tipográfico, sem foto ou foto pequena"
+            (ver docs/IDENTIDADES-E-EFEITOS.md). */}
+        {isDesktop && (
+          <div
+            className="pointer-events-none absolute right-[3%] top-[34%] hidden sm:block"
+            style={{ transform: 'rotate(-3deg)' }}
+          >
+            <div className="w-[170px] border-4 border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_24px_48px_-20px_rgba(0,0,0,0.6)] lg:w-[190px]">
+              <div className="relative aspect-[2/3] w-full overflow-hidden">
+                <Image
+                  src="/images/gastronomia/hero-quadro.jpg"
+                  alt="Quadro de ardósia sendo escrito à mão com o prato do dia"
+                  fill
+                  sizes="190px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
         )}
 
         <div className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -818,9 +882,23 @@ export default function GastronomiaDemo() {
             {ETAPAS.map((e, i) => (
               <ScrollReveal key={e.hora} delay={i * 0.08}>
                 <div
-                  className="h-full rounded-sm border border-[#F3EDE1]/10 bg-[#2A2722] p-6"
+                  className="relative h-full rounded-sm border border-[#F3EDE1]/10 bg-[#2A2722] p-6"
                   style={{ transform: isDesktop ? `rotate(${e.rotate})` : undefined }}
                 >
+                  {e.img && (
+                    <div
+                      className="pointer-events-none absolute -right-3 -top-4 h-14 w-14 overflow-hidden border-2 border-[#F3EDE1] shadow-[0_10px_22px_-10px_rgba(0,0,0,0.55)]"
+                      style={{ transform: `rotate(${i % 2 === 0 ? '6deg' : '-6deg'})` }}
+                    >
+                      <Image
+                        src={e.img}
+                        alt={e.title}
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
                   <span
                     className="mb-4 block text-[26px] leading-none text-[#D9A441]"
                     style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
