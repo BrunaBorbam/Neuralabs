@@ -453,7 +453,7 @@ export default function MarcenariaDemo() {
       </header>
 
       {/* Hero — split editorial, foto à direita + cartão de vidro com escassez */}
-      <section className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-14 sm:px-8 sm:pt-20 md:grid-cols-[1.05fr,1fr] md:gap-6 md:pb-0">
+      <section className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-14 sm:px-8 sm:pt-20 md:grid-cols-[1.05fr_1fr] md:gap-6 md:pb-0">
         <div className="flex flex-col justify-center py-6 md:py-20">
           <div className="mb-8 flex items-center gap-3">
             <span className="h-px w-9 bg-[#6B7A4E]" />

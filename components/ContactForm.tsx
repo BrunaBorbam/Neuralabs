@@ -63,7 +63,7 @@ export const ContactForm = () => {
         </ScrollReveal>
 
         <ScrollReveal>
-          <Card variant="glass" className="grid md:grid-cols-[1.2fr,1fr] gap-10">
+          <Card variant="glass" className="grid md:grid-cols-[1.2fr_1fr] gap-10">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               {/* Honeypot anti-bot: real visitors never see this field (it's
                   visually hidden, not just a small opacity trick a scraper
