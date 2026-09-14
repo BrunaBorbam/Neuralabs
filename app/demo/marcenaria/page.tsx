@@ -41,17 +41,16 @@
  * Gemini/Google Flow do lado dela — resolvendo o gap. 8 dos 9 slots de foto
  * abaixo já usam imagens reais geradas assim (hero, banner panorâmico,
  * ofício + detalhe, biblioteca em destaque + detalhe, cozinha, escritório),
- * servidas localmente de /public/images/cerne/. Só o Closet Boutique (grid
- * de portfólio, projeto 04) segue com placeholder — pendente de gerar a
- * foto correspondente (prompt 9 do documento docs/cerne-prompts-gemini.md).
- * ATUALIZADO 2026-09-14: o placeholder do Unsplash estava hotlinkado
- * (`images.unsplash.com` direto) e quebrava em dev local nesta máquina —
- * erro de certificado TLS (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`, provável
- * interceptação HTTPS por antivírus/firewall corporativo) impedia o
- * Next.js de buscar a imagem pra otimizar via `/_next/image`. Baixado
- * localmente pra `/public/images/cerne/closet-boutique.jpg` — resolve o
- * problema em qualquer ambiente, não só nesta máquina. Segue sendo
- * placeholder (não é foto real gerada), só não quebra mais.
+ * servidas localmente de /public/images/cerne/. O Closet Boutique (grid de
+ * portfólio, projeto 04) passou por um placeholder do Unsplash hotlinkado
+ * (quebrava em dev local nesta máquina — erro de certificado TLS,
+ * `UNABLE_TO_VERIFY_LEAF_SIGNATURE`, provável interceptação HTTPS por
+ * antivírus/firewall corporativo — impedia o Next.js de buscar a imagem
+ * pra otimizar via `/_next/image`), depois foi baixado localmente como
+ * stopgap, e desde 2026-09-14 usa a foto real gerada pela Bruna a partir
+ * do prompt 9 (docs/cerne-prompts-gemini.md) — `/public/images/cerne/
+ * closet-boutique.png`. Os 9 slots de foto do Hero ao portfólio agora
+ * usam imagem real.
  * Vídeo por IA — atualizado: o Hero agora usa um clipe real gerado no
  * Google Flow (apara de madeira se desprendendo da plaina em câmera lenta,
  * imagem-pra-vídeo a partir do HERO_IMAGE) em vez do Ken Burns em CSS —
@@ -187,7 +186,7 @@ const PROJETOS_PADRAO: Projeto[] = [
     materiais: ['Cedro', 'Latão escovado'],
     descricao:
       'Closet planejado como uma pequena boutique particular — armários em cedro com puxadores de latão escovado, ilha central para acessórios e iluminação embutida desenhada peça a peça com a proprietária.',
-    img: '/images/cerne/closet-boutique.jpg',
+    img: '/images/cerne/closet-boutique.png',
   },
 ];
 
