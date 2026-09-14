@@ -151,6 +151,31 @@ const FAQ_ITEMS = [
   },
 ];
 
+// Perguntas rápidas do "Concierge" — respondidas na hora, sem sair da
+// página (nenhuma IA de verdade por trás; ver nota na seção mais abaixo).
+// Existiam antes como uma única troca de mensagem fixa sob o rótulo
+// "Concierge IA 24/7", prometendo mais do que entregava: agora pelo menos
+// um punhado de perguntas reais responde instantaneamente de verdade,
+// e o WhatsApp fica pra qualquer coisa fora dessa lista.
+const CONCIERGE_PERGUNTAS = [
+  {
+    q: 'O check-in pode ser depois das 20h?',
+    a: 'Claro! Na Villa Serena o check-in é flexível até a meia-noite, sem custo extra.',
+  },
+  {
+    q: 'Tem vaga de estacionamento?',
+    a: 'Sim — vaga coberta pra até 2 carros dentro do próprio terreno, sem custo adicional.',
+  },
+  {
+    q: 'Vocês aceitam pets?',
+    a: 'Aceitamos, com aviso prévio na reserva — há uma taxa extra de limpeza pra estadias com pet.',
+  },
+  {
+    q: 'Dá pra chegar antes das 15h?',
+    a: 'Se a limpeza já tiver terminado, sim. Confirmamos pelo WhatsApp no próprio dia, geralmente pela manhã.',
+  },
+] as const;
+
 const MESES = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
@@ -180,6 +205,23 @@ function usePrefersReducedMotion() {
     return () => mq.removeEventListener('change', update);
   }, []);
   return reduced;
+}
+
+// Alta temporada enche ao longo das semanas — ilustrativo (não há agenda
+// real por trás nesta demo), mas varia por semana em vez de ficar
+// congelado num "3" pra sempre. Um número de escassez estático é o tipo
+// de coisa que quem revisita o site nota e desconta em credibilidade.
+// Num cliente real isso troca pela contagem real da agenda.
+const FINS_DE_SEMANA_LIVRES = [2, 3, 4] as const;
+
+function useFinsDeSemanaLivres(fallback: number) {
+  const [fds, setFds] = useState(fallback);
+  useEffect(() => {
+    const inicioDoAno = new Date(new Date().getFullYear(), 0, 1).getTime();
+    const semana = Math.floor((Date.now() - inicioDoAno) / (7 * 24 * 60 * 60 * 1000));
+    setFds(FINS_DE_SEMANA_LIVRES[semana % 3]);
+  }, []);
+  return fds;
 }
 
 function useMagnetic() {
@@ -273,6 +315,7 @@ export default function VillaSerenaDemo() {
   const showHeroVideo = isDesktop && !reducedMotion;
   const heroParallaxRef = useParallax<HTMLDivElement>(0.18, 60, isDesktop && !reducedMotion);
   const cardTiltRef = useTilt<HTMLDivElement>();
+  const finsDeSemanaLivres = useFinsDeSemanaLivres(3);
 
   return (
     <main
@@ -440,7 +483,7 @@ export default function VillaSerenaDemo() {
 
               <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#e08c3c]/30 bg-[#e08c3c]/10 px-3.5 py-2 text-xs text-[#f0cba0]">
                 <span className="h-2 w-2 rounded-full bg-[#e08c3c] animate-ring" />
-                Apenas <b className="text-white">3 fins de semana</b> livres na alta temporada
+                Apenas <b className="text-white">{finsDeSemanaLivres} fins de semana</b> livres na alta temporada
               </div>
             </ScrollReveal>
           </div>
@@ -647,41 +690,13 @@ export default function VillaSerenaDemo() {
           </ScrollReveal>
         </section>
 
-        {/* Concierge IA */}
-        <section className="mx-auto max-w-3xl px-5 py-20 sm:px-8 sm:py-28">
-          <ScrollReveal>
-            <div className="mb-12 text-center">
-              <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Concierge IA 24/7</span>
-              <h2 className="text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
-                Respostas instantâneas, a qualquer hora
-              </h2>
-              <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#F5EFE6]/65 sm:text-base">
-                Um assistente treinado para a Villa Serena tira dúvidas de hóspedes em segundos, direto no WhatsApp.
-              </p>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
-              <div className="mb-6 flex flex-col gap-4">
-                <div className="max-w-[85%] self-end rounded-2xl border border-[#D4A373]/25 bg-[#D4A373]/15 px-4 py-3 text-sm leading-relaxed text-[#F5EFE6] sm:max-w-sm">
-                  Oi! O check-in pode ser depois das 20h?
-                </div>
-                <div className="max-w-[85%] self-start rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm leading-relaxed text-[#F5EFE6]/90 sm:max-w-sm">
-                  Claro! Na Villa Serena o check-in é flexível até a meia-noite, sem custo extra. Posso confirmar sua chegada às 20h?
-                </div>
-              </div>
-              <a
-                href={getWhatsAppLink('Olá! Tenho uma dúvida sobre a Villa Serena.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-magnetic
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-medium text-[#F5EFE6] transition-colors hover:bg-white/10 sm:w-auto"
-              >
-                <MessageCircle className="h-4 w-4" /> Falar com o Concierge
-              </a>
-            </div>
-          </ScrollReveal>
-        </section>
+        {/* Concierge — perguntas rápidas respondidas na hora (ver
+            CONCIERGE_PERGUNTAS acima); WhatsApp cobre o resto. Trocado de
+            uma única troca de mensagem fixa sob o rótulo "Concierge IA
+            24/7" — que não tinha nada por trás além do link de WhatsApp —
+            pra algo que responde de verdade, na hora, sem prometer uma IA
+            que não existe nesta demo. */}
+        <ConciergeSection />
 
         {/* Footer */}
         <footer className="border-t border-white/10 px-5 py-10 text-center sm:px-8">
@@ -705,6 +720,66 @@ export default function VillaSerenaDemo() {
         <span className="sm:hidden">NEURALABS</span>
       </Link>
     </main>
+  );
+}
+
+/* ================================================================== */
+/*  CONCIERGE — perguntas rápidas respondidas na hora, sem IA de verdade */
+/* ================================================================== */
+function ConciergeSection() {
+  const [abertaIdx, setAbertaIdx] = useState<number | null>(null);
+
+  return (
+    <section className="mx-auto max-w-3xl px-5 py-20 sm:px-8 sm:py-28">
+      <ScrollReveal>
+        <div className="mb-12 text-center">
+          <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">Perguntas rápidas</span>
+          <h2 className="text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
+            Respostas na hora, sem esperar
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#F5EFE6]/65 sm:text-base">
+            Toque numa pergunta comum e veja a resposta na hora. Qualquer outra coisa, o
+            WhatsApp da anfitriã responde em minutos.
+          </p>
+        </div>
+      </ScrollReveal>
+      <ScrollReveal>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
+          <div className="mb-5 flex flex-wrap gap-2.5">
+            {CONCIERGE_PERGUNTAS.map((item, i) => (
+              <button
+                key={item.q}
+                type="button"
+                onClick={() => setAbertaIdx(i === abertaIdx ? null : i)}
+                className={`rounded-full border px-4 py-2 text-left text-[13px] leading-snug transition-colors ${
+                  i === abertaIdx
+                    ? 'border-[#D4A373]/50 bg-[#D4A373]/15 text-[#F5EFE6]'
+                    : 'border-white/15 bg-white/[0.03] text-[#F5EFE6]/80 hover:border-[#D4A373]/40 hover:text-[#F5EFE6]'
+                }`}
+              >
+                {item.q}
+              </button>
+            ))}
+          </div>
+          <div className="min-h-[68px] rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 text-sm leading-relaxed text-[#F5EFE6]/90">
+            {abertaIdx === null ? (
+              <span className="text-[#F5EFE6]/45">Toque numa pergunta acima para ver a resposta aqui.</span>
+            ) : (
+              CONCIERGE_PERGUNTAS[abertaIdx].a
+            )}
+          </div>
+          <a
+            href={getWhatsAppLink('Olá! Tenho uma dúvida sobre a Villa Serena.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-magnetic
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-medium text-[#F5EFE6] transition-colors hover:bg-white/10 sm:w-auto"
+          >
+            <MessageCircle className="h-4 w-4" /> Outra dúvida? Fale com a anfitriã
+          </a>
+        </div>
+      </ScrollReveal>
+    </section>
   );
 }
 

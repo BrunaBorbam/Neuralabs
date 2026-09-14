@@ -165,6 +165,8 @@ const PROJETOS_PADRAO: Projeto[] = [
     local: 'Cobertura · Florianópolis',
     ano: '2024',
     materiais: ['Carvalho fumê', 'Mármore Calacatta'],
+    descricao:
+      'Cozinha integrada à sala de uma cobertura de frente pro mar — marcenaria em carvalho fumê contrastando com bancada de mármore Calacatta, desenhada pra abrir totalmente durante recepções e fechar em painéis discretos no dia a dia.',
     img: '/images/cerne/cozinha.jpg',
   },
   {
@@ -173,6 +175,8 @@ const PROJETOS_PADRAO: Projeto[] = [
     local: 'Sede Corporativa · Curitiba',
     ano: '2024',
     materiais: ['Freijó', 'Vidro fosco'],
+    descricao:
+      'Sala de diretoria e recepção executiva em freijó e vidro fosco — painéis de marcenaria fazem a divisória acústica entre os ambientes sem recorrer a drywall, mantendo a mesma linguagem do desenho arquitetônico original.',
     img: '/images/cerne/escritorio.jpg',
   },
   {
@@ -181,6 +185,8 @@ const PROJETOS_PADRAO: Projeto[] = [
     local: 'Residência Privada · Gramado',
     ano: '2023',
     materiais: ['Cedro', 'Latão escovado'],
+    descricao:
+      'Closet planejado como uma pequena boutique particular — armários em cedro com puxadores de latão escovado, ilha central para acessórios e iluminação embutida desenhada peça a peça com a proprietária.',
     img: '/images/cerne/closet-boutique.jpg',
   },
 ];
@@ -298,6 +304,22 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
+// Agenda de ateliê enche ao longo do trimestre — mais vagas no primeiro
+// mês, menos no último. Ilustrativo (não há agenda real por trás nesta
+// demo), mas varia em vez de ficar congelada num "3" pra sempre: um
+// número de escassez que nunca muda é o tipo de coisa que quem revisita
+// o site nota e desconta em credibilidade. Num cliente real isso troca
+// pela contagem real da agenda.
+const VAGAS_POR_MES_NO_TRIMESTRE = [4, 3, 2] as const;
+
+function useVagasRestantes(fallback: number) {
+  const [vagas, setVagas] = useState(fallback);
+  useEffect(() => {
+    setVagas(VAGAS_POR_MES_NO_TRIMESTRE[new Date().getMonth() % 3]);
+  }, []);
+  return vagas;
+}
+
 /** Parallax sutil — só desktop, só sem prefers-reduced-motion */
 function useParallax(strength: number, enabled: boolean) {
   const ref = useRef<HTMLDivElement>(null);
@@ -399,6 +421,8 @@ export default function MarcenariaDemo() {
   const heroParallaxRef = useParallax(0.08, isDesktop && !reducedMotion);
   const bannerParallaxRef = useParallax(0.05, isDesktop && !reducedMotion);
   const rootRef = useMagnetic();
+  const vagasRestantes = useVagasRestantes(3);
+  const [projetoAberto, setProjetoAberto] = useState<Projeto | null>(null);
 
   // Portfólio editável via Notion (CMS leve — ver lib/notion.ts e
   // docs/cerne-cms-notion.md): busca em /api/cerne-projects ao montar e,
@@ -570,7 +594,7 @@ export default function MarcenariaDemo() {
                 <Ruler className="h-3 w-3" /> Agenda 2026
               </span>
               <p className="text-[12.5px] leading-[1.6] text-[#2A2C22]">
-                Apenas <b>3 vagas</b> restantes para novos projetos neste trimestre.
+                Apenas <b>{vagasRestantes} vagas</b> restantes para novos projetos neste trimestre.
               </p>
             </div>
           </div>
@@ -713,11 +737,19 @@ export default function MarcenariaDemo() {
             </div>
           </ScrollReveal>
 
-          {/* Case em destaque */}
+          {/* Case em destaque — "Ver detalhes" abre o modal (ver
+              ProjetoModal mais abaixo) com os mesmos dados já presentes em
+              PROJETOS_PADRAO/Notion, em vez de prometer uma navegação que
+              não existia (ver docs/biblioteca-referencias-visuais.md,
+              achado "Ver projeto ↗" não levava a lugar nenhum). */}
           {projetos.filter((p) => p.featured).map((p) => (
             <ScrollReveal key={p.idx}>
               <div className="mb-20 grid gap-10 md:grid-cols-2 md:gap-4">
-                <div className="group relative aspect-[4/5] overflow-hidden sm:rounded-sm md:aspect-auto">
+                <button
+                  type="button"
+                  onClick={() => setProjetoAberto(p)}
+                  className="group relative aspect-[4/5] overflow-hidden text-left sm:rounded-sm md:aspect-auto"
+                >
                   <Image
                     src={p.img}
                     alt={p.nome}
@@ -725,11 +757,11 @@ export default function MarcenariaDemo() {
                     sizes="(min-width: 768px) 45vw, 100vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/45 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <span className="absolute bottom-4 left-4 translate-y-2 text-[10.5px] uppercase tracking-[0.2em] text-[#F5F4EE] opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/50 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+                  <span className="absolute bottom-4 left-4 text-[10.5px] uppercase tracking-[0.2em] text-[#F5F4EE]">
                     Projeto em destaque
                   </span>
-                </div>
+                </button>
                 <div className="relative flex flex-col justify-center py-4">
                   <div className="relative -mt-10 hidden aspect-[4/3] w-[62%] self-end overflow-hidden rounded-sm border-4 border-[#EDECE3] shadow-lg md:block">
                     <Image
@@ -751,7 +783,7 @@ export default function MarcenariaDemo() {
                   </h3>
                   <p className="mb-4 text-[12px] text-[#5C5147]">{p.local}</p>
                   <p className="mb-5 max-w-md text-[13px] leading-[1.85] text-[#55584A]">{p.descricao}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="mb-5 flex flex-wrap gap-2">
                     {p.materiais.map((m) => (
                       <span
                         key={m}
@@ -761,16 +793,25 @@ export default function MarcenariaDemo() {
                       </span>
                     ))}
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setProjetoAberto(p)}
+                    className="inline-flex w-fit items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.15em] text-[#2A2C22] hover:text-[#6B7A4E]"
+                  >
+                    Ver detalhes do projeto <ArrowUpRight className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
             </ScrollReveal>
           ))}
 
-          {/* Grid dos demais projetos */}
+          {/* Grid dos demais projetos — "Ver projeto" agora é sempre
+              visível (não só no hover, que nunca aparece em touch) e abre
+              de verdade o modal com os dados do projeto. */}
           <div className="grid gap-x-8 gap-y-16 sm:grid-cols-3">
             {projetos.filter((p) => !p.featured).map((p, i) => (
               <ScrollReveal key={p.idx} delay={i * 0.06}>
-                <div className="group">
+                <button type="button" onClick={() => setProjetoAberto(p)} className="group block w-full text-left">
                   <div className="relative mb-5 aspect-[4/5] overflow-hidden sm:rounded-sm">
                     <Image
                       src={p.img}
@@ -779,10 +820,7 @@ export default function MarcenariaDemo() {
                       sizes="(min-width: 640px) 30vw, 100vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/50 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                    <span className="absolute bottom-4 left-4 flex translate-y-2 items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-[#F5F4EE] opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                      Ver projeto <ArrowUpRight className="h-3 w-3" />
-                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/45 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   </div>
                   <div className="flex items-baseline gap-3">
                     <span className="text-[11px] text-[#6B7A4E]">{p.idx}</span>
@@ -795,9 +833,12 @@ export default function MarcenariaDemo() {
                       </h3>
                       <p className="mt-1.5 text-[11.5px] text-[#5C5147]">{p.local} · {p.ano}</p>
                       <p className="text-[11.5px] text-[#5C5147]/70">{p.materiais.join(' · ')}</p>
+                      <span className="mt-2 inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] text-[#6B7A4E]">
+                        Ver projeto <ArrowUpRight className="h-3 w-3" />
+                      </span>
                     </div>
                   </div>
-                </div>
+                </button>
               </ScrollReveal>
             ))}
           </div>
@@ -942,6 +983,75 @@ export default function MarcenariaDemo() {
         <span className="hidden sm:inline">Voltar para NEURALABS Studio</span>
         <span className="sm:hidden">NEURALABS</span>
       </Link>
+
+      <ProjetoModal projeto={projetoAberto} onClose={() => setProjetoAberto(null)} />
     </main>
+  );
+}
+
+/** Modal de detalhe do projeto — abre com os mesmos dados já usados no
+ * card (PROJETOS_PADRAO ou Notion), reaproveitando o conteúdo em vez de
+ * exigir uma rota nova por projeto. Fecha por ESC, clique no fundo ou no
+ * botão de fechar. */
+function ProjetoModal({ projeto, onClose }: { projeto: Projeto | null; onClose: () => void }) {
+  useEffect(() => {
+    if (!projeto) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [projeto, onClose]);
+
+  if (!projeto) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={projeto.nome}
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-[#2A2C22]/60 p-4 backdrop-blur-sm sm:p-8"
+      onClick={onClose}
+    >
+      <div
+        className="relative grid max-h-[88vh] w-full max-w-3xl grid-cols-1 overflow-y-auto rounded-sm bg-[#F5F4EE] sm:grid-cols-2"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Fechar"
+          className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-[#F5F4EE]/90 text-[#2A2C22] shadow-md backdrop-blur-sm hover:bg-[#F5F4EE]"
+        >
+          <Minus className="h-4 w-4 rotate-45" />
+        </button>
+        <div className="relative aspect-[4/5] sm:aspect-auto">
+          <Image src={projeto.img} alt={projeto.nome} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
+        </div>
+        <div className="flex flex-col justify-center p-7 sm:p-9">
+          <span className="text-[11px] text-[#6B7A4E]">{projeto.idx} — {projeto.ano}</span>
+          <h3
+            className="mb-3 mt-2 text-[26px] leading-tight"
+            style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', fontWeight: 400 }}
+          >
+            {projeto.nome}
+          </h3>
+          <p className="mb-4 text-[12.5px] text-[#5C5147]">{projeto.local}</p>
+          {projeto.descricao && (
+            <p className="mb-5 text-[13.5px] leading-[1.85] text-[#55584A]">{projeto.descricao}</p>
+          )}
+          <div className="flex flex-wrap gap-2">
+            {projeto.materiais.map((m) => (
+              <span
+                key={m}
+                className="rounded-full border border-[#2A2C22]/15 px-3 py-1 text-[10.5px] uppercase tracking-[0.12em] text-[#576141]"
+              >
+                {m}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

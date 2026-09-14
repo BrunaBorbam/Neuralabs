@@ -374,6 +374,25 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
+// Dom, Seg, Ter, Qua, Qui, Sex, Sáb — bistrô de bairro enche mais de
+// quinta a sábado, sobra mais mesa no começo da semana. Ilustrativo (não
+// há reserva real por trás nesta demo) — mas varia por dia em vez de
+// ficar congelado num número fixo pra sempre, que é o problema real que
+// um número de escassez estático tem: some com a credibilidade dele pra
+// quem revisita e vê o mesmo "6" toda vez. Num cliente real isso troca
+// por contagem de reservas de verdade.
+const MESAS_POR_DIA = [7, 8, 8, 7, 5, 3, 4] as const;
+
+/** Retorna o valor estático (mesmo do SSR) até montar no cliente, evitando
+ * mismatch de hidratação — só depois troca pelo número do dia real. */
+function useMesasDisponiveis(fallback: number) {
+  const [mesas, setMesas] = useState(fallback);
+  useEffect(() => {
+    setMesas(MESAS_POR_DIA[new Date().getDay()]);
+  }, []);
+  return mesas;
+}
+
 /** Mesma assinatura de motion (atração magnética discreta) da CERNE/Villa
  * Serena — reaproveitada como recurso comum, não como diferenciador. */
 function useMagnetic() {
@@ -761,6 +780,7 @@ export default function GastronomiaDemo() {
   const reducedMotion = usePrefersReducedMotion();
   const rootRef = useMagnetic();
   const [depoimentoIdx, setDepoimentoIdx] = useState(0);
+  const mesasDisponiveis = useMesasDisponiveis(6);
 
   // Parallax — pedido pela Bruna como saída pra dar profundidade visual
   // sem depender de foto real: camadas que já existem (emblema orbital
@@ -944,7 +964,7 @@ export default function GastronomiaDemo() {
               className="text-[20px] leading-none text-[#F3EDE1]"
               style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
             >
-              6 mesas disponíveis
+              {mesasDisponiveis} mesas disponíveis
             </span>
           </div>
         </div>
