@@ -53,12 +53,14 @@
  * no scroll (referência trazida pela Bruna: mel escorrendo entre blocos
  * num site de apicultura — aqui reinterpretado só na técnica, com o
  * material/cor da própria identidade Ardósia, nunca a cor de mel).
- * Os mesmos ingredientes do emblema orbital do Hero também reaparecem,
- * discretos e flutuando (`FloatingDoodle`, reusa a keyframe `animate-float`
- * já existente em tailwind.config.ts), em #processo, depoimentos e
- * #contato — o "fio visual" que amarra a página inteira, pedido pela
- * Bruna depois de ver um site de café que espalha grãos por quase toda
- * seção.
+ * ATUALIZADO 2026-09-14: os ícones de ingrediente flutuando por #processo,
+ * depoimentos e #contato (`FloatingDoodle`) foram removidos — na revisão
+ * de "alto padrão" pedida pela Bruna, ler como ícone de linha genérico
+ * (lucide-react) batia como recurso de template, não autoral, mesmo sutil
+ * (16% opacidade). O emblema orbital do Hero (`IngredientOrbit`) continua
+ * — tem presença/intenção suficiente pra carregar o próprio peso. O traço
+ * de giz/tinta (`ArdosiaInkStroke`) segue como a assinatura de motion
+ * principal da página.
  *
  * Parallax (pedido pela Bruna como forma de dar profundidade sem
  * depender de foto real, enquanto ela não gera as imagens via
@@ -680,28 +682,6 @@ function SlateCube({ reducedMotion }: { reducedMotion: boolean }) {
  * só repetindo o vocabulário visual da Ardósia pelo scroll inteiro.
  * Desktop-only, como todo decorativo do projeto.
  */
-function FloatingDoodle({
-  Icon,
-  color,
-  className,
-  size = 26,
-  delay = 0,
-}: {
-  Icon: typeof Leaf;
-  color: string;
-  className: string;
-  size?: number;
-  delay?: number;
-}) {
-  return (
-    <Icon
-      aria-hidden="true"
-      className={`pointer-events-none absolute hidden animate-float opacity-[0.16] motion-reduce:animate-none md:block ${className}`}
-      style={{ width: size, height: size, color, animationDelay: `${delay}s` }}
-    />
-  );
-}
-
 function DishCard({ prato }: { prato: Prato }) {
   const Icon = categoryIcon(prato.categoria);
   const hasPhoto = Boolean(prato.img);
@@ -1077,8 +1057,6 @@ export default function GastronomiaDemo() {
       {/* Da feira à mesa — colagem tipográfica em cartões rotacionados
           (Arquétipo D), sem fotografia */}
       <section id="processo" className="relative overflow-hidden border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
-        <FloatingDoodle Icon={Cherry} color="#C1552C" className="right-[8%] top-[10%]" size={30} />
-        <FloatingDoodle Icon={Wheat} color="#D9A441" className="bottom-[14%] left-[4%]" size={24} delay={1.2} />
         <div className="mx-auto max-w-6xl">
           <ScrollReveal>
             <div className="mb-16 max-w-lg">
@@ -1183,7 +1161,6 @@ export default function GastronomiaDemo() {
 
       {/* FAQ — redução de fricção antes do CTA final */}
       <section id="faq" className="relative overflow-hidden border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
-        <FloatingDoodle Icon={Croissant} color="#D9A441" className="left-[6%] top-[8%]" size={26} delay={0.6} />
         <div className="mx-auto max-w-3xl">
           <ScrollReveal>
             <div className="mb-12 max-w-lg">
@@ -1217,8 +1194,6 @@ export default function GastronomiaDemo() {
         ref={contatoRef}
         className="relative mx-auto max-w-6xl overflow-hidden px-5 py-20 sm:px-8 sm:py-24"
       >
-        <FloatingDoodle Icon={Grape} color="#8A8478" className="right-[10%] top-[6%]" size={26} delay={1.8} />
-        <FloatingDoodle Icon={Wine} color="#C1552C" className="bottom-[12%] left-[3%]" size={24} delay={0.3} />
         <motion.span
           aria-hidden="true"
           className="pointer-events-none absolute -left-4 top-0 select-none text-[120px] font-normal italic leading-none text-[#F3EDE1]/[0.04] sm:text-[220px]"
