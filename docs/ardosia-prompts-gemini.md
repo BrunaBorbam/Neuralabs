@@ -128,6 +128,75 @@ clientes desfocados ao fundo, fora de foco. Composição horizontal,
 atmosfera aconchegante de bairro, tons de madeira escura e âmbar.
 ```
 
+## 8. Pão de Fermentação Natural (quadrada, ~1:1)
+Uso: card do cardápio (entrada).
+
+```
+Fotografia editorial de comida, um pão de fermentação natural rústico
+cortado ao meio sobre uma tábua de madeira escura, casca crocante e miolo
+alveolado à mostra, um potinho de manteiga de ervas ao lado com flor de
+sal por cima. Luz quente lateral, grão de filme sutil, fundo desfocado
+de mesa de bistrô. Composição quadrada.
+```
+
+## 9. Tagliatelle ao Ragù de 6 Horas (quadrada, ~1:1)
+Uso: card do cardápio (principal).
+
+```
+Fotografia editorial de comida, um prato fundo escuro com tagliatelle
+fresco ao ragù de carne cozido por horas, lascas de pecorino por cima,
+uma folha de manjericão ou salsa fresca de guarnição. Vapor sutil
+subindo do prato, luz quente lateral, fundo de madeira escura desfocado.
+Composição quadrada, atmosfera de bistrô noturno.
+```
+
+## 10. Pavê de Doce de Leite da Vó (quadrada, ~1:1)
+Uso: card do cardápio (sobremesa).
+
+```
+Fotografia editorial de sobremesa, uma fatia de pavê de doce de leite
+num prato de cerâmica escura simples, camadas visíveis de biscoito e
+creme, uma pitada de canela ou raspas de chocolate por cima. Luz quente
+lateral suave, fundo desfocado de mesa de madeira. Composição quadrada,
+sem exagero de styling — sobremesa caseira, não de vitrine de
+confeitaria.
+```
+
+## 11. Sorbet da Fruta da Estação (quadrada, ~1:1)
+Uso: card do cardápio (sobremesa).
+
+```
+Fotografia editorial de sobremesa, duas bolas de sorbet de fruta da
+estação (tom vibrante natural, ex: framboesa ou manga) numa taça de
+vidro simples, uma folha de hortelã de guarnição, gotas de condensação
+na taça. Luz quente lateral, fundo desfocado escuro. Composição
+quadrada, cores vivas da fruta contrastando com o fundo escuro.
+```
+
+## 12. Da Feira à Mesa — "O Quadro" (quadrada, ~1:1)
+Uso: selo de canto (56px) do card de processo — precisa ler bem em
+miniatura, evitar detalhe fino demais.
+
+```
+Fotografia editorial de um quadro-negro de ardósia na entrada de um
+bistrô, cardápio do dia escrito à mão a giz branco, uma lâmpada
+pendente iluminando de lado. Sem pessoas (ou só uma mão seg­u­rando o
+giz, fora de foco). Luz quente e baixa, grão de filme sutil.
+Composição quadrada.
+```
+
+## 13. Da Feira à Mesa — "A Mise en Place" (quadrada, ~1:1)
+Uso: selo de canto (56px) do card de processo — mesma observação do
+item 12.
+
+```
+Fotografia editorial de uma bancada de cozinha profissional durante a
+mise en place, potes pequenos com ingredientes organizados (ervas
+picadas, especiarias, molhos), uma faca de chef desfocada ao fundo.
+Sem rostos. Luz quente lateral, grão de filme sutil. Composição
+quadrada.
+```
+
 ---
 
 ### Depois de gerar
