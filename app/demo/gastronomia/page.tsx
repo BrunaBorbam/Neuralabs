@@ -507,9 +507,20 @@ function HeroPhoto({ active }: { active: boolean }) {
 
   return (
     <div
-      className="absolute right-[3%] top-[34%] hidden sm:block"
+      className="absolute right-[1%] top-[6%] z-20 hidden sm:flex sm:items-start sm:gap-3 md:right-[3%] md:top-[9%]"
       style={{ perspective: 900 }}
     >
+      {/* Legenda rotacionada na vertical — técnica emprestada do Dishoom
+          (dishoom.com, catalogado na biblioteca de referências): em vez de
+          legenda comum embaixo da foto, um texto pequeno correndo na
+          vertical ao lado dela, como crédito de foto de revista impressa.
+          Reforça a leitura "still de filme/documento", não decoração. */}
+      <span
+        className="hidden pt-2 text-[9.5px] uppercase tracking-[0.2em] text-[#8A8478] lg:block"
+        style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+      >
+        O quadro de hoje · giz sobre ardósia
+      </span>
       <motion.div
         onMouseMove={active ? handleMouseMove : undefined}
         onMouseLeave={active ? handleMouseLeave : undefined}
@@ -519,7 +530,7 @@ function HeroPhoto({ active }: { active: boolean }) {
           rotateY: active ? rotateY : 0,
           transformStyle: 'preserve-3d',
         }}
-        className="w-[170px] border-4 border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_24px_48px_-20px_rgba(0,0,0,0.6)] lg:w-[190px]"
+        className="w-[230px] border-4 border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_28px_60px_-20px_rgba(0,0,0,0.65)] md:w-[270px] lg:w-[300px]"
       >
         <div className="relative aspect-[2/3] w-full overflow-hidden">
           <motion.div
@@ -531,7 +542,7 @@ function HeroPhoto({ active }: { active: boolean }) {
               src="/images/gastronomia/hero-quadro.jpg"
               alt="Quadro de ardósia sendo escrito à mão com o prato do dia"
               fill
-              sizes="190px"
+              sizes="300px"
               className="object-cover"
             />
           </motion.div>
@@ -905,7 +916,7 @@ export default function GastronomiaDemo() {
         </div>
 
         <h1
-          className="relative mb-8 max-w-[820px] text-[46px] leading-[1.05] sm:text-[68px] md:text-[84px]"
+          className="relative z-10 mb-8 max-w-[600px] text-[52px] leading-[0.98] sm:max-w-[700px] sm:text-[80px] md:max-w-[760px] md:text-[92px] lg:max-w-[800px] lg:text-[100px]"
           style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
         >
           O cardápio muda.
@@ -921,7 +932,7 @@ export default function GastronomiaDemo() {
           </span>
         </h1>
 
-        <p className="mb-10 max-w-[440px] text-[14px] leading-[1.9] text-[#B6AF9E]">
+        <p className="relative z-10 mb-10 max-w-[440px] text-[14px] leading-[1.9] text-[#B6AF9E]">
           Sem cardápio engessado. Compramos o que tá bom na feira de terça e escrevemos no
           quadro — se o tomate não tava bom hoje, ele não entra no prato.
         </p>
@@ -970,21 +981,59 @@ export default function GastronomiaDemo() {
         </div>
       </section>
 
-      {/* Faixa de valores — marquee contínuo (recurso comum, mesma
-          animação CSS já usada em CERNE/Villa Serena) */}
-      <div className="overflow-hidden border-y border-[#F3EDE1]/10 bg-[#201E19] py-3.5">
+      {/* Faixa de valores — bloco de cor terracota cheio (técnica trazida
+          da referência Hanbut Restaurant, catalogada na biblioteca): em
+          vez de mais uma faixa escura discreta, a marquee vira o primeiro
+          "soco" de cor cheia da página — a paleta Ardósia usava terracota
+          só em acento pontual até aqui (botão, sublinhado); isso é a
+          mesma cor assumida como protagonista de uma seção inteira. */}
+      <div className="overflow-hidden border-y border-[#a84523]/40 bg-[#C1552C] py-3.5">
         <div className="flex w-max animate-marquee items-center gap-10 motion-reduce:animate-none">
           {[...VALORES, ...VALORES].map((v, i) => (
             <span
               key={`${v}-${i}`}
-              className="flex items-center gap-10 text-[11px] uppercase tracking-[0.2em] text-[#B6AF9E]"
+              className="flex items-center gap-10 text-[11px] font-medium uppercase tracking-[0.2em] text-[#F3EDE1]"
             >
               {v}
-              <span className="text-[#C1552C]">✦</span>
+              <span className="text-[#26241F]">✦</span>
             </span>
           ))}
         </div>
       </div>
+
+      {/* História — parágrafo justificado contando a origem real da casa
+          (técnica trazida da referência Dishoom, catalogada na biblioteca):
+          em vez de só tagline + CTA, uma camada de conteúdo editorial de
+          verdade, com especificidade (nomes, ano, gesto concreto) em vez
+          de copy genérico de "sobre nós". Texto justificado (não ragged-
+          right) para ler como coluna de revista, não como parágrafo de
+          formulário. */}
+      <section className="mx-auto max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
+        <ScrollReveal>
+          <div className="grid gap-10 md:grid-cols-[200px_1fr] md:gap-14">
+            <div className="flex items-start gap-3 md:flex-col md:gap-2">
+              <span className="h-px w-9 flex-shrink-0 bg-[#C1552C] md:h-auto md:w-px md:flex-shrink md:self-stretch" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
+                Desde 2019 · Cidade Baixa
+              </span>
+            </div>
+            <p
+              className="max-w-[62ch] text-[16px] leading-[1.9] text-[#D8D2C4] sm:text-[18px]"
+              style={{ textAlign: 'justify', textJustify: 'inter-word' }}
+            >
+              A Ardósia começou porque a Mari cansou de cardápio que promete tudo e entrega
+              congelado. Ela pegou uma lousa de verdade — a mesma do fundo da sala da escola
+              onde deu aula por oito anos — pregou na parede da entrada e escreveu, a giz, o
+              que tinha comprado naquela manhã na feira da Voluntários da Pátria. Não tinha
+              plano nenhum além desse. Sete anos depois o quadro ainda é apagado e reescrito
+              seis vezes por semana, à mão, geralmente pelo próprio chef antes do primeiro
+              cliente entrar. Não é estética de fazenda-orgânica-de-revista: é só o jeito mais
+              honesto que a casa encontrou de dizer o que tem hoje, sem prometer o que não vai
+              ter amanhã.
+            </p>
+          </div>
+        </ScrollReveal>
+      </section>
 
       {/* Cardápio de hoje — trilho de scroll horizontal (Arquétipo D) em
           vez de grid tradicional. Puxa do Notion quando configurado. */}
