@@ -7,11 +7,12 @@ import { Badge } from '@/components/ui/Badge';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { useLanguage } from '@/context/LanguageContext';
 
-// w=1600&q=80 was heavier than this section ever needs — the comparison box
-// never renders wider than ~960px (see the `sizes` prop below), so 1200/65
-// still looks sharp at any real viewport while cutting the transfer weight.
-const COMPARISON_IMAGE =
-  'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=65';
+// Baixada localmente em 2026-09-14: o hotlink direto pro Unsplash quebrava
+// em dev local nesta máquina (erro de certificado TLS ao Next.js tentar
+// buscar a imagem pra otimizar via /_next/image — provável interceptação
+// HTTPS por antivírus/firewall corporativo). Self-hosted evita o problema
+// em qualquer ambiente.
+const COMPARISON_IMAGE = '/images/comparativo-antes-depois.jpg';
 
 export const InteractiveComparison = () => {
   const { t } = useLanguage();

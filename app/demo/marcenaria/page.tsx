@@ -42,9 +42,16 @@
  * abaixo já usam imagens reais geradas assim (hero, banner panorâmico,
  * ofício + detalhe, biblioteca em destaque + detalhe, cozinha, escritório),
  * servidas localmente de /public/images/cerne/. Só o Closet Boutique (grid
- * de portfólio, projeto 04) segue com placeholder do Unsplash — pendente
- * de gerar a foto correspondente (prompt 9 do documento
- * docs/cerne-prompts-gemini.md).
+ * de portfólio, projeto 04) segue com placeholder — pendente de gerar a
+ * foto correspondente (prompt 9 do documento docs/cerne-prompts-gemini.md).
+ * ATUALIZADO 2026-09-14: o placeholder do Unsplash estava hotlinkado
+ * (`images.unsplash.com` direto) e quebrava em dev local nesta máquina —
+ * erro de certificado TLS (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`, provável
+ * interceptação HTTPS por antivírus/firewall corporativo) impedia o
+ * Next.js de buscar a imagem pra otimizar via `/_next/image`. Baixado
+ * localmente pra `/public/images/cerne/closet-boutique.jpg` — resolve o
+ * problema em qualquer ambiente, não só nesta máquina. Segue sendo
+ * placeholder (não é foto real gerada), só não quebra mais.
  * Vídeo por IA — atualizado: o Hero agora usa um clipe real gerado no
  * Google Flow (apara de madeira se desprendendo da plaina em câmera lenta,
  * imagem-pra-vídeo a partir do HERO_IMAGE) em vez do Ken Burns em CSS —
@@ -174,7 +181,7 @@ const PROJETOS_PADRAO: Projeto[] = [
     local: 'Residência Privada · Gramado',
     ano: '2023',
     materiais: ['Cedro', 'Latão escovado'],
-    img: img('photo-1705321963943-de94bb3f0dd3', 1400, 1750),
+    img: '/images/cerne/closet-boutique.jpg',
   },
 ];
 
