@@ -96,62 +96,59 @@ export const DemoCerne = () => {
 
 // ============================================================================
 // DEMO 3: ARDÓSIA (Gastronomia)
-// Arquétipo D: Assimétrico / Colagem
+// Arquétipo D: Assimétrico / Colagem (Limpo)
 // ============================================================================
 export const DemoArdosia = () => {
   return (
-    <div className="relative w-full h-full bg-[#1A1A1A] overflow-hidden">
-      {/* Efeito: Brush Stroke SVG revelando */}
+    <div className="relative w-full h-full bg-[#26241F] overflow-hidden">
+      {/* Fio de Giz contínuo */}
       <motion.svg 
-        className="absolute inset-0 w-full h-full opacity-10 pointer-events-none"
+        className="absolute inset-0 w-full h-full opacity-30 pointer-events-none"
         viewBox="0 0 100 100" 
         preserveAspectRatio="none"
       >
         <motion.path 
-          d="M0,50 Q25,30 50,50 T100,50" 
-          stroke="#C84B31" 
-          strokeWidth="20" 
+          d="M10,0 C30,30 0,60 10,100" 
+          stroke="#C1552C" 
+          strokeWidth="1.5" 
           fill="none"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
+          transition={{ duration: 2, ease: "easeInOut" }}
         />
       </motion.svg>
 
-      <div className="absolute inset-0 p-8">
-        {/* Título gigante assimétrico */}
-        <h2 className="text-5xl md:text-7xl text-[#E8DCC4] mb-2 leading-[0.8]" style={{ fontFamily: 'Instrument Serif, serif' }}>
-          Sabor
+      <div className="absolute inset-0 p-8 flex flex-col justify-center">
+        {/* Título gigante limpo */}
+        <h2 className="text-4xl md:text-5xl text-[#F3EDE1] mb-1 leading-none" style={{ fontFamily: 'var(--font-ardosia-serif), serif' }}>
+          O cardápio muda.
         </h2>
-        <h2 className="text-4xl md:text-5xl text-[#C84B31] italic ml-12 leading-[0.8]" style={{ fontFamily: 'Instrument Serif, serif' }}>
-          Bruto.
+        <h2 className="text-3xl md:text-4xl text-[#D9A441] italic leading-none" style={{ fontFamily: 'var(--font-ardosia-serif), serif' }}>
+          O capricho, não.
         </h2>
 
-        {/* Colagem de imagens */}
+        {/* Foto reta alinhada */}
         <motion.div 
-          className="absolute top-1/3 right-8 w-32 h-40 bg-zinc-800 rounded-sm shadow-xl overflow-hidden rotate-6 border border-zinc-700/50"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          className="absolute top-[15%] right-6 w-24 h-32 border-[3px] border-[#F3EDE1] shadow-xl overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="absolute inset-0 bg-[url('/images/hero-studio/gastronomia.jpg')] bg-cover bg-center opacity-80" />
+          <div className="absolute inset-0 bg-[url('/images/gastronomia/hero-quadro.jpg')] bg-cover bg-center" />
         </motion.div>
         
+        {/* Card limpo */}
         <motion.div 
-          className="absolute bottom-6 left-12 w-24 h-24 bg-[#E0A96D] rounded-full shadow-lg flex items-center justify-center border-4 border-[#1A1A1A] z-10"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.6, type: 'spring' }}
+          className="absolute bottom-8 left-8 bg-[#2E2B25] border border-[#F3EDE1]/12 p-3 shadow-lg"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.6 }}
         >
-          <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-widest text-center leading-tight">
-            Menu<br/>Auth
-          </span>
+          <p className="text-[8px] uppercase tracking-widest text-[#D9A441] mb-1">Hoje à noite</p>
+          <p className="text-lg text-[#F3EDE1] italic leading-none" style={{ fontFamily: 'var(--font-ardosia-serif), serif' }}>
+            6 mesas livres
+          </p>
         </motion.div>
-
-        {/* Textos pequenos font-sans */}
-        <p className="absolute bottom-8 right-8 max-w-[120px] text-[9px] text-[#E8DCC4]/60 text-right font-sans" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-          Fogo, fumaça e ingredientes ancestrais.
-        </p>
       </div>
     </div>
   );
@@ -159,49 +156,44 @@ export const DemoArdosia = () => {
 
 // ============================================================================
 // DEMO 4: E-COMMERCE
-// Arquétipo C: Grid Brutalista
+// Arquétipo E: Minimal Produto-Led
 // ============================================================================
 export const DemoEcommerce = () => {
   return (
-    <div className="relative w-full h-full bg-[#F4F4F0] overflow-hidden flex flex-col border-[6px] border-black">
-      {/* Marquee Superior Brutalista */}
-      <div className="w-full bg-black text-[#F4F4F0] py-1 overflow-hidden whitespace-nowrap flex items-center border-b-[4px] border-black">
-        <motion.div 
-          className="text-[10px] font-black uppercase tracking-widest"
-          animate={{ x: [0, -500] }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-        >
-          FREE SHIPPING ON ALL ORDERS &bull; 24H DELIVERY &bull; FREE SHIPPING ON ALL ORDERS &bull; 24H DELIVERY
-        </motion.div>
+    <div className="relative w-full h-full bg-[#050505] overflow-hidden flex flex-col">
+      {/* Film Grain */}
+      <div 
+        className="absolute inset-0 opacity-10 mix-blend-overlay"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E")' }}
+      />
+      
+      {/* Light Beams */}
+      <div className="absolute left-[20%] top-[-10%] h-[150%] w-[1px] -rotate-12 bg-gradient-to-b from-transparent via-white/30 to-transparent blur-sm" />
+      
+      {/* NavBar simples */}
+      <div className="absolute top-4 left-4 right-4 flex justify-between text-white/50 text-[8px] uppercase tracking-[0.2em] z-10">
+        <span style={{ fontFamily: 'var(--font-nox-serif), serif' }} className="text-white text-[10px]">L'Obscur</span>
+        <span>Cart (1)</span>
       </div>
 
-      <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-0 relative">
-        {/* Célula 1: Título Gigante */}
-        <div className="col-span-2 row-span-1 border-b-[4px] border-black bg-[#FF3B00] flex flex-col items-center justify-center p-4">
-          <h2 className="text-4xl md:text-6xl font-black text-black tracking-tighter uppercase leading-none">
-            New Drop
-          </h2>
-          <span className="text-black font-bold text-xs border-2 border-black rounded-full px-3 py-1 mt-2 bg-[#F4F4F0]">
-            VOL. 04
-          </span>
-        </div>
+      {/* Hero Bottle */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <motion.div 
+          className="relative w-28 h-40 z-10"
+          animate={{ y: [-5, 5, -5] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="absolute inset-0 bg-[url('/images/verticals/ecommerce.jpg')] bg-contain bg-no-repeat bg-center drop-shadow-[0_20px_40px_rgba(255,255,255,0.1)]" />
+        </motion.div>
+        {/* Glow */}
+        <div className="absolute w-32 h-32 bg-white/5 rounded-full blur-2xl" />
+      </div>
 
-        {/* Célula 2: Imagem do Produto (Preto e Branco alto contraste) */}
-        <div className="border-r-[4px] border-black bg-white flex items-center justify-center overflow-hidden group">
-          <motion.div 
-            className="w-full h-full bg-[url('/images/hero-studio/ecommerce.jpg')] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500"
-            whileHover={{ scale: 1.1 }}
-          />
-        </div>
-
-        {/* Célula 3: Preço e CTA Brutalista */}
-        <div className="bg-[#D4FF00] flex flex-col items-center justify-center p-4">
-          <p className="text-[10px] uppercase font-bold text-black mb-1">Sneaker X</p>
-          <p className="text-3xl font-black text-black mb-3 tracking-tighter">$249</p>
-          <button className="w-full py-2 bg-black text-white text-xs font-bold uppercase hover:bg-white hover:text-black hover:border-black border-2 border-black transition-colors">
-            Add to Cart
-          </button>
-        </div>
+      <div className="absolute bottom-6 w-full text-center z-10">
+        <h2 className="text-2xl text-white font-light tracking-widest mb-1" style={{ fontFamily: 'var(--font-nox-serif), serif' }}>
+          Extrait de Nuit
+        </h2>
+        <p className="text-[7px] text-white/50 uppercase tracking-[0.3em]">A essência do silêncio</p>
       </div>
     </div>
   );
