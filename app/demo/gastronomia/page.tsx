@@ -258,6 +258,60 @@ function RotatingTagline({ words, active }: { words: string[]; active: boolean }
   );
 }
 
+// Magnetic Button
+function MagneticButton({ children, className, onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouse = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { clientX, clientY } = e;
+    if (!ref.current) return;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX * 0.25, y: middleY * 0.25 });
+  };
+
+  const reset = () => {
+    setPosition({ x: 0, y: 0 });
+  };
+
+  return (
+    <motion.button
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      onClick={onClick}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      className={className}
+    >
+      {children}
+    </motion.button>
+  );
+}
+
+// Text Reveal
+function TextReveal({ text, className }: { text: string, className?: string }) {
+  const words = text.split(" ");
+  return (
+    <span className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: 0.7, delay: i * 0.05, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="inline-block mr-[0.25em]"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 const VALORES = [
   'PRODUTO DA ESTAÇÃO',
   'FEIRA DE TERÇA',
@@ -488,14 +542,17 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
 function HeroPhoto({ active }: { active: boolean }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [9, -9]), {
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), {
     stiffness: 160,
     damping: 16,
   });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-9, 9]), {
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), {
     stiffness: 160,
     damping: 16,
   });
+
+  const glowX = useSpring(useTransform(x, [-0.5, 0.5], [-20, 20]), { stiffness: 160, damping: 16 });
+  const glowY = useSpring(useTransform(y, [-0.5, 0.5], [-20, 20]), { stiffness: 160, damping: 16 });
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -532,8 +589,12 @@ function HeroPhoto({ active }: { active: boolean }) {
           rotateY: active ? rotateY : 0,
           transformStyle: 'preserve-3d',
         }}
-        className="w-[230px] border-4 border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_28px_60px_-20px_rgba(0,0,0,0.65)] md:w-[270px] lg:w-[300px]"
+        className="relative w-[230px] border-4 border-[#F3EDE1] bg-[#F3EDE1] md:w-[270px] lg:w-[300px]"
       >
+        <motion.div 
+          className="absolute inset-0 pointer-events-none" 
+          style={{ boxShadow: active ? `0px 20px 40px rgba(0,0,0,0.5), ${glowX.get()}px ${glowY.get()}px 40px rgba(243,237,225,0.08)` : '0 28px 60px -20px rgba(0,0,0,0.65)' }} 
+        />
         <div className="relative aspect-[2/3] w-full overflow-hidden">
           <motion.div
             className="absolute inset-0"
@@ -684,14 +745,16 @@ function SlateCube({ reducedMotion }: { reducedMotion: boolean }) {
  * só repetindo o vocabulário visual da Ardósia pelo scroll inteiro.
  * Desktop-only, como todo decorativo do projeto.
  */
-function DishCard({ prato }: { prato: Prato }) {
+function DishCard({ prato, index = 0 }: { prato: Prato, index?: number }) {
   const Icon = categoryIcon(prato.categoria);
   const hasPhoto = Boolean(prato.img);
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`relative flex w-[240px] h-full flex-shrink-0 flex-col justify-between overflow-hidden rounded-sm border sm:w-[270px] ${
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+      className={`group relative flex w-[240px] h-full flex-shrink-0 flex-col justify-between overflow-hidden rounded-sm border sm:w-[270px] ${
         prato.destaque
           ? 'border-[#C1552C]/50 bg-[#2E2B25]'
           : 'border-[#F3EDE1]/10 bg-[#2A2722]'
@@ -713,14 +776,17 @@ function DishCard({ prato }: { prato: Prato }) {
 
       {hasPhoto && (
         <div className="relative h-[150px] w-full overflow-hidden sm:h-[170px]">
-          <Image
-            src={prato.img}
-            alt={prato.nome}
-            fill
-            sizes="(min-width: 640px) 270px, 240px"
-            className="object-cover"
-          />
-          <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/25 bg-[#191712]/70 text-[#D9A441] backdrop-blur-sm">
+          <div className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-110">
+            <Image
+              src={prato.img}
+              alt={prato.nome}
+              fill
+              sizes="(min-width: 640px) 270px, 240px"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/25" />
+          </div>
+          <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/25 bg-[#191712]/70 text-[#D9A441] backdrop-blur-sm z-10">
             <Icon className="h-3.5 w-3.5" />
           </span>
         </div>
@@ -820,9 +886,14 @@ export default function GastronomiaDemo() {
   return (
     <main
       ref={rootRef}
-      className={`relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#26241F] text-[#F3EDE1] ${display.variable} ${sans.variable}`}
+      className={`relative min-h-screen w-full overflow-x-hidden bg-[#26241F] text-[#F3EDE1] selection:bg-[#C1552C] selection:text-[#F3EDE1] ${display.variable} ${sans.variable}`}
       style={{ fontFamily: 'var(--font-ardosia-sans)' }}
     >
+      {/* Film Grain Texture (Ardósia Física) */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-[0.035] mix-blend-overlay"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E")' }}
+      />
       <ArdosiaContinuousThread />
       {/* Selo NEURALABS — única menção à marca dentro da demo */}
       <div className="flex items-center justify-between gap-4 border-b border-[#F3EDE1]/10 bg-[#201E19] px-5 py-2 text-[11px] tracking-wide text-[#F3EDE1]/60 sm:px-8">
@@ -909,17 +980,8 @@ export default function GastronomiaDemo() {
           className="relative z-10 mb-8 max-w-[600px] text-[52px] leading-[0.98] sm:max-w-[700px] sm:text-[80px] md:max-w-[760px] md:text-[92px] lg:max-w-[800px] lg:text-[100px]"
           style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
         >
-          O cardápio muda.
-          <br />
-          <span className="relative inline-block">
-            <em style={{ fontStyle: 'italic', color: '#D9A441' }}>O capricho, não.</em>
-            <ArdosiaInkStroke
-              variant="underline"
-              color="#C1552C"
-              className="pointer-events-none absolute -bottom-2 left-0 h-3 w-full sm:h-4"
-              delay={0.5}
-            />
-          </span>
+          <TextReveal text="O cardápio muda." className="block" />
+          <TextReveal text="O capricho, não." className="block italic text-[#D9A441]" />
         </h1>
 
         <p className="relative z-10 mb-10 max-w-[440px] text-[14px] leading-[1.9] text-[#B6AF9E]">
@@ -927,20 +989,24 @@ export default function GastronomiaDemo() {
           quadro — se o tomate não tava bom hoje, ele não entra no prato.
         </p>
 
-        <div className="relative z-10 flex flex-wrap items-center gap-6">
-          <a
-            href="#contato"
-            data-magnetic
-            className="inline-flex w-fit items-center gap-2 rounded-sm bg-[#C1552C] px-7 py-3.5 text-[11.5px] font-medium uppercase tracking-[0.15em] text-[#F3EDE1] transition-colors hover:bg-[#a84523]"
+        <div className="flex flex-wrap items-center gap-6 pb-6">
+          <MagneticButton
+            onClick={() => {
+              document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="bg-[#C1552C] px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:bg-[#A34320]"
           >
             Reservar Mesa
-          </a>
-          <a
-            href="#cardapio"
-            className="inline-flex w-fit items-center gap-2 border-b border-[#D9A441] pb-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[#F3EDE1] hover:text-[#D9A441]"
+          </MagneticButton>
+          <button
+            onClick={() => {
+              document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group flex items-center gap-2 border-b border-[#D9A441]/30 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:border-[#D9A441]"
           >
-            Ver Cardápio de Hoje <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+            Ver cardápio de hoje
+            <ArrowUpRight className="h-3.5 w-3.5 text-[#D9A441] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </button>
         </div>
 
         {/* Cartão de escassez diária limpo e alinhado */}
@@ -1038,19 +1104,10 @@ export default function GastronomiaDemo() {
         </ScrollReveal>
 
         <ScrollReveal>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 lg:grid-cols-3">
-            {pratos.map((p, i) => {
-              // Assimetria: cards 0, 3, 6 ficam maiores (lg:col-span-2)
-              const isLarge = [0, 3, 6].includes(i);
-              return (
-                <div
-                  key={p.idx}
-                  className={`h-full ${isLarge ? 'sm:col-span-1 lg:col-span-2' : ''}`}
-                >
-                  <DishCard prato={p} />
-                </div>
-              );
-            })}
+          <div className="flex flex-nowrap gap-4 pb-8 sm:gap-6 md:grid md:grid-cols-2 md:gap-8 md:pb-0 lg:grid-cols-3">
+            {pratos.map((prato, i) => (
+              <DishCard key={prato.idx} prato={prato} index={i} />
+            ))}
           </div>
         </ScrollReveal>
 
