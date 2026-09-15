@@ -930,98 +930,71 @@ export default function GastronomiaDemo() {
         </div>
       </header>
 
-      {/* Hero — tipográfico gigante, sem foto (Arquétipo D). Emblema
-          orbital de ingredientes (ver IngredientOrbit acima — órbita
-          lenta em CSS/framer-motion, inspirada num efeito de objetos
-          flutuando que a Bruna trouxe de referência) + cartão de
-          escassez diária flutuante, em vez do "cartão de vidro sobre
-          foto" já usado 3x. */}
+      {/* Hero — Cinematic Full-Bleed */}
       <section
         ref={heroRef}
-        className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-20 pt-16 sm:px-8 sm:pt-24"
+        className="relative flex min-h-[100svh] w-full flex-col justify-end overflow-hidden px-5 pb-16 pt-32 sm:px-8 sm:pb-24"
       >
-        {/* Hero video — mão escrevendo no quadro de ardósia (background) */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30"
-          style={{ zIndex: 0 }}
-        >
-          <source src="/videos/ardosia/hero.mp4" type="video/mp4" />
-        </video>
-
-        {/* Removed IngredientOrbit for cleaner layout */}
-
-        {/* Foto real do Hero — o quadro de ardósia sendo escrito à mão,
-            gerada pela Bruna a partir de docs/ardosia-prompts-gemini.md.
-            Cartão de foto levemente rotacionado (moldura clara, sombra),
-            lendo como uma polaroide pinada — não full-bleed, porque o
-            Arquétipo D pede "hero tipográfico, sem foto ou foto pequena"
-            (ver docs/IDENTIDADES-E-EFEITOS.md). Zoom lento + tilt de
-            mouse via HeroPhoto (ver comentário no componente acima). */}
-        {isDesktop && <HeroPhoto active={!reducedMotion} />}
-
-        <div className="relative z-10 mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
-          <div className="flex items-center gap-3">
-            <span className="h-px w-9 bg-[#C1552C]" />
-            <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
-              Bistrô de Bairro · Cidade Baixa
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-[10.5px] uppercase tracking-[0.28em] text-[#8A8478]">
-            <span>Hoje tem</span>
-            <RotatingTagline words={TAGLINE_WORDS} active={!reducedMotion} />
-          </div>
+        <div className="absolute inset-0 z-0">
+          <motion.div
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="h-full w-full"
+          >
+            <Image
+              src="/images/gastronomia/hero-quadro.jpg"
+              alt="Hero Background"
+              fill
+              priority
+              className="object-cover opacity-60 mix-blend-luminosity"
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#26241F] via-[#26241F]/70 to-transparent" />
+          <div className="absolute inset-0 bg-[#26241F]/30 mix-blend-multiply" />
         </div>
 
-        <h1
-          className="relative z-10 mb-8 max-w-[600px] text-[52px] leading-[0.98] sm:max-w-[700px] sm:text-[80px] md:max-w-[760px] md:text-[92px] lg:max-w-[800px] lg:text-[100px]"
-          style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
-        >
-          <TextReveal text="O cardápio muda." className="block" />
-          <TextReveal text="O capricho, não." className="block italic text-[#D9A441]" />
-        </h1>
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center text-center">
+          <div className="mb-8 flex items-center justify-center gap-x-5 gap-y-2">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-9 bg-[#C1552C]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
+                Bistrô de Bairro · Cidade Baixa
+              </span>
+              <span className="h-px w-9 bg-[#C1552C]" />
+            </div>
+          </div>
 
-        <p className="relative z-10 mb-10 max-w-[440px] text-[14px] leading-[1.9] text-[#B6AF9E]">
-          Sem cardápio engessado. Compramos o que tá bom na feira de terça e escrevemos no
-          quadro — se o tomate não tava bom hoje, ele não entra no prato.
-        </p>
+          <h1
+            className="mb-8 max-w-[800px] text-[52px] leading-[0.98] sm:text-[80px] md:text-[92px] lg:text-[100px]"
+            style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+          >
+            <TextReveal text="O cardápio muda." className="block" />
+            <TextReveal text="O capricho, não." className="block italic text-[#D9A441]" />
+          </h1>
 
-        <div className="flex flex-wrap items-center gap-6 pb-6">
-          <MagneticButton
-            onClick={() => {
-              document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="bg-[#C1552C] px-6 py-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:bg-[#A34320]"
-          >
-            Reservar Mesa
-          </MagneticButton>
-          <button
-            onClick={() => {
-              document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="group flex items-center gap-2 border-b border-[#D9A441]/30 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:border-[#D9A441]"
-          >
-            Ver cardápio de hoje
-            <ArrowUpRight className="h-3.5 w-3.5 text-[#D9A441] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </button>
-        </div>
+          <p className="mb-10 max-w-[500px] text-[14.5px] leading-[1.9] text-[#B6AF9E]">
+            Sem cardápio engessado. Compramos o que tá bom na feira de terça e escrevemos no
+            quadro — se o tomate não tava bom hoje, ele não entra no prato.
+          </p>
 
-        {/* Cartão de escassez diária limpo e alinhado */}
-        <div className="mt-14 flex flex-wrap items-end gap-6 sm:mt-16">
-          <div
-            className="inline-flex max-w-[260px] flex-col gap-1 rounded-sm border border-[#F3EDE1]/12 bg-[#2E2B25] px-5 py-4"
-            style={{ boxShadow: '0 20px 40px -20px rgba(0,0,0,.5)' }}
-          >
-            <span className="text-[10px] uppercase tracking-[0.16em] text-[#D9A441]">Hoje à noite</span>
-            <span
-              className="text-[20px] leading-none text-[#F3EDE1]"
-              style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+          <div className="flex flex-col items-center gap-6 sm:flex-row">
+            <MagneticButton
+              onClick={() => {
+                document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="bg-[#C1552C] px-8 py-4.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:bg-[#A34320]"
             >
-              {mesasDisponiveis} mesas disponíveis
-            </span>
+              Reservar Mesa
+            </MagneticButton>
+            <button
+              onClick={() => {
+                document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="group flex items-center gap-2 border-b border-[#D9A441]/30 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:border-[#D9A441]"
+            >
+              Ver cardápio de hoje
+              <ArrowUpRight className="h-3.5 w-3.5 text-[#D9A441] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </button>
           </div>
         </div>
       </section>
@@ -1046,38 +1019,58 @@ export default function GastronomiaDemo() {
         </div>
       </div>
 
-      {/* História — parágrafo justificado contando a origem real da casa
-          (técnica trazida da referência Dishoom, catalogada na biblioteca):
-          em vez de só tagline + CTA, uma camada de conteúdo editorial de
-          verdade, com especificidade (nomes, ano, gesto concreto) em vez
-          de copy genérico de "sobre nós". Texto justificado (não ragged-
-          right) para ler como coluna de revista, não como parágrafo de
-          formulário. */}
-      <section className="mx-auto max-w-4xl px-5 py-20 sm:px-8 sm:py-28">
-        <ScrollReveal>
-          <div className="grid gap-10 md:grid-cols-[200px_1fr] md:gap-14">
-            <div className="flex items-start gap-3 md:flex-col md:gap-2">
-              <span className="h-px w-9 flex-shrink-0 bg-[#C1552C] md:h-auto md:w-px md:flex-shrink md:self-stretch" />
-              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
-                Desde 2019 · Cidade Baixa
-              </span>
-            </div>
-            <p
-              className="max-w-[62ch] text-[16px] leading-[1.9] text-[#D8D2C4] sm:text-[18px]"
-              style={{ textAlign: 'justify', textJustify: 'inter-word' }}
-            >
-              A Ardósia começou porque a Mari cansou de cardápio que promete tudo e entrega
-              congelado. Ela pegou uma lousa de verdade — a mesma do fundo da sala da escola
-              onde deu aula por oito anos — pregou na parede da entrada e escreveu, a giz, o
-              que tinha comprado naquela manhã na feira da Voluntários da Pátria. Não tinha
-              plano nenhum além desse. Sete anos depois o quadro ainda é apagado e reescrito
-              seis vezes por semana, à mão, geralmente pelo próprio chef antes do primeiro
-              cliente entrar. Não é estética de fazenda-orgânica-de-revista: é só o jeito mais
-              honesto que a casa encontrou de dizer o que tem hoje, sem prometer o que não vai
-              ter amanhã.
-            </p>
+      {/* História — Layout Sticky Editorial para preencher o vazio */}
+      <section className="relative mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
+        <div className="grid gap-12 md:grid-cols-2 md:items-start lg:gap-20">
+          
+          {/* Lado Esquerdo: Imagem Sticky */}
+          <div className="sticky top-32 hidden aspect-[4/5] w-full overflow-hidden rounded-sm border border-[#F3EDE1]/10 md:block">
+            <Image
+              src="/images/gastronomia/a-feira.jpg"
+              alt="Feira de terça"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-[#26241F]/20 mix-blend-multiply" />
           </div>
-        </ScrollReveal>
+
+          {/* Lado Direito: Texto */}
+          <div className="flex flex-col justify-center">
+            <ScrollReveal>
+              <div className="mb-8 flex items-center gap-3">
+                <span className="h-px w-9 bg-[#C1552C]" />
+                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
+                  Desde 2019 · Cidade Baixa
+                </span>
+              </div>
+              <p
+                className="max-w-[38ch] text-[24px] leading-[1.6] text-[#F3EDE1] sm:text-[28px]"
+                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+              >
+                A Ardósia começou porque a Mari cansou de cardápio que promete tudo e entrega congelado. 
+              </p>
+              <p className="mt-8 max-w-[42ch] text-[15px] leading-[1.9] text-[#B6AF9E]">
+                Ela pegou uma lousa de verdade — a mesma do fundo da sala da escola
+                onde deu aula por oito anos — pregou na parede da entrada e escreveu, a giz, o
+                que tinha comprado naquela manhã na feira da Voluntários da Pátria.
+              </p>
+              <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.9] text-[#B6AF9E]">
+                Sete anos depois o quadro ainda é apagado e reescrito seis vezes por semana, à mão. 
+                Não é estética de revista: é só o jeito mais honesto que a casa encontrou de dizer o que tem hoje, sem prometer o que não vai ter amanhã.
+              </p>
+              
+              <div className="mt-10 inline-flex max-w-[260px] flex-col gap-1 rounded-sm border border-[#F3EDE1]/12 bg-[#2A2722] px-5 py-4">
+                <span className="text-[10px] uppercase tracking-[0.16em] text-[#D9A441]">Hoje à noite</span>
+                <span
+                  className="text-[20px] leading-none text-[#F3EDE1]"
+                  style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+                >
+                  {mesasDisponiveis} mesas disponíveis
+                </span>
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
       </section>
 
       {/* Cardápio de hoje — trilho de scroll horizontal (Arquétipo D) em
