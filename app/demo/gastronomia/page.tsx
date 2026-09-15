@@ -864,9 +864,21 @@ export default function GastronomiaDemo() {
         ref={heroRef}
         className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-20 pt-16 sm:px-8 sm:pt-24"
       >
+        {/* Hero video — mão escrevendo no quadro de ardósia (background) */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30"
+          style={{ zIndex: 0 }}
+        >
+          <source src="/videos/ardosia/hero.mp4" type="video/mp4" />
+        </video>
+
         {isDesktop && !reducedMotion && (
           <motion.div
-            className="pointer-events-none absolute right-[2%] top-[2%]"
+            className="pointer-events-none absolute right-[2%] top-[2%] z-10"
             style={{ y: orbitParallaxY }}
           >
             <IngredientOrbit />
@@ -882,7 +894,7 @@ export default function GastronomiaDemo() {
             mouse via HeroPhoto (ver comentário no componente acima). */}
         {isDesktop && <HeroPhoto active={!reducedMotion} />}
 
-        <div className="mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
+        <div className="relative z-10 mb-8 flex flex-wrap items-center gap-x-5 gap-y-2">
           <div className="flex items-center gap-3">
             <span className="h-px w-9 bg-[#C1552C]" />
             <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
@@ -917,7 +929,7 @@ export default function GastronomiaDemo() {
           quadro — se o tomate não tava bom hoje, ele não entra no prato.
         </p>
 
-        <div className="flex flex-wrap items-center gap-6">
+        <div className="relative z-10 flex flex-wrap items-center gap-6">
           <a
             href="#contato"
             data-magnetic
