@@ -347,8 +347,105 @@ function TextReveal({ text, className }: { text: string, className?: string }) {
     </span>
   );
 }
+// ─── Dust Particles (Atmosfera Cinematográfica) ───
+function DustParticles() {
+  const particles = Array.from({ length: 20 });
+  return (
+    <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden">
+      {particles.map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-[#F3EDE1]"
+          style={{
+            width: Math.random() * 3 + 1 + 'px',
+            height: Math.random() * 3 + 1 + 'px',
+            left: Math.random() * 100 + '%',
+            top: Math.random() * 100 + '%',
+            opacity: Math.random() * 0.4 + 0.1,
+            filter: 'blur(1px)',
+          }}
+          animate={{
+            y: [0, -Math.random() * 100 - 50],
+            x: [0, Math.random() * 50 - 25],
+            opacity: [0, Math.random() * 0.4 + 0.1, 0],
+          }}
+          transition={{
+            duration: Math.random() * 10 + 10,
+            repeat: Infinity,
+            ease: 'linear',
+            delay: Math.random() * 5,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
+// ─── Floating Ingredient (3D Parallax com Mix-Blend-Screen) ───
+const FLOATING_INGREDIENTS = [
+  { src: '/images/gastronomia/ingredients/basil.jpg', alt: 'Manjericão', size: 90, x: '8%', y: '15%', delay: 0, rotate: -15, speed: 1.2 },
+  { src: '/images/gastronomia/ingredients/pepper.jpg', alt: 'Pimenta', size: 70, x: '85%', y: '20%', delay: 0.3, rotate: 25, speed: 0.8 },
+  { src: '/images/gastronomia/ingredients/tomato.jpg', alt: 'Tomate', size: 80, x: '12%', y: '65%', delay: 0.6, rotate: 10, speed: 1.0 },
+  { src: '/images/gastronomia/ingredients/rosemary.jpg', alt: 'Alecrim', size: 75, x: '90%', y: '55%', delay: 0.15, rotate: -20, speed: 1.4 },
+  { src: '/images/gastronomia/ingredients/garlic.jpg', alt: 'Alho', size: 65, x: '78%', y: '78%', delay: 0.45, rotate: 30, speed: 0.9 },
+];
 
+function FloatingIngredient({
+  src, alt, size, initialX, initialY, delay, initialRotate, speed, mouseX, mouseY
+}: {
+  src: string; alt: string; size: number;
+  initialX: string; initialY: string; delay: number;
+  initialRotate: number; speed: number;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+}) {
+  const springConfig = { stiffness: 50, damping: 20, mass: 0.8 };
+  const moveX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-30 * speed, 30 * speed]), springConfig);
+  const moveY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-25 * speed, 25 * speed]), springConfig);
+
+  return (
+    <motion.div
+      className="absolute pointer-events-none z-[10] mix-blend-screen"
+      style={{
+        left: initialX,
+        top: initialY,
+        x: moveX,
+        y: moveY,
+        width: size,
+        height: size,
+      }}
+      initial={{ opacity: 0, scale: 0, rotate: initialRotate - 20 }}
+      animate={{ opacity: 1, scale: 1, rotate: initialRotate }}
+      transition={{
+        delay: 0.8 + delay,
+        duration: 1.2,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      <motion.div
+        animate={{
+          y: [0, -12, 0],
+          rotate: [initialRotate, initialRotate + 5, initialRotate],
+        }}
+        transition={{
+          duration: 4 + delay * 2,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="relative w-full h-full"
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={`${size}px`}
+          className="object-contain"
+          style={{ filter: 'brightness(1.1) contrast(1.1)' }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
 
 // ─── Floating Insight Chip (glassmorphism) ───
 function FloatingChip({
@@ -435,7 +532,7 @@ function HeroChalkboardShowcase({ mouseX, mouseY }: {
                 transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
               >
                 <Image
-                  src="/images/gastronomia/hero-quadro.jpg"
+                  src="/images/gastronomia/hero-quadro-cinematic.jpg"
                   alt="Quadro de ardósia sendo escrito à mão com o cardápio do dia"
                   fill
                   priority
@@ -781,7 +878,25 @@ export default function GastronomiaDemo() {
           </motion.span>
         </motion.div>
 
-        {/* Ingredientes flutuantes removidos para manter o visual limpo e focado no quadro */}
+        {/* Dust Particles */}
+        <DustParticles />
+
+        {/* Ingredientes flutuantes — Agora com mix-blend-screen para ficarem perfeitos sem fundo preto! */}
+        {FLOATING_INGREDIENTS.map((ing, i) => (
+          <FloatingIngredient
+            key={i}
+            src={ing.src}
+            alt={ing.alt}
+            size={isDesktop ? ing.size : ing.size * 0.6}
+            initialX={ing.x}
+            initialY={ing.y}
+            delay={ing.delay}
+            initialRotate={ing.rotate}
+            speed={ing.speed}
+            mouseX={heroMouseX}
+            mouseY={heroMouseY}
+          />
+        ))}
 
         {/* Floating Insight Chips */}
         <FloatingChip
