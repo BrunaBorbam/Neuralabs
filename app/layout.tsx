@@ -6,6 +6,8 @@ import { PWAInstaller } from "@/components/PWAInstaller";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 // Weight lists trimmed to exactly what the site's Tailwind classes use
@@ -118,6 +120,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Script>
           </>
         )}
+        {process.env.NEXT_PUBLIC_CLARITY_ID && (
+          <Script id="clarity-script" strategy="afterInteractive">
+            {`
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID}");
+            `}
+          </Script>
+        )}
       </head>
       <body className="min-h-screen overflow-x-hidden max-w-full w-full bg-[#0B0A0E] text-pearl-200">
         <LanguageProvider>
@@ -126,6 +139,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CookieConsent />
           <PWAInstaller />
           <FloatingWhatsApp />
+          <Analytics />
+          <SpeedInsights />
         </LanguageProvider>
       </body>
     </html>

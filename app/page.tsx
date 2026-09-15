@@ -4,6 +4,7 @@ import { Pillars } from '@/components/Pillars';
 import { Verticals } from '@/components/Verticals';
 import { InteractiveComparison } from '@/components/InteractiveComparison';
 import { Calculator } from '@/components/Calculator';
+import { SocialProof } from '@/components/SocialProof';
 import { BrandIdentity } from '@/components/BrandIdentity';
 import { Pricing } from '@/components/Pricing';
 import { FAQ } from '@/components/FAQ';
@@ -20,6 +21,7 @@ export default function Home() {
         <Verticals />
         <InteractiveComparison />
         <Calculator />
+        <SocialProof />
         <BrandIdentity />
         <Pricing />
         <FAQ />

@@ -1,0 +1,169 @@
+From dba35101d8ffa8f4963eca02fb33b4e7ac17c10a Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 11 Sep 2026 16:50:36 +0000
+Subject: [PATCH 4/4] =?UTF-8?q?feat:=20adiciona=20conector=20de=20se=C3=A7?=
+ =?UTF-8?q?=C3=A3o=20(efeito=20"escorrendo")=20na=20Ard=C3=B3sia?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Inspirado numa referência que a Bruna trouxe (site de mel onde o mel
+escorre do pote pro bloco seguinte, amarrando o scroll entre seções).
+Aqui reinterpretado só na técnica — nova variante "drip" do componente
+ArdosiaInkStroke (mesmo motor de pathLength já usado no traço de tinta),
+com um fio de giz/tinta escorrendo nas emendas #cardapio→#processo e
+depoimentos→#faq, terminando numa gotinha. Cor e material seguem a
+identidade Ardósia (terracota/giz), nunca a paleta da referência.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016gJcn5W4c85HuUXZs4RVHz
+---
+ app/demo/gastronomia/page.tsx   | 21 ++++++++++++++---
+ components/ArdosiaInkStroke.tsx | 40 ++++++++++++++++++++++++++++++---
+ 2 files changed, 55 insertions(+), 6 deletions(-)
+
+diff --git a/app/demo/gastronomia/page.tsx b/app/demo/gastronomia/page.tsx
+index 58d9747..462198c 100644
+--- a/app/demo/gastronomia/page.tsx
++++ b/app/demo/gastronomia/page.tsx
+@@ -43,6 +43,12 @@
+  * ArdosiaInkStroke.tsx, via framer-motion `pathLength`) — item do catálogo
+  * de efeitos ainda não usado por nenhum projeto. Nada de anéis
+  * concêntricos, nada de wireframe 3D (já usados 3x e 1x respectivamente).
++ * A mesma técnica também conecta seções (variante "drip", componente
++ * ArdosiaSectionDrip) — um fio de giz "escorrendo" na emenda entre
++ * #cardapio→#processo e depoimentos→#faq, dando sensação de continuidade
++ * no scroll (referência trazida pela Bruna: mel escorrendo entre blocos
++ * num site de apicultura — aqui reinterpretado só na técnica, com o
++ * material/cor da própria identidade Ardósia, nunca a cor de mel).
+  *
+  * Gatilhos de neuromarketing (duas camadas — quem janta e quem contrataria
+  * a NEURALABS pra um restaurante real costumam ser a mesma pessoa aqui, o
+@@ -95,7 +101,7 @@ import {
+ } from 'lucide-react';
+ import { ScrollReveal } from '@/components/HeroAnimations';
+ import { ArdosiaReservaForm } from '@/components/ArdosiaReservaForm';
+-import { ArdosiaInkStroke } from '@/components/ArdosiaInkStroke';
++import { ArdosiaInkStroke, ArdosiaSectionDrip } from '@/components/ArdosiaInkStroke';
+ 
+ const display = Instrument_Serif({
+   subsets: ['latin'],
+@@ -630,7 +636,7 @@ export default function GastronomiaDemo() {
+ 
+       {/* Cardápio de hoje — trilho de scroll horizontal (Arquétipo D) em
+           vez de grid tradicional. Puxa do Notion quando configurado. */}
+-      <section id="cardapio" className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
++      <section id="cardapio" className="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
+         <ScrollReveal>
+           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+             <div className="max-w-lg">
+@@ -658,6 +664,13 @@ export default function GastronomiaDemo() {
+             ))}
+           </div>
+         </ScrollReveal>
++
++        {/* Conector de seção — o "escorrer" que amarra o scroll (ver
++            components/ArdosiaInkStroke.tsx, variante "drip"), inspirado
++            num efeito de continuidade que a Bruna trouxe de referência
++            (mel escorrendo entre seções) — aqui reinterpretado com o
++            traço de giz/tinta que já é a assinatura da Ardósia. */}
++        <ArdosiaSectionDrip />
+       </section>
+ 
+       {/* Da feira à mesa — colagem tipográfica em cartões rotacionados
+@@ -704,7 +717,7 @@ export default function GastronomiaDemo() {
+       {/* Depoimentos — carrossel manual (Arquétipo D), tom de bairro em
+           vez de credencial formal (diferente do depoimento de arquiteto
+           da CERNE) */}
+-      <section className="mx-auto max-w-3xl px-5 py-20 text-center sm:px-8 sm:py-24">
++      <section className="relative mx-auto max-w-3xl px-5 py-20 text-center sm:px-8 sm:py-24">
+         <ScrollReveal>
+           <Quote className="mx-auto mb-6 h-7 w-7 text-[#C1552C]" />
+           <p
+@@ -747,6 +760,8 @@ export default function GastronomiaDemo() {
+             </button>
+           </div>
+         </ScrollReveal>
++
++        <ArdosiaSectionDrip />
+       </section>
+ 
+       {/* FAQ — redução de fricção antes do CTA final */}
+diff --git a/components/ArdosiaInkStroke.tsx b/components/ArdosiaInkStroke.tsx
+index e0d37a1..23365a1 100644
+--- a/components/ArdosiaInkStroke.tsx
++++ b/components/ArdosiaInkStroke.tsx
+@@ -12,11 +12,18 @@
+  *
+  * Implementado com um <motion.path> animando `pathLength` (framer-motion,
+  * já é dependência do projeto) — leve, sem WebGL, funciona em mobile.
++ *
++ * Variante "drip" (adicionada depois, a pedido da Bruna, inspirada num
++ * efeito de "continuidade entre seções" que ela trouxe de referência —
++ * um site de mel onde o mel escorre do pote pro bloco seguinte, amarrando
++ * o scroll): aqui é um fio de giz/tinta escorrendo na emenda entre duas
++ * seções, terminando numa gotinha que "pinga" — mesma técnica (pathLength),
++ * conteúdo 100% da identidade Ardósia (giz/tinta, não mel).
+  */
+ 
+ import { motion } from 'framer-motion';
+ 
+-type Variant = 'underline' | 'circle';
++type Variant = 'underline' | 'circle' | 'drip';
+ 
+ const PATHS: Record<Variant, string> = {
+   // Traço horizontal levemente irregular — não uma linha reta perfeita,
+@@ -26,11 +33,14 @@ const PATHS: Record<Variant, string> = {
+   // "circulei isso no cardápio".
+   circle:
+     'M50 4C22 4 4 16 4 30C4 46 24 56 50 56C78 56 96 46 96 30C96 15 76 5 50 5',
++  // Fio vertical levemente sinuoso, escorrendo de cima pra baixo.
++  drip: 'M12 2C9 14 15 22 12 34C9 46 15 56 12 68C10 76 13 82 12 88',
+ };
+ 
+ const VIEWBOX: Record<Variant, string> = {
+   underline: '0 0 240 14',
+   circle: '0 0 100 60',
++  drip: '0 0 24 104',
+ };
+ 
+ export const ArdosiaInkStroke = ({
+@@ -60,9 +70,33 @@ export const ArdosiaInkStroke = ({
+       strokeLinecap="round"
+       strokeLinejoin="round"
+       initial={{ pathLength: 0, opacity: 0 }}
+-      whileInView={{ pathLength: 1, opacity: 1 }}
++      whileInView={{ pathLength: 1, opacity: variant === 'drip' ? 0.55 : 1 }}
+       viewport={{ once: true, amount: 0.6 }}
+-      transition={{ duration: 0.9, delay, ease: [0.65, 0, 0.35, 1] }}
++      transition={{ duration: variant === 'drip' ? 1.4 : 0.9, delay, ease: [0.65, 0, 0.35, 1] }}
+     />
++    {variant === 'drip' && (
++      <motion.circle
++        cx="12"
++        cy="94"
++        r="3.2"
++        fill={color}
++        initial={{ opacity: 0, scale: 0 }}
++        whileInView={{ opacity: 0.55, scale: 1 }}
++        viewport={{ once: true, amount: 0.6 }}
++        transition={{ duration: 0.4, delay: delay + 1.15, ease: 'easeOut' }}
++      />
++    )}
+   </svg>
+ );
++
++/** Conector visual entre duas seções — o "escorrer" que amarra o scroll,
++ * posicionado sobre a emenda (metade em cada seção). Uso: dentro de uma
++ * seção com `position: relative`, perto do fechamento (`</section>`). */
++export const ArdosiaSectionDrip = ({ color = '#C1552C' }: { color?: string }) => (
++  <div
++    aria-hidden="true"
++    className="pointer-events-none absolute left-1/2 -bottom-12 z-10 hidden h-24 w-6 -translate-x-1/2 sm:block"
++  >
++    <ArdosiaInkStroke variant="drip" color={color} strokeWidth={2.5} className="h-full w-full" />
++  </div>
++);
+-- 
+2.43.0
+

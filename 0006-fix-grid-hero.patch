@@ -1,0 +1,66 @@
+From f130a74d95ac6601f0b7edf7a050c60a339ab6d9 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 11 Sep 2026 13:21:54 +0000
+Subject: [PATCH] fix: corrige grid quebrado no Hero da CERNE e no contato da
+ NEURALABS
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Bug raiz encontrado inspecionando o CSS gerado no site publicado: as
+classes md:grid-cols-[1.05fr,1fr] (Hero da CERNE) e md:grid-cols-[1.2fr,1fr]
+(ContactForm da NEURALABS) usavam vírgula dentro do valor arbitrário do
+Tailwind. Isso compila para `grid-template-columns:1.05fr,1fr` — valor
+inválido pra essa propriedade CSS (que espera as colunas separadas por
+espaço, não vírgula) — então o navegador descarta a declaração inteira e
+volta pro padrão `grid-template-columns: none`. Na prática, a seção
+virava uma coluna só, empilhada, em vez de duas lado a lado.
+
+No Hero da CERNE isso explica os dois sintomas relatados: o vídeo/3D
+"sumia" (na verdade estava empilhado abaixo do texto, fora da área
+visível inicial) e a cadeira 3D aparecia deslocada — ela é posicionada em
+relação a esse mesmo container quebrado.
+
+Correção: troca a vírgula por underscore (`_`) dentro do valor
+arbitrário — sintaxe que o Tailwind converte para espaço no CSS de
+saída, gerando `grid-template-columns:1.05fr 1fr` (válido). Testado
+localmente: grid-template-columns passa a computar as duas colunas reais
+em ambas as páginas, vídeo e cadeira 3D aparecem ao lado do texto no
+Hero da CERNE como projetado.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016gJcn5W4c85HuUXZs4RVHz
+---
+ app/demo/marcenaria/page.tsx | 2 +-
+ components/ContactForm.tsx   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/app/demo/marcenaria/page.tsx b/app/demo/marcenaria/page.tsx
+index d8720ac..1813a21 100644
+--- a/app/demo/marcenaria/page.tsx
++++ b/app/demo/marcenaria/page.tsx
+@@ -453,7 +453,7 @@ export default function MarcenariaDemo() {
+       </header>
+ 
+       {/* Hero — split editorial, foto à direita + cartão de vidro com escassez */}
+-      <section className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-14 sm:px-8 sm:pt-20 md:grid-cols-[1.05fr,1fr] md:gap-6 md:pb-0">
++      <section className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-14 sm:px-8 sm:pt-20 md:grid-cols-[1.05fr_1fr] md:gap-6 md:pb-0">
+         <div className="flex flex-col justify-center py-6 md:py-20">
+           <div className="mb-8 flex items-center gap-3">
+             <span className="h-px w-9 bg-[#6B7A4E]" />
+diff --git a/components/ContactForm.tsx b/components/ContactForm.tsx
+index 4582358..ce732b9 100644
+--- a/components/ContactForm.tsx
++++ b/components/ContactForm.tsx
+@@ -63,7 +63,7 @@ export const ContactForm = () => {
+         </ScrollReveal>
+ 
+         <ScrollReveal>
+-          <Card variant="glass" className="grid md:grid-cols-[1.2fr,1fr] gap-10">
++          <Card variant="glass" className="grid md:grid-cols-[1.2fr_1fr] gap-10">
+             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+               {/* Honeypot anti-bot: real visitors never see this field (it's
+                   visually hidden, not just a small opacity trick a scraper
+-- 
+2.43.0
+

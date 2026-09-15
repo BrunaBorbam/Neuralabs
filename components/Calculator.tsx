@@ -15,6 +15,8 @@ export const Calculator = () => {
   const [visitors, setVisitors] = useState(3000);
   const [conversionRate, setConversionRate] = useState(1.2);
   const [ticket, setTicket] = useState(450);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const currency = useMemo(
     () =>
@@ -31,6 +33,23 @@ export const Calculator = () => {
     const monthly = visitors * gap * ticket;
     return { monthlyLoss: monthly, annualLoss: monthly * 12 };
   }, [visitors, conversionRate, ticket]);
+
+  const handleCaptureLead = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, visitors, conversionRate, ticket, annualLoss }),
+      });
+      if (res.ok) setStatus('success');
+      else setStatus('error');
+    } catch {
+      setStatus('error');
+    }
+  };
 
   return (
     <section id="calculadora" className="py-24 px-6 bg-obsidian-800/40">
@@ -124,6 +143,35 @@ export const Calculator = () => {
                   with no visible method, which works against exactly the
                   analytical buyer this calculator is meant to convince. */}
               <p className="text-xs text-pearl-300/40 mt-4 leading-relaxed">{t.calculator.benchmarkNote}</p>
+
+              <form onSubmit={handleCaptureLead} className="mt-8 w-full">
+                {status === 'success' ? (
+                  <div className="p-3 bg-gold-500/10 border border-gold-500/20 rounded-lg text-gold-300 text-sm">
+                    Simulação salva! Um especialista fará contato em breve.
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Seu melhor e-mail"
+                      required
+                      className="w-full px-4 py-3 bg-obsidian-800 border border-pearl-100/10 rounded-lg text-sm text-pearl-100 placeholder:text-pearl-300/30 focus:outline-none focus:border-gold-500/50 transition-colors"
+                    />
+                    <button
+                      type="submit"
+                      disabled={status === 'loading'}
+                      className="w-full py-3 bg-pearl-100 text-obsidian-900 text-sm font-semibold rounded-lg shadow-sm hover:bg-white transition-all active:scale-[0.98] disabled:opacity-70"
+                    >
+                      {status === 'loading' ? 'Enviando...' : 'Receber Diagnóstico Gratuito'}
+                    </button>
+                    {status === 'error' && (
+                      <span className="text-xs text-red-400">Erro ao enviar. Tente novamente.</span>
+                    )}
+                  </div>
+                )}
+              </form>
             </div>
           </Card>
         </ScrollReveal>
