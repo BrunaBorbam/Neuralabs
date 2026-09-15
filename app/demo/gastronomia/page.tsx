@@ -1039,10 +1039,23 @@ export default function GastronomiaDemo() {
         </ScrollReveal>
 
         <ScrollReveal>
-          <div className="scrollbar-none -mx-5 flex gap-4 overflow-x-auto px-5 pb-4 sm:-mx-8 sm:px-8">
-            {pratos.map((p) => (
-              <DishCard key={p.idx} prato={p} />
-            ))}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 lg:grid-cols-3">
+            {pratos.map((p, i) => {
+              // Assimetria: cards 0, 3, 6 ficam maiores (lg:col-span-2 ou lg:row-span-2)
+              const isLarge = [0, 3, 6].includes(i);
+              const rotations = ['1deg', '-1.5deg', '0.8deg', '-0.5deg', '1.2deg', '-1deg', '0.3deg', '-0.8deg'];
+              return (
+                <div
+                  key={p.idx}
+                  className={`${isLarge ? 'sm:col-span-1 lg:col-span-2' : ''}`}
+                  style={{
+                    transform: `rotate(${rotations[i % rotations.length]})`,
+                  }}
+                >
+                  <DishCard prato={p} />
+                </div>
+              );
+            })}
           </div>
         </ScrollReveal>
 
