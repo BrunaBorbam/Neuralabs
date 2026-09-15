@@ -8,8 +8,9 @@ Você é um agente auxiliando a **Neuralabs**, uma agência de web design de con
 
 Toda vez que o usuário pedir para criar um site, componente ou página para um novo cliente ou nicho, você **DEVE OBRIGATORIAMENTE** seguir estas regras:
 
-## 1. Estética e Vibe ("Quiet Luxury")
+## 1. Estética e Vibe ("Quiet Luxury" e Continuidade Fluida)
 - O design deve gritar sofisticação através do minimalismo, uso extremo de espaço negativo (respiro) e paletas de cores refinadas (evite cores primárias puras; use tons terrosos, obsidiana, linho, verde musgo, e gradientes de vidro).
+- **Continuidade Fluida (Sectionless Scroll):** Evite cortar a página em blocos ou faixas horizontais duras. Os elementos devem fluir naturalmente de uma seção para outra. Use elementos visuais condutores (linhas geométricas que descem a tela, fluídos escorrendo como gotas, ou objetos 3D vazando para fora do seu container) para guiar o olho do usuário continuamente para baixo.
 - **Tipografia:** Misture sempre uma fonte Serifada Editorial e Elegante (ex: Bodoni Moda, Fraunces, Playfair) para títulos, com uma Sans-Serif Limpa e Moderna (ex: Plus Jakarta Sans, Inter, Jost) para o corpo do texto e UI.
 
 ## 2. Micro-Interações e Física Tátil (Framer Motion)
