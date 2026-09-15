@@ -16,7 +16,7 @@ export const SocialProof = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <Badge variant="secondary" className="mb-4">
+          <Badge variant="primary" className="mb-4">
             A Prova
           </Badge>
           <h2 className="text-3xl md:text-5xl font-serif font-black text-pearl-100 mb-6">
