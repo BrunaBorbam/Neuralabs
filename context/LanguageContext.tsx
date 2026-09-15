@@ -171,12 +171,14 @@ export interface Dictionary {
 const pt: Dictionary = {
   nav: {
     links: [
-      { label: 'Pilares', href: '#pilares' },
-      { label: 'Nichos', href: '#nichos' },
-      { label: 'Antes & Depois', href: '#comparativo' },
-      { label: 'Preços', href: '#precos' },
-      { label: 'FAQ', href: '#faq' },
-      { label: 'Contato', href: '#contato' },
+      { label: 'Pilares', href: '/#pilares' },
+      { label: 'Nichos', href: '/#nichos' },
+      { label: 'Antes & Depois', href: '/#comparativo' },
+      { label: 'Preços', href: '/#precos' },
+      { label: 'FAQ', href: '/#faq' },
+      { label: 'Contato', href: '/#contato' },
+      { label: 'Portfólio', href: '/portfolio' },
+      { label: 'Metodologia', href: '/metodologia' },
     ],
     cta: 'Diagnóstico no WhatsApp',
     tagline: 'Criação de Sites Premium',
@@ -455,12 +457,14 @@ const pt: Dictionary = {
 const en: Dictionary = {
   nav: {
     links: [
-      { label: 'Pillars', href: '#pilares' },
-      { label: 'Niches', href: '#nichos' },
-      { label: 'Before & After', href: '#comparativo' },
-      { label: 'Pricing', href: '#precos' },
-      { label: 'FAQ', href: '#faq' },
-      { label: 'Contact', href: '#contato' },
+      { label: 'Pillars', href: '/#pilares' },
+      { label: 'Niches', href: '/#nichos' },
+      { label: 'Before & After', href: '/#comparativo' },
+      { label: 'Pricing', href: '/#precos' },
+      { label: 'FAQ', href: '/#faq' },
+      { label: 'Contact', href: '/#contato' },
+      { label: 'Portfolio', href: '/portfolio' },
+      { label: 'Methodology', href: '/metodologia' },
     ],
     cta: 'WhatsApp Diagnosis',
     tagline: 'Premium Website Design',
