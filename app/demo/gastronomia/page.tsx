@@ -527,7 +527,7 @@ function HeroPhoto({ active }: { active: boolean }) {
         onMouseMove={active ? handleMouseMove : undefined}
         onMouseLeave={active ? handleMouseLeave : undefined}
         style={{
-          rotate: -3,
+          rotate: 0,
           rotateX: active ? rotateX : 0,
           rotateY: active ? rotateY : 0,
           transformStyle: 'preserve-3d',
@@ -688,8 +688,10 @@ function DishCard({ prato }: { prato: Prato }) {
   const Icon = categoryIcon(prato.categoria);
   const hasPhoto = Boolean(prato.img);
   return (
-    <div
-      className={`relative flex w-[240px] flex-shrink-0 flex-col justify-between overflow-hidden rounded-sm border sm:w-[270px] ${
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className={`relative flex w-[240px] h-full flex-shrink-0 flex-col justify-between overflow-hidden rounded-sm border sm:w-[270px] ${
         prato.destaque
           ? 'border-[#C1552C]/50 bg-[#2E2B25]'
           : 'border-[#F3EDE1]/10 bg-[#2A2722]'
@@ -764,7 +766,7 @@ function DishCard({ prato }: { prato: Prato }) {
           {prato.preco}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -879,14 +881,7 @@ export default function GastronomiaDemo() {
           <source src="/videos/ardosia/hero.mp4" type="video/mp4" />
         </video>
 
-        {isDesktop && !reducedMotion && (
-          <motion.div
-            className="pointer-events-none absolute right-[2%] top-[2%] z-10"
-            style={{ y: orbitParallaxY }}
-          >
-            <IngredientOrbit />
-          </motion.div>
-        )}
+        {/* Removed IngredientOrbit for cleaner layout */}
 
         {/* Foto real do Hero — o quadro de ardósia sendo escrito à mão,
             gerada pela Bruna a partir de docs/ardosia-prompts-gemini.md.
@@ -948,22 +943,11 @@ export default function GastronomiaDemo() {
           </a>
         </div>
 
-        {/* Cartão de escassez diária — versão bistrô do "cartão de vidro
-            com escassez" (recurso comum aos três projetos anteriores):
-            aqui rotacionado, sem blur/vidro, pra ler como um recado de
-            quadro-negro afixado, não como widget de UI. Cubo de ardósia
-            (SlateCube) ao lado, lado a lado em flex — não atrás/sobre o
-            cartão, pra não brigar por espaço nem ser encoberto por ele
-            ou pelo widget de chat fixo no canto da tela. */}
+        {/* Cartão de escassez diária limpo e alinhado */}
         <div className="mt-14 flex flex-wrap items-end gap-6 sm:mt-16">
-          {isDesktop && (
-            <div className="hidden pb-1 sm:block">
-              <SlateCube reducedMotion={reducedMotion} />
-            </div>
-          )}
           <div
             className="inline-flex max-w-[260px] flex-col gap-1 rounded-sm border border-[#F3EDE1]/12 bg-[#2E2B25] px-5 py-4"
-            style={{ transform: isDesktop ? 'rotate(-2deg)' : undefined, boxShadow: '0 20px 40px -20px rgba(0,0,0,.5)' }}
+            style={{ boxShadow: '0 20px 40px -20px rgba(0,0,0,.5)' }}
           >
             <span className="text-[10px] uppercase tracking-[0.16em] text-[#D9A441]">Hoje à noite</span>
             <span
@@ -1056,16 +1040,12 @@ export default function GastronomiaDemo() {
         <ScrollReveal>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 lg:grid-cols-3">
             {pratos.map((p, i) => {
-              // Assimetria: cards 0, 3, 6 ficam maiores (lg:col-span-2 ou lg:row-span-2)
+              // Assimetria: cards 0, 3, 6 ficam maiores (lg:col-span-2)
               const isLarge = [0, 3, 6].includes(i);
-              const rotations = ['1deg', '-1.5deg', '0.8deg', '-0.5deg', '1.2deg', '-1deg', '0.3deg', '-0.8deg'];
               return (
                 <div
                   key={p.idx}
-                  className={`${isLarge ? 'sm:col-span-1 lg:col-span-2' : ''}`}
-                  style={{
-                    transform: `rotate(${rotations[i % rotations.length]})`,
-                  }}
+                  className={`h-full ${isLarge ? 'sm:col-span-1 lg:col-span-2' : ''}`}
                 >
                   <DishCard prato={p} />
                 </div>
@@ -1106,12 +1086,10 @@ export default function GastronomiaDemo() {
               <ScrollReveal key={e.hora} delay={i * 0.08}>
                 <div
                   className="relative h-full rounded-sm border border-[#F3EDE1]/10 bg-[#2A2722] p-6"
-                  style={{ transform: isDesktop ? `rotate(${e.rotate})` : undefined }}
                 >
                   {e.img && (
                     <div
                       className="pointer-events-none absolute -right-3 -top-4 h-14 w-14 overflow-hidden border-2 border-[#F3EDE1] shadow-[0_10px_22px_-10px_rgba(0,0,0,0.55)]"
-                      style={{ transform: `rotate(${i % 2 === 0 ? '6deg' : '-6deg'})` }}
                     >
                       <Image
                         src={e.img}
