@@ -18,7 +18,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { Bodoni_Moda, Plus_Jakarta_Sans } from 'next/font/google';
 import { ArrowLeft, ShoppingBag, Droplets, Wind, Leaf, Plus, Minus, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
@@ -40,6 +40,26 @@ const sans = Plus_Jakarta_Sans({
 
 const HERO_BOTTLE = '/images/verticals/ecommerce.jpg';
 
+function TextReveal({ text }: { text: string }) {
+  const words = text.split(" ");
+  return (
+    <span className="inline-block">
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0.2, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: 0.6, delay: i * 0.04, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="inline-block mr-2"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export default function EcommerceDemo() {
   const [mounted, setMounted] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -58,6 +78,22 @@ export default function EcommerceDemo() {
   const bottleScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
+  // 3D Tilt Effect
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [8, -8]), { stiffness: 100, damping: 25 });
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-8, 8]), { stiffness: 100, damping: 25 });
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set((e.clientX - rect.left) / rect.width);
+    mouseY.set((e.clientY - rect.top) / rect.height);
+  }
+  function handleMouseLeave() {
+    mouseX.set(0.5);
+    mouseY.set(0.5);
+  }
+
   const handleAddToCart = () => {
     setAdded(true);
     setCartOpen(true);
@@ -71,6 +107,12 @@ export default function EcommerceDemo() {
       className={`relative min-h-screen w-full overflow-x-hidden bg-[#050505] text-[#EFEFEF] ${serif.variable} ${sans.variable} selection:bg-[#EFEFEF] selection:text-[#050505]`}
       style={{ fontFamily: 'var(--font-nox-sans)' }}
     >
+      {/* Film Grain (Textura Cinematográfica) */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-[0.035] mix-blend-overlay"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}
+      />
+
       {/* Feixe de Luz Contínuo (Continuidade Fluida) */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-0 h-full w-full"
@@ -115,7 +157,12 @@ export default function EcommerceDemo() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative h-[100svh] flex flex-col items-center justify-center">
+      <section 
+        className="relative h-[100svh] flex flex-col items-center justify-center"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ perspective: 1200 }}
+      >
         {/* Spotlights */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <div className="absolute left-1/2 top-0 h-[70vh] w-[40vw] -translate-x-1/2 rounded-[100%] bg-white/5 blur-[120px]" />
@@ -124,7 +171,7 @@ export default function EcommerceDemo() {
 
         <motion.div 
           className="z-10 relative mt-20"
-          style={{ y: bottleY, scale: bottleScale }}
+          style={{ y: bottleY, scale: bottleScale, rotateX, rotateY, transformStyle: 'preserve-3d' }}
         >
           <div className="relative w-[300px] h-[400px] sm:w-[450px] sm:h-[600px]">
             <Image 
@@ -153,36 +200,38 @@ export default function EcommerceDemo() {
       {/* Storytelling & Sensory Details */}
       <section className="relative z-20 bg-[#050505] px-6 py-32 sm:px-12">
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-          <ScrollReveal>
+          <div>
             <h2 className="text-3xl sm:text-4xl leading-snug mb-8" style={{ fontFamily: 'var(--font-nox-serif)' }}>
-              Criado para desaparecer na escuridão e ser lembrado até o amanhecer.
+              <TextReveal text="Criado para desaparecer na escuridão e ser lembrado até o amanhecer." />
             </h2>
-            <p className="text-sm text-white/60 leading-loose mb-10">
-              Formulado com absolutos botânicos raros extraídos a frio na região de Grasse. 
-              Sem sintéticos, sem atalhos. O frasco de obsidiana fundida protege os óleos 
-              essenciais da degradação luminosa.
-            </p>
-            
-            <div className="space-y-6 border-t border-white/10 pt-8">
-              {[
-                { icon: Wind, label: 'Notas de Topo', desc: 'Bergamota esfumaçada, Pimenta Negra' },
-                { icon: Leaf, label: 'Coração', desc: 'Ládano, Vetiver escuro, Íris' },
-                { icon: Droplets, label: 'Base', desc: 'Âmbar gris ético, Oud envelhecido' }
-              ].map((note, i) => (
-                <div key={i} className="flex gap-4 items-start">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70">
-                    <note.icon className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <h4 className="text-xs uppercase tracking-widest text-white/80 mb-1">{note.label}</h4>
-                    <p className="text-[13px] text-white/50">{note.desc}</p>
+            <ScrollReveal delay={0.2}>
+              <p className="text-sm text-white/60 leading-loose mb-10">
+                Formulado com absolutos botânicos raros extraídos a frio na região de Grasse. 
+                Sem sintéticos, sem atalhos. O frasco de obsidiana fundida protege os óleos 
+                essenciais da degradação luminosa.
+              </p>
+              
+              <div className="space-y-6 border-t border-white/10 pt-8">
+                {[
+                  { icon: Wind, label: 'Notas de Topo', desc: 'Bergamota esfumaçada, Pimenta Negra' },
+                  { icon: Leaf, label: 'Coração', desc: 'Ládano, Vetiver escuro, Íris' },
+                  { icon: Droplets, label: 'Base', desc: 'Âmbar gris ético, Oud envelhecido' }
+                ].map((note, i) => (
+                  <div key={i} className="flex gap-4 items-start">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70">
+                      <note.icon className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <h4 className="text-xs uppercase tracking-widest text-white/80 mb-1">{note.label}</h4>
+                      <p className="text-[13px] text-white/50">{note.desc}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </ScrollReveal>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
 
-          <ScrollReveal delay={0.2}>
+          <ScrollReveal delay={0.4}>
             {/* Purchase Card (Glassmorphism) */}
             <div className="relative rounded-2xl border border-white/10 bg-white/[0.02] p-8 backdrop-blur-2xl shadow-[0_30px_60px_-20px_rgba(0,0,0,0.8)]">
               <div className="absolute -top-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
