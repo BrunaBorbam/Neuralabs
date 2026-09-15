@@ -4,100 +4,15 @@
  * ARDÓSIA — Bistrô de Bairro
  * Demonstração Interativa • NEURALABS Studio
  *
- * Quarto projeto de portfólio (depois do site NEURALABS, Villa Serena e
- * CERNE) — ver docs/IDENTIDADES-E-EFEITOS.md antes de mexer aqui. Esse
- * documento existe justamente porque os três primeiros repetiam demais a
- * mesma estrutura (Hero cinematográfico/split + cartão de vidro + anéis
- * concêntricos). A Ardósia usa, de propósito, um arquétipo, uma paleta,
- * uma tipografia e uma assinatura de motion que NENHUM projeto anterior
- * usou — ver registro no fim daquele documento.
- *
- * Arquétipo: D — Assimétrico/Colagem Editorial (primeiro uso). Hero
- * tipográfico gigante SEM fotografia grande (ao contrário de CERNE e Villa
- * Serena, que são foto-centrados) — elementos "doodle" de ingredientes
- * flutuando em ângulos, cartões rotacionados na seção de processo.
- *
- * NOTA DE PRODUÇÃO — fotografia real integrada (set/2026): as ferramentas
- * de imagem/3D equipadas nesta sessão (Higgsfield, Adobe) seguiram
- * bloqueadas por crédito/plano em toda tentativa — a saída foi a Bruna
- * gerar as fotos ela mesma via Gemini, usando os prompts prontos em
- * docs/ardosia-prompts-gemini.md. As imagens ficam em
- * public/images/gastronomia/ e entram: nos 4 cards do cardápio com foto
- * (Burrata, Risoto, Peixe do Dia — prato em destaque — e Taça de Vinho,
- * ver campo `img` em PRATOS_PADRAO/DishCard), como foto pequena rotacionada
- * no Hero (o quadro de ardósia sendo escrito à mão — mantém o Arquétipo D,
- * que pede "hero tipográfico, sem foto ou foto pequena", nunca full-bleed)
- * e como fotos "pinadas" no canto dos cards de #processo ("A Feira" e "A
- * Mesa" — reforça a leitura de colagem editorial do arquétipo). Os pratos
- * sem foto ainda (Pão, Tagliatelle, Pavê, Sorbet) e as duas etapas do meio
- * (O Quadro, A Mise en Place) seguem no fallback de ícone/tipografia —
- * troca automática assim que a Bruna gerar o resto via o mesmo documento
- * de prompts.
- *
- * Identidade "Quadro de Ardósia" — nome e conceito vêm do quadro-negro de
- * giz onde bistrôs de bairro escrevem o cardápio do dia à mão. Paleta:
- * Ardósia (carvão quente) #26241F, Giz #F3EDE1, Terracota #C1552C,
- * Mostarda #D9A441. Tipografia: Instrument Serif (display, itálico com
- * personalidade de caligrafia) + Space Grotesk (sans/UI contemporânea) —
- * nenhuma das duas usada nos três projetos anteriores (Playfair+Inter,
- * Bodoni Moda+Plus Jakarta Sans, Fraunces+Jost).
- *
- * Assinatura de motion: traço de tinta/giz se revelando sob títulos e
- * ao redor da palavra-chave do prato em destaque (components/
- * ArdosiaInkStroke.tsx, via framer-motion `pathLength`) — item do catálogo
- * de efeitos ainda não usado por nenhum projeto. Nada de anéis
- * concêntricos, nada de wireframe 3D (já usados 3x e 1x respectivamente).
- * A mesma técnica também conecta seções (variante "drip", componente
- * ArdosiaSectionDrip) — um fio de giz "escorrendo" na emenda entre
- * #cardapio→#processo e depoimentos→#faq, dando sensação de continuidade
- * no scroll (referência trazida pela Bruna: mel escorrendo entre blocos
- * num site de apicultura — aqui reinterpretado só na técnica, com o
- * material/cor da própria identidade Ardósia, nunca a cor de mel).
- * ATUALIZADO 2026-09-14: os ícones de ingrediente flutuando por #processo,
- * depoimentos e #contato (`FloatingDoodle`) foram removidos — na revisão
- * de "alto padrão" pedida pela Bruna, ler como ícone de linha genérico
- * (lucide-react) batia como recurso de template, não autoral, mesmo sutil
- * (16% opacidade). O emblema orbital do Hero (`IngredientOrbit`) continua
- * — tem presença/intenção suficiente pra carregar o próprio peso. O traço
- * de giz/tinta (`ArdosiaInkStroke`) segue como a assinatura de motion
- * principal da página.
- *
- * Parallax (pedido pela Bruna como forma de dar profundidade sem
- * depender de foto real, enquanto ela não gera as imagens via
- * docs/ardosia-prompts-gemini.md): via framer-motion `useScroll` +
- * `useTransform`, sem lib nova. O emblema orbital do Hero se desloca
- * mais devagar que o texto ao rolar a página; a palavra gigante
- * "Ardósia" no fundo da seção de contato desliza na direção oposta ao
- * formulário. Desktop-only, respeita prefers-reduced-motion.
- *
- * Gatilhos de neuromarketing (duas camadas — quem janta e quem contrataria
- * a NEURALABS pra um restaurante real costumam ser a mesma pessoa aqui, o
- * dono, então os dois se somam): escassez diária real ("6 mesas hoje à
- * noite", não uma agenda anual abstrata — mais crível pro contexto de
- * bistrô), transparência de cardápio antes da decisão (ver os pratos e
- * preços do dia sem precisar entrar), prova social casual (depoimentos de
- * clientes recorrentes pelo primeiro nome, tom de bairro — não autoridade
- * formal como o depoimento de arquiteto da CERNE), redução de fricção
- * pré-reserva (FAQ curto) e a narrativa "cardápio muda toda semana", que
- * vira ao mesmo tempo gatilho de frescor E o argumento natural de venda
- * pro CMS via Notion (o dono atualiza o quadro sem pedir deploy).
- *
- * Reserva — formulário real (mesmo endpoint /api/send-email, Resend, já
- * configurado): envia com source: 'ardosia', que troca a cópia do e-mail
- * pro tom da casa e inclui campos de reserva (pessoas/data/horário) que a
- * CERNE não tinha — ver ArdosiaReservaForm.tsx e a branch isArdosia em
- * app/api/send-email/route.ts. Honeypot, rate limit e consentimento LGPD
- * seguem o mesmo padrão já estabelecido.
- *
- * Cardápio editável sem código — mesmo CMS leve via Notion da CERNE
- * (lib/notion.ts: fetchArdosiaPratos, database separada via
- * NOTION_DATABASE_ID_ARDOSIA, mesma NOTION_API_KEY), provando que o padrão
- * é replicável pra qualquer cliente novo — aqui aplicado ao cardápio do
- * dia em vez de um portfólio de projetos. Sem a variável configurada, usa
- * PRATOS_PADRAO abaixo normalmente.
+ * REDESIGN set/2026 — Hero 3D Parallax com ingredientes flutuantes
+ * reagindo ao mouse, tipografia signature gigante no fundo, floating
+ * insight chips (avaliação, preço, tempo de preparo), showcase
+ * interativo de pratos com Ken Burns zoom e efeitos glassmorphism
+ * premium. Inspirado nas referências de Pinterest que a Bruna gravou
+ * em vídeo (set/2026).
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -107,6 +22,7 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  type MotionValue,
 } from 'framer-motion';
 import { Instrument_Serif, Space_Grotesk } from 'next/font/google';
 import {
@@ -126,6 +42,10 @@ import {
   Wine,
   UtensilsCrossed,
   Quote,
+  Star,
+  Clock,
+  Sparkles,
+  Timer,
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { ArdosiaReservaForm } from '@/components/ArdosiaReservaForm';
@@ -155,9 +75,6 @@ type Prato = {
   destaque?: boolean;
 };
 
-// Conteúdo estático de referência — usado enquanto nenhum CMS está ligado,
-// e como fallback se a busca no Notion falhar. Ver useEffect mais abaixo,
-// com fetch em /api/ardosia-pratos.
 const PRATOS_PADRAO: Prato[] = [
   {
     idx: '01',
@@ -223,94 +140,6 @@ const PRATOS_PADRAO: Prato[] = [
     img: '/images/gastronomia/vinho-natural.jpg',
   },
 ];
-
-// Palavra cíclica no Hero — device inspirado na referência internacional
-// pesquisada a pedido da Bruna (Qissa — A Tale of Food usa "Origin ✦ Spice
-// ✦ Aroma" trocando sozinho no Hero). Aqui, palavras que resumem o próprio
-// conceito da Ardósia em vez de copiadas da referência — reforça o "muda
-// todo dia" sem custar nenhum asset novo (só motion, framer-motion já é
-// dependência do projeto).
-const TAGLINE_WORDS = ['Estação', 'Fogo', 'Feira', 'Giz'];
-
-function RotatingTagline({ words, active }: { words: string[]; active: boolean }) {
-  const [idx, setIdx] = useState(0);
-  useEffect(() => {
-    if (!active) return;
-    const id = setInterval(() => setIdx((i) => (i + 1) % words.length), 2200);
-    return () => clearInterval(id);
-  }, [active, words.length]);
-  return (
-    <span className="relative inline-flex h-[1.4em] w-[92px] items-baseline overflow-hidden align-baseline sm:w-[104px]">
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={words[idx]}
-          initial={{ y: active ? 14 : 0, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: active ? -14 : 0, opacity: 0 }}
-          transition={{ duration: 0.45, ease: [0.65, 0, 0.35, 1] }}
-          className="absolute left-0 whitespace-nowrap"
-          style={{ color: '#D9A441', letterSpacing: '0.04em' }}
-        >
-          {words[idx]}
-        </motion.span>
-      </AnimatePresence>
-    </span>
-  );
-}
-
-// Magnetic Button
-function MagneticButton({ children, className, onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) {
-  const ref = useRef<HTMLButtonElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-
-  const handleMouse = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { clientX, clientY } = e;
-    if (!ref.current) return;
-    const { height, width, left, top } = ref.current.getBoundingClientRect();
-    const middleX = clientX - (left + width / 2);
-    const middleY = clientY - (top + height / 2);
-    setPosition({ x: middleX * 0.25, y: middleY * 0.25 });
-  };
-
-  const reset = () => {
-    setPosition({ x: 0, y: 0 });
-  };
-
-  return (
-    <motion.button
-      ref={ref}
-      onMouseMove={handleMouse}
-      onMouseLeave={reset}
-      onClick={onClick}
-      animate={{ x: position.x, y: position.y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-      className={className}
-    >
-      {children}
-    </motion.button>
-  );
-}
-
-// Text Reveal
-function TextReveal({ text, className }: { text: string, className?: string }) {
-  const words = text.split(" ");
-  return (
-    <span className={className}>
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.7, delay: i * 0.05, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="inline-block mr-[0.25em]"
-        >
-          {word}
-        </motion.span>
-      ))}
-    </span>
-  );
-}
 
 const VALORES = [
   'PRODUTO DA ESTAÇÃO',
@@ -430,17 +259,8 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-// Dom, Seg, Ter, Qua, Qui, Sex, Sáb — bistrô de bairro enche mais de
-// quinta a sábado, sobra mais mesa no começo da semana. Ilustrativo (não
-// há reserva real por trás nesta demo) — mas varia por dia em vez de
-// ficar congelado num número fixo pra sempre, que é o problema real que
-// um número de escassez estático tem: some com a credibilidade dele pra
-// quem revisita e vê o mesmo "6" toda vez. Num cliente real isso troca
-// por contagem de reservas de verdade.
 const MESAS_POR_DIA = [7, 8, 8, 7, 5, 3, 4] as const;
 
-/** Retorna o valor estático (mesmo do SSR) até montar no cliente, evitando
- * mismatch de hidratação — só depois troca pelo número do dia real. */
 function useMesasDisponiveis(fallback: number) {
   const [mesas, setMesas] = useState(fallback);
   useEffect(() => {
@@ -449,8 +269,6 @@ function useMesasDisponiveis(fallback: number) {
   return mesas;
 }
 
-/** Mesma assinatura de motion (atração magnética discreta) da CERNE/Villa
- * Serena — reaproveitada como recurso comum, não como diferenciador. */
 function useMagnetic() {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -478,6 +296,285 @@ function useMagnetic() {
   return ref;
 }
 
+// ─── Magnetic Button ───
+function MagneticButton({ children, className, onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouse = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { clientX, clientY } = e;
+    if (!ref.current) return;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX * 0.25, y: middleY * 0.25 });
+  };
+
+  const reset = () => setPosition({ x: 0, y: 0 });
+
+  return (
+    <motion.button
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      onClick={onClick}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      className={className}
+    >
+      {children}
+    </motion.button>
+  );
+}
+
+// ─── Text Reveal ───
+function TextReveal({ text, className }: { text: string, className?: string }) {
+  const words = text.split(" ");
+  return (
+    <span className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: 0.7, delay: i * 0.05, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="inline-block mr-[0.25em]"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
+// ─── Floating Ingredient (3D Parallax, reage ao mouse) ───
+const FLOATING_INGREDIENTS = [
+  { src: '/images/gastronomia/ingredients/basil.jpg', alt: 'Manjericão', size: 90, x: '8%', y: '15%', delay: 0, rotate: -15, speed: 1.2 },
+  { src: '/images/gastronomia/ingredients/pepper.jpg', alt: 'Pimenta', size: 70, x: '85%', y: '20%', delay: 0.3, rotate: 25, speed: 0.8 },
+  { src: '/images/gastronomia/ingredients/tomato.jpg', alt: 'Tomate', size: 80, x: '12%', y: '65%', delay: 0.6, rotate: 10, speed: 1.0 },
+  { src: '/images/gastronomia/ingredients/rosemary.jpg', alt: 'Alecrim', size: 75, x: '90%', y: '55%', delay: 0.15, rotate: -20, speed: 1.4 },
+  { src: '/images/gastronomia/ingredients/garlic.jpg', alt: 'Alho', size: 65, x: '78%', y: '78%', delay: 0.45, rotate: 30, speed: 0.9 },
+];
+
+function FloatingIngredient({
+  src, alt, size, initialX, initialY, delay, initialRotate, speed, mouseX, mouseY
+}: {
+  src: string; alt: string; size: number;
+  initialX: string; initialY: string; delay: number;
+  initialRotate: number; speed: number;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+}) {
+  const springConfig = { stiffness: 50, damping: 20, mass: 0.8 };
+  const moveX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-30 * speed, 30 * speed]), springConfig);
+  const moveY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-25 * speed, 25 * speed]), springConfig);
+
+  return (
+    <motion.div
+      className="absolute pointer-events-none z-10"
+      style={{
+        left: initialX,
+        top: initialY,
+        x: moveX,
+        y: moveY,
+        width: size,
+        height: size,
+      }}
+      initial={{ opacity: 0, scale: 0, rotate: initialRotate - 20 }}
+      animate={{ opacity: 1, scale: 1, rotate: initialRotate }}
+      transition={{
+        delay: 0.8 + delay,
+        duration: 1.2,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      <motion.div
+        animate={{
+          y: [0, -12, 0],
+          rotate: [initialRotate, initialRotate + 5, initialRotate],
+        }}
+        transition={{
+          duration: 4 + delay * 2,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="relative w-full h-full"
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={`${size}px`}
+          className="object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
+          style={{ filter: 'brightness(1.1) contrast(1.05)' }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Floating Insight Chip (glassmorphism) ───
+function FloatingChip({
+  icon: Icon, label, value, x, y, delay, mouseX, mouseY, speed = 1
+}: {
+  icon: typeof Star; label: string; value: string;
+  x: string; y: string; delay: number;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+  speed?: number;
+}) {
+  const springConfig = { stiffness: 80, damping: 25, mass: 0.5 };
+  const moveX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15 * speed, 15 * speed]), springConfig);
+  const moveY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-12 * speed, 12 * speed]), springConfig);
+
+  return (
+    <motion.div
+      className="absolute z-20 hidden md:flex"
+      style={{ left: x, top: y, x: moveX, y: moveY }}
+      initial={{ opacity: 0, scale: 0.6, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ delay: 1.2 + delay, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <motion.div
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 3.5 + delay, repeat: Infinity, ease: 'easeInOut' }}
+        className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-2.5 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.08)]"
+      >
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#D9A441]/20">
+          <Icon className="h-4 w-4 text-[#D9A441]" />
+        </span>
+        <div className="flex flex-col">
+          <span className="text-[9px] uppercase tracking-[0.14em] text-[#B6AF9E]">{label}</span>
+          <span className="text-[13px] font-semibold text-[#F3EDE1]">{value}</span>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Hero Chalkboard Showcase (3D tilt + Ken Burns) ───
+// O quadro de ardósia é O elemento-chave da identidade visual.
+// Mesmo efeito 3D parallax da referência de Pinterest, mas aplicado
+// ao quadro de giz sendo escrito à mão — não a um prato genérico.
+function HeroChalkboardShowcase({ mouseX, mouseY }: {
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+}) {
+  const springConfig = { stiffness: 120, damping: 20 };
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [10, -10]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), springConfig);
+
+  return (
+    <motion.div
+      className="relative z-10"
+      initial={{ opacity: 0, scale: 0.85, y: 40, rotate: -3 }}
+      animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+      transition={{ delay: 0.3, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="flex items-start gap-3" style={{ perspective: 1000 }}>
+        {/* Legenda vertical — como crédito de revista impressa */}
+        <span
+          className="hidden pt-3 text-[9px] uppercase tracking-[0.2em] text-[#8A8478] lg:block"
+          style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+        >
+          O quadro de hoje · giz sobre ardósia
+        </span>
+
+        <motion.div
+          style={{
+            rotateX,
+            rotateY,
+            transformStyle: 'preserve-3d',
+          }}
+          className="relative"
+        >
+          {/* Moldura estilo polaroid — a foto do quadro "pinada" */}
+          <div className="relative w-[260px] border-[5px] border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.65),0_0_40px_-8px_rgba(217,164,65,0.1)] sm:w-[300px] md:w-[340px] lg:w-[380px]">
+            {/* Foto do quadro com Ken Burns */}
+            <div className="relative aspect-[3/4] w-full overflow-hidden">
+              <motion.div
+                className="absolute inset-0"
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Image
+                  src="/images/gastronomia/hero-quadro.jpg"
+                  alt="Quadro de ardósia sendo escrito à mão com o cardápio do dia"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 380px, (min-width: 768px) 340px, (min-width: 640px) 300px, 260px"
+                  className="object-cover"
+                />
+              </motion.div>
+              {/* Vinheta cinematográfica — leitura de still de filme */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{ boxShadow: 'inset 0 0 40px 12px rgba(0,0,0,0.45)' }}
+              />
+            </div>
+            {/* Rodapé polaroid — handwritten feel */}
+            <div className="flex items-center justify-between px-3 py-2">
+              <span
+                className="text-[11px] italic text-[#26241F]/60"
+                style={{ fontFamily: 'var(--font-ardosia-serif)' }}
+              >
+                cardápio de hoje
+              </span>
+              <span className="text-[9px] uppercase tracking-wider text-[#26241F]/40">
+                set. 2026
+              </span>
+            </div>
+          </div>
+
+          {/* Ink stroke ao redor do quadro */}
+          <ArdosiaInkStroke
+            variant="circle"
+            color="#C1552C"
+            className="pointer-events-none absolute -inset-6 opacity-50"
+          />
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Selo de Escassez (estilo etiqueta de giz no quadro) ───
+function ChalkTag({ mouseX, mouseY }: {
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+}) {
+  const springConfig = { stiffness: 60, damping: 20, mass: 0.6 };
+  const moveX = useSpring(useTransform(mouseX, [-0.5, 0.5], [10, -10]), springConfig);
+  const moveY = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), springConfig);
+
+  return (
+    <motion.div
+      className="absolute z-30 hidden md:block"
+      style={{ right: '5%', bottom: '25%', x: moveX, y: moveY }}
+      initial={{ opacity: 0, scale: 0.5, rotate: -6 }}
+      animate={{ opacity: 1, scale: 1, rotate: -3 }}
+      transition={{ delay: 1.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <motion.div
+        animate={{ y: [0, -8, 0], rotate: [-3, -1, -3] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        className="flex flex-col items-center justify-center gap-0.5 rounded-sm border border-dashed border-[#F3EDE1]/30 bg-[#2A2722]/90 px-5 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.5)] backdrop-blur-sm"
+      >
+        <span className="text-[9px] uppercase tracking-[0.18em] text-[#D9A441]">Hoje à noite</span>
+        <span
+          className="text-[18px] italic text-[#F3EDE1]"
+          style={{ fontFamily: 'var(--font-ardosia-serif)' }}
+        >
+          6 mesas
+        </span>
+        <span className="text-[8px] uppercase tracking-wider text-[#8A8478]">disponíveis</span>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── FAQ Item ───
 function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
@@ -503,248 +600,7 @@ function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultO
   );
 }
 
-/**
- * Emblema orbital do Hero — ingredientes flutuando em órbita lenta ao
- * redor de um emblema central. Substitui os doodles estáticos antigos
- * (folha/trigo/uva/peixe parados em ângulos fixos) e dá ao Hero o
- * "momento visual" que faltava, sem depender de foto real nenhuma.
- *
- * Referência trazida pela Bruna: um vídeo de feed do Pinterest mostrando
- * um mockup de celular com objetos 3D flutuando ao redor da tela
- * ("Flawless design. Frictionless sales.", Ouma Digital). Aqui a técnica
- * é reaproduzida em CSS/framer-motion puro (sem WebGL/3D real — mantém a
- * regra da Ardósia de nunca reusar wireframe 3D nem anéis concêntricos
- * reagindo ao mouse): cada ingrediente vive num wrapper que gira ao
- * redor do centro, com um segundo wrapper interno girando na direção
- * oposta na mesma velocidade, then o ícone nunca fica de cabeça pra
- * baixo — só translada em órbita.
- */
-/**
- * Foto do Hero "viva" — a Bruna pediu mais movimento/vídeo na foto do
- * quadro (ela não gerou vídeo, só foto, e as ferramentas de geração de
- * vídeo desta sessão seguem bloqueadas por plano/crédito). Solução: dois
- * efeitos dos catálogos que ela mandou pra salvar como referência —
- * docs/referencia-31-efeitos-animacao.md e
- * docs/references/50-efeitos-imagem-css.md.
- *
- * 1) Zoom lento contínuo (item 31 do catálogo de 50, "Zoom image with
- *    scale" — Omar Dsooky / técnica Ken Burns): a foto respira devagar
- *    (scale 1 → 1.07 → 1) num loop de 16s, sem nunca cortar a borda —
- *    lê como filmagem sutil, não como foto parada, sem precisar de vídeo
- *    de verdade.
- * 2) Tilt de perspectiva ao passar o mouse (item 26 do catálogo de 50,
- *    "Perspective tilty images" — Henry Desroches): a foto inclina em 3D
- *    seguindo o cursor, reagindo como um objeto físico apoiado na mesa —
- *    só desktop, só com o mouse sobre a foto.
- * Ambos cortados em prefers-reduced-motion (o zoom não anima; o tilt
- * simplesmente não liga o listener).
- */
-function HeroPhoto({ active }: { active: boolean }) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), {
-    stiffness: 160,
-    damping: 16,
-  });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), {
-    stiffness: 160,
-    damping: 16,
-  });
-
-  const glowX = useSpring(useTransform(x, [-0.5, 0.5], [-20, 20]), { stiffness: 160, damping: 16 });
-  const glowY = useSpring(useTransform(y, [-0.5, 0.5], [-20, 20]), { stiffness: 160, damping: 16 });
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
-  }
-  function handleMouseLeave() {
-    x.set(0);
-    y.set(0);
-  }
-
-  return (
-    <div
-      className="absolute right-[1%] top-[6%] z-20 hidden sm:flex sm:items-start sm:gap-3 md:right-[3%] md:top-[9%]"
-      style={{ perspective: 900 }}
-    >
-      {/* Legenda rotacionada na vertical — técnica emprestada do Dishoom
-          (dishoom.com, catalogado na biblioteca de referências): em vez de
-          legenda comum embaixo da foto, um texto pequeno correndo na
-          vertical ao lado dela, como crédito de foto de revista impressa.
-          Reforça a leitura "still de filme/documento", não decoração. */}
-      <span
-        className="hidden pt-2 text-[9.5px] uppercase tracking-[0.2em] text-[#8A8478] lg:block"
-        style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-      >
-        O quadro de hoje · giz sobre ardósia
-      </span>
-      <motion.div
-        onMouseMove={active ? handleMouseMove : undefined}
-        onMouseLeave={active ? handleMouseLeave : undefined}
-        style={{
-          rotate: 0,
-          rotateX: active ? rotateX : 0,
-          rotateY: active ? rotateY : 0,
-          transformStyle: 'preserve-3d',
-        }}
-        className="relative w-[230px] border-4 border-[#F3EDE1] bg-[#F3EDE1] md:w-[270px] lg:w-[300px]"
-      >
-        <motion.div 
-          className="absolute inset-0 pointer-events-none" 
-          style={{ boxShadow: active ? `0px 20px 40px rgba(0,0,0,0.5), ${glowX.get()}px ${glowY.get()}px 40px rgba(243,237,225,0.08)` : '0 28px 60px -20px rgba(0,0,0,0.65)' }} 
-        />
-        <div className="relative aspect-[2/3] w-full overflow-hidden">
-          <motion.div
-            className="absolute inset-0"
-            animate={active ? { scale: [1, 1.07, 1] } : undefined}
-            transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <Image
-              src="/images/gastronomia/hero-quadro.jpg"
-              alt="Quadro de ardósia sendo escrito à mão com o prato do dia"
-              fill
-              sizes="300px"
-              className="object-cover"
-            />
-          </motion.div>
-          {/* Vinheta sutil — reforça a leitura de "still de filme" em vez
-              de foto de banco, coerente com a direção de fotografia da
-              identidade (ver docs/ardosia-identidade-visual.md, seção 5). */}
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{ boxShadow: 'inset 0 0 28px 8px rgba(0,0,0,0.4)' }}
-          />
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-const ORBIT_ITEMS = [
-  { Icon: Leaf, color: '#6B7A4E', angle: 0, size: 26 },
-  { Icon: Wheat, color: '#D9A441', angle: 90, size: 32 },
-  { Icon: Grape, color: '#8A8478', angle: 180, size: 22 },
-  { Icon: Fish, color: '#C1552C', angle: 270, size: 28 },
-] as const;
-
-function IngredientOrbit() {
-  const duration = 46;
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none relative h-[280px] w-[280px]"
-    >
-      {/* Emblema central — o "selo" do quadro de ardósia */}
-      <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#F3EDE1]/15 bg-[#2A2722]/90 backdrop-blur-sm">
-        <UtensilsCrossed className="h-6 w-6 text-[#D9A441]/75" />
-        <ArdosiaInkStroke
-          variant="circle"
-          color="#C1552C"
-          className="pointer-events-none absolute -inset-3 opacity-70"
-        />
-      </div>
-
-      {ORBIT_ITEMS.map(({ Icon, color, angle, size }, i) => (
-        <motion.div
-          key={i}
-          className="absolute inset-0"
-          style={{ originX: 0.5, originY: 0.5 }}
-          initial={{ rotate: angle }}
-          animate={{ rotate: angle + 360 }}
-          transition={{ duration, repeat: Infinity, ease: 'linear' }}
-        >
-          <div className="absolute left-1/2 top-0 -translate-x-1/2">
-            <motion.div
-              initial={{ rotate: -angle }}
-              animate={{ rotate: -angle - 360 }}
-              transition={{ duration, repeat: Infinity, ease: 'linear' }}
-            >
-              <Icon style={{ width: size, height: size, color, opacity: 0.55 }} />
-            </motion.div>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
-/**
- * Cubo de ardósia girando em CSS 3D puro — `perspective` + `preserve-3d`
- * + `rotateY` num loop infinito, sem WebGL/react-three-fiber. É o efeito
- * #1 do catálogo ("renderização em tempo real", ver docs/
- * referencia-31-efeitos-animacao.md e docs/references/
- * 31-efeitos-animacao.html) — pedido pela Bruna em set/2026 (ver
- * docs/IDENTIDADES-E-EFEITOS.md). Cada face é um quadrado de ardósia com
- * ícone/palavra a giz, mesmo vocabulário do IngredientOrbit acima.
- * Desktop-only (decorativo); com `prefers-reduced-motion`, para de girar
- * e fica num ângulo fixo em vez de animar.
- */
-const CUBE_SIZE = 104;
-const CUBE_FACES: { key: string; transform: string; Icon?: typeof Leaf; label: string }[] = [
-  { key: 'front', transform: `translateZ(${CUBE_SIZE / 2}px)`, Icon: UtensilsCrossed, label: 'Prato do dia' },
-  { key: 'right', transform: `rotateY(90deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Wheat, label: 'Pão do dia' },
-  { key: 'back', transform: `rotateY(180deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Wine, label: 'Vinho natural' },
-  { key: 'left', transform: `rotateY(-90deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Flame, label: 'Na brasa' },
-  { key: 'top', transform: `rotateX(90deg) translateZ(${CUBE_SIZE / 2}px)`, Icon: Leaf, label: 'Da feira' },
-  { key: 'bottom', transform: `rotateX(-90deg) translateZ(${CUBE_SIZE / 2}px)`, label: 'Feito à mão' },
-];
-
-function SlateCube({ reducedMotion }: { reducedMotion: boolean }) {
-  return (
-    <div aria-hidden="true" className="pointer-events-none" style={{ perspective: 560 }}>
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className={reducedMotion ? '' : 'animate-slate-spin'}
-        style={{
-          width: CUBE_SIZE,
-          height: CUBE_SIZE,
-          position: 'relative',
-          transformStyle: 'preserve-3d',
-          transform: reducedMotion ? 'rotateX(-16deg) rotateY(28deg)' : undefined,
-        }}
-      >
-        {CUBE_FACES.map(({ key, transform, Icon, label }) => (
-          <div
-            key={key}
-            className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 border border-dashed border-[#F3EDE1]/25 bg-[#201E19]"
-            style={{ transform }}
-          >
-            {Icon ? (
-              <>
-                <Icon className="h-4 w-4 text-[#D9A441]/80" />
-                <span className="px-2 text-center text-[7.5px] uppercase leading-tight tracking-[0.12em] text-[#B6AF9E]">
-                  {label}
-                </span>
-              </>
-            ) : (
-              <span
-                className="px-2 text-center text-[13px] italic leading-tight text-[#F3EDE1]/85"
-                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
-              >
-                {label}
-              </span>
-            )}
-          </div>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
-/**
- * Ícone decorativo flutuando, reaproveitado em várias seções além do
- * Hero — o "fio visual" que amarra a página inteira, pedido pela Bruna
- * depois de ver uma referência (site de café que espalha grãos/respingos
- * de café em quase toda seção). Aqui: os mesmos ícones de ingrediente já
- * usados no emblema orbital do Hero, bem discretos (opacidade baixa),
- * com a animação `animate-float` que já existe em tailwind.config.ts
- * (usada em outros projetos NEURALABS) — sem criar nenhum efeito novo,
- * só repetindo o vocabulário visual da Ardósia pelo scroll inteiro.
- * Desktop-only, como todo decorativo do projeto.
- */
+// ─── DishCard ───
 function DishCard({ prato, index = 0 }: { prato: Prato, index?: number }) {
   const Icon = categoryIcon(prato.categoria);
   const hasPhoto = Boolean(prato.img);
@@ -836,6 +692,7 @@ function DishCard({ prato, index = 0 }: { prato: Prato, index?: number }) {
   );
 }
 
+
 export default function GastronomiaDemo() {
   const isDesktop = useIsDesktop();
   const reducedMotion = usePrefersReducedMotion();
@@ -843,17 +700,31 @@ export default function GastronomiaDemo() {
   const [depoimentoIdx, setDepoimentoIdx] = useState(0);
   const mesasDisponiveis = useMesasDisponiveis(6);
 
-  // Parallax — pedido pela Bruna como saída pra dar profundidade visual
-  // sem depender de foto real: camadas que já existem (emblema orbital
-  // do Hero, palavra-fundo "Ardósia" no contato) se deslocam em
-  // velocidades diferentes do resto do conteúdo conforme o scroll, via
-  // framer-motion `useScroll`/`useTransform` (leve, sem lib nova).
+  // Mouse tracking para parallax global do Hero
+  const heroMouseX = useMotionValue(0);
+  const heroMouseY = useMotionValue(0);
+
+  const handleHeroMouse = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (reducedMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    heroMouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+    heroMouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+  }, [reducedMotion, heroMouseX, heroMouseY]);
+
+  const handleHeroLeave = useCallback(() => {
+    heroMouseX.set(0);
+    heroMouseY.set(0);
+  }, [heroMouseX, heroMouseY]);
+
+  // Parallax scroll
   const heroRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   });
-  const orbitParallaxY = useTransform(heroProgress, [0, 1], [0, 90]);
+  const heroTextY = useTransform(heroProgress, [0, 1], [0, -60]);
+  const heroBgScale = useTransform(heroProgress, [0, 1], [1, 1.15]);
+  const heroBgOpacity = useTransform(heroProgress, [0, 0.8], [0.35, 0]);
 
   const contatoRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress: contatoProgress } = useScroll({
@@ -862,9 +733,7 @@ export default function GastronomiaDemo() {
   });
   const wordmarkParallaxX = useTransform(contatoProgress, [0, 1], [-50, 30]);
 
-  // Cardápio editável via Notion (CMS leve — mesmo padrão da CERNE, ver
-  // lib/notion.ts). Sem NOTION_DATABASE_ID_ARDOSIA configurada, ou se a
-  // busca falhar, fica no fallback estático — a seção nunca fica vazia.
+  // Cardápio via Notion
   const [pratos, setPratos] = useState<Prato[]>(PRATOS_PADRAO);
   useEffect(() => {
     let cancelled = false;
@@ -875,12 +744,8 @@ export default function GastronomiaDemo() {
           setPratos(data.pratos);
         }
       })
-      .catch(() => {
-        // silencioso: fica no fallback estático
-      });
-    return () => {
-      cancelled = true;
-    };
+      .catch(() => {});
+    return () => { cancelled = true; };
   }, []);
 
   return (
@@ -889,13 +754,14 @@ export default function GastronomiaDemo() {
       className={`relative min-h-screen w-full overflow-x-hidden bg-[#26241F] text-[#F3EDE1] selection:bg-[#C1552C] selection:text-[#F3EDE1] ${display.variable} ${sans.variable}`}
       style={{ fontFamily: 'var(--font-ardosia-sans)' }}
     >
-      {/* Film Grain Texture (Ardósia Física) */}
+      {/* Film Grain Texture */}
       <div 
         className="pointer-events-none fixed inset-0 z-50 h-full w-full opacity-[0.035] mix-blend-overlay"
         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E")' }}
       />
       <ArdosiaContinuousThread />
-      {/* Selo NEURALABS — única menção à marca dentro da demo */}
+
+      {/* Selo NEURALABS */}
       <div className="flex items-center justify-between gap-4 border-b border-[#F3EDE1]/10 bg-[#201E19] px-5 py-2 text-[11px] tracking-wide text-[#F3EDE1]/60 sm:px-8">
         <span>
           <span className="text-[#D9A441]">✦</span> Demonstração desenvolvida por{' '}
@@ -930,81 +796,229 @@ export default function GastronomiaDemo() {
         </div>
       </header>
 
-      {/* Hero — Cinematic Full-Bleed */}
+      {/* ═══════════════════════════════════════════════════════
+          HERO — 3D PARALLAX com ingredientes flutuantes
+          Inspirado nas referências de Pinterest (vídeo set/2026)
+          ═══════════════════════════════════════════════════════ */}
       <section
         ref={heroRef}
-        className="relative flex min-h-[100svh] w-full flex-col justify-end overflow-hidden px-5 pb-16 pt-32 sm:px-8 sm:pb-24"
+        className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden"
+        onMouseMove={isDesktop ? handleHeroMouse : undefined}
+        onMouseLeave={isDesktop ? handleHeroLeave : undefined}
       >
-        <div className="absolute inset-0 z-0">
-          <motion.div
-            animate={{ scale: [1, 1.08, 1] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="h-full w-full"
-          >
-            <Image
-              src="/images/gastronomia/hero-quadro.jpg"
-              alt="Hero Background"
-              fill
-              priority
-              className="object-cover opacity-60 mix-blend-luminosity"
-            />
-          </motion.div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#26241F] via-[#26241F]/70 to-transparent" />
-          <div className="absolute inset-0 bg-[#26241F]/30 mix-blend-multiply" />
+        {/* Background com Ken Burns */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          style={{ scale: heroBgScale, opacity: heroBgOpacity }}
+        >
+          <Image
+            src="/images/gastronomia/hero-quadro.jpg"
+            alt=""
+            fill
+            priority
+            className="object-cover"
+            style={{ filter: 'blur(3px) brightness(0.3)' }}
+          />
+        </motion.div>
+
+        {/* Gradientes atmosféricos */}
+        <div className="absolute inset-0 z-[1]">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#26241F] via-transparent to-[#26241F]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#26241F]/80 via-transparent to-[#26241F]/80" />
+          {/* Warm glow radial atrás do prato */}
+          <div
+            className="absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40"
+            style={{
+              background: 'radial-gradient(circle, rgba(217,164,65,0.12) 0%, rgba(193,85,44,0.06) 40%, transparent 70%)',
+            }}
+          />
         </div>
 
-        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center text-center">
-          <div className="mb-8 flex items-center justify-center gap-x-5 gap-y-2">
-            <div className="flex items-center gap-3">
+        {/* Tipografia Gigante no Fundo */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center overflow-hidden select-none"
+          style={{ y: isDesktop && !reducedMotion ? heroTextY : 0 }}
+        >
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 1.5, ease: 'easeOut' }}
+            className="whitespace-nowrap text-[120px] font-normal uppercase leading-none tracking-[0.2em] text-[#F3EDE1]/[0.03] sm:text-[180px] md:text-[220px] lg:text-[280px]"
+            style={{ fontFamily: 'var(--font-ardosia-serif)' }}
+          >
+            ARDÓSIA
+          </motion.span>
+        </motion.div>
+
+        {/* Ingredientes flutuantes */}
+        {FLOATING_INGREDIENTS.map((ing, i) => (
+          <FloatingIngredient
+            key={i}
+            src={ing.src}
+            alt={ing.alt}
+            size={isDesktop ? ing.size : ing.size * 0.6}
+            initialX={ing.x}
+            initialY={ing.y}
+            delay={ing.delay}
+            initialRotate={ing.rotate}
+            speed={ing.speed}
+            mouseX={heroMouseX}
+            mouseY={heroMouseY}
+          />
+        ))}
+
+        {/* Floating Insight Chips */}
+        <FloatingChip
+          icon={Star}
+          label="Avaliação"
+          value="4.9 ★ (1.2k)"
+          x="3%"
+          y="38%"
+          delay={0}
+          mouseX={heroMouseX}
+          mouseY={heroMouseY}
+          speed={0.7}
+        />
+        <FloatingChip
+          icon={Clock}
+          label="Tempo médio"
+          value="45 min"
+          x="82%"
+          y="40%"
+          delay={0.2}
+          mouseX={heroMouseX}
+          mouseY={heroMouseY}
+          speed={1.1}
+        />
+        <FloatingChip
+          icon={Sparkles}
+          label="Receita"
+          value="Autoral"
+          x="6%"
+          y="72%"
+          delay={0.4}
+          mouseX={heroMouseX}
+          mouseY={heroMouseY}
+          speed={0.9}
+        />
+
+        {/* Chalk Tag — selo de escassez no estilo do quadro */}
+        <ChalkTag mouseX={heroMouseX} mouseY={heroMouseY} />
+
+        {/* Conteúdo principal do Hero */}
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-5 py-32 sm:px-8 lg:flex-row lg:items-center lg:gap-16">
+
+          {/* Lado Esquerdo — Texto */}
+          <motion.div
+            className="flex flex-col items-center text-center lg:items-start lg:text-left lg:flex-1"
+            style={{ y: isDesktop && !reducedMotion ? heroTextY : 0 }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="mb-6 flex items-center gap-3"
+            >
               <span className="h-px w-9 bg-[#C1552C]" />
               <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">
                 Bistrô de Bairro · Cidade Baixa
               </span>
               <span className="h-px w-9 bg-[#C1552C]" />
-            </div>
-          </div>
+            </motion.div>
 
-          <h1
-            className="mb-8 max-w-[800px] text-[52px] leading-[0.98] sm:text-[80px] md:text-[92px] lg:text-[100px]"
-            style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
-          >
-            <TextReveal text="O cardápio muda." className="block" />
-            <TextReveal text="O capricho, não." className="block italic text-[#D9A441]" />
-          </h1>
-
-          <p className="mb-10 max-w-[500px] text-[14.5px] leading-[1.9] text-[#B6AF9E]">
-            Sem cardápio engessado. Compramos o que tá bom na feira de terça e escrevemos no
-            quadro — se o tomate não tava bom hoje, ele não entra no prato.
-          </p>
-
-          <div className="flex flex-col items-center gap-6 sm:flex-row">
-            <MagneticButton
-              onClick={() => {
-                document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="bg-[#C1552C] px-8 py-4.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:bg-[#A34320]"
+            <h1
+              className="mb-6 max-w-[700px] text-[44px] leading-[0.98] sm:text-[64px] md:text-[72px] lg:text-[80px]"
+              style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
             >
-              Reservar Mesa
-            </MagneticButton>
-            <button
-              onClick={() => {
-                document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="group flex items-center gap-2 border-b border-[#D9A441]/30 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:border-[#D9A441]"
+              <TextReveal text="O cardápio muda." className="block" />
+              <TextReveal text="O capricho, não." className="block italic text-[#D9A441]" />
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="mb-8 max-w-[460px] text-[14.5px] leading-[1.9] text-[#B6AF9E]"
             >
-              Ver cardápio de hoje
-              <ArrowUpRight className="h-3.5 w-3.5 text-[#D9A441] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </button>
+              Sem cardápio engessado. Compramos o que tá bom na feira de terça e escrevemos no
+              quadro — se o tomate não tava bom hoje, ele não entra no prato.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.8 }}
+              className="flex flex-col items-center gap-5 sm:flex-row lg:items-start"
+            >
+              <MagneticButton
+                onClick={() => {
+                  document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="bg-[#C1552C] px-8 py-4.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:bg-[#A34320] shadow-[0_8px_30px_rgba(193,85,44,0.4)]"
+              >
+                Reservar Mesa
+              </MagneticButton>
+              <button
+                onClick={() => {
+                  document.getElementById('cardapio')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="group flex items-center gap-2 border-b border-[#D9A441]/30 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#F3EDE1] transition-colors hover:border-[#D9A441]"
+              >
+                Ver cardápio de hoje
+                <ArrowUpRight className="h-3.5 w-3.5 text-[#D9A441] transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </button>
+            </motion.div>
+
+            {/* Micro stat bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.3, duration: 0.8 }}
+              className="mt-10 flex items-center gap-6 border-t border-[#F3EDE1]/10 pt-6"
+            >
+              {[
+                { label: 'Pratos do dia', value: '8+' },
+                { label: 'Mesas hoje', value: String(mesasDisponiveis) },
+                { label: 'Desde', value: '2019' },
+              ].map((stat, i) => (
+                <div key={i} className="flex flex-col items-center lg:items-start">
+                  <span
+                    className="text-[22px] leading-none text-[#D9A441]"
+                    style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+                  >
+                    {stat.value}
+                  </span>
+                  <span className="mt-1 text-[9px] uppercase tracking-[0.14em] text-[#8A8478]">{stat.label}</span>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Lado Direito — Quadro de Ardósia */}
+          <div className="relative mt-12 lg:mt-0 lg:flex-1 flex items-center justify-center">
+            <HeroChalkboardShowcase mouseX={heroMouseX} mouseY={heroMouseY} />
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex flex-col items-center gap-2"
+          >
+            <span className="text-[9px] uppercase tracking-[0.2em] text-[#8A8478]">Descubra</span>
+            <div className="h-8 w-px bg-gradient-to-b from-[#D9A441] to-transparent" />
+          </motion.div>
+        </motion.div>
       </section>
 
-      {/* Faixa de valores — bloco de cor terracota cheio (técnica trazida
-          da referência Hanbut Restaurant, catalogada na biblioteca): em
-          vez de mais uma faixa escura discreta, a marquee vira o primeiro
-          "soco" de cor cheia da página — a paleta Ardósia usava terracota
-          só em acento pontual até aqui (botão, sublinhado); isso é a
-          mesma cor assumida como protagonista de uma seção inteira. */}
+      {/* Faixa de valores — marquee terracota */}
       <div className="overflow-hidden border-y border-[#a84523]/40 bg-[#C1552C] py-3.5">
         <div className="flex w-max animate-marquee items-center gap-10 motion-reduce:animate-none">
           {[...VALORES, ...VALORES].map((v, i) => (
@@ -1019,7 +1033,7 @@ export default function GastronomiaDemo() {
         </div>
       </div>
 
-      {/* História — Layout Sticky Editorial para preencher o vazio */}
+      {/* História — Layout Sticky Editorial */}
       <section className="relative mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
         <div className="grid gap-12 md:grid-cols-2 md:items-start lg:gap-20">
           
@@ -1073,8 +1087,7 @@ export default function GastronomiaDemo() {
         </div>
       </section>
 
-      {/* Cardápio de hoje — trilho de scroll horizontal (Arquétipo D) em
-          vez de grid tradicional. Puxa do Notion quando configurado. */}
+      {/* Cardápio */}
       <section id="cardapio" className="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
         <ScrollReveal>
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
@@ -1104,16 +1117,10 @@ export default function GastronomiaDemo() {
           </div>
         </ScrollReveal>
 
-        {/* Conector de seção — o "escorrer" que amarra o scroll (ver
-            components/ArdosiaInkStroke.tsx, variante "drip"), inspirado
-            num efeito de continuidade que a Bruna trouxe de referência
-            (mel escorrendo entre seções) — aqui reinterpretado com o
-            traço de giz/tinta que já é a assinatura da Ardósia. */}
         <ArdosiaSectionDrip />
       </section>
 
-      {/* Da feira à mesa — colagem tipográfica em cartões rotacionados
-          (Arquétipo D), sem fotografia */}
+      {/* Da feira à mesa */}
       <section id="processo" className="relative overflow-hidden border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
         <div className="mx-auto max-w-6xl">
           <ScrollReveal>
@@ -1165,9 +1172,7 @@ export default function GastronomiaDemo() {
         </div>
       </section>
 
-      {/* Depoimentos — carrossel manual (Arquétipo D), tom de bairro em
-          vez de credencial formal (diferente do depoimento de arquiteto
-          da CERNE) */}
+      {/* Depoimentos */}
       <section className="relative mx-auto max-w-3xl px-5 py-20 text-center sm:px-8 sm:py-24">
         <ScrollReveal>
           <Quote className="mx-auto mb-6 h-7 w-7 text-[#C1552C]" />
@@ -1215,7 +1220,7 @@ export default function GastronomiaDemo() {
         <ArdosiaSectionDrip />
       </section>
 
-      {/* FAQ — redução de fricção antes do CTA final */}
+      {/* FAQ */}
       <section id="faq" className="relative overflow-hidden border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
         <div className="mx-auto max-w-3xl">
           <ScrollReveal>
@@ -1242,9 +1247,7 @@ export default function GastronomiaDemo() {
         </div>
       </section>
 
-      {/* Contato / Reserva — CTA assimétrico (Arquétipo D): palavra gigante
-          de fundo + formulário real ao lado, em vez do formulário
-          centralizado da CERNE */}
+      {/* Contato / Reserva */}
       <section
         id="contato"
         ref={contatoRef}
