@@ -104,6 +104,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fraunces, Jost } from 'next/font/google';
 import { ArrowLeft, ArrowUpRight, Minus, Plus, Ruler } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { CerneContactForm } from '@/components/CerneContactForm';
 
@@ -744,7 +745,9 @@ export default function MarcenariaDemo() {
           {projetos.filter((p) => p.featured).map((p) => (
             <ScrollReveal key={p.idx}>
               <div className="mb-20 grid gap-10 md:grid-cols-2 md:gap-4">
-                <button
+                <motion.button
+                  whileHover={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
                   type="button"
                   onClick={() => setProjetoAberto(p)}
                   className="group relative aspect-[4/5] overflow-hidden text-left sm:rounded-sm md:aspect-auto"
@@ -760,7 +763,7 @@ export default function MarcenariaDemo() {
                   <span className="absolute bottom-4 left-4 text-[10.5px] uppercase tracking-[0.2em] text-[#F5F4EE]">
                     Projeto em destaque
                   </span>
-                </button>
+                </motion.button>
                 <div className="relative flex flex-col justify-center py-4">
                   <div className="relative -mt-10 hidden aspect-[4/3] w-[62%] self-end overflow-hidden rounded-sm border-4 border-[#EDECE3] shadow-lg md:block">
                     <Image

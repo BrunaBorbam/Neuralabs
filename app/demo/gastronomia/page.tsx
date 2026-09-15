@@ -633,7 +633,9 @@ const CUBE_FACES: { key: string; transform: string; Icon?: typeof Leaf; label: s
 function SlateCube({ reducedMotion }: { reducedMotion: boolean }) {
   return (
     <div aria-hidden="true" className="pointer-events-none" style={{ perspective: 560 }}>
-      <div
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
         className={reducedMotion ? '' : 'animate-slate-spin'}
         style={{
           width: CUBE_SIZE,
@@ -666,7 +668,7 @@ function SlateCube({ reducedMotion }: { reducedMotion: boolean }) {
             )}
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

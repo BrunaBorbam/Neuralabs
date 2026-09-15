@@ -24,6 +24,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { Bodoni_Moda, Plus_Jakarta_Sans } from 'next/font/google';
 import {
   ArrowLeft,
@@ -251,29 +252,6 @@ function useMagnetic() {
   return ref;
 }
 
-/** Subtle pointer-tilt on the floating savings card — desktop, fine-pointer only. */
-function useTilt<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || !window.matchMedia('(hover: hover)').matches) return;
-    const move = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      el.style.transform = `perspective(900px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 8).toFixed(2)}deg)`;
-    };
-    const leave = () => (el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)');
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerleave', leave);
-    return () => {
-      el.removeEventListener('pointermove', move);
-      el.removeEventListener('pointerleave', leave);
-    };
-  }, []);
-  return ref;
-}
-
 /** Gentle vertical parallax, desktop + non-reduced-motion only, clamped so the layer never leaves its frame. */
 function useParallax<T extends HTMLElement>(strength: number, maxPx: number, enabled: boolean) {
   const ref = useRef<T | null>(null);
@@ -314,7 +292,6 @@ export default function VillaSerenaDemo() {
   const reducedMotion = usePrefersReducedMotion();
   const showHeroVideo = isDesktop && !reducedMotion;
   const heroParallaxRef = useParallax<HTMLDivElement>(0.18, 60, isDesktop && !reducedMotion);
-  const cardTiltRef = useTilt<HTMLDivElement>();
   const finsDeSemanaLivres = useFinsDeSemanaLivres(3);
 
   return (
@@ -489,10 +466,11 @@ export default function VillaSerenaDemo() {
           </div>
 
           {/* Placa de vidro edge-lit + reflexo (elemento-assinatura da marca) */}
-          <div className="absolute bottom-[10vh] right-[6vw] z-10 hidden w-[300px] md:block">
-            <div
-              ref={cardTiltRef}
-              className="relative rounded-2xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-xl transition-transform duration-300"
+          <div className="absolute bottom-[10vh] right-[6vw] z-10 hidden w-[300px] md:block" style={{ perspective: 1000 }}>
+            <motion.div
+              whileHover={{ rotateX: 5, rotateY: -10, scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="relative rounded-2xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-2xl"
               style={{ boxShadow: '0 30px 70px -30px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.15)' }}
             >
               <div
@@ -514,7 +492,7 @@ export default function VillaSerenaDemo() {
                 <span className="text-[#F5EFE6]/50 line-through">{currency.format(9840)}</span>
                 <span className="font-semibold text-[#D4A373]">{currency.format(8200)}</span>
               </div>
-            </div>
+            </motion.div>
             <div
               className="h-14 rounded-2xl bg-white/[0.05] blur-[3px]"
               style={{
