@@ -348,71 +348,7 @@ function TextReveal({ text, className }: { text: string, className?: string }) {
   );
 }
 
-// ─── Floating Ingredient (3D Parallax, reage ao mouse) ───
-const FLOATING_INGREDIENTS = [
-  { src: '/images/gastronomia/ingredients/basil.jpg', alt: 'Manjericão', size: 90, x: '8%', y: '15%', delay: 0, rotate: -15, speed: 1.2 },
-  { src: '/images/gastronomia/ingredients/pepper.jpg', alt: 'Pimenta', size: 70, x: '85%', y: '20%', delay: 0.3, rotate: 25, speed: 0.8 },
-  { src: '/images/gastronomia/ingredients/tomato.jpg', alt: 'Tomate', size: 80, x: '12%', y: '65%', delay: 0.6, rotate: 10, speed: 1.0 },
-  { src: '/images/gastronomia/ingredients/rosemary.jpg', alt: 'Alecrim', size: 75, x: '90%', y: '55%', delay: 0.15, rotate: -20, speed: 1.4 },
-  { src: '/images/gastronomia/ingredients/garlic.jpg', alt: 'Alho', size: 65, x: '78%', y: '78%', delay: 0.45, rotate: 30, speed: 0.9 },
-];
 
-function FloatingIngredient({
-  src, alt, size, initialX, initialY, delay, initialRotate, speed, mouseX, mouseY
-}: {
-  src: string; alt: string; size: number;
-  initialX: string; initialY: string; delay: number;
-  initialRotate: number; speed: number;
-  mouseX: MotionValue<number>;
-  mouseY: MotionValue<number>;
-}) {
-  const springConfig = { stiffness: 50, damping: 20, mass: 0.8 };
-  const moveX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-30 * speed, 30 * speed]), springConfig);
-  const moveY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-25 * speed, 25 * speed]), springConfig);
-
-  return (
-    <motion.div
-      className="absolute pointer-events-none z-10"
-      style={{
-        left: initialX,
-        top: initialY,
-        x: moveX,
-        y: moveY,
-        width: size,
-        height: size,
-      }}
-      initial={{ opacity: 0, scale: 0, rotate: initialRotate - 20 }}
-      animate={{ opacity: 1, scale: 1, rotate: initialRotate }}
-      transition={{
-        delay: 0.8 + delay,
-        duration: 1.2,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
-      <motion.div
-        animate={{
-          y: [0, -12, 0],
-          rotate: [initialRotate, initialRotate + 5, initialRotate],
-        }}
-        transition={{
-          duration: 4 + delay * 2,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="relative w-full h-full"
-      >
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes={`${size}px`}
-          className="object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
-          style={{ filter: 'brightness(1.1) contrast(1.05)' }}
-        />
-      </motion.div>
-    </motion.div>
-  );
-}
 
 // ─── Floating Insight Chip (glassmorphism) ───
 function FloatingChip({
@@ -527,12 +463,7 @@ function HeroChalkboardShowcase({ mouseX, mouseY }: {
             </div>
           </div>
 
-          {/* Ink stroke ao redor do quadro */}
-          <ArdosiaInkStroke
-            variant="circle"
-            color="#C1552C"
-            className="pointer-events-none absolute -inset-6 opacity-50"
-          />
+          {/* Ink stroke removido para limpar a imagem (círculo sobre o quadro) */}
         </motion.div>
       </div>
     </motion.div>
@@ -850,22 +781,7 @@ export default function GastronomiaDemo() {
           </motion.span>
         </motion.div>
 
-        {/* Ingredientes flutuantes */}
-        {FLOATING_INGREDIENTS.map((ing, i) => (
-          <FloatingIngredient
-            key={i}
-            src={ing.src}
-            alt={ing.alt}
-            size={isDesktop ? ing.size : ing.size * 0.6}
-            initialX={ing.x}
-            initialY={ing.y}
-            delay={ing.delay}
-            initialRotate={ing.rotate}
-            speed={ing.speed}
-            mouseX={heroMouseX}
-            mouseY={heroMouseY}
-          />
-        ))}
+        {/* Ingredientes flutuantes removidos para manter o visual limpo e focado no quadro */}
 
         {/* Floating Insight Chips */}
         <FloatingChip
