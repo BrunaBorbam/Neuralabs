@@ -20,9 +20,9 @@ export const SocialProof = () => {
             A Ciência
           </Badge>
           <h2 className="text-3xl md:text-5xl font-serif font-black text-pearl-100 mb-6">
-            Não acredite em nós. <br className="hidden md:block"/>
+            A ciência do <br className="hidden md:block"/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blush-400 to-gold-500">
-              Acredite nos dados.
+              Web Design de Conversão
             </span>
           </h2>
           <p className="text-pearl-300/70 max-w-2xl mx-auto leading-relaxed mb-16">
