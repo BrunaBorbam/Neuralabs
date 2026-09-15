@@ -24,7 +24,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Bodoni_Moda, Plus_Jakarta_Sans } from 'next/font/google';
 import {
   ArrowLeft,
@@ -293,6 +293,8 @@ export default function VillaSerenaDemo() {
   const showHeroVideo = isDesktop && !reducedMotion;
   const heroParallaxRef = useParallax<HTMLDivElement>(0.18, 60, isDesktop && !reducedMotion);
   const finsDeSemanaLivres = useFinsDeSemanaLivres(3);
+  const { scrollYProgress } = useScroll();
+  const waveOffset = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   return (
     <main
@@ -300,6 +302,26 @@ export default function VillaSerenaDemo() {
       className={`relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#0D0F12] text-[#F5EFE6] ${serif.variable} ${sans.variable}`}
       style={{ fontFamily: 'var(--font-villa-sans)' }}
     >
+      {/* Ondas Topográficas Contínuas (Continuidade Fluida) */}
+      <div className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-10">
+        <svg viewBox="0 0 100 1000" preserveAspectRatio="none" className="h-[200%] w-full">
+          <motion.path
+            d="M 10 0 C 50 200, -20 400, 30 600 C 80 800, -10 900, 20 1000"
+            stroke="#D4A373"
+            strokeWidth="0.5"
+            fill="none"
+            style={{ y: waveOffset }}
+          />
+          <motion.path
+            d="M 20 0 C 60 200, -10 400, 40 600 C 90 800, 0 900, 30 1000"
+            stroke="#D4A373"
+            strokeWidth="0.2"
+            fill="none"
+            style={{ y: waveOffset }}
+          />
+        </svg>
+      </div>
+
       {/* Aurora ambiente */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute -left-[10vw] -top-[14vw] h-[46vw] w-[46vw] rounded-full bg-[radial-gradient(circle,rgba(212,163,115,.5),transparent_70%)] blur-[90px] animate-drift-slow" />

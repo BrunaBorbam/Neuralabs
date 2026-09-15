@@ -129,7 +129,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { ArdosiaReservaForm } from '@/components/ArdosiaReservaForm';
-import { ArdosiaInkStroke, ArdosiaSectionDrip } from '@/components/ArdosiaInkStroke';
+import { ArdosiaInkStroke, ArdosiaSectionDrip, ArdosiaContinuousThread } from '@/components/ArdosiaInkStroke';
 
 const display = Instrument_Serif({
   subsets: ['latin'],
@@ -821,6 +821,7 @@ export default function GastronomiaDemo() {
       className={`relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#26241F] text-[#F3EDE1] ${display.variable} ${sans.variable}`}
       style={{ fontFamily: 'var(--font-ardosia-sans)' }}
     >
+      <ArdosiaContinuousThread />
       {/* Selo NEURALABS — única menção à marca dentro da demo */}
       <div className="flex items-center justify-between gap-4 border-b border-[#F3EDE1]/10 bg-[#201E19] px-5 py-2 text-[11px] tracking-wide text-[#F3EDE1]/60 sm:px-8">
         <span>

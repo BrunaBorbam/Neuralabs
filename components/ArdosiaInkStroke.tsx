@@ -21,7 +21,7 @@
  * conteúdo 100% da identidade Ardósia (giz/tinta, não mel).
  */
 
-import { motion } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 
 type Variant = 'underline' | 'circle' | 'drip';
 
@@ -100,3 +100,22 @@ export const ArdosiaSectionDrip = ({ color = '#C1552C' }: { color?: string }) =>
     <ArdosiaInkStroke variant="drip" color={color} strokeWidth={2.5} className="h-full w-full" />
   </div>
 );
+
+/** Fio condutor de rolagem (Continuidade Fluida). Uma linha de giz que corre a página inteira baseada no scroll. */
+export const ArdosiaContinuousThread = ({ color = '#C1552C' }: { color?: string }) => {
+  const { scrollYProgress } = useScroll();
+  return (
+    <div className="pointer-events-none fixed inset-y-0 left-2 sm:left-6 z-0 w-8 opacity-20 mix-blend-screen">
+      <svg viewBox="0 0 24 1000" preserveAspectRatio="none" className="h-full w-full">
+        <motion.path
+          d="M 12 0 C 24 150, 0 350, 12 500 C 24 650, 0 850, 12 1000"
+          stroke={color}
+          strokeWidth="1.5"
+          fill="none"
+          strokeLinecap="round"
+          style={{ pathLength: scrollYProgress }}
+        />
+      </svg>
+    </div>
+  );
+};

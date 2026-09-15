@@ -71,6 +71,15 @@ export default function EcommerceDemo() {
       className={`relative min-h-screen w-full overflow-x-hidden bg-[#050505] text-[#EFEFEF] ${serif.variable} ${sans.variable} selection:bg-[#EFEFEF] selection:text-[#050505]`}
       style={{ fontFamily: 'var(--font-nox-sans)' }}
     >
+      {/* Feixe de Luz Contínuo (Continuidade Fluida) */}
+      <motion.div
+        className="pointer-events-none fixed inset-0 z-0 h-full w-full"
+        style={{ opacity: useTransform(scrollYProgress, [0, 1], [0.3, 0.7]) }}
+      >
+        <div className="absolute left-[10%] top-[-20%] h-[150vh] w-[1px] -rotate-12 bg-gradient-to-b from-transparent via-white/20 to-transparent blur-sm" />
+        <div className="absolute left-[40%] top-[-10%] h-[150vh] w-[2px] -rotate-12 bg-gradient-to-b from-transparent via-white/10 to-transparent blur-md" />
+      </motion.div>
+
       {/* Attribution Bar */}
       <div className="fixed top-0 z-50 flex w-full items-center justify-between gap-4 border-b border-white/5 bg-black/60 px-5 py-2 text-[10px] tracking-widest text-white/50 uppercase backdrop-blur-md">
         <span>

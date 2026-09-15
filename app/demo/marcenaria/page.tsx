@@ -719,9 +719,9 @@ export default function MarcenariaDemo() {
         </div>
       </section>
 
-      {/* Portfólio — case em destaque + grid dos demais com overlay de hover */}
-      <section id="portfolio" className="border-t border-[#2A2C22]/10 bg-[#EDECE3] px-5 py-24 sm:px-8 sm:py-28">
-        <div className="mx-auto max-w-6xl">
+      {/* Trabalhos — Obras (Grid Sobreposto para Continuidade Fluida) */}
+      <section id="obras" className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] px-5 pb-20 pt-32 sm:px-8 sm:pb-32">
+        <div className="mx-auto max-w-7xl">
           <ScrollReveal>
             <div className="mb-16 max-w-lg">
               <div className="mb-7 flex items-center gap-3">
@@ -840,7 +840,7 @@ export default function MarcenariaDemo() {
                       </span>
                     </div>
                   </div>
-                </button>
+                </motion.button>
               </ScrollReveal>
             ))}
           </div>
