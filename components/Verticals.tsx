@@ -36,7 +36,7 @@ const VERTICAL_MEDIA = [
     icon: ShoppingBag,
     image: '/images/verticals/ecommerce.jpg',
     video: '/videos/verticals/ecommerce',
-    demoHref: undefined,
+    demoHref: '/demo/ecommerce',
   },
 ];
 
