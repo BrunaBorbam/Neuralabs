@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { DemoVillaSerena, DemoCerne, DemoArdosia, DemoEcommerce } from '../HeroDemos';
 
 // Same AI-generated editorial set used in Nichos (public/images/verticals),
 // copied here rather than hotlinked from Unsplash: one less third-party
@@ -113,18 +114,14 @@ export const HeroStudioMockup = () => {
                   tab-switcher template. */}
               <motion.div
                 className="absolute inset-0"
-                initial={{ scale: 1.08 }}
+                initial={{ scale: 1.02 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 6, ease: 'easeOut' }}
               >
-                <Image
-                  src={TAB_IMAGES[active]}
-                  alt={activeTab.label}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                  priority
-                />
+                {active === 0 && <DemoVillaSerena />}
+                {active === 1 && <DemoCerne />}
+                {active === 2 && <DemoArdosia />}
+                {active === 3 && <DemoEcommerce />}
               </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent" />
 
@@ -187,14 +184,12 @@ export const HeroStudioMockup = () => {
                 transition={{ duration: 0.4 }}
                 className="absolute inset-0"
               >
-                <Image
-                  src={TAB_IMAGES[active]}
-                  alt=""
-                  fill
-                  sizes="120px"
-                  className="object-cover"
-                  aria-hidden="true"
-                />
+                <div className="absolute inset-0 pointer-events-none origin-top-left scale-[0.4] w-[250%] h-[250%]">
+                  {active === 0 && <DemoVillaSerena />}
+                  {active === 1 && <DemoCerne />}
+                  {active === 2 && <DemoArdosia />}
+                  {active === 3 && <DemoEcommerce />}
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/85 via-transparent to-obsidian-900/10" />
                 <span className="absolute inset-x-1.5 bottom-1.5 px-1.5 py-1 rounded bg-gold-500 text-obsidian-900 text-[8px] font-bold text-center leading-none">
                   {activeTab.cta}
