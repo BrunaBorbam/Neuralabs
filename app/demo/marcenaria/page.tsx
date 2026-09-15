@@ -840,7 +840,7 @@ export default function MarcenariaDemo() {
                       </span>
                     </div>
                   </div>
-                </motion.button>
+                </button>
               </ScrollReveal>
             ))}
           </div>
