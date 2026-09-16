@@ -118,11 +118,6 @@ export default function EcommerceDemo() {
   const heroOpacity = useTransform(smoothProgress, [0, 0.3], [1, 0]);
   const heroTextY = useTransform(smoothProgress, [0, 0.3], ['0%', '-60%']);
   const heroBlur = useTransform(smoothProgress, [0, 0.4], ['blur(0px)', 'blur(20px)']);
-  
-  // Sticky Section transitions
-  const stickyBgOpacity = useTransform(smoothProgress, [0.1, 0.4], [0, 1]);
-  const stickyContentY = useTransform(smoothProgress, [0.1, 0.4], [100, 0]);
-  const stickyContentOpacity = useTransform(smoothProgress, [0.1, 0.3], [0, 1]);
 
   const handleAddToCart = () => {
     setAdded(true);
@@ -244,8 +239,11 @@ export default function EcommerceDemo() {
           {/* Lado Esquerdo - Imagem Fixa (Revela pelo Scroll) */}
           <div className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center">
             <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-20%" }}
+              transition={{ duration: 1 }}
               className="relative w-full aspect-[4/5] overflow-hidden rounded-md border border-white/5 bg-white/[0.01]"
-              style={{ opacity: stickyBgOpacity }}
             >
               <Image 
                 src={HERO_BOTTLE_CINEMATIC}
@@ -271,7 +269,12 @@ export default function EcommerceDemo() {
           {/* Lado Direito - Scroll Text & Buy Box */}
           <div className="lg:w-1/2 p-6 sm:p-12 lg:p-20 lg:py-32 flex flex-col gap-32">
             
-            <motion.div style={{ y: stickyContentY, opacity: stickyContentOpacity }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 0.8 }}
+            >
               <h3 className="text-3xl sm:text-5xl leading-snug mb-8" style={{ fontFamily: 'var(--font-nox-serif)' }}>
                 Criado para desaparecer na escuridão e ser lembrado até o amanhecer.
               </h3>
