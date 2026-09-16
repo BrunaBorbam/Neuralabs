@@ -285,7 +285,7 @@ export default function EcommerceDemo() {
       {/* ─── 2. SEÇÃO STICKY EDITORIAL (SPLIT SCREEN) ─── */}
       <section className="relative w-full bg-[#050505] z-10 -mt-[20vh]">
         {/* Layout Sticky em Desktop */}
-        <div className="flex flex-col lg:flex-row min-h-[150vh]">
+        <div className="flex flex-col lg:flex-row">
           
           <div className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center">
             <motion.div 
@@ -396,6 +396,53 @@ export default function EcommerceDemo() {
         </div>
       </section>
 
+      {/* ─── 3. OUTROS PRODUTOS (Preenchendo o Vazio) ─── */}
+      <section className="relative w-full bg-[#050505] py-24 px-6 sm:px-12 border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between mb-16">
+            <div>
+              <h2 className="text-3xl sm:text-4xl" style={{ fontFamily: 'var(--font-nox-serif)' }}>Mais da Coleção</h2>
+              <p className="text-[11px] uppercase tracking-widest text-white/50 mt-4">Complete o Ritual</p>
+            </div>
+            <button className="hidden sm:flex text-[10px] uppercase tracking-widest text-white/70 hover:text-white transition-colors items-center gap-2">
+              Ver Todos <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Produto 1 */}
+            <div className="group cursor-pointer">
+              <div className="relative w-full aspect-[4/5] bg-white/[0.02] border border-white/5 overflow-hidden mb-6 rounded-sm">
+                <Image src={HERO_BOTTLE_CINEMATIC} alt="Vela Botânica" fill className="object-cover opacity-60 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700" style={{ filter: 'brightness(0.5) sepia(0.2)' }} />
+              </div>
+              <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Bougie Noire</h3>
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Vela Botânica • 250g</p>
+              <p className="text-sm font-light text-white">R$ 540</p>
+            </div>
+
+            {/* Produto 2 */}
+            <div className="group cursor-pointer">
+              <div className="relative w-full aspect-[4/5] bg-white/[0.02] border border-white/5 overflow-hidden mb-6 rounded-sm">
+                <Image src={HERO_BOTTLE_CINEMATIC} alt="Extrait 50ml" fill className="object-cover opacity-60 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700" style={{ filter: 'brightness(0.6) grayscale(0.5)' }} />
+              </div>
+              <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Noir Ômbre</h3>
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Extrait de Parfum • 50ml</p>
+              <p className="text-sm font-light text-white">R$ 1.150</p>
+            </div>
+
+            {/* Produto 3 */}
+            <div className="group cursor-pointer sm:hidden lg:block">
+              <div className="relative w-full aspect-[4/5] bg-white/[0.02] border border-white/5 overflow-hidden mb-6 rounded-sm">
+                <Image src={HERO_BOTTLE_CINEMATIC} alt="Sabonete Líquido" fill className="object-cover opacity-60 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700" style={{ filter: 'brightness(0.4) contrast(1.5)' }} />
+              </div>
+              <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>L'Eau Noire</h3>
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Gel de Banho • 200ml</p>
+              <p className="text-sm font-light text-white">R$ 380</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── 4. FOOTER DE LUXO (NOX PARIS) ─── */}
       <footer className="relative w-full bg-[#050505] pt-32 pb-12 px-6 sm:px-12 border-t border-white/5 z-10">
         <div className="max-w-7xl mx-auto">
@@ -471,22 +518,19 @@ export default function EcommerceDemo() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ delay: 0.1, duration: 0.4 }}
-              className="relative w-[90%] max-w-5xl aspect-video bg-[#050505] rounded-xl overflow-hidden border border-white/5 flex items-center justify-center shadow-2xl"
+              className="relative w-[90%] max-w-5xl aspect-video bg-[#050505] rounded-xl overflow-hidden border border-white/5 shadow-2xl"
             >
-              <CinematicSmoke />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90" />
-              
-              <div className="relative z-10 text-center pointer-events-none">
-                <h3 className="text-3xl md:text-5xl mb-4 text-white" style={{ fontFamily: 'var(--font-nox-serif)' }}>O Silêncio Tem Uma Assinatura</h3>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-white/50">Curta-metragem • NOX Paris</p>
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="mt-8 mx-auto flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-[10px] uppercase tracking-widest text-white backdrop-blur-md hover:bg-white/20 transition-colors"
-                >
-                  <Play className="h-4 w-4" /> Reproduzir Filme
-                </motion.button>
-              </div>
+              {/* REAL YOUTUBE PLAYER EMBED */}
+              <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/oG-n2TqRoxM?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0" 
+                title="NOX Paris Cinematic Film" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              ></iframe>
             </motion.div>
           </motion.div>
         )}
