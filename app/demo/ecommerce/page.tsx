@@ -520,17 +520,14 @@ export default function EcommerceDemo() {
               transition={{ delay: 0.1, duration: 0.4 }}
               className="relative w-[90%] max-w-5xl aspect-video bg-[#050505] rounded-xl overflow-hidden border border-white/5 shadow-2xl"
             >
-              {/* REAL YOUTUBE PLAYER EMBED */}
-              <iframe 
-                width="100%" 
-                height="100%" 
-                src="https://www.youtube.com/embed/oG-n2TqRoxM?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0" 
-                title="NOX Paris Cinematic Film" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-              ></iframe>
+              {/* PLAYER DE VÍDEO NATIVO */}
+              <video 
+                src="/videos/ardosia-hero-placeholder.mp4" 
+                controls
+                autoPlay
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ filter: 'grayscale(100%) contrast(1.2)' }}
+              />
             </motion.div>
           </motion.div>
         )}
