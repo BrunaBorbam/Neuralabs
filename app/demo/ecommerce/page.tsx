@@ -287,13 +287,11 @@ export default function EcommerceDemo() {
         {/* Layout Sticky em Desktop */}
         <div className="flex flex-col lg:flex-row min-h-[150vh]">
           
-          {/* Lado Esquerdo - Imagem Fixa (Revela pelo Scroll) */}
           <div className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-20%" }}
-              transition={{ duration: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
               className="relative w-full aspect-[4/5] overflow-hidden rounded-md border border-white/5 bg-white/[0.01]"
             >
               <Image 
@@ -317,13 +315,12 @@ export default function EcommerceDemo() {
             </motion.div>
           </div>
 
-          {/* Lado Direito - Scroll Text & Buy Box */}
           <div className="lg:w-1/2 p-6 sm:p-12 lg:p-20 lg:py-32 flex flex-col gap-32">
             
             <motion.div 
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
+              viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
               <h3 className="text-3xl sm:text-5xl leading-snug mb-8" style={{ fontFamily: 'var(--font-nox-serif)' }}>
