@@ -6,7 +6,8 @@
  *
  * Arquétipo: E. Minimal Produto-Led (Evoluído para Cinematic Full-Bleed)
  * Identidade: "Quiet Luxury Escuro". Fundo cinematográfico, luz volumétrica.
- * Tipografia: Bodoni Moda (editorial/luxo) + Plus Jakarta 'use client';
+ * Tipografia: Bodoni Moda (editorial/luxo) + Plus Jakarta
+ */
 
 import { useEffect, useState, useRef, ReactNode } from 'react';
 import Image from 'next/image';
