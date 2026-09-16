@@ -420,82 +420,93 @@ function FloatingChip({
   );
 }
 
-// ─── Hero Chalkboard Showcase (3D tilt + Ken Burns) ───
-// O quadro de ardósia é O elemento-chave da identidade visual.
-// Mesmo efeito 3D parallax da referência de Pinterest, mas aplicado
-// ao quadro de giz sendo escrito à mão — não a um prato genérico.
-function HeroChalkboardShowcase({ mouseX, mouseY }: {
+// ─── Hero Plate Showcase (3D tilt + Scroll-Driven Rotation + Floating Ingredients) ───
+function HeroPlateShowcase({ mouseX, mouseY, scrollYProgress }: {
   mouseX: MotionValue<number>;
   mouseY: MotionValue<number>;
+  scrollYProgress: MotionValue<number>;
 }) {
   const springConfig = { stiffness: 120, damping: 20 };
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [4, -4]), springConfig);
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-4, 4]), springConfig);
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), springConfig);
+  
+  // Rotação baseada no scroll para o prato
+  const plateRotation = useTransform(scrollYProgress, [0, 1], [0, 180]);
 
   return (
     <motion.div
-      className="relative z-10"
-      initial={{ opacity: 0, scale: 0.85, y: 40, rotate: -3 }}
-      animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+      className="relative z-10 w-full h-[500px] flex items-center justify-center"
+      initial={{ opacity: 0, scale: 0.85, y: 40 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+      style={{ perspective: 1200 }}
     >
-      <div className="flex items-start gap-3" style={{ perspective: 1000 }}>
-        {/* Legenda vertical — como crédito de revista impressa */}
-        <span
-          className="hidden pt-3 text-[9px] uppercase tracking-[0.2em] text-[#8A8478] lg:block"
-          style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-        >
-          O quadro de hoje · giz sobre ardósia
-        </span>
-
-        <motion.div
-          style={{
-            rotateX,
-            rotateY,
-            transformStyle: 'preserve-3d',
+      <motion.div
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: 'preserve-3d',
+        }}
+        className="relative w-full max-w-[450px] aspect-square flex items-center justify-center"
+      >
+        {/* Prato Principal (Screen mix-blend para fundo preto) */}
+        <motion.div 
+          className="absolute inset-0 rounded-full"
+          style={{ 
+            rotate: plateRotation,
           }}
-          className="relative"
         >
-          {/* Moldura estilo polaroid — a foto do quadro "pinada" */}
-          <div className="relative w-[260px] border-[5px] border-[#F3EDE1] bg-[#F3EDE1] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.65),0_0_40px_-8px_rgba(217,164,65,0.1)] sm:w-[300px] md:w-[340px] lg:w-[380px]">
-            {/* Foto do quadro com Ken Burns */}
-            <div className="relative aspect-[3/4] w-full overflow-hidden">
-              <motion.div
-                className="absolute inset-0"
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <Image
-                  src="/images/gastronomia/hero-quadro-pt.jpg"
-                  alt="Quadro de ardósia sendo escrito à mão com o cardápio do dia"
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 380px, (min-width: 768px) 340px, (min-width: 640px) 300px, 260px"
-                  className="object-cover"
-                />
-              </motion.div>
-              {/* Vinheta cinematográfica — leitura de still de filme */}
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{ boxShadow: 'inset 0 0 40px 12px rgba(0,0,0,0.45)' }}
-              />
-            </div>
-            {/* Rodapé polaroid — handwritten feel */}
-            <div className="flex items-center justify-between px-3 py-2">
-              <span
-                className="text-[11px] italic text-[#26241F]/60"
-                style={{ fontFamily: 'var(--font-ardosia-serif)' }}
-              >
-                cardápio de hoje
-              </span>
-              <span className="text-[9px] uppercase tracking-wider text-[#26241F]/40">
-                set. 2026
-              </span>
-            </div>
-          </div>
-
-          {/* Ink stroke removido para limpar a imagem (círculo sobre o quadro) */}
+          <Image
+            src="/images/gastronomia/hero-plate.jpg"
+            alt="Risoto Especial"
+            fill
+            className="object-cover rounded-full"
+            style={{ mixBlendMode: 'screen' }} 
+          />
         </motion.div>
+
+        {/* Ingredientes Flutuantes (Parallax multi-camada) */}
+        <FloatingIngredient 
+          src="/images/gastronomia/rosemary.jpg" 
+          width={80} 
+          height={80} 
+          x="-20%" y="-10%" 
+          mouseX={mouseX} mouseY={mouseY} speed={1.5} rotate={15} 
+        />
+        <FloatingIngredient 
+          src="/images/gastronomia/mushroom.jpg" 
+          width={60} 
+          height={60} 
+          x="110%" y="20%" 
+          mouseX={mouseX} mouseY={mouseY} speed={-1.2} rotate={-25} 
+        />
+        <FloatingIngredient 
+          src="/images/gastronomia/mushroom.jpg" 
+          width={40} 
+          height={40} 
+          x="-10%" y="100%" 
+          mouseX={mouseX} mouseY={mouseY} speed={2} rotate={45} 
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function FloatingIngredient({ src, width, height, x, y, mouseX, mouseY, speed, rotate }: any) {
+  const springConfig = { stiffness: 80, damping: 25, mass: 0.5 };
+  const moveX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-25 * speed, 25 * speed]), springConfig);
+  const moveY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-20 * speed, 20 * speed]), springConfig);
+
+  return (
+    <motion.div
+      className="absolute"
+      style={{ left: x, top: y, x: moveX, y: moveY, rotate }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.8, duration: 1, ease: 'easeOut' }}
+    >
+      <div style={{ width, height, position: 'relative', mixBlendMode: 'screen' }}>
+        <Image src={src} alt="Ingrediente" fill className="object-contain" style={{ opacity: 0 }} />
       </div>
     </motion.div>
   );
@@ -942,9 +953,9 @@ export default function GastronomiaDemo() {
             </motion.div>
           </motion.div>
 
-          {/* Lado Direito — Quadro de Ardósia */}
+          {/* Lado Direito — Prato Showcase */}
           <div className="relative mt-12 lg:mt-0 lg:flex-1 flex items-center justify-center">
-            <HeroChalkboardShowcase mouseX={heroMouseX} mouseY={heroMouseY} />
+            <HeroPlateShowcase mouseX={heroMouseX} mouseY={heroMouseY} scrollYProgress={heroProgress} />
           </div>
         </div>
 

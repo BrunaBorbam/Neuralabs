@@ -1,13 +1,10 @@
+# *
 User-agent: *
 Allow: /
-Disallow: /api/
 
+# Host
+Host: https://neuralabs.online
+
+# Sitemaps
 Sitemap: https://neuralabs.online/sitemap.xml
-
-# Google
-User-agent: Googlebot
-Allow: /
-
-# Bing
-User-agent: Bingbot
-Allow: /
+Sitemap: https://neuralabs.online/server-sitemap-index.xml
