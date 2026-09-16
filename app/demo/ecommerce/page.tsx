@@ -92,6 +92,56 @@ function MagneticButton({ children, className, onClick }: { children: ReactNode;
   );
 }
 
+/** Cinematic Abstract Video Effect (CSS/Framer Motion) */
+function CinematicSmoke() {
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-[#050505]">
+      {/* Deep Shadow Background */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#020202] via-[#050505] to-[#0a0a0a]" />
+
+      {/* Smoke Orb 1 */}
+      <motion.div
+        animate={{ 
+          x: ['-10%', '10%', '-10%'], 
+          y: ['-20%', '10%', '-20%'],
+          scale: [1, 1.3, 1],
+          opacity: [0.3, 0.6, 0.3]
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -top-[20%] -left-[10%] w-[80%] h-[120%] bg-white/5 rounded-[100%] blur-[120px] mix-blend-screen"
+      />
+      
+      {/* Smoke Orb 2 */}
+      <motion.div
+        animate={{ 
+          x: ['10%', '-20%', '10%'], 
+          y: ['10%', '-10%', '10%'],
+          scale: [1.2, 0.9, 1.2],
+          opacity: [0.2, 0.5, 0.2]
+        }}
+        transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-[10%] -right-[20%] w-[90%] h-[110%] bg-white/[0.03] rounded-[100%] blur-[140px] mix-blend-screen"
+      />
+
+      {/* Volumetric Light Beam */}
+      <motion.div
+        animate={{ 
+          rotate: [-5, 5, -5],
+          opacity: [0.1, 0.3, 0.1]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -top-[50%] left-[20%] w-[40%] h-[200%] bg-gradient-to-b from-white/10 to-transparent blur-[80px] transform -rotate-12 origin-top"
+      />
+
+      {/* Film Grain Noise */}
+      <div 
+        className="absolute inset-0 opacity-[0.15] mix-blend-overlay pointer-events-none"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}
+      />
+    </div>
+  );
+}
+
 export default function EcommerceDemo() {
   const [mounted, setMounted] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -426,16 +476,8 @@ export default function EcommerceDemo() {
               transition={{ delay: 0.1, duration: 0.4 }}
               className="relative w-[90%] max-w-5xl aspect-video bg-[#050505] rounded-xl overflow-hidden border border-white/5 flex items-center justify-center shadow-2xl"
             >
-              <video 
-                src="/videos/ardosia-hero-placeholder.mp4" 
-                autoPlay 
-                loop 
-                muted 
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{ filter: 'grayscale(100%) contrast(1.2)' }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent opacity-80" />
+              <CinematicSmoke />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90" />
               
               <div className="relative z-10 text-center pointer-events-none">
                 <h3 className="text-3xl md:text-5xl mb-4 text-white" style={{ fontFamily: 'var(--font-nox-serif)' }}>O Silêncio Tem Uma Assinatura</h3>
