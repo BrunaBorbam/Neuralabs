@@ -343,6 +343,8 @@ export default function EcommerceDemo() {
                   Edição numerada. 500 frascos disponíveis.
                 </p>
               </div>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
@@ -423,23 +425,18 @@ export default function EcommerceDemo() {
               transition={{ delay: 0.1, duration: 0.4 }}
               className="relative w-[90%] max-w-5xl aspect-video bg-[#050505] rounded-xl overflow-hidden border border-white/5 flex items-center justify-center shadow-2xl"
             >
-              {/* Cinematic Placeholder */}
-              <motion.div
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0"
-              >
-                <Image 
-                  src={HERO_BOTTLE_CINEMATIC}
-                  alt="NOIR ÔMBRE Cinematic"
-                  fill
-                  className="object-cover opacity-30"
-                  style={{ filter: 'grayscale(100%) contrast(1.2)' }}
-                />
-              </motion.div>
+              <video 
+                src="/videos/ardosia-hero-placeholder.mp4" 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ filter: 'grayscale(100%) contrast(1.2)' }}
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent opacity-80" />
               
-              <div className="relative z-10 text-center">
+              <div className="relative z-10 text-center pointer-events-none">
                 <h3 className="text-3xl md:text-5xl mb-4 text-white" style={{ fontFamily: 'var(--font-nox-serif)' }}>O Silêncio Tem Uma Assinatura</h3>
                 <p className="text-[10px] uppercase tracking-[0.3em] text-white/50">Curta-metragem • NOX Paris</p>
                 <motion.button 
