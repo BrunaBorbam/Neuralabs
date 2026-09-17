@@ -34,6 +34,10 @@ const sans = Plus_Jakarta_Sans({
 });
 
 const HERO_BOTTLE_CINEMATIC = '/images/ecommerce/hero-perfume-branded.jpg';
+const PARALLAX_BOTTLE = '/images/nox/hero-bottle-black.jpg';
+const PARALLAX_BERGAMOT = '/images/nox/ingredient-bergamot.jpg';
+const PARALLAX_PEPPER = '/images/nox/ingredient-pepper.jpg';
+const PARALLAX_AMBER = '/images/nox/ingredient-amber.jpg';
 
 // ─── EFEITOS SOTD ───
 
@@ -218,6 +222,24 @@ export default function EcommerceDemo() {
   const heroTextY = useTransform(smoothProgress, [0, 0.3], ['0%', '-60%']);
   const heroBlur = useTransform(smoothProgress, [0, 0.4], ['blur(0px)', 'blur(20px)']);
 
+  // Parallax SOTD - Explosão de Ingredientes
+  const bottleScale = useTransform(smoothProgress, [0, 0.4], [1.1, 0.85]);
+  const bottleRotateY = useTransform(smoothProgress, [0, 0.4], [0, -10]);
+  
+  const bergamotX = useTransform(smoothProgress, [0, 0.4], ['0vw', '15vw']);
+  const bergamotY = useTransform(smoothProgress, [0, 0.4], ['0vh', '-25vh']);
+  const bergamotRotate = useTransform(smoothProgress, [0, 0.4], [-15, 45]);
+  const bergamotScale = useTransform(smoothProgress, [0, 0.4], [0.8, 1.1]);
+
+  const pepperX = useTransform(smoothProgress, [0, 0.4], ['0vw', '-25vw']);
+  const pepperY = useTransform(smoothProgress, [0, 0.4], ['0vh', '15vh']);
+  const pepperRotate = useTransform(smoothProgress, [0, 0.4], [25, -60]);
+  
+  const amberX = useTransform(smoothProgress, [0, 0.4], ['0vw', '20vw']);
+  const amberY = useTransform(smoothProgress, [0, 0.4], ['0vh', '30vh']);
+  const amberRotate = useTransform(smoothProgress, [0, 0.4], [-10, -50]);
+  const amberScale = useTransform(smoothProgress, [0, 0.4], [0.9, 1.2]);
+
   const handleAddToCart = () => {
     setAdded(true);
     setCartOpen(true);
@@ -297,24 +319,64 @@ export default function EcommerceDemo() {
           <motion.div 
             className="absolute inset-0 z-0 h-full w-full origin-center"
             style={{ 
-              scale: useTransform(smoothProgress, [0, 0.4], [1.05, 1.4]), // Base scale slightly up to prevent edges showing on tilt
-              filter: heroBlur, 
+              scale: useTransform(smoothProgress, [0, 0.4], [1.05, 1.4]),
               opacity: heroOpacity,
               rotateX, 
               rotateY 
             }}
           >
             <CinematicSmoke />
-            <Image 
-              src={HERO_BOTTLE_CINEMATIC}
-              alt="NOIR ÔMBRE by NOX Paris"
-              fill
-              className="object-cover"
-              priority
-            />
+            
+            {/* Parallax Container: Frasco + Ingredientes */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              
+              {/* Bergamota */}
+              <motion.div
+                className="absolute z-[5] w-[400px] h-[400px] mix-blend-screen pointer-events-none"
+                style={{
+                  x: bergamotX, y: bergamotY, rotate: bergamotRotate, scale: bergamotScale,
+                  filter: 'brightness(1.2)'
+                }}
+              >
+                <Image src={PARALLAX_BERGAMOT} alt="Bergamota" fill className="object-contain opacity-90" />
+              </motion.div>
+
+              {/* Pimenta */}
+              <motion.div
+                className="absolute z-[5] w-[250px] h-[250px] mix-blend-screen pointer-events-none"
+                style={{
+                  x: pepperX, y: pepperY, rotate: pepperRotate,
+                }}
+              >
+                <Image src={PARALLAX_PEPPER} alt="Pimenta Negra" fill className="object-contain opacity-80" />
+              </motion.div>
+
+              {/* Âmbar */}
+              <motion.div
+                className="absolute z-[5] w-[350px] h-[350px] mix-blend-screen pointer-events-none"
+                style={{
+                  x: amberX, y: amberY, rotate: amberRotate, scale: amberScale,
+                }}
+              >
+                <Image src={PARALLAX_AMBER} alt="Âmbar" fill className="object-contain opacity-90" />
+              </motion.div>
+
+              {/* Frasco Principal */}
+              <motion.div
+                className="relative z-10 w-[800px] h-[800px] mix-blend-screen pointer-events-none"
+                style={{
+                  scale: bottleScale,
+                  rotateY: bottleRotateY,
+                  filter: 'brightness(1.1) contrast(1.1)'
+                }}
+              >
+                <Image src={PARALLAX_BOTTLE} alt="NOIR ÔMBRE by NOX Paris" fill className="object-contain" priority />
+              </motion.div>
+
+            </div>
+
             {/* Dark Overlay Gradient para leitura de texto */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-[#050505]/60" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-80 pointer-events-none" />
           </motion.div>
 
           {/* Tipografia Gigante Parallax com Efeito Magnético Reverso */}
