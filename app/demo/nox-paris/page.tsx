@@ -234,7 +234,7 @@ export default function EcommerceDemo() {
   return (
     <main
       ref={containerRef}
-      className={`relative w-full overflow-clip bg-[#050505] text-[#EFEFEF] ${serif.variable} ${sans.variable} selection:bg-[#EFEFEF] selection:text-[#050505]`}
+      className={`relative w-full bg-[#050505] text-[#EFEFEF] ${serif.variable} ${sans.variable} selection:bg-[#EFEFEF] selection:text-[#050505]`}
       style={{ fontFamily: 'var(--font-nox-sans)' }}
     >
       <CustomCursor />
