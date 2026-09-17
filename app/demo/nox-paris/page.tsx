@@ -222,23 +222,9 @@ export default function EcommerceDemo() {
   const heroTextY = useTransform(smoothProgress, [0, 0.3], ['0%', '-60%']);
   const heroBlur = useTransform(smoothProgress, [0, 0.4], ['blur(0px)', 'blur(20px)']);
 
-  // Parallax SOTD - Explosão de Ingredientes
+  // Parallax SOTD - Frasco
   const bottleScale = useTransform(smoothProgress, [0, 0.4], [1.1, 0.85]);
   const bottleRotateY = useTransform(smoothProgress, [0, 0.4], [0, -10]);
-  
-  const bergamotX = useTransform(smoothProgress, [0, 0.4], ['0vw', '15vw']);
-  const bergamotY = useTransform(smoothProgress, [0, 0.4], ['0vh', '-25vh']);
-  const bergamotRotate = useTransform(smoothProgress, [0, 0.4], [-15, 45]);
-  const bergamotScale = useTransform(smoothProgress, [0, 0.4], [0.8, 1.1]);
-
-  const pepperX = useTransform(smoothProgress, [0, 0.4], ['0vw', '-25vw']);
-  const pepperY = useTransform(smoothProgress, [0, 0.4], ['0vh', '15vh']);
-  const pepperRotate = useTransform(smoothProgress, [0, 0.4], [25, -60]);
-  
-  const amberX = useTransform(smoothProgress, [0, 0.4], ['0vw', '20vw']);
-  const amberY = useTransform(smoothProgress, [0, 0.4], ['0vh', '30vh']);
-  const amberRotate = useTransform(smoothProgress, [0, 0.4], [-10, -50]);
-  const amberScale = useTransform(smoothProgress, [0, 0.4], [0.9, 1.2]);
 
   const handleAddToCart = () => {
     setAdded(true);
@@ -327,40 +313,9 @@ export default function EcommerceDemo() {
           >
             <CinematicSmoke />
             
-            {/* Parallax Container: Frasco + Ingredientes */}
+            {/* Parallax Container: Apenas o Frasco */}
             <div className="absolute inset-0 flex items-center justify-center">
               
-              {/* Bergamota */}
-              <motion.div
-                className="absolute z-[5] w-[400px] h-[400px] mix-blend-screen pointer-events-none"
-                style={{
-                  x: bergamotX, y: bergamotY, rotate: bergamotRotate, scale: bergamotScale,
-                  filter: 'brightness(1.2)'
-                }}
-              >
-                <Image src={PARALLAX_BERGAMOT} alt="Bergamota" fill className="object-contain opacity-90" />
-              </motion.div>
-
-              {/* Pimenta */}
-              <motion.div
-                className="absolute z-[5] w-[250px] h-[250px] mix-blend-screen pointer-events-none"
-                style={{
-                  x: pepperX, y: pepperY, rotate: pepperRotate,
-                }}
-              >
-                <Image src={PARALLAX_PEPPER} alt="Pimenta Negra" fill className="object-contain opacity-80" />
-              </motion.div>
-
-              {/* Âmbar */}
-              <motion.div
-                className="absolute z-[5] w-[350px] h-[350px] mix-blend-screen pointer-events-none"
-                style={{
-                  x: amberX, y: amberY, rotate: amberRotate, scale: amberScale,
-                }}
-              >
-                <Image src={PARALLAX_AMBER} alt="Âmbar" fill className="object-contain opacity-90" />
-              </motion.div>
-
               {/* Frasco Principal */}
               <motion.div
                 className="relative z-10 w-[800px] h-[800px] mix-blend-screen pointer-events-none"
