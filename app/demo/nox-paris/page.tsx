@@ -16,6 +16,7 @@ import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionV
 import { Bodoni_Moda, Plus_Jakarta_Sans } from 'next/font/google';
 import { ArrowLeft, ShoppingBag, Droplets, Wind, Leaf, Plus, Minus, ArrowRight, Play } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
+import CustomCursor from '@/components/CustomCursor';
 
 const serif = Bodoni_Moda({
   subsets: ['latin'],
@@ -32,7 +33,7 @@ const sans = Plus_Jakarta_Sans({
   display: 'swap',
 });
 
-const HERO_BOTTLE_CINEMATIC = '/images/ecommerce/hero-perfume-cinematic.jpg';
+const HERO_BOTTLE_CINEMATIC = '/images/ecommerce/hero-perfume-branded.jpg';
 
 // ─── EFEITOS SOTD ───
 
@@ -152,7 +153,24 @@ export default function EcommerceDemo() {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    
+    // Otimização Mobile (Giroscópio para Tilt 3D)
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.beta === null || e.gamma === null) return;
+      
+      // Normalize values. 
+      // beta (front/back): natural hold is ~45deg. Range 20 to 70 mapped to 0-1
+      // gamma (left/right): range -30 to 30 mapped to 0-1
+      const normalizedY = Math.max(0, Math.min(1, (e.beta - 20) / 50));
+      const normalizedX = Math.max(0, Math.min(1, (e.gamma + 30) / 60));
+      
+      mouseX.set(normalizedX);
+      mouseY.set(normalizedY);
+    };
+
+    window.addEventListener('deviceorientation', handleOrientation);
+    return () => window.removeEventListener('deviceorientation', handleOrientation);
+  }, [mouseX, mouseY]);
 
   const PRICE = 1850;
 
@@ -163,6 +181,36 @@ export default function EcommerceDemo() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20, restDelta: 0.001 });
+
+  // ─── EFEITOS INTERATIVOS DO HERO (Spotlight & 3D Tilt) ───
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    mouseX.set((clientX - left) / width);
+    mouseY.set((clientY - top) / height);
+  };
+
+  const handleHeroMouseLeave = () => {
+    mouseX.set(0.5);
+    mouseY.set(0.5);
+  };
+
+  const springConfig = { stiffness: 100, damping: 30, mass: 0.5 };
+  
+  // Rotação suave (Tilt 3D)
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [3, -3]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-3, 3]), springConfig);
+  
+  // Posição do Spotlight em porcentagem
+  const spotlightX = useSpring(useTransform(mouseX, [0, 1], ['0%', '100%']), springConfig);
+  const spotlightY = useSpring(useTransform(mouseY, [0, 1], ['0%', '100%']), springConfig);
+  
+  // Parallax reverso para a tipografia gigante
+  const textRotateX = useSpring(useTransform(mouseY, [0, 1], [-5, 5]), springConfig);
+  const textRotateY = useSpring(useTransform(mouseX, [0, 1], [5, -5]), springConfig);
 
   // Hero Deep Zoom & Fade
   const heroScale = useTransform(smoothProgress, [0, 0.4], [1, 1.4]);
@@ -176,14 +224,20 @@ export default function EcommerceDemo() {
     setTimeout(() => setAdded(false), 2000);
   };
 
-  if (!mounted) return null;
+  // Horizontal Scroll Setup (Storytelling)
+  const horizontalScrollRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: horizontalProgress } = useScroll({
+    target: horizontalScrollRef,
+  });
+  const horizontalX = useTransform(horizontalProgress, [0, 1], ["10%", "-65%"]);
 
   return (
     <main
       ref={containerRef}
-      className={`relative w-full overflow-x-hidden bg-[#050505] text-[#EFEFEF] ${serif.variable} ${sans.variable} selection:bg-[#EFEFEF] selection:text-[#050505]`}
+      className={`relative w-full overflow-clip bg-[#050505] text-[#EFEFEF] ${serif.variable} ${sans.variable} selection:bg-[#EFEFEF] selection:text-[#050505]`}
       style={{ fontFamily: 'var(--font-nox-sans)' }}
     >
+      <CustomCursor />
       {/* Attribution Bar */}
       <div className="fixed top-0 z-50 flex w-full items-center justify-between gap-4 border-b border-white/5 bg-[#050505]/80 px-5 py-2 text-[10px] tracking-widest text-white/50 uppercase backdrop-blur-xl">
         <span>
@@ -218,14 +272,39 @@ export default function EcommerceDemo() {
         </button>
       </header>
 
-      {/* ─── 1. HERO 100% IMERSIVO (SOTD DEEP PARALLAX) ─── */}
-      <section className="relative h-[120vh] w-full flex flex-col items-center justify-center">
+      {/* ─── 1. HERO 100% IMERSIVO (SOTD DEEP PARALLAX + EFEITOS INTERATIVOS) ─── */}
+      <section 
+        className="relative h-[120vh] w-full flex flex-col items-center justify-center"
+        onMouseMove={handleHeroMouseMove}
+        onMouseLeave={handleHeroMouseLeave}
+        style={{ perspective: 1200 }}
+      >
         {/* Fundo Parallax (Imagem Cinematográfica) - Fixa durante o scroll e dá zoom */}
         <div className="sticky top-0 w-full h-screen overflow-hidden">
+          
+          {/* Spotlight Interativo que segue o mouse */}
+          <motion.div 
+            className="pointer-events-none absolute inset-0 z-[1] opacity-50 mix-blend-screen"
+            style={{ 
+              background: 'radial-gradient(1000px circle at var(--x) var(--y), rgba(255,255,255,0.25), transparent 40%)',
+              // @ts-ignore (hack for Framer Motion CSS variables)
+              '--x': spotlightX,
+              '--y': spotlightY
+            }} 
+          />
+
+          {/* Background com Tilt e Fumaça */}
           <motion.div 
             className="absolute inset-0 z-0 h-full w-full origin-center"
-            style={{ scale: heroScale, filter: heroBlur, opacity: heroOpacity }}
+            style={{ 
+              scale: useTransform(smoothProgress, [0, 0.4], [1.05, 1.4]), // Base scale slightly up to prevent edges showing on tilt
+              filter: heroBlur, 
+              opacity: heroOpacity,
+              rotateX, 
+              rotateY 
+            }}
           >
+            <CinematicSmoke />
             <Image 
               src={HERO_BOTTLE_CINEMATIC}
               alt="NOIR ÔMBRE by NOX Paris"
@@ -238,10 +317,15 @@ export default function EcommerceDemo() {
             <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-transparent to-transparent" />
           </motion.div>
 
-          {/* Tipografia Gigante Parallax */}
+          {/* Tipografia Gigante Parallax com Efeito Magnético Reverso */}
           <motion.div
             className="pointer-events-none absolute inset-0 z-[1] flex flex-col items-center justify-center mix-blend-overlay"
-            style={{ y: heroTextY, opacity: heroOpacity }}
+            style={{ 
+              y: heroTextY, 
+              opacity: heroOpacity,
+              rotateX: textRotateX,
+              rotateY: textRotateY
+            }}
           >
             <h1 
               className="text-[15vw] leading-[0.8] tracking-widest uppercase text-white/40"
@@ -299,18 +383,34 @@ export default function EcommerceDemo() {
                 alt="NOIR ÔMBRE detail"
                 fill
                 className="object-cover"
-                style={{ filter: 'brightness(0.6) contrast(1.2)' }}
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#050505]/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#050505] via-[#050505]/40 to-transparent" />
               
-              {/* Play Video CTA */}
+              {/* Play Video CTA with Rotating Text Ring */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <MagneticButton 
-                  onClick={() => setVideoOpen(true)}
-                  className="flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-xl transition-colors hover:bg-white/10 group"
-                >
-                  <Play className="h-6 w-6 ml-1 text-white/80 group-hover:text-white transition-colors" />
-                </MagneticButton>
+                <div className="relative flex items-center justify-center">
+                  <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute w-40 h-40"
+                  >
+                    <svg viewBox="0 0 100 100" className="w-full h-full text-white/30 overflow-visible">
+                      <path id="circlePath" d="M 50, 50 m -50, 0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0" fill="none" />
+                      <text className="text-[10.5px] uppercase tracking-[0.2em] font-light" fill="currentColor">
+                        <textPath href="#circlePath" startOffset="0%">
+                          NOX PARIS • EXTRAIT DE PARFUM • NOIR ÔMBRE • 
+                        </textPath>
+                      </text>
+                    </svg>
+                  </motion.div>
+                  
+                  <MagneticButton 
+                    onClick={() => setVideoOpen(true)}
+                    className="flex h-20 w-20 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur-xl transition-colors hover:bg-white/10 hover:border-white/40 group z-10"
+                  >
+                    <Play className="h-6 w-6 ml-1 text-white/90 group-hover:text-white transition-colors" />
+                  </MagneticButton>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -355,8 +455,20 @@ export default function EcommerceDemo() {
 
             {/* ─── 3. MICRO-INTERAÇÕES DE LUXO (Glassmorphism Cart) ─── */}
             <ScrollReveal>
-              <div className="relative rounded-2xl border border-white/5 bg-white/[0.02] p-8 backdrop-blur-3xl shadow-[0_30px_80px_-20px_rgba(0,0,0,1)] lg:mt-20">
-                <div className="absolute -top-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              <div className="relative w-full">
+                {/* NEW EDITORIAL ASSET: Preenchendo o vazio à esquerda do Cart */}
+                <div className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-[110%] w-[90%] aspect-square rounded-full overflow-hidden border border-white/5 shadow-2xl mix-blend-lighten">
+                  <Image 
+                    src="/images/ecommerce/ingredients-macro.jpg" 
+                    alt="Raw Botanical Ingredients" 
+                    fill 
+                    className="object-cover opacity-90 scale-110" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black via-transparent to-transparent" />
+                </div>
+
+                <div className="relative rounded-2xl border border-white/5 bg-white/[0.02] p-8 backdrop-blur-3xl shadow-[0_30px_80px_-20px_rgba(0,0,0,1)] lg:mt-20">
+                  <div className="absolute -top-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                 
                 <h4 className="text-3xl mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>NOIR ÔMBRE</h4>
                 <p className="text-xs text-white/50 tracking-widest uppercase mb-10">Parfum • 100ml / 3.4 oz</p>
@@ -391,8 +503,59 @@ export default function EcommerceDemo() {
                   Edição numerada. 500 frascos disponíveis.
                 </p>
               </div>
+              </div>
             </ScrollReveal>
           </div>
+        </div>
+      </section>
+
+      {/* ─── NEW: CINEMATIC HORIZONTAL SCROLL (STORYTELLING) ─── */}
+      <section ref={horizontalScrollRef} className="relative w-full h-[300vh] bg-[#020202]">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+          
+          {/* Background Text / Mood */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none whitespace-nowrap">
+            <h2 className="text-[15vw]" style={{ fontFamily: 'var(--font-nox-serif)' }}>L'ARTISANAT</h2>
+          </div>
+
+          <motion.div 
+            className="flex gap-12 px-[10vw] sm:px-[20vw] relative z-10"
+            style={{ x: horizontalX }}
+          >
+            {/* Card 1 */}
+            <div className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group">
+              <Image src="/images/ecommerce/story-1.jpg" alt="Colheita em Grasse" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-10 left-10 right-10">
+                <span className="text-[10px] tracking-widest text-white/50 uppercase mb-3 block">01 / A Colheita</span>
+                <h3 className="text-3xl text-white mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>Jasmim de Grasse</h3>
+                <p className="text-xs text-white/60 font-light leading-relaxed max-w-sm">Colhido artesanalmente nas primeiras horas da madrugada, quando a flor exala seu absoluto máximo de fragrância.</p>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group">
+              <Image src="/images/ecommerce/story-2.jpg" alt="Extração Botânica" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-10 left-10 right-10">
+                <span className="text-[10px] tracking-widest text-white/50 uppercase mb-3 block">02 / A Extração</span>
+                <h3 className="text-3xl text-white mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>Alquimia Pura</h3>
+                <p className="text-xs text-white/60 font-light leading-relaxed max-w-sm">Alembic de cobre vintage e destilação a frio garantem que as moléculas mais voláteis e raras sejam preservadas intactas.</p>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group">
+              <Image src="/images/ecommerce/story-3.jpg" alt="Envasamento" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute bottom-10 left-10 right-10">
+                <span className="text-[10px] tracking-widest text-white/50 uppercase mb-3 block">03 / A Obra</span>
+                <h3 className="text-3xl text-white mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>Obsidiana Escura</h3>
+                <p className="text-xs text-white/60 font-light leading-relaxed max-w-sm">Líquido de ouro envolto em pedra vulcânica, bloqueando espectros de luz e envelhecendo o Extrait como um bom vinho.</p>
+              </div>
+            </div>
+
+          </motion.div>
         </div>
       </section>
 
@@ -412,8 +575,8 @@ export default function EcommerceDemo() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Produto 1 */}
             <div className="group cursor-pointer">
-              <div className="relative w-full aspect-[4/5] bg-white/[0.02] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src={HERO_BOTTLE_CINEMATIC} alt="Vela Botânica" fill className="object-cover opacity-60 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700" style={{ filter: 'brightness(0.5) sepia(0.2)' }} />
+              <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
+                <Image src="/images/ecommerce/vela-real-v4.jpg" alt="Vela Botânica" fill className="object-cover group-hover:scale-105 transition-all duration-700 mix-blend-lighten" style={{ filter: 'brightness(1.3) contrast(1.1)' }} />
               </div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Bougie Noire</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Vela Botânica • 250g</p>
@@ -422,8 +585,8 @@ export default function EcommerceDemo() {
 
             {/* Produto 2 */}
             <div className="group cursor-pointer">
-              <div className="relative w-full aspect-[4/5] bg-white/[0.02] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src={HERO_BOTTLE_CINEMATIC} alt="Extrait 50ml" fill className="object-cover opacity-60 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700" style={{ filter: 'brightness(0.6) grayscale(0.5)' }} />
+              <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
+                <Image src="/images/ecommerce/perfume-real-v4.jpg" alt="Extrait 50ml" fill className="object-cover group-hover:scale-105 transition-all duration-700 mix-blend-lighten" style={{ filter: 'brightness(1.3) contrast(1.1)' }} />
               </div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Noir Ômbre</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Extrait de Parfum • 50ml</p>
@@ -432,8 +595,8 @@ export default function EcommerceDemo() {
 
             {/* Produto 3 */}
             <div className="group cursor-pointer sm:hidden lg:block">
-              <div className="relative w-full aspect-[4/5] bg-white/[0.02] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src={HERO_BOTTLE_CINEMATIC} alt="Sabonete Líquido" fill className="object-cover opacity-60 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700" style={{ filter: 'brightness(0.4) contrast(1.5)' }} />
+              <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
+                <Image src="/images/ecommerce/sabonete-real-v4.jpg" alt="Sabonete Líquido" fill className="object-cover group-hover:scale-105 transition-all duration-700 mix-blend-lighten" style={{ filter: 'brightness(1.3) contrast(1.1)' }} />
               </div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>L'Eau Noire</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Gel de Banho • 200ml</p>
@@ -520,13 +683,12 @@ export default function EcommerceDemo() {
               transition={{ delay: 0.1, duration: 0.4 }}
               className="relative w-[90%] max-w-5xl aspect-video bg-[#050505] rounded-xl overflow-hidden border border-white/5 shadow-2xl"
             >
-              {/* PLAYER DE VÍDEO NATIVO */}
+              {/* LOCAL VIDEO PLAYER */}
               <video 
-                src="/videos/ardosia-hero-placeholder.mp4" 
+                src="/videos/verticals/ecommerce.mp4"
+                autoPlay 
                 controls
-                autoPlay
                 className="absolute inset-0 w-full h-full object-cover"
-                style={{ filter: 'grayscale(100%) contrast(1.2)' }}
               />
             </motion.div>
           </motion.div>
