@@ -280,7 +280,7 @@ export default function EcommerceDemo() {
         style={{ perspective: 1200 }}
       >
         {/* Fundo Parallax (Imagem Cinematográfica) - Fixa durante o scroll e dá zoom */}
-        <div className="sticky top-0 w-full h-screen overflow-hidden" style={{ willChange: 'transform' }}>
+        <div className="sticky top-0 w-full h-screen overflow-hidden">
           
           {/* Spotlight Interativo que segue o mouse */}
           <motion.div 
@@ -370,15 +370,13 @@ export default function EcommerceDemo() {
       <section className="relative w-full bg-[#050505] z-10 -mt-[20vh]">
         {/* Layout Sticky em Desktop */}
         <div className="flex flex-col lg:flex-row">
-          <div 
-            className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center"
-            style={{ willChange: 'transform' }}
-          >
+          <div className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
               className="relative w-full aspect-[4/5] overflow-hidden rounded-md border border-white/5 bg-white/[0.01]"
+              style={{ willChange: 'transform' }}
             >
               <Image 
                 src={HERO_BOTTLE_CINEMATIC}
@@ -513,7 +511,7 @@ export default function EcommerceDemo() {
 
       {/* ─── NEW: CINEMATIC HORIZONTAL SCROLL (STORYTELLING) ─── */}
       <section ref={horizontalScrollRef} className="relative w-full h-[300vh] bg-[#020202]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center" style={{ willChange: 'transform' }}>
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
           
           {/* Background Text / Mood */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none whitespace-nowrap">
