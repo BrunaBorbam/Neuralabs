@@ -280,7 +280,7 @@ export default function EcommerceDemo() {
         style={{ perspective: 1200 }}
       >
         {/* Fundo Parallax (Imagem Cinematográfica) - Fixa durante o scroll e dá zoom */}
-        <div className="sticky top-0 w-full h-screen overflow-hidden">
+        <div className="sticky top-0 w-full h-screen overflow-hidden" style={{ willChange: 'transform' }}>
           
           {/* Spotlight Interativo que segue o mouse */}
           <motion.div 
@@ -370,8 +370,10 @@ export default function EcommerceDemo() {
       <section className="relative w-full bg-[#050505] z-10 -mt-[20vh]">
         {/* Layout Sticky em Desktop */}
         <div className="flex flex-col lg:flex-row">
-          
-          <div className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center">
+          <div 
+            className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center"
+            style={{ willChange: 'transform' }}
+          >
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -511,7 +513,7 @@ export default function EcommerceDemo() {
 
       {/* ─── NEW: CINEMATIC HORIZONTAL SCROLL (STORYTELLING) ─── */}
       <section ref={horizontalScrollRef} className="relative w-full h-[300vh] bg-[#020202]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center" style={{ willChange: 'transform' }}>
           
           {/* Background Text / Mood */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none whitespace-nowrap">
