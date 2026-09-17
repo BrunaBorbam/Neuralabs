@@ -576,7 +576,7 @@ export default function EcommerceDemo() {
             {/* Produto 1 */}
             <div className="group cursor-pointer">
               <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src="/images/ecommerce/vela-real-v4.jpg" alt="Vela Botânica" fill className="object-cover group-hover:scale-105 transition-all duration-700 mix-blend-lighten" style={{ filter: 'brightness(1.3) contrast(1.1)' }} />
+                <Image src="/images/ecommerce/vela-real-v4.jpg" alt="Vela Botânica" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
               </div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Bougie Noire</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Vela Botânica • 250g</p>
@@ -586,7 +586,7 @@ export default function EcommerceDemo() {
             {/* Produto 2 */}
             <div className="group cursor-pointer">
               <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src="/images/ecommerce/perfume-real-v4.jpg" alt="Extrait 50ml" fill className="object-cover group-hover:scale-105 transition-all duration-700 mix-blend-lighten" style={{ filter: 'brightness(1.3) contrast(1.1)' }} />
+                <Image src="/images/ecommerce/perfume-real-v4.jpg" alt="Extrait 50ml" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
               </div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Noir Ômbre</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Extrait de Parfum • 50ml</p>
@@ -596,7 +596,7 @@ export default function EcommerceDemo() {
             {/* Produto 3 */}
             <div className="group cursor-pointer sm:hidden lg:block">
               <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src="/images/ecommerce/sabonete-real-v4.jpg" alt="Sabonete Líquido" fill className="object-cover group-hover:scale-105 transition-all duration-700 mix-blend-lighten" style={{ filter: 'brightness(1.3) contrast(1.1)' }} />
+                <Image src="/images/ecommerce/sabonete-real-v4.jpg" alt="Sabonete Líquido" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
               </div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>L'Eau Noire</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Gel de Banho • 200ml</p>
