@@ -151,6 +151,10 @@ export default function EcommerceDemo() {
   const [added, setAdded] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
 
+  // ─── EFEITOS INTERATIVOS DO HERO (Spotlight & 3D Tilt) ───
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+
   useEffect(() => {
     setMounted(true);
     
@@ -181,10 +185,6 @@ export default function EcommerceDemo() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20, restDelta: 0.001 });
-
-  // ─── EFEITOS INTERATIVOS DO HERO (Spotlight & 3D Tilt) ───
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
 
   const handleHeroMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY, currentTarget } = e;
