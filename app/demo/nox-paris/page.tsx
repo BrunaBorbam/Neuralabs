@@ -222,10 +222,6 @@ export default function EcommerceDemo() {
   const heroTextY = useTransform(smoothProgress, [0, 0.3], ['0%', '-60%']);
   const heroBlur = useTransform(smoothProgress, [0, 0.4], ['blur(0px)', 'blur(20px)']);
 
-  // Parallax SOTD - Frasco
-  const bottleScale = useTransform(smoothProgress, [0, 0.4], [1.1, 0.85]);
-  const bottleRotateY = useTransform(smoothProgress, [0, 0.4], [0, -10]);
-
   const handleAddToCart = () => {
     setAdded(true);
     setCartOpen(true);
@@ -303,35 +299,26 @@ export default function EcommerceDemo() {
 
           {/* Background com Tilt e Fumaça */}
           <motion.div 
-            className="absolute inset-0 z-0 h-full w-full origin-center"
+            className="absolute inset-0 z-0 h-full w-full origin-center overflow-hidden"
             style={{ 
               scale: useTransform(smoothProgress, [0, 0.4], [1.05, 1.4]),
+              filter: heroBlur, 
               opacity: heroOpacity,
               rotateX, 
               rotateY 
             }}
           >
             <CinematicSmoke />
-            
-            {/* Parallax Container: Apenas o Frasco */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              
-              {/* Frasco Principal */}
-              <motion.div
-                className="relative z-10 w-[800px] h-[800px] mix-blend-screen pointer-events-none"
-                style={{
-                  scale: bottleScale,
-                  rotateY: bottleRotateY,
-                  filter: 'brightness(1.1) contrast(1.1)'
-                }}
-              >
-                <Image src={PARALLAX_BOTTLE} alt="NOIR ÔMBRE by NOX Paris" fill className="object-contain" priority />
-              </motion.div>
-
-            </div>
-
+            <Image 
+              src={HERO_BOTTLE_CINEMATIC}
+              alt="NOIR ÔMBRE by NOX Paris"
+              fill
+              className="object-cover"
+              priority
+            />
             {/* Dark Overlay Gradient para leitura de texto */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-80 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-[#050505]/60" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-transparent to-transparent" />
           </motion.div>
 
           {/* Tipografia Gigante Parallax com Efeito Magnético Reverso */}
