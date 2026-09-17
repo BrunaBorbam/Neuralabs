@@ -97,56 +97,6 @@ function MagneticButton({ children, className, onClick }: { children: ReactNode;
   );
 }
 
-/** Cinematic Abstract Video Effect (CSS/Framer Motion) */
-function CinematicSmoke() {
-  return (
-    <div className="absolute inset-0 overflow-hidden bg-[#050505]">
-      {/* Deep Shadow Background */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#020202] via-[#050505] to-[#0a0a0a]" />
-
-      {/* Smoke Orb 1 */}
-      <motion.div
-        animate={{ 
-          x: ['-10%', '10%', '-10%'], 
-          y: ['-20%', '10%', '-20%'],
-          scale: [1, 1.3, 1],
-          opacity: [0.3, 0.6, 0.3]
-        }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -top-[20%] -left-[10%] w-[80%] h-[120%] bg-white/5 rounded-[100%] blur-[120px] mix-blend-screen"
-      />
-      
-      {/* Smoke Orb 2 */}
-      <motion.div
-        animate={{ 
-          x: ['10%', '-20%', '10%'], 
-          y: ['10%', '-10%', '10%'],
-          scale: [1.2, 0.9, 1.2],
-          opacity: [0.2, 0.5, 0.2]
-        }}
-        transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[10%] -right-[20%] w-[90%] h-[110%] bg-white/[0.03] rounded-[100%] blur-[140px] mix-blend-screen"
-      />
-
-      {/* Volumetric Light Beam */}
-      <motion.div
-        animate={{ 
-          rotate: [-5, 5, -5],
-          opacity: [0.1, 0.3, 0.1]
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -top-[50%] left-[20%] w-[40%] h-[200%] bg-gradient-to-b from-white/10 to-transparent blur-[80px] transform -rotate-12 origin-top"
-      />
-
-      {/* Film Grain Noise */}
-      <div 
-        className="absolute inset-0 opacity-[0.15] mix-blend-overlay pointer-events-none"
-        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}
-      />
-    </div>
-  );
-}
-
 export default function EcommerceDemo() {
   const [mounted, setMounted] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -297,9 +247,9 @@ export default function EcommerceDemo() {
             }} 
           />
 
-          {/* Background com Tilt e Fumaça */}
+          {/* Background com Tilt */}
           <motion.div 
-            className="absolute inset-0 z-0 h-full w-full origin-center overflow-hidden"
+            className="absolute inset-0 z-0 h-full w-full origin-center overflow-hidden bg-[#050505]"
             style={{ 
               scale: useTransform(smoothProgress, [0, 0.4], [1.05, 1.4]),
               filter: heroBlur, 
@@ -308,7 +258,6 @@ export default function EcommerceDemo() {
               rotateY 
             }}
           >
-            <CinematicSmoke />
             <Image 
               src={HERO_BOTTLE_CINEMATIC}
               alt="NOIR ÔMBRE by NOX Paris"
