@@ -511,11 +511,7 @@ export default function MarcenariaDemo() {
             className="mb-7 max-w-[500px] text-[42px] leading-[1.08] sm:text-[52px] md:text-[56px]"
             style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
           >
-            Onde arquitetura 
-            <span className="inline-block w-[1.3em] h-[0.7em] align-middle rounded-full bg-cover bg-center mx-1.5 sm:mx-2 overflow-hidden border border-[#2A2C22]/15 shadow-sm relative top-[-4px]">
-              <Image src={OFICIO_DETAIL_IMAGE} alt="Textura madeira" fill className="object-cover" />
-            </span>
-            <br />
+            Onde arquitetura<br />
             <em className="text-[#6B7A4E]" style={{ fontStyle: 'italic' }}>
               vira marcenaria.
             </em>
