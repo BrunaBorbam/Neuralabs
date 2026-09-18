@@ -508,10 +508,14 @@ export default function MarcenariaDemo() {
             </span>
           </div>
           <h1
-            className="mb-7 text-[42px] leading-[1.08] sm:text-[54px] md:text-[58px]"
+            className="mb-7 w-full max-w-5xl text-[44px] leading-[1] sm:text-[60px] md:text-[72px]"
             style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
           >
-            Onde arquitetura<br />
+            Onde arquitetura 
+            <span className="inline-block w-[1.5em] h-[0.75em] align-middle rounded-full bg-cover bg-center mx-2 sm:mx-3 overflow-hidden border border-[#2A2C22]/15 shadow-sm relative top-[-4px]">
+              <Image src={OFICIO_DETAIL_IMAGE} alt="Textura madeira" fill className="object-cover" />
+            </span>
+            <br />
             <em className="text-[#6B7A4E]" style={{ fontStyle: 'italic' }}>
               vira marcenaria.
             </em>
@@ -639,69 +643,65 @@ export default function MarcenariaDemo() {
         </div>
       </section>
 
-      {/* O Ofício — mosaico de duas fotos + selo "desde" */}
-      <section id="oficio" className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <div className="grid gap-14 md:grid-cols-2 md:gap-20">
-          <ScrollReveal>
-            <div className="relative">
-              <div className="relative aspect-[4/5] overflow-hidden sm:rounded-sm">
-                <Image
-                  src={OFICIO_IMAGE}
-                  alt="Detalhe de marcenaria em madeira nobre"
-                  fill
-                  sizes="(min-width: 768px) 35vw, 80vw"
-                  className="object-cover"
-                />
-              </div>
-              {/* Segunda foto sobreposta — mosaico editorial (mesmo device
-                  visual da Villa Serena para dar profundidade de camada,
-                  em composição própria da CERNE) */}
-              <div className="absolute -bottom-8 -right-6 hidden w-[46%] overflow-hidden rounded-sm border-4 border-[#F5F4EE] shadow-xl sm:block">
-                <div className="relative aspect-[4/5]">
-                  <Image
-                    src={OFICIO_DETAIL_IMAGE}
-                    alt="Textura e veios de madeira nobre em close"
-                    fill
-                    sizes="20vw"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-              <div className="absolute -top-5 -left-5 hidden rounded-sm border border-[#2A2C22]/10 bg-[#F5F4EE] px-4 py-3 sm:block">
-                <span
-                  className="block text-[22px] leading-none text-[#6B7A4E]"
-                  style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic' }}
-                >
-                  Desde 2011
-                </span>
-              </div>
+      {/* O Ofício (Gapless Bento Grid) */}
+      <section id="oficio" className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-rows-[auto] gap-0 border border-[#2A2C22]/15 bg-[#EDECE3] rounded-sm overflow-hidden">
+          
+          <div className="md:col-span-2 lg:col-span-2 p-10 lg:p-14 border border-[#2A2C22]/10 bg-[#F5F4EE] flex flex-col justify-center">
+            <div className="mb-7 flex items-center gap-3">
+              <span className="h-px w-9 bg-[#6B7A4E]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">O Ofício</span>
             </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <div className="flex h-full flex-col justify-center pt-8 sm:pt-0">
-              <div className="mb-7 flex items-center gap-3">
-                <span className="h-px w-9 bg-[#6B7A4E]" />
-                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">O Ofício</span>
-              </div>
-              <h2
-                className="mb-6 text-[30px] leading-[1.18] sm:text-[36px]"
-                style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
-              >
-                Cada peça, <em style={{ fontStyle: 'italic', color: '#6B7A4E' }}>um projeto.</em><br />
-                Nunca uma prateleira.
-              </h2>
-              <p className="mb-5 max-w-md text-[13.5px] leading-[1.9] text-[#55584A]">
-                Não trabalhamos com catálogo. Cada encomenda começa de uma folha em branco — o
-                desenho nasce do espaço, não o contrário. A CERNE atende um número limitado de
-                projetos por ano, o suficiente para que cada um receba atenção de atelier, não de
-                fábrica.
-              </p>
-              <p className="max-w-md text-[13.5px] leading-[1.9] text-[#55584A]">
-                Trabalhamos lado a lado com arquitetos e designers de interiores — o projeto de
-                marcenaria nasce junto com o projeto arquitetônico, não depois dele.
-              </p>
-            </div>
-          </ScrollReveal>
+            <h2
+              className="mb-6 text-[36px] leading-[1.15] sm:text-[44px]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+            >
+              Cada peça, <em style={{ fontStyle: 'italic', color: '#6B7A4E' }}>um projeto.</em>
+            </h2>
+            <p className="max-w-md text-[14px] leading-[1.8] text-[#55584A] mb-4">
+              Não trabalhamos com catálogo. Cada encomenda começa de uma folha em branco — o desenho nasce do espaço, não o contrário.
+            </p>
+            <p className="max-w-md text-[14px] leading-[1.8] text-[#55584A]">
+              A CERNE atende um número limitado de projetos por ano, o suficiente para que cada um receba atenção de atelier, não de fábrica.
+            </p>
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 border border-[#2A2C22]/10 relative min-h-[350px] overflow-hidden group">
+            <Image
+              src={OFICIO_IMAGE}
+              alt="Detalhe de marcenaria"
+              fill
+              className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+            />
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 border border-[#2A2C22]/10 bg-[#2A2C22] p-10 flex flex-col justify-between text-[#F5F4EE]">
+            <span
+              className="block text-[48px] leading-none text-[#6B7A4E]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic' }}
+            >
+              2011
+            </span>
+            <p className="text-[11px] uppercase tracking-[0.2em] opacity-70">
+              Ano de Fundação
+            </p>
+          </div>
+
+          <div className="md:col-span-2 lg:col-span-3 border border-[#2A2C22]/10 relative min-h-[300px] overflow-hidden group">
+            <Image
+              src={HERO_BANNER_IMAGE}
+              alt="Painel panorâmico"
+              fill
+              className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+            />
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 border border-[#2A2C22]/10 bg-[#EDECE3] p-10 flex items-center justify-center">
+            <span className="text-[14px] uppercase tracking-[0.3em] font-semibold text-[#576141] text-center leading-[1.8]">
+              Artesanato<br/>e Precisão
+            </span>
+          </div>
+
         </div>
       </section>
 
@@ -791,38 +791,52 @@ export default function MarcenariaDemo() {
         </div>
       </section>
 
-      {/* Processo */}
-      <section id="processo" className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-28">
-        <ScrollReveal>
-          <div className="mb-16 max-w-lg">
-            <div className="mb-7 flex items-center gap-3">
+      {/* Processo (Card Stacking ScrollTrigger) */}
+      <section id="processo" className="relative px-5 py-32 sm:px-8 md:py-48 bg-[#F5F4EE]">
+        <div className="mx-auto max-w-4xl relative">
+          
+          <div className="mb-24 text-center">
+            <div className="mb-6 flex items-center justify-center gap-3">
               <span className="h-px w-9 bg-[#6B7A4E]" />
               <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Como Funciona</span>
+              <span className="h-px w-9 bg-[#6B7A4E]" />
             </div>
             <h2
-              className="text-[30px] leading-[1.18] sm:text-[36px]"
+              className="text-[40px] leading-[1.1] sm:text-[56px]"
               style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
             >
               Do desenho à instalação
             </h2>
           </div>
-        </ScrollReveal>
 
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          {ETAPAS.map((e, i) => (
-            <ScrollReveal key={e.n} delay={i * 0.07}>
-              <div className="border-t border-[#2A2C22]/15 pt-6">
-                <span
-                  className="mb-4 block text-[26px] text-[#6B7A4E]"
-                  style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic' }}
+          <div className="relative">
+            {ETAPAS.map((e, i) => (
+              <div 
+                key={e.n} 
+                className="sticky top-32 w-full pt-4 mb-24"
+                style={{ zIndex: i + 10 }}
+              >
+                <div
+                  className="relative overflow-hidden rounded-sm border border-[#2A2C22]/15 bg-[#EDECE3] p-8 md:p-14 shadow-[0_-10px_40px_rgba(42,44,34,0.15)]"
+                  style={{ transform: `scale(${1 - (ETAPAS.length - 1 - i) * 0.02})` }}
                 >
-                  {e.n}
-                </span>
-                <h3 className="mb-3 text-[14.5px] font-medium text-[#2A2C22]">{e.title}</h3>
-                <p className="text-[12.5px] leading-[1.8] text-[#55584A]">{e.body}</p>
+                  <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
+                    <span
+                      className="text-[80px] leading-none text-[#6B7A4E] shrink-0"
+                      style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', opacity: 0.4 }}
+                    >
+                      {e.n}
+                    </span>
+                    <div className="flex-1">
+                      <h3 className="mb-4 text-[24px] font-medium text-[#2A2C22] tracking-wide">{e.title}</h3>
+                      <p className="text-[15px] leading-[1.9] text-[#55584A]">{e.body}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </ScrollReveal>
-          ))}
+            ))}
+          </div>
+
         </div>
       </section>
 
