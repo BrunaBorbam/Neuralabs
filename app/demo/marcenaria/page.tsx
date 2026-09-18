@@ -104,9 +104,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fraunces, Jost } from 'next/font/google';
 import { ArrowLeft, ArrowUpRight, Minus, Plus, Ruler } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { CerneContactForm } from '@/components/CerneContactForm';
+import WoodGrainCanvas from './WoodGrainCanvas';
 
 const serif = Fraunces({
   subsets: ['latin'],
@@ -424,6 +425,13 @@ export default function MarcenariaDemo() {
   const vagasRestantes = useVagasRestantes(3);
   const [projetoAberto, setProjetoAberto] = useState<Projeto | null>(null);
 
+  // Horizontal Scroll Setup para Portfólio
+  const horizontalScrollRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: horizontalProgress } = useScroll({
+    target: horizontalScrollRef,
+  });
+  const horizontalX = useTransform(horizontalProgress, [0, 1], ["0%", "-80%"]);
+
   // Portfólio editável via Notion (CMS leve — ver lib/notion.ts e
   // docs/cerne-cms-notion.md): busca em /api/cerne-projects ao montar e,
   // só se vier configurado e com conteúdo, troca o array estático pelo
@@ -566,6 +574,10 @@ export default function MarcenariaDemo() {
               </div>
             )}
           </div>
+          
+          {/* Arte Algorítmica: Veios de Madeira */}
+          <WoodGrainCanvas />
+
           {/* Cadeira em wireframe 3D removida do Hero (v4) — a geometria
               procedural (CerneScene3D) não convenceu depois de duas
               rodadas de ajuste, e gerar um modelo real via IA (Meshy)
@@ -719,131 +731,63 @@ export default function MarcenariaDemo() {
         </div>
       </section>
 
-      {/* Trabalhos — Obras (Grid Sobreposto para Continuidade Fluida) */}
-      <section id="obras" className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] px-5 pb-20 pt-32 sm:px-8 sm:pb-32">
-        <div className="mx-auto max-w-7xl">
-          <ScrollReveal>
-            <div className="mb-16 max-w-lg">
-              <div className="mb-7 flex items-center gap-3">
-                <span className="h-px w-9 bg-[#6B7A4E]" />
-                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Portfólio</span>
-              </div>
-              <h2
-                className="text-[30px] leading-[1.18] sm:text-[36px]"
-                style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
-              >
-                Projetos recentes
-              </h2>
+      {/* Trabalhos — Obras (Horizontal Scroll Cinematográfico - Huashu) */}
+      <section id="obras" ref={horizontalScrollRef} className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] h-[300vh]">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center px-5 sm:px-8 border-b border-[#2A2C22]/10">
+          
+          <div className="absolute top-24 left-5 sm:left-8 z-20">
+            <div className="mb-7 flex items-center gap-3">
+              <span className="h-px w-9 bg-[#6B7A4E]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Portfólio</span>
             </div>
-          </ScrollReveal>
+            <h2
+              className="text-[40px] leading-[1.1] sm:text-[50px] whitespace-nowrap"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+            >
+              Galeria de <em className="text-[#6B7A4E] italic">Obras</em>
+            </h2>
+          </div>
 
-          {/* Case em destaque — "Ver detalhes" abre o modal (ver
-              ProjetoModal mais abaixo) com os mesmos dados já presentes em
-              PROJETOS_PADRAO/Notion, em vez de prometer uma navegação que
-              não existia (ver docs/biblioteca-referencias-visuais.md,
-              achado "Ver projeto ↗" não levava a lugar nenhum). */}
-          {projetos.filter((p) => p.featured).map((p) => (
-            <ScrollReveal key={p.idx}>
-              <div className="mb-20 grid gap-10 md:grid-cols-2 md:gap-4">
-                <motion.button
-                  whileHover={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  type="button"
-                  onClick={() => setProjetoAberto(p)}
-                  className="group relative aspect-[4/5] overflow-hidden text-left sm:rounded-sm md:aspect-auto"
-                >
+          <motion.div 
+            className="flex gap-16 sm:gap-32 px-5 sm:px-[15vw] relative z-10 pt-32"
+            style={{ x: horizontalX }}
+          >
+            {projetos.map((p) => (
+              <div key={p.idx} className="w-[85vw] sm:w-[45vw] lg:w-[30vw] shrink-0 relative group">
+                <div className="relative aspect-[4/5] overflow-hidden border border-[#2A2C22]/20 mb-6">
                   <Image
                     src={p.img}
                     alt={p.nome}
                     fill
-                    sizes="(min-width: 768px) 45vw, 100vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    sizes="(min-width: 768px) 35vw, 85vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/50 via-transparent to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
-                  <span className="absolute bottom-4 left-4 text-[10.5px] uppercase tracking-[0.2em] text-[#F5F4EE]">
-                    Projeto em destaque
-                  </span>
-                </motion.button>
-                <div className="relative flex flex-col justify-center py-4">
-                  <div className="relative -mt-10 hidden aspect-[4/3] w-[62%] self-end overflow-hidden rounded-sm border-4 border-[#EDECE3] shadow-lg md:block">
-                    <Image
-                      src={FEATURED_SECONDARY_IMAGE}
-                      alt={`${p.nome} — detalhe`}
-                      fill
-                      sizes="30vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="mt-6 flex items-baseline gap-3 md:mt-10">
-                    <span className="text-[11px] text-[#6B7A4E]">{p.idx} — {p.ano}</span>
-                  </div>
-                  <h3
-                    className="mb-3 mt-2 text-[24px] leading-tight sm:text-[28px]"
-                    style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', fontWeight: 400 }}
-                  >
-                    {p.nome}
-                  </h3>
-                  <p className="mb-4 text-[12px] text-[#5C5147]">{p.local}</p>
-                  <p className="mb-5 max-w-md text-[13px] leading-[1.85] text-[#55584A]">{p.descricao}</p>
-                  <div className="mb-5 flex flex-wrap gap-2">
-                    {p.materiais.map((m) => (
-                      <span
-                        key={m}
-                        className="rounded-full border border-[#2A2C22]/15 px-3 py-1 text-[10.5px] uppercase tracking-[0.12em] text-[#576141]"
-                      >
-                        {m}
-                      </span>
-                    ))}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setProjetoAberto(p)}
-                    className="inline-flex w-fit items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.15em] text-[#2A2C22] hover:text-[#6B7A4E]"
-                  >
-                    Ver detalhes do projeto <ArrowUpRight className="h-3.5 w-3.5" />
-                  </button>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
-              </div>
-            </ScrollReveal>
-          ))}
-
-          {/* Grid dos demais projetos — "Ver projeto" agora é sempre
-              visível (não só no hover, que nunca aparece em touch) e abre
-              de verdade o modal com os dados do projeto. */}
-          <div className="grid gap-x-8 gap-y-16 sm:grid-cols-3">
-            {projetos.filter((p) => !p.featured).map((p, i) => (
-              <ScrollReveal key={p.idx} delay={i * 0.06}>
-                <button type="button" onClick={() => setProjetoAberto(p)} className="group block w-full text-left">
-                  <div className="relative mb-5 aspect-[4/5] overflow-hidden sm:rounded-sm">
-                    <Image
-                      src={p.img}
-                      alt={p.nome}
-                      fill
-                      sizes="(min-width: 640px) 30vw, 100vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/45 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  </div>
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-[11px] text-[#6B7A4E]">{p.idx}</span>
-                    <div>
-                      <h3
-                        className="text-[19px] leading-tight"
-                        style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', fontWeight: 400 }}
-                      >
-                        {p.nome}
-                      </h3>
-                      <p className="mt-1.5 text-[11.5px] text-[#5C5147]">{p.local} · {p.ano}</p>
-                      <p className="text-[11.5px] text-[#5C5147]/70">{p.materiais.join(' · ')}</p>
-                      <span className="mt-2 inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] text-[#6B7A4E]">
-                        Ver projeto <ArrowUpRight className="h-3 w-3" />
-                      </span>
-                    </div>
-                  </div>
+                
+                <div className="flex items-baseline gap-3 mb-2 border-b border-[#2A2C22]/10 pb-2">
+                  <span className="text-[11px] font-bold text-[#6B7A4E]">{p.idx}</span>
+                  <span className="text-[11px] text-[#55584A] uppercase tracking-widest">{p.ano}</span>
+                </div>
+                
+                <h3
+                  className="mb-2 text-[24px] leading-tight text-[#2A2C22]"
+                  style={{ fontFamily: 'var(--font-cerne-serif)' }}
+                >
+                  {p.nome}
+                </h3>
+                <p className="mb-6 text-[11px] uppercase tracking-widest text-[#5C5147]">{p.local}</p>
+                
+                <button
+                  type="button"
+                  onClick={() => setProjetoAberto(p)}
+                  className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E] transition-colors"
+                >
+                  Ver Ficha Técnica <ArrowUpRight className="h-3.5 w-3.5" />
                 </button>
-              </ScrollReveal>
+              </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
