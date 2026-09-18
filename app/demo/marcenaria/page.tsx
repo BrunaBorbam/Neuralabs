@@ -508,11 +508,11 @@ export default function MarcenariaDemo() {
             </span>
           </div>
           <h1
-            className="mb-7 w-full max-w-5xl text-[44px] leading-[1] sm:text-[60px] md:text-[72px]"
+            className="mb-7 max-w-[500px] text-[42px] leading-[1.08] sm:text-[52px] md:text-[56px]"
             style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
           >
             Onde arquitetura 
-            <span className="inline-block w-[1.5em] h-[0.75em] align-middle rounded-full bg-cover bg-center mx-2 sm:mx-3 overflow-hidden border border-[#2A2C22]/15 shadow-sm relative top-[-4px]">
+            <span className="inline-block w-[1.3em] h-[0.7em] align-middle rounded-full bg-cover bg-center mx-1.5 sm:mx-2 overflow-hidden border border-[#2A2C22]/15 shadow-sm relative top-[-4px]">
               <Image src={OFICIO_DETAIL_IMAGE} alt="Textura madeira" fill className="object-cover" />
             </span>
             <br />
@@ -645,28 +645,28 @@ export default function MarcenariaDemo() {
 
       {/* O Ofício (Gapless Bento Grid) */}
       <section id="oficio" className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-rows-[auto] gap-0 border border-[#2A2C22]/15 bg-[#EDECE3] rounded-sm overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-px bg-[#2A2C22]/15 border border-[#2A2C22]/15 rounded-sm overflow-hidden">
           
-          <div className="md:col-span-2 lg:col-span-2 p-10 lg:p-14 border border-[#2A2C22]/10 bg-[#F5F4EE] flex flex-col justify-center">
+          <div className="md:col-span-2 lg:col-span-2 p-10 lg:p-14 bg-[#F5F4EE] flex flex-col justify-center h-full">
             <div className="mb-7 flex items-center gap-3">
               <span className="h-px w-9 bg-[#6B7A4E]" />
               <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">O Ofício</span>
             </div>
             <h2
-              className="mb-6 text-[36px] leading-[1.15] sm:text-[44px]"
+              className="mb-6 text-[32px] leading-[1.18] sm:text-[40px]"
               style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
             >
               Cada peça, <em style={{ fontStyle: 'italic', color: '#6B7A4E' }}>um projeto.</em>
             </h2>
-            <p className="max-w-md text-[14px] leading-[1.8] text-[#55584A] mb-4">
+            <p className="max-w-md text-[13.5px] leading-[1.9] text-[#55584A] mb-5">
               Não trabalhamos com catálogo. Cada encomenda começa de uma folha em branco — o desenho nasce do espaço, não o contrário.
             </p>
-            <p className="max-w-md text-[14px] leading-[1.8] text-[#55584A]">
+            <p className="max-w-md text-[13.5px] leading-[1.9] text-[#55584A]">
               A CERNE atende um número limitado de projetos por ano, o suficiente para que cada um receba atenção de atelier, não de fábrica.
             </p>
           </div>
 
-          <div className="md:col-span-1 lg:col-span-1 border border-[#2A2C22]/10 relative min-h-[350px] overflow-hidden group">
+          <div className="md:col-span-1 lg:col-span-1 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full">
             <Image
               src={OFICIO_IMAGE}
               alt="Detalhe de marcenaria"
@@ -675,7 +675,7 @@ export default function MarcenariaDemo() {
             />
           </div>
 
-          <div className="md:col-span-1 lg:col-span-1 border border-[#2A2C22]/10 bg-[#2A2C22] p-10 flex flex-col justify-between text-[#F5F4EE]">
+          <div className="md:col-span-1 lg:col-span-1 bg-[#2A2C22] p-10 flex flex-col justify-between text-[#F5F4EE] h-full">
             <span
               className="block text-[48px] leading-none text-[#6B7A4E]"
               style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic' }}
@@ -687,7 +687,7 @@ export default function MarcenariaDemo() {
             </p>
           </div>
 
-          <div className="md:col-span-2 lg:col-span-3 border border-[#2A2C22]/10 relative min-h-[300px] overflow-hidden group">
+          <div className="md:col-span-2 lg:col-span-3 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full">
             <Image
               src={HERO_BANNER_IMAGE}
               alt="Painel panorâmico"
@@ -696,7 +696,7 @@ export default function MarcenariaDemo() {
             />
           </div>
 
-          <div className="md:col-span-1 lg:col-span-1 border border-[#2A2C22]/10 bg-[#EDECE3] p-10 flex items-center justify-center">
+          <div className="md:col-span-1 lg:col-span-1 bg-[#EDECE3] p-10 flex items-center justify-center h-full">
             <span className="text-[14px] uppercase tracking-[0.3em] font-semibold text-[#576141] text-center leading-[1.8]">
               Artesanato<br/>e Precisão
             </span>
@@ -813,7 +813,7 @@ export default function MarcenariaDemo() {
             {ETAPAS.map((e, i) => (
               <div 
                 key={e.n} 
-                className="sticky top-32 w-full pt-4 mb-24"
+                className="sticky top-32 w-full pt-4 h-[60vh] sm:h-[50vh]"
                 style={{ zIndex: i + 10 }}
               >
                 <div
