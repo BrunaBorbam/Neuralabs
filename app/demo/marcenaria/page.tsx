@@ -733,10 +733,10 @@ export default function MarcenariaDemo() {
 
       {/* Trabalhos — Obras (Horizontal Scroll Cinematográfico - Huashu) */}
       <section id="obras" ref={horizontalScrollRef} className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] h-[300vh]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center px-5 sm:px-8 border-b border-[#2A2C22]/10">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col pt-24 sm:pt-32 px-5 sm:px-8 border-b border-[#2A2C22]/10">
           
-          <div className="absolute top-24 left-5 sm:left-8 z-20">
-            <div className="mb-7 flex items-center gap-3">
+          <div className="shrink-0 z-20 mb-6">
+            <div className="mb-4 flex items-center gap-3">
               <span className="h-px w-9 bg-[#6B7A4E]" />
               <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Portfólio</span>
             </div>
@@ -748,54 +748,56 @@ export default function MarcenariaDemo() {
             </h2>
           </div>
 
-          <motion.div 
-            className="flex gap-16 sm:gap-32 px-5 sm:px-[15vw] relative z-10 pt-32"
-            style={{ x: horizontalX }}
-          >
-            {projetos.map((p) => (
-              <div key={p.idx} className="w-[85vw] sm:w-[45vw] lg:w-[30vw] shrink-0 relative group">
-                <div className="relative aspect-[4/5] overflow-hidden border border-[#2A2C22]/20 mb-6">
-                  <Image
-                    src={p.img}
-                    alt={p.nome}
-                    fill
-                    sizes="(min-width: 768px) 35vw, 85vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          <div className="flex-1 min-h-0 relative">
+            <motion.div 
+              className="flex gap-12 sm:gap-24 px-5 sm:px-[5vw] h-full items-start pt-6"
+              style={{ x: horizontalX }}
+            >
+              {projetos.map((p) => (
+                <div key={p.idx} className="w-[85vw] sm:w-[45vw] lg:w-[30vw] shrink-0 relative group">
+                  <div className="relative aspect-[4/5] overflow-hidden border border-[#2A2C22]/20 mb-6">
+                    <Image
+                      src={p.img}
+                      alt={p.nome}
+                      fill
+                      sizes="(min-width: 768px) 35vw, 85vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  </div>
+                  
+                  <div className="flex items-baseline gap-3 mb-2 border-b border-[#2A2C22]/10 pb-2">
+                    <span className="text-[11px] font-bold text-[#6B7A4E]">{p.idx}</span>
+                    <span className="text-[11px] text-[#55584A] uppercase tracking-widest">{p.ano}</span>
+                  </div>
+                  
+                  <h3
+                    className="mb-2 text-[24px] leading-tight text-[#2A2C22]"
+                    style={{ fontFamily: 'var(--font-cerne-serif)' }}
+                  >
+                    {p.nome}
+                  </h3>
+                  <p className="mb-6 text-[11px] uppercase tracking-widest text-[#5C5147]">{p.local}</p>
+                  
+                  <button
+                    type="button"
+                    onClick={() => setProjetoAberto(p)}
+                    className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E] transition-colors"
+                  >
+                    Ver Ficha Técnica <ArrowUpRight className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-                
-                <div className="flex items-baseline gap-3 mb-2 border-b border-[#2A2C22]/10 pb-2">
-                  <span className="text-[11px] font-bold text-[#6B7A4E]">{p.idx}</span>
-                  <span className="text-[11px] text-[#55584A] uppercase tracking-widest">{p.ano}</span>
-                </div>
-                
-                <h3
-                  className="mb-2 text-[24px] leading-tight text-[#2A2C22]"
-                  style={{ fontFamily: 'var(--font-cerne-serif)' }}
-                >
-                  {p.nome}
-                </h3>
-                <p className="mb-6 text-[11px] uppercase tracking-widest text-[#5C5147]">{p.local}</p>
-                
-                <button
-                  type="button"
-                  onClick={() => setProjetoAberto(p)}
-                  className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E] transition-colors"
-                >
-                  Ver Ficha Técnica <ArrowUpRight className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            ))}
-          </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Processo (Card Stacking ScrollTrigger) */}
-      <section id="processo" className="relative px-5 py-32 sm:px-8 md:py-48 bg-[#F5F4EE]">
+      <section id="processo" className="relative px-5 py-24 sm:px-8 md:py-32 bg-[#F5F4EE]">
         <div className="mx-auto max-w-4xl relative">
           
-          <div className="mb-24 text-center">
+          <div className="mb-16 text-center">
             <div className="mb-6 flex items-center justify-center gap-3">
               <span className="h-px w-9 bg-[#6B7A4E]" />
               <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Como Funciona</span>
