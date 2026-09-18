@@ -428,8 +428,9 @@ export default function MarcenariaDemo() {
   const horizontalScrollRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: horizontalProgress } = useScroll({
     target: horizontalScrollRef,
+    offset: ["start start", "end end"],
   });
-  // Reduzido de -80% para -45% para evitar que a galeria saia completamente da tela
+  // Traduz a galeria horizontalmente enquanto o container está fixo (300vh = 200vh de área útil)
   const horizontalX = useTransform(horizontalProgress, [0, 1], ["0%", "-45%"]);
 
   // Portfólio editável via Notion (CMS leve — ver lib/notion.ts e
@@ -728,7 +729,7 @@ export default function MarcenariaDemo() {
       </section>
 
       {/* Trabalhos — Obras (Horizontal Scroll Cinematográfico - Huashu) */}
-      <section id="obras" ref={horizontalScrollRef} className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] h-[150vh]">
+      <section id="obras" ref={horizontalScrollRef} className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] h-[300vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col pt-24 sm:pt-32 px-5 sm:px-8 border-b border-[#2A2C22]/10">
           
           <div className="shrink-0 z-20 mb-6">
