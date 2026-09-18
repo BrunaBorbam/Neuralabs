@@ -41,6 +41,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { getWhatsAppLink } from '@/lib/whatsapp';
+import CoastalCanvas from './CoastalCanvas';
 
 const serif = Bodoni_Moda({
   subsets: ['latin'],
@@ -302,25 +303,8 @@ export default function VillaSerenaDemo() {
       className={`relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#0D0F12] text-[#F5EFE6] ${serif.variable} ${sans.variable}`}
       style={{ fontFamily: 'var(--font-villa-sans)' }}
     >
-      {/* Ondas Topográficas Contínuas (Continuidade Fluida) */}
-      <div className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-10">
-        <svg viewBox="0 0 100 1000" preserveAspectRatio="none" className="h-[200%] w-full">
-          <motion.path
-            d="M 10 0 C 50 200, -20 400, 30 600 C 80 800, -10 900, 20 1000"
-            stroke="#D4A373"
-            strokeWidth="0.5"
-            fill="none"
-            style={{ y: waveOffset }}
-          />
-          <motion.path
-            d="M 20 0 C 60 200, -10 400, 40 600 C 90 800, 0 900, 30 1000"
-            stroke="#D4A373"
-            strokeWidth="0.2"
-            fill="none"
-            style={{ y: waveOffset }}
-          />
-        </svg>
-      </div>
+      {/* Ondas Topográficas Substituídas por Arte Algorítmica (Taste Skill + Canvas) */}
+      <CoastalCanvas />
 
       {/* Aurora ambiente */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -537,44 +521,52 @@ export default function VillaSerenaDemo() {
           </div>
         </div>
 
-        {/* Tour scrollytelling */}
-        <section id="tour" className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-28">
+        {/* Tour scrollytelling Avançado (Pin & Scrub - Huashu / Taste Skill) */}
+        <section id="tour" className="relative mx-auto max-w-[1400px] px-5 py-32 sm:px-12">
           <ScrollReveal>
-            <div className="mb-16 text-center">
-              <span className="mb-3 block text-xs uppercase tracking-[0.24em] text-[#D4A373]">A villa</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
-                Três horas do dia, três lugares para viver.
-              </h2>
+            <div className="mb-24 flex flex-col md:flex-row md:items-end md:justify-between border-b border-white/10 pb-8">
+              <div>
+                <span className="mb-4 block text-[10px] uppercase tracking-[0.3em] text-[#D4A373]">A villa</span>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl leading-none" style={{ fontFamily: 'var(--font-villa-serif)' }}>
+                  Três horas do dia,<br />três lugares para viver.
+                </h2>
+              </div>
+              <p className="max-w-xs text-xs uppercase tracking-widest text-[#F5EFE6]/50 mt-8 md:mt-0 text-right hidden md:block">
+                Arquitetura que se move<br />com o sol de Trancoso.
+              </p>
             </div>
           </ScrollReveal>
 
-          <div className="flex flex-col gap-20">
+          <div className="flex flex-col gap-32">
             {AMBIENTES.map((a, i) => (
-              <ScrollReveal key={a.title}>
-                <div className={`grid items-center gap-8 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? 'md:[direction:rtl]' : ''}`}>
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/15 [direction:ltr]">
+              <div key={a.title} className="relative flex flex-col md:flex-row items-stretch gap-12 lg:gap-24 group">
+                {/* Imagem (Sticky pinning behavior simulado com CSS nativo e Framer) */}
+                <div className={`w-full md:w-1/2 ${i % 2 === 1 ? 'md:order-last' : ''}`}>
+                  <div className="md:sticky md:top-32 w-full aspect-[4/5] overflow-hidden border border-white/5 bg-white/[0.02]">
                     <Image
                       src={a.img}
                       alt={a.title}
                       fill
                       loading="lazy"
                       sizes="(min-width: 768px) 50vw, 100vw"
-                      className="object-cover"
+                      className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[2s] ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    <span className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/50 px-3 py-1.5 text-[11px] uppercase tracking-wide text-[#F5EFE6]/85 backdrop-blur-sm">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <span className="absolute bottom-6 left-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#F5EFE6]/90 backdrop-blur-md">
                       <a.icon className="h-3.5 w-3.5 text-[#D4A373]" /> {a.tag}
                     </span>
                   </div>
-                  <div className="[direction:ltr]">
-                    <span className="mb-2 block text-xs uppercase tracking-[0.22em] text-[#D4A373]">{a.kicker}</span>
-                    <h3 className="mb-4 text-2xl sm:text-3xl" style={{ fontFamily: 'var(--font-villa-serif)' }}>
-                      {a.title}
-                    </h3>
-                    <p className="max-w-md text-sm leading-relaxed text-[#F5EFE6]/75 sm:text-base">{a.body}</p>
-                  </div>
                 </div>
-              </ScrollReveal>
+                
+                {/* Texto Editorial (Assimétrico, grandes fontes) */}
+                <div className="w-full md:w-1/2 flex flex-col justify-center py-12 md:py-32">
+                  <span className="mb-4 block text-[10px] uppercase tracking-[0.25em] text-[#D4A373]">{a.kicker}</span>
+                  <h3 className="mb-8 text-4xl sm:text-5xl lg:text-6xl leading-[1.1]" style={{ fontFamily: 'var(--font-villa-serif)' }}>
+                    {a.title}
+                  </h3>
+                  <p className="max-w-md text-base leading-relaxed text-[#F5EFE6]/60 font-light border-l border-[#D4A373]/30 pl-6 ml-2">{a.body}</p>
+                </div>
+              </div>
             ))}
           </div>
         </section>

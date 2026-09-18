@@ -228,7 +228,7 @@ export default function EcommerceDemo() {
 
       {/* ─── 1. HERO 100% IMERSIVO (SOTD DEEP PARALLAX + EFEITOS INTERATIVOS) ─── */}
       <section 
-        className="relative h-[120vh] w-full flex flex-col items-center justify-center"
+        className="relative h-screen w-full flex flex-col items-center justify-center"
         onMouseMove={handleHeroMouseMove}
         onMouseLeave={handleHeroMouseLeave}
         style={{ perspective: 1200 }}
@@ -320,16 +320,15 @@ export default function EcommerceDemo() {
       </section>
 
       {/* ─── 2. SEÇÃO STICKY EDITORIAL (SPLIT SCREEN) ─── */}
-      <section className="relative w-full bg-[#050505] z-10 -mt-[20vh]">
+      <section className="relative w-full bg-[#050505] z-10">
         {/* Layout Sticky em Desktop */}
-        <div className="flex flex-col lg:flex-row">
-          <div className="lg:w-1/2 lg:sticky lg:top-0 lg:h-screen p-6 sm:p-12 lg:p-20 flex flex-col justify-center">
+        <div className="flex flex-col lg:flex-row items-start relative">
+          <div className="lg:w-1/2 lg:sticky lg:top-0 lg:h-[100vh] p-6 sm:p-12 lg:p-20 flex flex-col justify-center">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
-              className="relative w-full aspect-[4/5] overflow-hidden rounded-md border border-white/5 bg-white/[0.01]"
-              style={{ willChange: 'transform' }}
+              className="relative w-full max-h-[75vh] max-w-[65vh] mx-auto aspect-[4/5] overflow-hidden rounded-md border border-white/5 bg-white/[0.01]"
             >
               <Image 
                 src={HERO_BOTTLE_CINEMATIC}
@@ -409,18 +408,10 @@ export default function EcommerceDemo() {
             {/* ─── 3. MICRO-INTERAÇÕES DE LUXO (Glassmorphism Cart) ─── */}
             <ScrollReveal>
               <div className="relative w-full">
-                {/* NEW EDITORIAL ASSET: Preenchendo o vazio à esquerda do Cart */}
-                <div className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-[110%] w-[90%] aspect-square rounded-full overflow-hidden border border-white/5 shadow-2xl mix-blend-lighten">
-                  <Image 
-                    src="/images/ecommerce/ingredients-macro.jpg" 
-                    alt="Raw Botanical Ingredients" 
-                    fill 
-                    className="object-cover opacity-90 scale-110" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-black via-transparent to-transparent" />
-                </div>
-
-                <div className="relative rounded-2xl border border-white/5 bg-white/[0.02] p-8 backdrop-blur-3xl shadow-[0_30px_80px_-20px_rgba(0,0,0,1)] lg:mt-20">
+                <div 
+                  className="relative rounded-2xl border border-white/5 bg-white/[0.02] p-8 backdrop-blur-2xl shadow-[0_30px_80px_-20px_rgba(0,0,0,1)] lg:mt-20"
+                  style={{ willChange: 'transform, opacity' }}
+                >
                   <div className="absolute -top-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                 
                 <h4 className="text-3xl mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>NOIR ÔMBRE</h4>
