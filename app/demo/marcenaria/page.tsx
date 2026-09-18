@@ -459,7 +459,7 @@ export default function MarcenariaDemo() {
   return (
     <main
       ref={rootRef}
-      className={`relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#F5F4EE] text-[#2A2C22] ${serif.variable} ${sans.variable}`}
+      className={`relative min-h-screen w-full max-w-full bg-[#F5F4EE] text-[#2A2C22] ${serif.variable} ${sans.variable}`}
       style={{ fontFamily: 'var(--font-cerne-sans)' }}
     >
       {/* Selo NEURALABS — única menção à marca dentro da demo */}
