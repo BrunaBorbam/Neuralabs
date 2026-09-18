@@ -886,11 +886,15 @@ export default function GastronomiaDemo() {
             </motion.div>
 
             <h1
-              className="mb-6 max-w-[700px] text-[44px] leading-[0.98] sm:text-[64px] md:text-[72px] lg:text-[80px]"
+              className="mb-6 w-full max-w-6xl text-[44px] leading-[0.98] sm:text-[64px] md:text-[72px] lg:text-[80px]"
               style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
             >
-              <TextReveal text="O cardápio muda." className="block" />
-              <TextReveal text="O capricho, não." className="block italic text-[#D9A441]" />
+              <TextReveal text="O cardápio " className="inline" />
+              <span className="inline-block w-[1.3em] h-[0.7em] align-middle rounded-full bg-cover bg-center mx-1 sm:mx-2 overflow-hidden border-2 border-[#D9A441]/20 shadow-[0_8px_16px_rgba(0,0,0,0.6)] relative top-[-4px]">
+                <Image src="/images/gastronomia/hero-plate.jpg" alt="Ingredientes frescos" fill className="object-cover" />
+              </span>
+              <TextReveal text=" muda." className="inline" /><br/>
+              <TextReveal text="O capricho, não." className="inline italic text-[#D9A441]" />
             </h1>
 
             <motion.p
@@ -1046,136 +1050,154 @@ export default function GastronomiaDemo() {
         </div>
       </section>
 
-      {/* Cardápio */}
-      <section id="cardapio" className="relative mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24">
-        <ScrollReveal>
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-            <div className="max-w-lg">
-              <div className="mb-6 flex items-center gap-3">
-                <span className="h-px w-9 bg-[#C1552C]" />
-                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">Cardápio</span>
+      {/* Cardápio (GSAP Scroll Pinning Split Layout) */}
+      <section id="cardapio" className="relative w-full border-t border-[#F3EDE1]/10 bg-[#26241F]">
+        <div className="mx-auto flex max-w-7xl flex-col md:flex-row">
+          
+          {/* Lado Esquerdo - Pinned */}
+          <div className="w-full md:w-[40%] px-5 py-20 sm:px-8 md:sticky md:top-0 md:h-screen md:flex md:flex-col md:justify-center">
+            <ScrollReveal>
+              <div className="max-w-md">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="h-px w-9 bg-[#C1552C]" />
+                  <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">Cardápio</span>
+                </div>
+                <h2
+                  className="text-[40px] leading-[1.1] sm:text-[50px] mb-6"
+                  style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+                >
+                  O quadro de <em className="text-[#C1552C] italic">hoje</em>
+                </h2>
+                <p className="text-[14px] leading-[1.8] text-[#B6AF9E]">
+                  Abaixo, as criações disponíveis na cozinha neste exato momento. Deslize para explorar.
+                </p>
               </div>
-              <h2
-                className="text-[30px] leading-[1.15] sm:text-[36px]"
-                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
-              >
-                O quadro de hoje
-              </h2>
+            </ScrollReveal>
+          </div>
+
+          {/* Lado Direito - Scrolling Grid */}
+          <div className="w-full md:w-[60%] px-5 pb-20 md:py-32 sm:px-8 md:border-l border-[#F3EDE1]/10">
+            <div className="grid gap-6 sm:grid-cols-2">
+              {pratos.map((prato, i) => (
+                <DishCard key={prato.idx} prato={prato} index={i} />
+              ))}
             </div>
-            <span className="hidden text-[11px] uppercase tracking-[0.14em] text-[#8A8478] sm:inline-flex items-center gap-1.5">
-              Arraste para o lado <ArrowUpRight className="h-3 w-3 rotate-90" />
-            </span>
           </div>
-        </ScrollReveal>
 
-        <ScrollReveal>
-          <div className="flex flex-nowrap gap-4 pb-8 sm:gap-6 md:grid md:grid-cols-2 md:gap-8 md:pb-0 lg:grid-cols-3">
-            {pratos.map((prato, i) => (
-              <DishCard key={prato.idx} prato={prato} index={i} />
-            ))}
-          </div>
-        </ScrollReveal>
-
+        </div>
         <ArdosiaSectionDrip />
       </section>
 
-      {/* Da feira à mesa */}
-      <section id="processo" className="relative overflow-hidden border-t border-[#F3EDE1]/10 bg-[#201E19] px-5 py-20 sm:px-8 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <ScrollReveal>
-            <div className="mb-16 max-w-lg">
-              <div className="mb-6 flex items-center gap-3">
-                <span className="h-px w-9 bg-[#C1552C]" />
-                <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">Como Funciona</span>
-              </div>
-              <h2
-                className="text-[30px] leading-[1.15] sm:text-[36px]"
-                style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
-              >
-                Da feira à mesa
-              </h2>
+      {/* Da feira à mesa (Card Stacking ScrollTrigger) */}
+      <section id="processo" className="relative bg-[#201E19] px-5 py-32 sm:px-8 md:py-48 border-t border-[#F3EDE1]/10">
+        <div className="mx-auto max-w-4xl relative">
+          
+          <div className="mb-24 text-center">
+            <div className="mb-6 flex items-center justify-center gap-3">
+              <span className="h-px w-9 bg-[#C1552C]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#D9A441]">Como Funciona</span>
+              <span className="h-px w-9 bg-[#C1552C]" />
             </div>
-          </ScrollReveal>
+            <h2
+              className="text-[40px] leading-[1.1] sm:text-[56px]"
+              style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+            >
+              Da feira à mesa
+            </h2>
+          </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="relative">
             {ETAPAS.map((e, i) => (
-              <ScrollReveal key={e.hora} delay={i * 0.08}>
+              <div 
+                key={e.hora} 
+                className="sticky top-32 w-full pt-4 mb-24"
+                style={{ zIndex: i + 10 }}
+              >
                 <div
-                  className="relative h-full rounded-sm border border-[#F3EDE1]/10 bg-[#2A2722] p-6"
+                  className="relative overflow-hidden rounded-xl border border-[#F3EDE1]/20 bg-[#2A2722] p-8 md:p-12 shadow-[0_-20px_50px_rgba(32,30,25,0.8)]"
+                  style={{ transform: `scale(${1 - (ETAPAS.length - 1 - i) * 0.02})` }}
                 >
-                  {e.img && (
-                    <div
-                      className="pointer-events-none absolute -right-3 -top-4 h-14 w-14 overflow-hidden border-2 border-[#F3EDE1] shadow-[0_10px_22px_-10px_rgba(0,0,0,0.55)]"
-                    >
-                      <Image
-                        src={e.img}
-                        alt={e.title}
-                        fill
-                        sizes="56px"
-                        className="object-cover"
-                      />
+                  <div className="flex flex-col md:flex-row gap-8 items-center">
+                    {e.img && (
+                      <div className="relative h-[200px] w-full md:w-[250px] overflow-hidden rounded-sm border border-[#F3EDE1]/10 shrink-0">
+                        <Image src={e.img} alt={e.title} fill className="object-cover" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <span
+                        className="mb-4 block text-[40px] leading-none text-[#D9A441]"
+                        style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
+                      >
+                        {e.hora}
+                      </span>
+                      <h3 className="mb-4 text-[24px] font-medium text-[#F3EDE1] tracking-wide">{e.title}</h3>
+                      <p className="text-[15px] leading-[1.9] text-[#B6AF9E]">{e.body}</p>
                     </div>
-                  )}
-                  <span
-                    className="mb-4 block text-[26px] leading-none text-[#D9A441]"
-                    style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
-                  >
-                    {e.hora}
-                  </span>
-                  <h3 className="mb-3 text-[14.5px] font-medium text-[#F3EDE1]">{e.title}</h3>
-                  <p className="text-[12.5px] leading-[1.8] text-[#B6AF9E]">{e.body}</p>
+                  </div>
                 </div>
-              </ScrollReveal>
+              </div>
             ))}
           </div>
+
         </div>
       </section>
 
-      {/* Depoimentos */}
-      <section className="relative mx-auto max-w-3xl px-5 py-20 text-center sm:px-8 sm:py-24">
-        <ScrollReveal>
-          <Quote className="mx-auto mb-6 h-7 w-7 text-[#C1552C]" />
-          <p
-            className="mb-6 min-h-[110px] text-[20px] leading-[1.55] sm:text-[24px]"
-            style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic', fontWeight: 400 }}
-          >
-            &ldquo;{DEPOIMENTOS[depoimentoIdx].quote}&rdquo;
-          </p>
-          <p className="mb-8 text-[11.5px] uppercase tracking-[0.18em] text-[#D9A441]">
-            {DEPOIMENTOS[depoimentoIdx].autor} — {DEPOIMENTOS[depoimentoIdx].tag}
-          </p>
-          <div className="flex items-center justify-center gap-4">
-            <button
-              aria-label="Depoimento anterior"
-              onClick={() =>
-                setDepoimentoIdx((i) => (i - 1 + DEPOIMENTOS.length) % DEPOIMENTOS.length)
-              }
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/15 text-[#F3EDE1]/70 transition-colors hover:border-[#D9A441]/50 hover:text-[#D9A441]"
+      {/* Depoimentos (Gapless Bento Grid) */}
+      <section className="relative mx-auto max-w-7xl px-5 py-32 sm:px-8 md:py-48">
+        
+        <div className="mb-20 text-center">
+            <h2
+              className="text-[40px] leading-[1.1] sm:text-[56px]"
+              style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
             >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <div className="flex items-center gap-1.5">
-              {DEPOIMENTOS.map((_, i) => (
-                <button
-                  key={i}
-                  aria-label={`Ver depoimento ${i + 1}`}
-                  onClick={() => setDepoimentoIdx(i)}
-                  className={`h-1.5 rounded-full transition-all ${
-                    i === depoimentoIdx ? 'w-5 bg-[#D9A441]' : 'w-1.5 bg-[#F3EDE1]/20'
-                  }`}
-                />
-              ))}
-            </div>
-            <button
-              aria-label="Próximo depoimento"
-              onClick={() => setDepoimentoIdx((i) => (i + 1) % DEPOIMENTOS.length)}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/15 text-[#F3EDE1]/70 transition-colors hover:border-[#D9A441]/50 hover:text-[#D9A441]"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        </ScrollReveal>
+              Avaliações Reais
+            </h2>
+        </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-rows-[auto] gap-0 border border-[#F3EDE1]/15 overflow-hidden rounded-sm bg-[#26241F]">
+          
+          <div className="md:col-span-2 lg:col-span-2 p-10 border border-[#F3EDE1]/15 bg-[#2A2722] flex flex-col justify-between group">
+            <Quote className="mb-8 h-8 w-8 text-[#C1552C]" />
+            <p className="text-[24px] sm:text-[30px] leading-[1.4] mb-12 text-[#F3EDE1]" style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic' }}>
+              &ldquo;{DEPOIMENTOS[0].quote}&rdquo;
+            </p>
+            <div>
+              <p className="text-[12px] font-bold tracking-[0.15em] text-[#D9A441] uppercase">{DEPOIMENTOS[0].autor}</p>
+              <p className="text-[11px] text-[#B6AF9E] uppercase">{DEPOIMENTOS[0].tag}</p>
+            </div>
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 border border-[#F3EDE1]/15 relative min-h-[300px] overflow-hidden group">
+             <Image src="/images/gastronomia/vinho-natural.jpg" alt="Vinho" fill className="object-cover transition-transform duration-[2s] group-hover:scale-110" />
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 p-8 border border-[#F3EDE1]/15 bg-[#201E19] flex flex-col justify-between group">
+            <Quote className="mb-6 h-6 w-6 text-[#C1552C]" />
+            <p className="text-[18px] leading-[1.5] mb-8 text-[#F3EDE1]" style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic' }}>
+              &ldquo;{DEPOIMENTOS[1].quote}&rdquo;
+            </p>
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.15em] text-[#D9A441] uppercase">{DEPOIMENTOS[1].autor}</p>
+              <p className="text-[9px] text-[#B6AF9E] uppercase">{DEPOIMENTOS[1].tag}</p>
+            </div>
+          </div>
+
+          <div className="md:col-span-2 lg:col-span-2 p-8 border border-[#F3EDE1]/15 bg-[#26241F] flex flex-col justify-between group">
+            <Quote className="mb-6 h-6 w-6 text-[#C1552C]" />
+            <p className="text-[20px] leading-[1.5] mb-8 text-[#F3EDE1]" style={{ fontFamily: 'var(--font-ardosia-serif)', fontStyle: 'italic' }}>
+              &ldquo;{DEPOIMENTOS[2].quote}&rdquo;
+            </p>
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.15em] text-[#D9A441] uppercase">{DEPOIMENTOS[2].autor}</p>
+              <p className="text-[9px] text-[#B6AF9E] uppercase">{DEPOIMENTOS[2].tag}</p>
+            </div>
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-2 border border-[#F3EDE1]/15 relative min-h-[300px] overflow-hidden group">
+             <Image src="/images/gastronomia/a-mesa.jpg" alt="A Mesa" fill className="object-cover transition-transform duration-[2s] group-hover:scale-110" />
+          </div>
+
+        </div>
         <ArdosiaSectionDrip />
       </section>
 
