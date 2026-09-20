@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Efeitos — NEURALABS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fff;
+            padding: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .registro {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f9f9f9;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .checkbox {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
+        .checkbox.checked::before {
+            content: "✓";
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .efeito-item {
+            margin: 12px 0;
+            padding: 12px;
+            background: #fafafa;
+            border-left: 3px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .efeito-item.usado {
+            border-left-color: #2d5a2d;
+        }
+
+        .efeito-item.livre {
+            border-left-color: #4a90e2;
+        }
+
+        .efeito-titulo {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .efeito-descricao {
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .destaque {
+            background: #fffacd;
+            padding: 20px;
+            border-left: 4px solid #ffd700;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+
+        .destaque strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .grid-efeitos {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .efeito-grid-item {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .efeito-grid-item:nth-child(odd) {
+            background: #fafafa;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status.usado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.livre {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .page-break {
+            page-break-after: always;
+            margin: 40px 0;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+                page-break-after: avoid;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Biblioteca de Efeitos & Identidades</h1>
+    <p class="subtitle">NEURALABS — Versão 2026-09-15</p>
+
+    <div class="destaque">
+        <strong>⚠️ Regra Obrigatória</strong>
+        Antes de começar qualquer site novo: escolha um Arquétipo não-usado, um Efeito não-usado, e uma Tipografia não-usada. Atualize o Registro depois de publicar.
+    </div>
+
+    <!-- SEÇÃO 1: ARQUÉTIPOS -->
+    <h2>1. Arquétipos de Site</h2>
+    <p style="margin-bottom: 20px; color: #666;">Cada arquétipo muda a ordem e composição das seções, não só a cor.</p>
+
+    <div class="efeito-item usado">
+        <div class="efeito-titulo">A. Editorial Split <span class="status usado">USADO: CERNE</span></div>
+        <div class="efeito-descricao">Hero dividido 50/50 texto/foto, respiração em branco/linho, citações panorâmicas full-bleed, galeria com case em destaque + grid. Quando usar: marcas artesanais, ateliês, arquitetura, moda autoral.</div>
+    </div>
+
+    <div class="efeito-item usado">
+        <div class="efeito-titulo">B. Cinematic Full-Bleed <span class="status usado">USADO: Villa Serena</span></div>
+        <div class="efeito-descricao">Hero de tela cheia (vídeo/foto), texto sobreposto com overlay de cor, card de vidro flutuante com dado numérico. Quando usar: hospitalidade, experiências, turismo, imóveis de alto padrão.</div>
+    </div>
+
+    <div class="efeito-item usado">
+        <div class="efeito-titulo">D. Assimétrico / Colagem Editorial <span class="status usado">USADO: Ardósia</span></div>
+        <div class="efeito-descricao">Grid quebrado, elementos sobrepostos em ângulos, tipografia mista (display gigante + legendas pequenas rotacionadas), scroll horizontal. Quando usar: estúdio criativo, fotografia, branding, gastronomia autoral.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">C. Grid Brutalista / Catálogo <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Grade densa de produtos/projetos, tipografia condensada e grande, cores em blocos sólidos. Quando usar: e-commerce, moda de rua, produto técnico, arquitetura brutalista.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">E. Minimal Produto-Led <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Extremamente limpo, espaço negativo, foco em 1-2 produtos/serviços, motion só em microinterações. Quando usar: SaaS, produto digital, consultoria técnica, clínica/serviço de precisão.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">F. Dados & Dashboard <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Números e gráficos como elemento visual principal, paleta com 1 cor de destaque sobre fundo neutro, tipografia monoespaçada. Quando usar: negócio B2B, fintech, consultoria de performance/dados.</div>
+    </div>
+
+    <!-- SEÇÃO 2: CATÁLOGO DE EFEITOS -->
+    <h2 style="margin-top: 60px;">2. Catálogo de Efeitos & Assinaturas</h2>
+    <p style="margin-bottom: 20px; color: #666;">Cada projeto usa no máximo um item desta lista como assinatura de motion/3D.</p>
+
+    <div class="efeito-item usado">
+        <div class="efeito-titulo">Anéis/Esferas Concêntricos <span class="status usado">ESGOTADO</span></div>
+        <div class="efeito-descricao"><strong>Usado 3x:</strong> Site NEURALABS, Villa Serena, CERNE v1. Elemento de assinatura reagindo ao mouse ou pulsando. <strong style="color: #d32f2f;">Não usar de novo.</strong></div>
+    </div>
+
+    <div class="efeito-item usado">
+        <div class="efeito-titulo">Wireframe 3D de Objeto Real <span class="status usado">REMOVIDO</span></div>
+        <div class="efeito-descricao"><strong>Usado 1x:</strong> CERNE v2 (removido set/2026). Cadeira/garrafa/prédio girando devagar. Livre para reuso futuro se houver modelo 3D real bom o bastante.</div>
+    </div>
+
+    <div class="efeito-item usado">
+        <div class="efeito-titulo">Reveal com Traço de Tinta/Giz (SVG + Framer Motion) <span class="status usado">USADO: Ardósia</span></div>
+        <div class="efeito-descricao"><strong>Usado 1x:</strong> Ardósia (set/2026). Efeito brush-stroke animado revelando títulos e elementos. Via <code>pathLength</code> do Framer Motion.</div>
+    </div>
+
+    <div class="efeito-item usado">
+        <div class="efeito-titulo">CSS 3D Puro (perspective + preserve-3d) <span class="status usado">USADO: Ardósia</span></div>
+        <div class="efeito-descricao"><strong>Usado 1x:</strong> Ardósia (set/2026). SlateCube com ícone/palavra a giz em cada face, girando devagar. Elemento secundário, não conta como assinatura principal.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Blob Líquido Morphing <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">SVG ou shader simples reagindo a scroll ou interação.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Partículas Seguindo o Cursor <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Canvas 2D leve, sem WebGL.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Reveal com Máscara de Grade (Grid-Wipe) <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Imagem "monta" quadrado a quadrado ao entrar na viewport.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Texto Estilo Split-Flap/Odômetro <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Letras giram como painel de aeroporto.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Scroll Horizontal com Trilho de Cards <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Em vez de scroll vertical tradicional.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Parallax tipo Recorte de Papel (Paper-Cut) <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Camadas sem 3D real, recorte visual estilo origami.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Ruído/Grain Animado <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Sutil sobre uma cor sólida (textura, não brilho).</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Extrusão Isométrica <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">De um ícone/logo ao rolar a página.</div>
+    </div>
+
+    <div class="efeito-item livre">
+        <div class="efeito-titulo">Linha de Scan / Glitch Discreta <span class="status livre">LIVRE</span></div>
+        <div class="efeito-descricao">Em hover. Bom para tech/dados.</div>
+    </div>
+
+    <!-- SEÇÃO 3: TIPOGRAFIA -->
+    <h2 style="margin-top: 60px;">3. Fórmulas Tipográficas</h2>
+
+    <div class="registro">
+        <table>
+            <thead>
+                <tr>
+                    <th>Projeto</th>
+                    <th>Serifada/Display</th>
+                    <th>Sans/UI</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Site NEURALABS</strong></td>
+                    <td>Playfair Display</td>
+                    <td>Inter</td>
+                </tr>
+                <tr>
+                    <td><strong>Villa Serena</strong></td>
+                    <td>Bodoni Moda</td>
+                    <td>Plus Jakarta Sans</td>
+                </tr>
+                <tr>
+                    <td><strong>CERNE</strong></td>
+                    <td>Fraunces</td>
+                    <td>Jost</td>
+                </tr>
+                <tr>
+                    <td><strong>Ardósia</strong></td>
+                    <td>Instrument Serif</td>
+                    <td>Space Grotesk</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="margin-top: 20px; color: #666;"><strong>Sugestões para próximos projetos:</strong> Newsreader + Work Sans · Instrument Serif + Space Grotesk · Libre Caslon Text + Manrope · DM Serif Display + IBM Plex Sans · Georama + Sora</p>
+
+    <!-- SEÇÃO 4: REGISTRO -->
+    <h2 style="margin-top: 60px;">4. Registro de Identidades Usadas</h2>
+
+    <div class="registro">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Projeto</th>
+                    <th>Arquétipo</th>
+                    <th>Paleta</th>
+                    <th>Assinatura Motion/3D</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><strong>Site NEURALABS</strong></td>
+                    <td>(Institucional)</td>
+                    <td>Obsidiana + Malva/Grafite</td>
+                    <td>Esfera + anel 3D orbitando</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>Villa Serena</strong></td>
+                    <td>B — Cinematic Full-Bleed</td>
+                    <td>Noturno + dourado pôr-do-sol</td>
+                    <td>Ondulação SVG (ripple)</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>CERNE</strong></td>
+                    <td>A — Editorial Split</td>
+                    <td>Linho + Musgo</td>
+                    <td>(3D removido set/2026; hoje só vídeo + card)</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>Ardósia</strong></td>
+                    <td>D — Assimétrico/Colagem</td>
+                    <td>Ardósia + Giz + Terracota + Mostarda</td>
+                    <td>Traço de tinta/giz revelando (SVG)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="destaque" style="margin-top: 40px;">
+        <strong>Próximo projeto:</strong> Usar Arquétipo C, E ou F · Tipografia nova (nunca as 4 linhas acima) · Efeito de assinatura novo (nunca anéis, nunca wireframe, nunca brush-stroke tão cedo)
+    </div>
+
+    <!-- SEÇÃO BONUS: 31 EFEITOS DE ANIMAÇÃO -->
+    <h2 style="margin-top: 60px;">5. Referência — 31 Efeitos de Animação</h2>
+    <p style="margin-bottom: 20px; color: #666;"><strong>Arquivo completo:</strong> <code>docs/referencia-31-efeitos-animacao.md</code> e HTML interativo em <code>docs/references/31-efeitos-animacao.html</code></p>
+
+    <div class="efeito-item">
+        <div class="efeito-titulo">#1 — Renderização em Tempo Real (CSS 3D)</div>
+        <div class="efeito-descricao">Cubo girando usando <code>perspective</code> + <code>transform-style: preserve-3d</code> + <code>rotateX/rotateY</code>. Sem WebGL. Implementado na Ardósia (SlateCube).</div>
+    </div>
+
+    <p style="margin-top: 20px; color: #666;"><em>Consulte o arquivo HTML interativo para ver todos os 31 efeitos de animação rodando de verdade.</em></p>
+
+    <!-- SEÇÃO BONUS: 50 EFEITOS DE IMAGEM -->
+    <h2 style="margin-top: 60px;">6. Referência — 50 Efeitos de Imagem CSS</h2>
+    <p style="margin-bottom: 20px; color: #666;"><strong>Arquivo completo:</strong> <code>docs/references/50-efeitos-imagem-css.md</code></p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+        <div>
+            <h3 style="margin-top: 0;">Efeitos de Cartão (7)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>Product card</li>
+                <li>Playing e-commerce cards</li>
+                <li>All-but-me</li>
+                <li>Animated info card</li>
+                <li>Flipping card split</li>
+                <li>Flip card</li>
+                <li>CSS card stack flip</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Efeitos com SVG (5)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>Image revealing</li>
+                <li>Ripped images</li>
+                <li>Image transitions using SVG filters</li>
+                <li>Luminance edge</li>
+                <li>SVG image mask</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Efeitos de Hover (5)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>4-corner image</li>
+                <li>Hover rays with masking</li>
+                <li>Dual image</li>
+                <li>CSS image hover effects</li>
+                <li>Gallery hover effect</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Efeitos de Scroll (3)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>Hover effect for headers</li>
+                <li>Image transition on scroll (GSAP)</li>
+                <li>Multi-filters</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Efeitos de Filtro e Máscara (5)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>Spread</li>
+                <li>Image mask hover effect</li>
+                <li>Glitching lighthouse</li>
+                <li>Simple CSS image effects</li>
+                <li>CSS glitch image effect</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Efeitos 3D (5)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>Perspective tilty images</li>
+                <li>CSS-only 3D tri-vision billboard</li>
+                <li>One background for multiple divs</li>
+                <li>CSS 3D split image animation</li>
+                <li>3D image hover</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Imagens "Vivas" (4)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>Zoom image with scale</li>
+                <li>2.5D</li>
+                <li>Night vision</li>
+                <li>CSS in space</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Efeitos com Clip-Path (6)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>CSS image reveal</li>
+                <li>3D sliced image</li>
+                <li>Glitch effect on hover</li>
+                <li>Kitties!</li>
+                <li>Clip-path hover effect</li>
+                <li>Circular grid with cool hover effect</li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 style="margin-top: 0;">Outros (10+)</h3>
+            <ul style="font-size: 0.9em;">
+                <li>Interactive road trip map</li>
+                <li>Image transition</li>
+                <li>Houdini image transition</li>
+                <li>Image hover effect</li>
+                <li>Water your cat</li>
+                <li>Duplicate lighthouse</li>
+                <li>3D card flips</li>
+                <li>Magnifying glass effect</li>
+                <li>3D flip card</li>
+                <li>CSS image slider</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr style="margin: 60px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+    <p style="text-align: center; color: #999; font-size: 0.9em; margin-top: 40px;">
+        <strong>Biblioteca viva</strong> — Atualizada em 15/09/2026<br>
+        Para converter esta página em PDF: <strong>Ctrl+P</strong> (ou Cmd+P) → Salvar como PDF
+    </p>
+</body>
+</html>

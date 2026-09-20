@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://neuralabs.online
+
+# Sitemaps
+Sitemap: https://neuralabs.online/sitemap.xml
+Sitemap: https://neuralabs.online/server-sitemap-index.xml

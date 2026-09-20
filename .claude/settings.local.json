@@ -19,7 +19,24 @@
       "Bash(xargs kill -9)",
       "Bash(taskkill /PID 20044 /F)",
       "Bash(mkdir -p \"C:\\\\Users\\\\insti\\\\OneDrive\\\\Desktop\\\\neuralabs\\\\.claude\")",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(taskkill /IM node.exe /F)",
+      "Bash(npm list *)",
+      "Bash(vercel whoami *)",
+      "Bash(vercel projects *)",
+      "Bash(vercel logs *)",
+      "Bash(curl -s -H 'Authorization: Bearer vcp_31JQWBY2WaAnJbwehFhiGeTr0R1Iw85YlAcCgI3v9B2vm6BjCT3vzcK9' https://api.vercel.com/v6/projects/neuralabs/deployments?limit=5)",
+      "Bash(curl -s -H 'Authorization: Bearer vcp_31JQWBY2WaAnJbwehFhiGeTr0R1Iw85YlAcCgI3v9B2vm6BjCT3vzcK9' https://api.vercel.com/v9/projects/prj_gHrT47732D25NUmvtFb7adpScoVG/deployments)",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s -H 'Authorization: Bearer vcp_31JQWBY2WaAnJbwehFhiGeTr0R1Iw85YlAcCgI3v9B2vm6BjCT3vzcK9' https://api.vercel.com/v12/projects/prj_gHrT47732D25NUmvtFb7adpScoVG/env)",
+      "Bash(curl -s -H 'Authorization: Bearer vcp_31JQWBY2WaAnJbwehFhiGeTr0R1Iw85YlAcCgI3v9B2vm6BjCT3vzcK9' https://api.vercel.com/v9/projects/prj_gHrT47732D25NUmvtFb7adpScoVG)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(git reset *)",
+      "Bash(git clean *)",
+      "Bash(git merge *)",
+      "Bash(git checkout *)"
     ]
   }
 }

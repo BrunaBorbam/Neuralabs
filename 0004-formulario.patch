@@ -1,0 +1,454 @@
+From 0c67158432e79dc52ebd19a71f0d23a103b43470 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 11 Sep 2026 12:46:05 +0000
+Subject: [PATCH] =?UTF-8?q?feat:=20adiciona=20formul=C3=A1rio=20de=20conta?=
+ =?UTF-8?q?to=20real=20e=20seguro=20na=20demo=20CERNE?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Substitui o botão de WhatsApp isolado da seção de contato por um
+formulário funcional (nome, e-mail, telefone, mensagem) que reaproveita
+o endpoint /api/send-email (Resend) já configurado na Vercel para o
+site principal da NEURALABS — sem exigir nova chave/conta.
+
+Segurança e LGPD: validação server-side, honeypot anti-bot, rate limit
+por IP (já existentes na rota, reaproveitados), checkbox de
+consentimento obrigatório com link para /privacy, HTML escapado antes
+de entrar nos e-mails, e mensagem de confiança visível junto ao botão
+de envio. A rota ganha um parâmetro `source: 'cerne'` que troca a cópia
+do e-mail para o tom de marca da CERNE sem alterar o comportamento do
+formulário principal da NEURALABS (que não envia esse campo).
+
+WhatsApp continua disponível como alternativa rápida ao lado do
+formulário.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016gJcn5W4c85HuUXZs4RVHz
+---
+ app/api/send-email/route.ts     | 126 +++++++++++++++--------
+ app/demo/marcenaria/page.tsx    |  41 ++++----
+ components/CerneContactForm.tsx | 170 ++++++++++++++++++++++++++++++++
+ 3 files changed, 276 insertions(+), 61 deletions(-)
+ create mode 100644 components/CerneContactForm.tsx
+
+diff --git a/app/api/send-email/route.ts b/app/api/send-email/route.ts
+index d62eb30..66848e1 100644
+--- a/app/api/send-email/route.ts
++++ b/app/api/send-email/route.ts
+@@ -58,11 +58,13 @@ export async function POST(req: NextRequest) {
+       );
+     }
+ 
+-    const { name, email, company, phone, website } = await req.json();
++    const body = await req.json();
++    const { name, email, company, phone, website, message, source } = body;
+ 
+     // Honeypot: a field real visitors never see or fill (hidden off-screen
+-    // in ContactForm.tsx), but most bots fill every input blindly. Silently
+-    // report success instead of erroring, so a bot gets no signal to adapt.
++    // in ContactForm.tsx / CerneContactForm.tsx), but most bots fill every
++    // input blindly. Silently report success instead of erroring, so a bot
++    // gets no signal to adapt.
+     if (website) {
+       return NextResponse.json({ success: true, message: 'Email sent successfully' }, { status: 200 });
+     }
+@@ -83,49 +85,88 @@ export async function POST(req: NextRequest) {
+       );
+     }
+ 
++    // Consent (LGPD): only enforced when the caller actually sends a
++    // `consent` field — CerneContactForm always does (checkbox required),
++    // while the original ContactForm.tsx predates this and never sends one,
++    // so it's left untouched rather than silently broken.
++    if (Object.prototype.hasOwnProperty.call(body, 'consent') && body.consent !== true) {
++      return NextResponse.json(
++        { error: 'Consent is required' },
++        { status: 400 }
++      );
++    }
++
+     const resend = new Resend(process.env.RESEND_API_KEY);
+     const safeName = escapeHtml(name);
+     const safeEmail = escapeHtml(email);
+     const safeCompany = company ? escapeHtml(company) : '';
+     const safePhone = phone ? escapeHtml(phone) : '';
++    const safeMessage = message ? escapeHtml(message).replace(/\n/g, '<br>') : '';
++    const isCerne = source === 'cerne';
+ 
+     // Send email to user
+-    const userEmailResult = await resend.emails.send({
+-      from: 'Neuralabs <onboarding@resend.dev>',
+-      to: email,
+-      subject: '🧠 Recebemos sua solicitação de diagnóstico!',
+-      html: `
+-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0B0A0E;">
+-          <h1 style="color: #B98CA8; font-size: 24px; margin-bottom: 20px;">Obrigado, ${safeName}!</h1>
+-
+-          <p style="color: #FAF7F2; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+-            Recebemos sua solicitação de diagnóstico de conversão 🎯
+-          </p>
+-
+-          <div style="background: #1D1B24; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(250,247,242,0.1);">
+-            <h2 style="color: #B98CA8; margin-top: 0;">Dados recebidos:</h2>
+-            <p style="color: #FAF7F2;"><strong>Nome:</strong> ${safeName}</p>
+-            <p style="color: #FAF7F2;"><strong>Email:</strong> ${safeEmail}</p>
+-            ${safeCompany ? `<p style="color: #FAF7F2;"><strong>Empresa:</strong> ${safeCompany}</p>` : ''}
+-            ${safePhone ? `<p style="color: #FAF7F2;"><strong>WhatsApp:</strong> ${safePhone}</p>` : ''}
+-          </div>
+-
+-          <p style="color: #F0EAE1; font-size: 14px; line-height: 1.6;">
+-            Nosso time vai analisar seu site e enviar um diagnóstico completo em até 24 horas.
+-          </p>
+-
+-          <div style="background: linear-gradient(135deg, #C89DB5, #9E7089); color: #0B0A0E; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+-            <p style="margin: 0; font-size: 14px; font-weight: 600;">
+-              💡 Enquanto isso, qualquer dúvida é só chamar no WhatsApp — respondemos direto, sem robô.
+-            </p>
+-          </div>
+-
+-          <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
+-            © 2026 Neuralabs. Onde Neurociência Vira Conversão.
+-          </p>
+-        </div>
+-      `,
+-    });
++    const userEmailResult = await resend.emails.send(
++      isCerne
++        ? {
++            from: 'CERNE <onboarding@resend.dev>',
++            to: email,
++            subject: 'Recebemos sua mensagem — CERNE',
++            html: `
++              <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 32px 24px; background: #F5F4EE; color: #2A2C22;">
++                <h1 style="font-weight: 400; font-size: 24px; margin-bottom: 16px;">Obrigado, ${safeName}.</h1>
++                <p style="font-size: 15px; line-height: 1.8; margin-bottom: 20px;">
++                  Recebemos sua mensagem sobre o seu projeto. Atendemos um número limitado
++                  de projetos por trimestre e respondemos pessoalmente — em até um dia útil.
++                </p>
++                <div style="background: #ffffff; padding: 20px; border-radius: 2px; margin-bottom: 20px; border: 1px solid rgba(42,44,34,0.1);">
++                  <p style="margin: 0 0 8px;"><strong>Nome:</strong> ${safeName}</p>
++                  <p style="margin: 0 0 8px;"><strong>Email:</strong> ${safeEmail}</p>
++                  ${safePhone ? `<p style="margin: 0 0 8px;"><strong>Telefone:</strong> ${safePhone}</p>` : ''}
++                  ${safeMessage ? `<p style="margin: 8px 0 0;"><strong>Mensagem:</strong><br>${safeMessage}</p>` : ''}
++                </div>
++                <p style="font-size: 12px; color: rgba(42,44,34,0.55); margin-top: 32px;">
++                  Demonstração de portfólio desenvolvida por NEURALABS Studio.
++                </p>
++              </div>
++            `,
++          }
++        : {
++            from: 'Neuralabs <onboarding@resend.dev>',
++            to: email,
++            subject: '🧠 Recebemos sua solicitação de diagnóstico!',
++            html: `
++              <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0B0A0E;">
++                <h1 style="color: #B98CA8; font-size: 24px; margin-bottom: 20px;">Obrigado, ${safeName}!</h1>
++
++                <p style="color: #FAF7F2; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
++                  Recebemos sua solicitação de diagnóstico de conversão 🎯
++                </p>
++
++                <div style="background: #1D1B24; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(250,247,242,0.1);">
++                  <h2 style="color: #B98CA8; margin-top: 0;">Dados recebidos:</h2>
++                  <p style="color: #FAF7F2;"><strong>Nome:</strong> ${safeName}</p>
++                  <p style="color: #FAF7F2;"><strong>Email:</strong> ${safeEmail}</p>
++                  ${safeCompany ? `<p style="color: #FAF7F2;"><strong>Empresa:</strong> ${safeCompany}</p>` : ''}
++                  ${safePhone ? `<p style="color: #FAF7F2;"><strong>WhatsApp:</strong> ${safePhone}</p>` : ''}
++                </div>
++
++                <p style="color: #F0EAE1; font-size: 14px; line-height: 1.6;">
++                  Nosso time vai analisar seu site e enviar um diagnóstico completo em até 24 horas.
++                </p>
++
++                <div style="background: linear-gradient(135deg, #C89DB5, #9E7089); color: #0B0A0E; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
++                  <p style="margin: 0; font-size: 14px; font-weight: 600;">
++                    💡 Enquanto isso, qualquer dúvida é só chamar no WhatsApp — respondemos direto, sem robô.
++                  </p>
++                </div>
++
++                <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
++                  © 2026 Neuralabs. Onde Neurociência Vira Conversão.
++                </p>
++              </div>
++            `,
++          }
++    );
+ 
+     if (userEmailResult.error) {
+       console.error('Error sending user email:', userEmailResult.error);
+@@ -138,16 +179,17 @@ export async function POST(req: NextRequest) {
+     // Send notification to admin
+     try {
+       await resend.emails.send({
+-        from: 'Neuralabs <onboarding@resend.dev>',
++        from: isCerne ? 'CERNE Demo <onboarding@resend.dev>' : 'Neuralabs <onboarding@resend.dev>',
+         to: process.env.CONTACT_EMAIL || 'admin@neuralabs.online',
+-        subject: `🧠 Novo Lead: ${safeName}`,
++        subject: isCerne ? `Novo contato via demo CERNE: ${safeName}` : `🧠 Novo Lead: ${safeName}`,
+         html: `
+           <div style="font-family: Arial, sans-serif;">
+-            <h2>Novo Lead Recebido</h2>
++            <h2>${isCerne ? 'Novo contato (demo CERNE)' : 'Novo Lead Recebido'}</h2>
+             <p><strong>Nome:</strong> ${safeName}</p>
+             <p><strong>Email:</strong> ${safeEmail}</p>
+             ${safeCompany ? `<p><strong>Empresa:</strong> ${safeCompany}</p>` : ''}
+             ${safePhone ? `<p><strong>WhatsApp:</strong> ${safePhone}</p>` : ''}
++            ${safeMessage ? `<p><strong>Mensagem:</strong><br>${safeMessage}</p>` : ''}
+             <hr>
+             <p style="color: #999; font-size: 12px;">Enviado em: ${new Date().toLocaleString('pt-BR')}</p>
+           </div>
+diff --git a/app/demo/marcenaria/page.tsx b/app/demo/marcenaria/page.tsx
+index 9760a9b..e4e4f50 100644
+--- a/app/demo/marcenaria/page.tsx
++++ b/app/demo/marcenaria/page.tsx
+@@ -60,16 +60,27 @@
+  * mensagem de "projeto técnico antes do corte" da seção Processo. Só
+  * monta em desktop, atrás do mesmo hook useIsDesktop usado no restante do
+  * site.
++ *
++ * Contato — formulário real (não só o botão de WhatsApp da v1): usa o
++ * mesmo endpoint /api/send-email (Resend) do site principal da NEURALABS,
++ * já configurado com RESEND_API_KEY/CONTACT_EMAIL na Vercel — sem setup
++ * extra. Envia com source: 'cerne', que troca a cópia do e-mail pra tom
++ * de marca da CERNE (a rota mantém o comportamento antigo intacto quando
++ * source não é enviado, então o formulário principal da NEURALABS não é
++ * afetado). Validação server-side, honeypot anti-bot, rate limit por IP e
++ * checkbox de consentimento LGPD obrigatório com link pra /privacy — ver
++ * components/CerneContactForm.tsx. Pensado como o padrão de referência
++ * pra reaproveitar em formulários de clientes reais.
+  */
+ 
+ import { useEffect, useRef, useState } from 'react';
+ import Image from 'next/image';
+ import Link from 'next/link';
+ import { Fraunces, Jost } from 'next/font/google';
+-import { ArrowLeft, ArrowUpRight, MessageCircle, Minus, Plus, Ruler } from 'lucide-react';
++import { ArrowLeft, ArrowUpRight, Minus, Plus, Ruler } from 'lucide-react';
+ import { ScrollReveal } from '@/components/HeroAnimations';
+ import { CerneScene3D } from '@/components/CerneScene3D';
+-import { getWhatsAppLink } from '@/lib/whatsapp';
++import { CerneContactForm } from '@/components/CerneContactForm';
+ 
+ const serif = Fraunces({
+   subsets: ['latin'],
+@@ -811,7 +822,9 @@ export default function MarcenariaDemo() {
+         </ScrollReveal>
+       </section>
+ 
+-      {/* Contato */}
++      {/* Contato — formulário real (Resend, ver app/api/send-email/route.ts,
++          source: 'cerne') com validação, honeypot, rate limit e checkbox de
++          consentimento LGPD, + WhatsApp como alternativa rápida ao lado. */}
+       <section id="contato" className="mx-auto max-w-3xl px-5 py-24 sm:px-8 sm:py-28">
+         <ScrollReveal>
+           <div className="mb-10 text-center">
+@@ -831,22 +844,12 @@ export default function MarcenariaDemo() {
+           </div>
+         </ScrollReveal>
+         <ScrollReveal>
+-          <div className="flex flex-col items-center gap-4">
+-            <a
+-              href={getWhatsAppLink(
+-                'Olá! Vi o portfólio da CERNE e gostaria de conversar sobre um projeto de marcenaria.'
+-              )}
+-              target="_blank"
+-              rel="noopener noreferrer"
+-              data-magnetic
+-              className="inline-flex items-center gap-2 rounded-sm bg-[#2A2C22] px-8 py-4 text-[12px] font-medium uppercase tracking-[0.15em] text-[#F5F4EE] transition-colors hover:bg-[#6B7A4E]"
+-            >
+-              <MessageCircle className="h-4 w-4" /> Solicitar Consulta
+-            </a>
+-            <p className="text-[11px] uppercase tracking-[0.16em] text-[#576141]/80">
+-              Atendemos Rio Grande do Sul · Santa Catarina · Paraná
+-            </p>
+-          </div>
++          <CerneContactForm />
++        </ScrollReveal>
++        <ScrollReveal>
++          <p className="mt-10 text-center text-[11px] uppercase tracking-[0.16em] text-[#576141]/80">
++            Atendemos Rio Grande do Sul · Santa Catarina · Paraná
++          </p>
+         </ScrollReveal>
+       </section>
+ 
+diff --git a/components/CerneContactForm.tsx b/components/CerneContactForm.tsx
+new file mode 100644
+index 0000000..fa1bb6d
+--- /dev/null
++++ b/components/CerneContactForm.tsx
+@@ -0,0 +1,170 @@
++'use client';
++
++import { useState, FormEvent } from 'react';
++import Link from 'next/link';
++import { MessageCircle, Send, ShieldCheck } from 'lucide-react';
++import { getWhatsAppLink } from '@/lib/whatsapp';
++import { trackFormSubmit } from '@/lib/ga';
++
++type Status = 'idle' | 'loading' | 'success' | 'error';
++
++const inputClass =
++  'w-full rounded-sm border border-[#2A2C22]/15 bg-white px-4 py-3 text-[13.5px] text-[#2A2C22] placeholder:text-[#2A2C22]/35 transition-colors focus:border-[#6B7A4E]/60 focus:outline-none';
++
++export const CerneContactForm = () => {
++  const [status, setStatus] = useState<Status>('idle');
++  const [form, setForm] = useState({
++    name: '',
++    email: '',
++    phone: '',
++    message: '',
++    website: '', // honeypot
++    consent: false,
++  });
++
++  const handleChange =
++    (field: 'name' | 'email' | 'phone' | 'message' | 'website') =>
++    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
++      setForm((prev) => ({ ...prev, [field]: e.target.value }));
++    };
++
++  const handleSubmit = async (e: FormEvent) => {
++    e.preventDefault();
++    if (!form.consent) {
++      setStatus('error');
++      return;
++    }
++    setStatus('loading');
++
++    try {
++      const res = await fetch('/api/send-email', {
++        method: 'POST',
++        headers: { 'Content-Type': 'application/json' },
++        body: JSON.stringify({ ...form, source: 'cerne' }),
++      });
++
++      if (!res.ok) throw new Error('Falha no envio');
++
++      trackFormSubmit('cerne_contact_form');
++      setStatus('success');
++      setForm({ name: '', email: '', phone: '', message: '', website: '', consent: false });
++    } catch {
++      setStatus('error');
++    }
++  };
++
++  return (
++    <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-10">
++      <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3.5">
++        {/* Honeypot anti-bot: real visitors never see this field (hidden
++            off-screen, out of tab order and autofill), but a bot filling
++            every input blindly will populate it — the API rejects silently
++            whenever it arrives non-empty, so a bot gets no signal to adapt. */}
++        <input
++          type="text"
++          name="website"
++          value={form.website}
++          onChange={handleChange('website')}
++          tabIndex={-1}
++          autoComplete="off"
++          aria-hidden="true"
++          className="absolute -left-[9999px] h-px w-px opacity-0"
++        />
++        <input
++          type="text"
++          required
++          placeholder="Seu nome"
++          value={form.name}
++          onChange={handleChange('name')}
++          className={inputClass}
++        />
++        <input
++          type="email"
++          required
++          placeholder="Seu e-mail"
++          value={form.email}
++          onChange={handleChange('email')}
++          className={inputClass}
++        />
++        <input
++          type="tel"
++          placeholder="Telefone / WhatsApp (opcional)"
++          value={form.phone}
++          onChange={handleChange('phone')}
++          className={inputClass}
++        />
++        <textarea
++          placeholder="Conte um pouco sobre o espaço e a ideia (opcional)"
++          value={form.message}
++          onChange={handleChange('message')}
++          rows={3}
++          className={`${inputClass} resize-none`}
++        />
++
++        <label className="flex items-start gap-2.5 py-1 text-[11.5px] leading-relaxed text-[#55584A]">
++          <input
++            type="checkbox"
++            required
++            checked={form.consent}
++            onChange={(e) => setForm((prev) => ({ ...prev, consent: e.target.checked }))}
++            className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 accent-[#6B7A4E]"
++          />
++          <span>
++            Concordo com o uso dos meus dados para retorno de contato, conforme a{' '}
++            <Link href="/privacy" target="_blank" className="underline hover:text-[#6B7A4E]">
++              Política de Privacidade
++            </Link>
++            .
++          </span>
++        </label>
++
++        <button
++          type="submit"
++          disabled={status === 'loading'}
++          className="mt-1 inline-flex items-center justify-center gap-2 rounded-sm bg-[#2A2C22] px-8 py-4 text-[12px] font-medium uppercase tracking-[0.15em] text-[#F5F4EE] transition-colors hover:bg-[#6B7A4E] disabled:opacity-60"
++        >
++          <Send className="h-4 w-4" />
++          {status === 'loading' ? 'Enviando…' : 'Enviar mensagem'}
++        </button>
++
++        <p className="flex items-start gap-1.5 pt-0.5 text-[10.5px] leading-relaxed text-[#576141]/80">
++          <ShieldCheck className="h-3.5 w-3.5 flex-shrink-0" />
++          Seus dados trafegam criptografados (HTTPS) e não são compartilhados com terceiros.
++        </p>
++
++        {status === 'success' && (
++          <p className="text-[12.5px] text-[#6B7A4E]">
++            Mensagem enviada — respondemos pessoalmente em até um dia útil.
++          </p>
++        )}
++        {status === 'error' && (
++          <p className="text-[12.5px] text-red-700/80">
++            {form.consent
++              ? 'Não foi possível enviar agora. Tente novamente em instantes.'
++              : 'É preciso concordar com a Política de Privacidade para enviar.'}
++          </p>
++        )}
++      </form>
++
++      <div className="flex w-full flex-col items-start gap-3 border-t border-[#2A2C22]/10 pt-6 sm:w-auto sm:max-w-[220px] sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
++        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#6B7A4E]/25 bg-[#6B7A4E]/10">
++          <MessageCircle className="h-4.5 w-4.5 text-[#576141]" />
++        </span>
++        <p className="text-[12.5px] leading-relaxed text-[#55584A]">
++          Prefere conversar direto? Chame no WhatsApp.
++        </p>
++        <a
++          href={getWhatsAppLink(
++            'Olá! Vi o portfólio da CERNE e gostaria de conversar sobre um projeto de marcenaria.'
++          )}
++          target="_blank"
++          rel="noopener noreferrer"
++          data-magnetic
++          className="inline-flex items-center gap-2 rounded-sm border border-[#2A2C22]/20 px-5 py-3 text-[11.5px] font-medium uppercase tracking-[0.14em] text-[#2A2C22] transition-colors hover:border-[#6B7A4E]/50 hover:text-[#6B7A4E]"
++        >
++          <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
++        </a>
++      </div>
++    </div>
++  );
++};
+-- 
+2.43.0
+

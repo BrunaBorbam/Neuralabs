@@ -1,0 +1,1016 @@
+'use client';
+
+/**
+ * CERNE — Marcenaria & Arquitetura de Interiores
+ * Demonstração Interativa • NEURALABS Studio
+ *
+ * Identidade autônoma "Luxo Silencioso" (distinta da identidade da própria
+ * NEURALABS e da Villa Serena): pesquisamos ateliers reais de marcenaria de
+ * alto padrão (Shape London, Make Bespoke Studio) antes de desenhar — o
+ * padrão do setor não é dark mode, é claro, minimalista e editorial, com a
+ * fotografia (não a UI) carregando o peso visual. Linho #F5F4EE, Musgo
+ * #6B7A4E, Carvão-texto #2A2C22. Tipografia: Fraunces (serifada editorial,
+ * itálico para ênfase) + Jost (sans/UI, leve).
+ *
+ * REVISÃO — versão 2: a primeira versão ficou rasa demais pro padrão
+ * NEURALABS (poucas seções, pouca profundidade de craft). Esta revisão traz
+ * o mesmo nível de camadas da Villa Serena, mas com a assinatura de motion
+ * própria da CERNE (nunca copiando 1:1 o vocabulário visual de outro
+ * projeto): cartão de vidro editorial flutuante no Hero com gatilho de
+ * escassez, barra de números com contagem ao scroll, mosaico de duas fotos
+ * + selo "desde" na seção do Ofício, quebra panorâmica com citação de
+ * princípio de projeto, portfólio com case em destaque + overlay de hover
+ * nos demais, FAQ em acordeão (redução de fricção pré-CTA) e rodapé com
+ * navegação própria.
+ *
+ * Gatilhos de neuromarketing (voltados a quem contrataria a marcenaria —
+ * proprietário de residência/escritório de alto padrão, geralmente via
+ * arquiteto): prova social pelo portfólio de projetos nomeados e com
+ * materiais explícitos (nunca fotos de banco genéricas sem contexto),
+ * ancoragem de exclusividade + escassez (agenda 2026 com vagas contadas),
+ * autoridade por número (anos de ofício, projetos entregues), redução de
+ * fricção pré-consulta (processo em 4 etapas + FAQ antes do CTA) e
+ * depoimento de arquiteto (credibilidade entre pares, não apenas cliente
+ * final).
+ *
+ * Sem camada de portfólio dentro da demo: a única menção à NEURALABS é a
+ * barra discreta de atribuição no topo + o disclaimer no rodapé.
+ *
+ * NOTA DE PRODUÇÃO — atualizada: Higgsfield seguia indisponível nesta conta
+ * (plano não permite geração real), mas a Bruna gera imagem/vídeo pelo
+ * Gemini/Google Flow do lado dela — resolvendo o gap. 8 dos 9 slots de foto
+ * abaixo já usam imagens reais geradas assim (hero, banner panorâmico,
+ * ofício + detalhe, biblioteca em destaque + detalhe, cozinha, escritório),
+ * servidas localmente de /public/images/cerne/. O Closet Boutique (grid de
+ * portfólio, projeto 04) passou por um placeholder do Unsplash hotlinkado
+ * (quebrava em dev local nesta máquina — erro de certificado TLS,
+ * `UNABLE_TO_VERIFY_LEAF_SIGNATURE`, provável interceptação HTTPS por
+ * antivírus/firewall corporativo — impedia o Next.js de buscar a imagem
+ * pra otimizar via `/_next/image`), depois foi baixado localmente como
+ * stopgap, e desde 2026-09-14 usa a foto real gerada pela Bruna a partir
+ * do prompt 9 (docs/cerne-prompts-gemini.md) — `/public/images/cerne/
+ * closet-boutique.png`. Os 9 slots de foto do Hero ao portfólio agora
+ * usam imagem real.
+ * Vídeo por IA — atualizado: o Hero agora usa um clipe real gerado no
+ * Google Flow (apara de madeira se desprendendo da plaina em câmera lenta,
+ * imagem-pra-vídeo a partir do HERO_IMAGE) em vez do Ken Burns em CSS —
+ * só em desktop (ver useIsDesktop), por custo de banda. Mobile e
+ * prefers-reduced-motion continuam no Ken Burns sobre a foto estática.
+ *
+ * 3D — v2: uma cadeira de encomenda em wireframe (CerneScene3D), girando
+ * devagar como "peça no torno". Trocamos os anéis concêntricos da v1
+ * porque esse motivo já tinha sido usado no site da NEURALABS (esfera +
+ * anel) e na Villa Serena (ondulação em SVG) — ver
+ * docs/IDENTIDADES-E-EFEITOS.md. Um objeto real do ofício da marcenaria é
+ * mais coerente com a marca do que uma forma abstrata, e reforça a
+ * mensagem de "projeto técnico antes do corte" da seção Processo. Só
+ * monta em desktop, atrás do mesmo hook useIsDesktop usado no restante do
+ * site.
+ *
+ * 3D — v3: o wireframe da cadeira morava direto em cima do vídeo inteiro
+ * (absolute inset-0 no container do Hero) e caía bem na parte mais "cheia"
+ * da cena (mão + apara de madeira) — lia como sujeira/glitch, não design.
+ * Agora vive num cartão próprio, menor, no canto superior direito
+ * (simétrico ao card "Agenda 2026" no canto inferior esquerdo), com o
+ * mesmo tratamento de vidro/blur — a cadeira fica legível como peça de
+ * design em vez de disputar espaço com o vídeo.
+ *
+ * Contato — formulário real (não só o botão de WhatsApp da v1): usa o
+ * mesmo endpoint /api/send-email (Resend) do site principal da NEURALABS,
+ * já configurado com RESEND_API_KEY/CONTACT_EMAIL na Vercel — sem setup
+ * extra. Envia com source: 'cerne', que troca a cópia do e-mail pra tom
+ * de marca da CERNE (a rota mantém o comportamento antigo intacto quando
+ * source não é enviado, então o formulário principal da NEURALABS não é
+ * afetado). Validação server-side, honeypot anti-bot, rate limit por IP e
+ * checkbox de consentimento LGPD obrigatório com link pra /privacy — ver
+ * components/CerneContactForm.tsx. Pensado como o padrão de referência
+ * pra reaproveitar em formulários de clientes reais.
+ *
+ * Portfólio editável sem código — CMS leve via Notion (opcional, ver
+ * docs/cerne-cms-notion.md pro passo a passo): sem NOTION_API_KEY/
+ * NOTION_DATABASE_ID configuradas, o portfólio usa PROJETOS_PADRAO abaixo
+ * normalmente. Configurando, o useEffect logo no início do componente
+ * busca em /api/cerne-projects (lib/notion.ts) e troca pelo conteúdo que
+ * o cliente mantém numa database do Notion — sem precisar de novo deploy
+ * a cada alteração. As fotos passam por um proxy próprio
+ * (/api/cerne-photo/[pageId]) em vez de expor a URL assinada do Notion
+ * (que expira em ~1h) direto no HTML. Pensado como o padrão de
+ * referência pra dar autonomia de conteúdo a clientes reais sem abrir
+ * mão do layout/motion/3D controlados por código.
+ */
+
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Fraunces, Jost } from 'next/font/google';
+import { ArrowLeft, ArrowUpRight, Minus, Plus, Ruler } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ScrollReveal } from '@/components/HeroAnimations';
+import { CerneContactForm } from '@/components/CerneContactForm';
+import WoodGrainCanvas from './WoodGrainCanvas';
+
+const serif = Fraunces({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-cerne-serif',
+  display: 'swap',
+});
+const sans = Jost({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-cerne-sans',
+  display: 'swap',
+});
+
+const img = (id: string, w: number, h: number) =>
+  `https://images.unsplash.com/${id}?w=${w}&h=${h}&q=80&auto=format&fit=crop`;
+
+// Fotos reais geradas pela Bruna no Gemini — ver nota de produção acima.
+const HERO_IMAGE = '/images/cerne/hero.jpg';
+const HERO_BANNER_IMAGE = '/images/cerne/banner.jpg';
+const OFICIO_IMAGE = '/images/cerne/oficio.jpg';
+const OFICIO_DETAIL_IMAGE = '/images/cerne/oficio-detalhe.jpg';
+const FEATURED_SECONDARY_IMAGE = '/images/cerne/biblioteca-detalhe.jpg';
+
+type Projeto = {
+  idx: string;
+  nome: string;
+  local: string;
+  ano: string;
+  materiais: string[];
+  img: string;
+  descricao?: string;
+  featured?: boolean;
+};
+
+// Conteúdo estático de referência — usado direto enquanto nenhum CMS está
+// ligado, e como fallback se a busca no Notion falhar (ver useEffect mais
+// abaixo, com fetch em /api/cerne-projects). Nunca deixa a seção de
+// portfólio vazia por causa de configuração pendente ou fora do ar.
+const PROJETOS_PADRAO: Projeto[] = [
+  {
+    idx: '01',
+    nome: 'Biblioteca em Nogueira',
+    local: 'Residência Privada · Porto Alegre',
+    ano: '2025',
+    materiais: ['Nogueira maciça', 'Latão escovado'],
+    descricao:
+      'Biblioteca de pé-direito duplo com escada suspensa e estante corrida em nogueira maciça — desenhada em conjunto com o arquiteto do projeto desde a planta baixa, não como reforma posterior.',
+    img: '/images/cerne/biblioteca.jpg',
+    featured: true,
+  },
+  {
+    idx: '02',
+    nome: 'Cozinha em Carvalho Fumê',
+    local: 'Cobertura · Florianópolis',
+    ano: '2024',
+    materiais: ['Carvalho fumê', 'Mármore Calacatta'],
+    descricao:
+      'Cozinha integrada à sala de uma cobertura de frente pro mar — marcenaria em carvalho fumê contrastando com bancada de mármore Calacatta, desenhada pra abrir totalmente durante recepções e fechar em painéis discretos no dia a dia.',
+    img: '/images/cerne/cozinha.jpg',
+  },
+  {
+    idx: '03',
+    nome: 'Escritório Executivo',
+    local: 'Sede Corporativa · Curitiba',
+    ano: '2024',
+    materiais: ['Freijó', 'Vidro fosco'],
+    descricao:
+      'Sala de diretoria e recepção executiva em freijó e vidro fosco — painéis de marcenaria fazem a divisória acústica entre os ambientes sem recorrer a drywall, mantendo a mesma linguagem do desenho arquitetônico original.',
+    img: '/images/cerne/escritorio.jpg',
+  },
+  {
+    idx: '04',
+    nome: 'Closet Boutique',
+    local: 'Residência Privada · Gramado',
+    ano: '2023',
+    materiais: ['Cedro', 'Latão escovado'],
+    descricao:
+      'Closet planejado como uma pequena boutique particular — armários em cedro com puxadores de latão escovado, ilha central para acessórios e iluminação embutida desenhada peça a peça com a proprietária.',
+    img: '/images/cerne/closet-boutique.png',
+  },
+];
+
+const ETAPAS = [
+  {
+    n: '01',
+    title: 'Consulta & Briefing',
+    body: 'Visita técnica ao espaço (ou ao projeto arquitetônico) para entender uso, fluxo e a intenção estética antes de qualquer desenho.',
+  },
+  {
+    n: '02',
+    title: 'Projeto Técnico',
+    body: 'Desenho detalhado com especificação de madeira, ferragem e acabamento — aprovado com você antes de qualquer corte.',
+  },
+  {
+    n: '03',
+    title: 'Produção Artesanal',
+    body: 'Cada peça é executada no ateliê, com acompanhamento fotográfico das etapas — nunca produção terceirizada em série.',
+  },
+  {
+    n: '04',
+    title: 'Instalação & Entrega',
+    body: 'Instalação por nossa própria equipe, com ajuste fino no local. O projeto só está pronto quando encaixa perfeitamente.',
+  },
+] as const;
+
+const MATERIAIS = [
+  'Nogueira Maciça',
+  'Carvalho Fumê',
+  'Freijó',
+  'Cedro',
+  'Latão Escovado',
+  'Mármore Calacatta',
+  'Vidro Fosco',
+] as const;
+
+const STATS = [
+  { value: 14, suffix: '', label: 'Anos de ofício' },
+  { value: 180, suffix: '+', label: 'Projetos entregues' },
+  { value: 100, suffix: '%', label: 'Sob encomenda' },
+  { value: 3, suffix: '', label: 'Estados atendidos' },
+] as const;
+
+const FAQ = [
+  {
+    q: 'Vocês atendem fora do Rio Grande do Sul?',
+    a: 'Sim. Já executamos projetos em Santa Catarina e Paraná — o acompanhamento técnico é feito à distância entre visitas, com presença garantida nos marcos principais do projeto (briefing, aprovação técnica e instalação).',
+  },
+  {
+    q: 'Qual o prazo médio de um projeto?',
+    a: 'Entre 8 e 14 semanas da aprovação do projeto técnico até a instalação, dependendo da complexidade e da disponibilidade dos materiais especificados.',
+  },
+  {
+    q: 'Vocês fazem só móveis avulsos ou também elementos arquitetônicos?',
+    a: 'Trabalhamos com marcenaria integrada à arquitetura — portas de grandes vãos, painéis, boiseries, escadas — não só peças de mobiliário isoladas.',
+  },
+  {
+    q: 'Como funciona o orçamento?',
+    a: 'Após a visita técnica e o briefing, enviamos uma proposta com escopo, materiais e prazo definidos por escrito — sem reabertura de valor no meio do projeto.',
+  },
+] as const;
+
+/** Botões com leve atração magnética ao cursor — mesma assinatura de motion
+ * usada na Villa Serena, aqui em intensidade mais discreta pra combinar com
+ * o registro editorial (nada "brincalhão"). Desktop com mouse fino apenas. */
+function useMagnetic() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const root = ref.current;
+    if (!root || !window.matchMedia('(hover: hover)').matches) return;
+    const els = Array.from(root.querySelectorAll<HTMLElement>('[data-magnetic]'));
+    const cleanups: (() => void)[] = [];
+    els.forEach((el) => {
+      const move = (e: MouseEvent) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * 0.15}px, ${y * 0.2}px)`;
+      };
+      const leave = () => (el.style.transform = 'translate(0,0)');
+      el.addEventListener('mousemove', move);
+      el.addEventListener('mouseleave', leave);
+      cleanups.push(() => {
+        el.removeEventListener('mousemove', move);
+        el.removeEventListener('mouseleave', leave);
+      });
+    });
+    return () => cleanups.forEach((c) => c());
+  }, []);
+  return ref;
+}
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return isDesktop;
+}
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return reduced;
+}
+
+// Agenda de ateliê enche ao longo do trimestre — mais vagas no primeiro
+// mês, menos no último. Ilustrativo (não há agenda real por trás nesta
+// demo), mas varia em vez de ficar congelada num "3" pra sempre: um
+// número de escassez que nunca muda é o tipo de coisa que quem revisita
+// o site nota e desconta em credibilidade. Num cliente real isso troca
+// pela contagem real da agenda.
+const VAGAS_POR_MES_NO_TRIMESTRE = [4, 3, 2] as const;
+
+function useVagasRestantes(fallback: number) {
+  const [vagas, setVagas] = useState(fallback);
+  useEffect(() => {
+    setVagas(VAGAS_POR_MES_NO_TRIMESTRE[new Date().getMonth() % 3]);
+  }, []);
+  return vagas;
+}
+
+/** Parallax sutil — só desktop, só sem prefers-reduced-motion */
+function useParallax(strength: number, enabled: boolean) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!enabled) return;
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const y = Math.min(window.scrollY, 900) * strength;
+        el.style.transform = `translateY(${y}px)`;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [strength, enabled]);
+  return ref;
+}
+
+/** Número que sobe de 0 até `value` quando entra em viewport — reforça o
+ * gatilho de autoridade (anos/projetos/estados) no momento em que o
+ * visitante repara nele, em vez de já chegar estático na tela. */
+function StatCounter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [display, setDisplay] = useState(0);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || started.current) return;
+        started.current = true;
+        const duration = 1100;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setDisplay(Math.round(value * eased));
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [value]);
+
+  return (
+    <div className="text-center sm:text-left">
+      <span
+        ref={ref}
+        className="block text-[36px] leading-none text-[#2A2C22] sm:text-[42px]"
+        style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+      >
+        {display}
+        <span className="text-[#6B7A4E]">{suffix}</span>
+      </span>
+      <span className="mt-2 block text-[11px] uppercase tracking-[0.16em] text-[#55584A]">{label}</span>
+    </div>
+  );
+}
+
+function FaqItem({ q, a, defaultOpen = false }: { q: string; a: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-[#2A2C22]/12 py-6">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-6 text-left"
+      >
+        <span className="text-[14.5px] font-medium text-[#2A2C22] sm:text-[15.5px]">{q}</span>
+        <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-[#2A2C22]/20 text-[#6B7A4E] transition-colors">
+          {open ? <Minus className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+        </span>
+      </button>
+      <div
+        className="grid transition-[grid-template-rows] duration-300 ease-out"
+        style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
+      >
+        <div className="overflow-hidden">
+          <p className="max-w-xl pt-4 text-[13px] leading-[1.85] text-[#55584A]">{a}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function MarcenariaDemo() {
+  const isDesktop = useIsDesktop();
+  const reducedMotion = usePrefersReducedMotion();
+  const heroParallaxRef = useParallax(0.08, isDesktop && !reducedMotion);
+  const bannerParallaxRef = useParallax(0.05, isDesktop && !reducedMotion);
+  const rootRef = useMagnetic();
+  const vagasRestantes = useVagasRestantes(3);
+  const [projetoAberto, setProjetoAberto] = useState<Projeto | null>(null);
+
+  const horizontalScrollRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: horizontalProgress } = useScroll({
+    target: horizontalScrollRef,
+    offset: ["start start", "end end"],
+  });
+  // Traduz a galeria horizontalmente enquanto o container está fixo (300vh = 200vh de área útil)
+  const horizontalX = useTransform(horizontalProgress, [0, 1], ["0%", "-45%"]);
+
+  // Portfólio editável via Notion (CMS leve — ver lib/notion.ts e
+  // docs/cerne-cms-notion.md): busca em /api/cerne-projects ao montar e,
+  // só se vier configurado e com conteúdo, troca o array estático pelo
+  // que o cliente mantém no Notion. Qualquer falha (CMS não configurado,
+  // fora do ar, resposta vazia) mantém PROJETOS_PADRAO — a seção de
+  // portfólio nunca fica vazia nem quebra por causa disso.
+  const [projetos, setProjetos] = useState<Projeto[]>(PROJETOS_PADRAO);
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/cerne-projects')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && data?.configured && Array.isArray(data.projetos) && data.projetos.length > 0) {
+          setProjetos(data.projetos);
+        }
+      })
+      .catch(() => {
+        // silencioso: fica no fallback estático
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <main
+      ref={rootRef}
+      className={`relative min-h-screen w-full max-w-full bg-[#F5F4EE] text-[#2A2C22] ${serif.variable} ${sans.variable}`}
+      style={{ fontFamily: 'var(--font-cerne-sans)' }}
+    >
+      {/* Selo NEURALABS — única menção à marca dentro da demo */}
+      <div className="flex items-center justify-between gap-4 border-b border-[#2A2C22]/10 bg-[#EDECE3] px-5 py-2 text-[11px] tracking-wide text-[#2A2C22]/70 sm:px-8">
+        <span>
+          <span className="text-[#6B7A4E]">✦</span> Demonstração desenvolvida por{' '}
+          <span className="font-semibold text-[#2A2C22]">NEURALABS Studio</span>
+        </span>
+        <Link href="/" className="whitespace-nowrap font-medium hover:text-[#6B7A4E]">
+          ← Voltar
+        </Link>
+      </div>
+
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b border-[#2A2C22]/10 bg-[#F5F4EE]/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-5 sm:px-8">
+          <span
+            className="text-sm uppercase tracking-[0.3em] sm:text-base"
+            style={{ fontFamily: 'var(--font-cerne-serif)' }}
+          >
+            CERNE
+          </span>
+          <nav className="hidden items-center gap-8 text-[12.5px] font-medium tracking-wide text-[#2A2C22]/75 md:flex">
+            <a href="#oficio" className="hover:text-[#6B7A4E]">O Ofício</a>
+            <a href="#portfolio" className="hover:text-[#6B7A4E]">Portfólio</a>
+            <a href="#processo" className="hover:text-[#6B7A4E]">Processo</a>
+            <a href="#faq" className="hover:text-[#6B7A4E]">Perguntas</a>
+          </nav>
+          <a
+            href="#contato"
+            data-magnetic
+            className="inline-flex flex-shrink-0 items-center justify-center whitespace-nowrap rounded-sm border border-[#2A2C22] px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.15em] text-[#2A2C22] transition-colors hover:bg-[#2A2C22] hover:text-[#F5F4EE] sm:px-6 sm:py-3"
+          >
+            Solicitar Consulta
+          </a>
+        </div>
+      </header>
+
+      {/* Hero — split editorial, foto à direita + cartão de vidro com escassez */}
+      <section className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-14 sm:px-8 sm:pt-20 md:grid-cols-[1.05fr_1fr] md:gap-6 md:pb-0">
+        <div className="flex flex-col justify-center py-6 md:py-20">
+          <div className="mb-8 flex items-center gap-3">
+            <span className="h-px w-9 bg-[#6B7A4E]" />
+            <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">
+              Marcenaria &amp; Arquitetura de Interiores
+            </span>
+          </div>
+          <h1
+            className="mb-7 max-w-[500px] text-[42px] leading-[1.08] sm:text-[52px] md:text-[56px]"
+            style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+          >
+            Onde arquitetura<br />
+            <em className="text-[#6B7A4E]" style={{ fontStyle: 'italic' }}>
+              vira marcenaria.
+            </em>
+          </h1>
+          <p className="mb-9 max-w-[380px] text-[13.5px] leading-[1.9] text-[#55584A]">
+            Projetos autorais em madeira e metal para quem trata cada ambiente como peça de
+            arquitetura, não decoração. Do desenho técnico ao acabamento manual, uma equipe só
+            para o seu projeto.
+          </p>
+          <div className="flex flex-wrap items-center gap-6">
+            <a
+              href="#portfolio"
+              className="inline-flex w-fit items-center gap-2 border-b border-[#6B7A4E] pb-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E]"
+            >
+              Ver Portfólio <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+            <a
+              href="#contato"
+              data-magnetic
+              className="inline-flex w-fit items-center gap-2 rounded-sm bg-[#2A2C22] px-6 py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[#F5F4EE] transition-colors hover:bg-[#6B7A4E]"
+            >
+              Solicitar Consulta
+            </a>
+          </div>
+        </div>
+
+        <div className="relative -mx-5 aspect-[4/5] overflow-hidden sm:mx-0 sm:rounded-sm md:aspect-auto md:h-[86vh] md:min-h-[560px]">
+          <div ref={heroParallaxRef} className="absolute inset-0 -top-[6%] h-[112%] w-full">
+            {isDesktop && !reducedMotion ? (
+              // Vídeo real (gerado no Google Flow, imagem-pra-vídeo a partir
+              // do próprio HERO_IMAGE): apara de madeira se desprendendo da
+              // plaina em câmera lenta — assinatura sensorial do craft,
+              // trocando o Ken Burns em CSS. Só desktop: custo de banda de
+              // vídeo não compensa em mobile, mantém o Ken Burns lá (ver
+              // ramo abaixo). Mudo, sem controles, loop contínuo.
+              <video
+                key="hero-video"
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster={HERO_IMAGE}
+                className="h-full w-full object-cover"
+              >
+                <source src="/videos/cerne/hero-shaving.webm" type="video/webm" />
+                <source src="/videos/cerne/hero-shaving.mp4" type="video/mp4" />
+              </video>
+            ) : (
+              // Fallback mobile e prefers-reduced-motion: Ken Burns em CSS
+              // sobre a foto estática — mesma lógica de antes.
+              <div className={reducedMotion ? '' : 'h-full w-full animate-ken-burns'}>
+                <Image
+                  src={HERO_IMAGE}
+                  alt="Ambiente com marcenaria sob medida em tons de madeira, luz natural"
+                  fill
+                  priority
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
+          </div>
+          
+          {/* Arte Algorítmica: Veios de Madeira */}
+          <WoodGrainCanvas />
+
+          {/* Cadeira em wireframe 3D removida do Hero (v4) — a geometria
+              procedural (CerneScene3D) não convenceu depois de duas
+              rodadas de ajuste, e gerar um modelo real via IA (Meshy)
+              esbarrou em paywall tanto na Meshy quanto nas ferramentas
+              de imagem/3D desta sessão. Decisão: manter o Hero só com
+              vídeo + card "Agenda 2026" por ora — mais sóbrio, zero
+              custo, sem elemento "quase certo". CerneScene3D.tsx
+              continua no projeto, pronto pra receber um GLB real via
+              useGLTF quando houver crédito disponível; é só reencaixar
+              este bloco. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F5F4EE]/20 via-transparent to-transparent md:bg-gradient-to-l md:from-transparent md:via-transparent md:to-[#F5F4EE]/10" />
+
+          {/* Cartão de vidro editorial — assinatura de motion da CERNE,
+              equivalente ao card flutuante da Villa Serena, adaptado ao
+              registro claro/linho: escassez de agenda em vez de preço. */}
+          <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-auto sm:w-[260px]">
+            <div
+              className="relative rounded-sm border border-[#2A2C22]/10 bg-[#F5F4EE]/90 p-5 backdrop-blur-xl"
+              style={{ boxShadow: '0 24px 50px -24px rgba(42,44,34,.35)' }}
+            >
+              <div
+                className="pointer-events-none absolute -top-px left-[10%] right-[10%] h-px"
+                style={{ background: 'linear-gradient(90deg,transparent,#6B7A4E,transparent)' }}
+              />
+              <span className="mb-2 flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-[#576141]">
+                <Ruler className="h-3 w-3" /> Agenda 2026
+              </span>
+              <p className="text-[12.5px] leading-[1.6] text-[#2A2C22]">
+                Apenas <b>{vagasRestantes} vagas</b> restantes para novos projetos neste trimestre.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Faixa de materiais — assinatura de motion da CERNE (marquee contínuo) */}
+      <div className="overflow-hidden border-y border-[#2A2C22]/10 bg-[#EDECE3] py-3.5">
+        <div className="flex w-max animate-marquee items-center gap-10 motion-reduce:animate-none">
+          {[...MATERIAIS, ...MATERIAIS].map((m, i) => (
+            <span
+              key={`${m}-${i}`}
+              className="flex items-center gap-10 text-[10.5px] uppercase tracking-[0.2em] text-[#576141]"
+            >
+              {m}
+              <span className="text-[#6B7A4E]/50">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Números — gatilho de autoridade, contam ao entrar na viewport */}
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+        <div className="grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:gap-6">
+          {STATS.map((s, i) => (
+            <ScrollReveal key={s.label} delay={i * 0.08}>
+              <StatCounter value={s.value} suffix={s.suffix} label={s.label} />
+            </ScrollReveal>
+          ))}
+        </div>
+      </section>
+
+      {/* O Ofício (Gapless Bento Grid) */}
+      <section id="oficio" className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-px bg-[#2A2C22]/15 border border-[#2A2C22]/15 rounded-sm overflow-hidden">
+          
+          <div className="md:col-span-2 lg:col-span-2 p-10 lg:p-14 bg-[#F5F4EE] flex flex-col justify-center h-full">
+            <div className="mb-7 flex items-center gap-3">
+              <span className="h-px w-9 bg-[#6B7A4E]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">O Ofício</span>
+            </div>
+            <h2
+              className="mb-6 text-[32px] leading-[1.18] sm:text-[40px]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+            >
+              Cada peça, <em style={{ fontStyle: 'italic', color: '#6B7A4E' }}>um projeto.</em>
+            </h2>
+            <p className="max-w-md text-[13.5px] leading-[1.9] text-[#55584A] mb-5">
+              Não trabalhamos com catálogo. Cada encomenda começa de uma folha em branco — o desenho nasce do espaço, não o contrário.
+            </p>
+            <p className="max-w-md text-[13.5px] leading-[1.9] text-[#55584A]">
+              A CERNE atende um número limitado de projetos por ano, o suficiente para que cada um receba atenção de atelier, não de fábrica.
+            </p>
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full">
+            <Image
+              src={OFICIO_IMAGE}
+              alt="Detalhe de marcenaria"
+              fill
+              className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+            />
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 bg-[#2A2C22] p-10 flex flex-col justify-between text-[#F5F4EE] h-full">
+            <span
+              className="block text-[48px] leading-none text-[#6B7A4E]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic' }}
+            >
+              2011
+            </span>
+            <p className="text-[11px] uppercase tracking-[0.2em] opacity-70">
+              Ano de Fundação
+            </p>
+          </div>
+
+          <div className="md:col-span-2 lg:col-span-3 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full">
+            <Image
+              src={HERO_BANNER_IMAGE}
+              alt="Painel panorâmico"
+              fill
+              className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+            />
+          </div>
+
+          <div className="md:col-span-1 lg:col-span-1 bg-[#EDECE3] p-10 flex items-center justify-center h-full">
+            <span className="text-[14px] uppercase tracking-[0.3em] font-semibold text-[#576141] text-center leading-[1.8]">
+              Artesanato<br/>e Precisão
+            </span>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Quebra panorâmica — respiro editorial entre Ofício e Portfólio,
+          com citação de princípio de projeto sobre a foto (parallax). */}
+      <section className="relative h-[52vh] min-h-[340px] overflow-hidden sm:h-[60vh]">
+        <div ref={bannerParallaxRef} className="absolute inset-0 -top-[10%] h-[130%] w-full">
+          <Image
+            src={HERO_BANNER_IMAGE}
+            alt="Painel panorâmico de marcenaria em madeira, luz lateral"
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/75 via-[#2A2C22]/25 to-[#2A2C22]/10" />
+        <div className="relative flex h-full items-end px-5 pb-10 sm:items-center sm:justify-center sm:px-8 sm:pb-0">
+          <ScrollReveal>
+            <p
+              className="max-w-2xl text-[22px] leading-[1.4] text-[#F5F4EE] sm:text-center sm:text-[30px]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', fontWeight: 400 }}
+            >
+              &ldquo;Arquitetura não termina na planta baixa — termina na textura que a mão
+              sente.&rdquo;
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Trabalhos — Obras (Horizontal Scroll Cinematográfico - Huashu) */}
+      <section id="obras" ref={horizontalScrollRef} className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] h-[300vh]">
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col pt-24 sm:pt-32 px-5 sm:px-8 border-b border-[#2A2C22]/10">
+          
+          <div className="shrink-0 z-20 mb-6">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-px w-9 bg-[#6B7A4E]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Portfólio</span>
+            </div>
+            <h2
+              className="text-[40px] leading-[1.1] sm:text-[50px] whitespace-nowrap"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+            >
+              Galeria de <em className="text-[#6B7A4E] italic">Obras</em>
+            </h2>
+          </div>
+
+          <div className="flex-1 min-h-0 relative">
+            <motion.div 
+              className="flex gap-12 sm:gap-24 px-5 sm:px-[5vw] h-full items-start pt-6"
+              style={{ x: horizontalX }}
+            >
+              {projetos.map((p) => (
+                <div key={p.idx} className="w-[85vw] sm:w-[45vw] lg:w-[30vw] shrink-0 relative group">
+                  <div className="relative aspect-[4/5] overflow-hidden border border-[#2A2C22]/20 mb-6">
+                    <Image
+                      src={p.img}
+                      alt={p.nome}
+                      fill
+                      sizes="(min-width: 768px) 35vw, 85vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  </div>
+                  
+                  <div className="flex items-baseline gap-3 mb-2 border-b border-[#2A2C22]/10 pb-2">
+                    <span className="text-[11px] font-bold text-[#6B7A4E]">{p.idx}</span>
+                    <span className="text-[11px] text-[#55584A] uppercase tracking-widest">{p.ano}</span>
+                  </div>
+                  
+                  <h3
+                    className="mb-2 text-[24px] leading-tight text-[#2A2C22]"
+                    style={{ fontFamily: 'var(--font-cerne-serif)' }}
+                  >
+                    {p.nome}
+                  </h3>
+                  <p className="mb-6 text-[11px] uppercase tracking-widest text-[#5C5147]">{p.local}</p>
+                  
+                  <button
+                    type="button"
+                    onClick={() => setProjetoAberto(p)}
+                    className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E] transition-colors"
+                  >
+                    Ver Ficha Técnica <ArrowUpRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Processo (Card Stacking ScrollTrigger) */}
+      <section id="processo" className="relative px-5 py-24 sm:px-8 md:py-32 bg-[#F5F4EE]">
+        <div className="mx-auto max-w-4xl relative">
+          
+          <div className="mb-16 text-center">
+            <div className="mb-6 flex items-center justify-center gap-3">
+              <span className="h-px w-9 bg-[#6B7A4E]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Como Funciona</span>
+              <span className="h-px w-9 bg-[#6B7A4E]" />
+            </div>
+            <h2
+              className="text-[40px] leading-[1.1] sm:text-[56px]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+            >
+              Do desenho à instalação
+            </h2>
+          </div>
+
+          <div className="relative">
+            {ETAPAS.map((e, i) => (
+              <div 
+                key={e.n} 
+                className="sticky top-32 w-full pt-4 h-[60vh] sm:h-[50vh]"
+                style={{ zIndex: i + 10 }}
+              >
+                <div
+                  className="relative overflow-hidden rounded-sm border border-[#2A2C22]/15 bg-[#EDECE3] p-8 md:p-14 shadow-[0_-10px_40px_rgba(42,44,34,0.15)]"
+                  style={{ transform: `scale(${1 - (ETAPAS.length - 1 - i) * 0.02})` }}
+                >
+                  <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
+                    <span
+                      className="text-[80px] leading-none text-[#6B7A4E] shrink-0"
+                      style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', opacity: 0.4 }}
+                    >
+                      {e.n}
+                    </span>
+                    <div className="flex-1">
+                      <h3 className="mb-4 text-[24px] font-medium text-[#2A2C22] tracking-wide">{e.title}</h3>
+                      <p className="text-[15px] leading-[1.9] text-[#55584A]">{e.body}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* Depoimento — credibilidade entre pares (arquiteto) */}
+      <section className="border-t border-[#2A2C22]/10 bg-[#EDECE3] px-5 py-24 sm:px-8 sm:py-28">
+        <ScrollReveal>
+          <div className="mx-auto max-w-2xl text-center">
+            <p
+              className="mb-8 text-[22px] leading-[1.5] sm:text-[26px]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', fontWeight: 400 }}
+            >
+              &ldquo;A CERNE é a única marcenaria que indico sem ressalva para projetos
+              autorais. Eles desenham junto, não só executam — o resultado final sempre bate
+              exatamente com o que foi especificado em projeto.&rdquo;
+            </p>
+            <p className="text-[11.5px] uppercase tracking-[0.2em] text-[#576141]">
+              Renata Xavier — Arquiteta, RX Arquitetura
+            </p>
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* FAQ — redução de fricção antes do CTA final */}
+      <section id="faq" className="mx-auto max-w-3xl px-5 py-24 sm:px-8 sm:py-28">
+        <ScrollReveal>
+          <div className="mb-12 max-w-lg">
+            <div className="mb-7 flex items-center gap-3">
+              <span className="h-px w-9 bg-[#6B7A4E]" />
+              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Perguntas Frequentes</span>
+            </div>
+            <h2
+              className="text-[30px] leading-[1.18] sm:text-[36px]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+            >
+              Antes de conversarmos
+            </h2>
+          </div>
+        </ScrollReveal>
+        <ScrollReveal>
+          <div>
+            {FAQ.map((f, i) => (
+              <FaqItem key={f.q} q={f.q} a={f.a} defaultOpen={i === 0} />
+            ))}
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* Contato — formulário real (Resend, ver app/api/send-email/route.ts,
+          source: 'cerne') com validação, honeypot, rate limit e checkbox de
+          consentimento LGPD, + WhatsApp como alternativa rápida ao lado. */}
+      <section id="contato" className="mx-auto max-w-3xl px-5 py-24 sm:px-8 sm:py-28">
+        <ScrollReveal>
+          <div className="mb-10 text-center">
+            <span className="mb-4 block text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">
+              Agenda Limitada
+            </span>
+            <h2
+              className="mb-5 text-[30px] leading-[1.18] sm:text-[36px]"
+              style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
+            >
+              Vamos conversar sobre o seu projeto
+            </h2>
+            <p className="mx-auto max-w-md text-[13.5px] leading-[1.9] text-[#55584A]">
+              Atendemos um número limitado de projetos por trimestre. Conte um pouco sobre o
+              espaço e a ideia — respondemos pessoalmente em até um dia útil.
+            </p>
+          </div>
+        </ScrollReveal>
+        <ScrollReveal>
+          <CerneContactForm />
+        </ScrollReveal>
+        <ScrollReveal>
+          <p className="mt-10 text-center text-[11px] uppercase tracking-[0.16em] text-[#576141]/80">
+            Atendemos Rio Grande do Sul · Santa Catarina · Paraná
+          </p>
+        </ScrollReveal>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-[#2A2C22]/10 px-5 py-10 sm:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center">
+          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11.5px] font-medium tracking-wide text-[#2A2C22]/70">
+            <a href="#oficio" className="hover:text-[#6B7A4E]">O Ofício</a>
+            <a href="#portfolio" className="hover:text-[#6B7A4E]">Portfólio</a>
+            <a href="#processo" className="hover:text-[#6B7A4E]">Processo</a>
+            <a href="#faq" className="hover:text-[#6B7A4E]">Perguntas</a>
+          </nav>
+          <p className="text-[11px] text-[#2A2C22]/45">
+            Projeto fictício de demonstração criado por{' '}
+            <Link href="/" className="underline hover:text-[#6B7A4E]">
+              NEURALABS
+            </Link>
+            . Marca, fotos e depoimentos são ilustrativos.
+          </p>
+        </div>
+      </footer>
+
+      {/* Botão flutuante de voltar */}
+      <Link
+        href="/"
+        className="fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 rounded-full border border-[#2A2C22]/15 bg-[#F5F4EE]/95 px-4 py-3 text-xs font-semibold text-[#2A2C22] shadow-lg backdrop-blur-md transition-colors hover:bg-[#F5F4EE] sm:px-5 sm:text-sm"
+      >
+        <ArrowLeft className="h-4 w-4 flex-shrink-0" />
+        <span className="hidden sm:inline">Voltar para NEURALABS Studio</span>
+        <span className="sm:hidden">NEURALABS</span>
+      </Link>
+
+      <ProjetoModal projeto={projetoAberto} onClose={() => setProjetoAberto(null)} />
+    </main>
+  );
+}
+
+/** Modal de detalhe do projeto — abre com os mesmos dados já usados no
+ * card (PROJETOS_PADRAO ou Notion), reaproveitando o conteúdo em vez de
+ * exigir uma rota nova por projeto. Fecha por ESC, clique no fundo ou no
+ * botão de fechar. */
+function ProjetoModal({ projeto, onClose }: { projeto: Projeto | null; onClose: () => void }) {
+  useEffect(() => {
+    if (!projeto) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [projeto, onClose]);
+
+  if (!projeto) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={projeto.nome}
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-[#2A2C22]/60 p-4 backdrop-blur-sm sm:p-8"
+      onClick={onClose}
+    >
+      <div
+        className="relative grid max-h-[88vh] w-full max-w-3xl grid-cols-1 overflow-y-auto rounded-sm bg-[#F5F4EE] sm:grid-cols-2"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Fechar"
+          className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-[#F5F4EE]/90 text-[#2A2C22] shadow-md backdrop-blur-sm hover:bg-[#F5F4EE]"
+        >
+          <Minus className="h-4 w-4 rotate-45" />
+        </button>
+        <div className="relative aspect-[4/5] sm:aspect-auto">
+          <Image src={projeto.img} alt={projeto.nome} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
+        </div>
+        <div className="flex flex-col justify-center p-7 sm:p-9">
+          <span className="text-[11px] text-[#6B7A4E]">{projeto.idx} — {projeto.ano}</span>
+          <h3
+            className="mb-3 mt-2 text-[26px] leading-tight"
+            style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', fontWeight: 400 }}
+          >
+            {projeto.nome}
+          </h3>
+          <p className="mb-4 text-[12.5px] text-[#5C5147]">{projeto.local}</p>
+          {projeto.descricao && (
+            <p className="mb-5 text-[13.5px] leading-[1.85] text-[#55584A]">{projeto.descricao}</p>
+          )}
+          <div className="flex flex-wrap gap-2">
+            {projeto.materiais.map((m) => (
+              <span
+                key={m}
+                className="rounded-full border border-[#2A2C22]/15 px-3 py-1 text-[10.5px] uppercase tracking-[0.12em] text-[#576141]"
+              >
+                {m}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

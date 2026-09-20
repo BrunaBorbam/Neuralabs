@@ -1,0 +1,204 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Lock } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
+import { DemoVillaSerena, DemoCerne, DemoArdosia, DemoEcommerce } from '../HeroDemos';
+
+// Same AI-generated editorial set used in Nichos (public/images/verticals),
+// copied here rather than hotlinked from Unsplash: one less third-party
+// origin on the page's LCP image, and a consistent visual identity between
+// the Hero mockup and the Nichos cards instead of two unrelated stock-photo
+// styles.
+const TAB_IMAGES = [
+  '/images/hero-studio/airbnb.jpg',
+  '/images/hero-studio/marcenaria.jpg',
+  '/images/hero-studio/gastronomia.jpg',
+  '/images/hero-studio/ecommerce.jpg',
+];
+
+export const HeroStudioMockup = () => {
+  const { t } = useLanguage();
+  const [active, setActive] = useState(0);
+  const tabs = t.heroStudio.tabs;
+  const activeTab = tabs[active];
+
+  return (
+    <div className="relative min-w-0">
+      <motion.div
+        className="hidden sm:flex absolute -top-5 left-8 z-20 items-center gap-2 px-4 py-2 rounded-full bg-obsidian-800/90 border border-pearl-100/15 backdrop-blur-md text-xs font-semibold text-pearl-100 shadow-lg whitespace-nowrap"
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        {t.heroStudio.badgeSpeed}
+      </motion.div>
+
+      <motion.div
+        className="hidden sm:flex absolute -bottom-5 right-8 z-20 items-center gap-2 px-4 py-2 rounded-full bg-obsidian-800/90 border border-blush-500/25 backdrop-blur-md text-xs font-semibold text-blush-200 shadow-lg whitespace-nowrap"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+      >
+        {t.heroStudio.badgeNeuro}
+      </motion.div>
+
+      <div className="w-full max-w-full bg-[#121019]/90 border border-white/10 rounded-2xl overflow-hidden shadow-2xl shadow-black/90">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+          <div className="flex gap-1.5 flex-shrink-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
+            <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
+            <span className="w-2.5 h-2.5 rounded-full bg-pearl-200/50" />
+          </div>
+          {/* min-w-0 lets this flex child actually shrink below its content
+              width so overflow-x-auto kicks in instead of stretching the
+              card; the gradient overlay hints more tabs are scrollable
+              off-screen, since the cut-off icon alone read as a layout bug
+              on mobile rather than an intentional scroll strip. */}
+          <div className="relative min-w-0 flex-1">
+            <div className="flex flex-nowrap gap-1.5 overflow-x-auto scrollbar-none py-1">
+              {tabs.map((tab, idx) => (
+                <button
+                  key={tab.label}
+                  type="button"
+                  onClick={() => setActive(idx)}
+                  className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                    idx === active
+                      ? 'bg-gold-500/15 border border-gold-500/40 text-pearl-100'
+                      : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'
+                  }`}
+                >
+                  <span>{tab.emoji}</span>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#121019] to-transparent" />
+          </div>
+        </div>
+
+        {/* Fake browser address bar — the single cheapest, most reliable
+            signal that this panel is "a website open in a browser" rather
+            than a photo with a caption on top. Direct feedback: the panel
+            didn't read as "isto é um site" at a glance. */}
+        <div className="flex items-center gap-2 px-4 py-2 border-b border-white/10 bg-obsidian-900/40">
+          <Lock className="w-3 h-3 text-pearl-300/40 flex-shrink-0" />
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={active}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="text-[11px] text-pearl-300/50 truncate"
+            >
+              {activeTab.domain}
+            </motion.span>
+          </AnimatePresence>
+        </div>
+
+        <div className="relative aspect-[4/3] sm:aspect-video overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="absolute inset-0"
+            >
+              {/* Slow continuous zoom (Ken Burns) instead of a static
+                  screenshot — the panel is meant to hint at the motion/3D
+                  craft the agency actually builds (see the Nichos hover
+                  cards and the Hero's own glass sphere), not read as a flat
+                  tab-switcher template. */}
+              <motion.div
+                className="absolute inset-0"
+                initial={{ scale: 1.02 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 6, ease: 'easeOut' }}
+              >
+                {active === 0 && <DemoVillaSerena />}
+                {active === 1 && <DemoCerne />}
+                {active === 2 && <DemoArdosia />}
+                {active === 3 && <DemoEcommerce />}
+              </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/90 via-obsidian-900/20 to-transparent" />
+
+              {/* Same honesty standard as the Nichos cards: this mockup and
+                  its metrics are an illustrative concept, not a real client
+                  result, so it carries the same disclosure they do. */}
+              <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-obsidian-900/70 border border-pearl-100/15 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-wide text-pearl-300/80">
+                {t.verticals.conceptTag}
+              </span>
+
+              <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between gap-4">
+                <div>
+                  <p className="text-sm md:text-base font-semibold text-pearl-100 mb-3 max-w-[220px] leading-snug">
+                    {activeTab.headline}
+                  </p>
+                  <span className="inline-block px-4 py-2 rounded-lg bg-gold-500 text-obsidian-900 text-xs font-bold">
+                    {activeTab.cta}
+                  </span>
+                </div>
+
+                <div className="rounded-lg bg-obsidian-900/70 border border-pearl-100/10 backdrop-blur-md px-3 py-2 text-right flex-shrink-0">
+                  <p className="text-[10px] uppercase tracking-wide text-pearl-300/60 mb-0.5 whitespace-nowrap">
+                    {activeTab.metricLabel}
+                  </p>
+                  <p className="text-sm font-bold text-gold-300">{activeTab.metricValue}</p>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Responsive phone mockup, overlapping the desktop panel's corner.
+          The address bar already signals "this is a website", but the
+          single most recognizable visual shorthand for "we build websites"
+          (as opposed to "we sell one nice photo") is showing the SAME
+          product responsive across devices — the classic agency-portfolio
+          cue. Mirrors the active tab so the two frames always tell the
+          same story. Hidden on small screens: there's no spare room next
+          to an already phone-width panel, and the badges follow the same
+          sm-and-up rule. */}
+      <motion.div
+        className="hidden sm:block absolute -bottom-10 md:-bottom-14 -left-10 md:-left-16 z-20 w-16 md:w-20"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="rounded-[1.2rem] border-4 border-obsidian-800 bg-obsidian-800 shadow-2xl shadow-black/90 overflow-hidden">
+          {/* Notch */}
+          <div className="relative h-3 bg-obsidian-800 flex items-center justify-center">
+            <div className="w-6 h-1 rounded-full bg-obsidian-600" />
+          </div>
+          <div className="relative aspect-[9/17] overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0"
+              >
+                <div className="absolute inset-0 pointer-events-none origin-top-left scale-[0.4] w-[250%] h-[250%]">
+                  {active === 0 && <DemoVillaSerena />}
+                  {active === 1 && <DemoCerne />}
+                  {active === 2 && <DemoArdosia />}
+                  {active === 3 && <DemoEcommerce />}
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian-900/85 via-transparent to-obsidian-900/10" />
+                <span className="absolute inset-x-1.5 bottom-1.5 px-1.5 py-1 rounded bg-gold-500 text-obsidian-900 text-[8px] font-bold text-center leading-none">
+                  {activeTab.cta}
+                </span>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};

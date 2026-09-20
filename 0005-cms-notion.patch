@@ -1,0 +1,445 @@
+From 8130a03752aef61016b1e6454a5724358947b306 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 11 Sep 2026 13:06:50 +0000
+Subject: [PATCH] =?UTF-8?q?feat:=20adiciona=20CMS=20leve=20via=20Notion=20?=
+ =?UTF-8?q?pro=20portf=C3=B3lio=20da=20demo=20CERNE?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Deixa o cliente editar os projetos do portfólio (nome, local, ano,
+materiais, descrição, foto, destaque, publicar/ocultar) direto numa
+database do Notion, sem mexer em código e sem precisar de novo deploy a
+cada alteração — pensado como padrão de referência pra dar autonomia de
+conteúdo a clientes reais.
+
+- lib/notion.ts: busca a database via API do Notion (fluxo
+  database → data source → query, API 2025-09-03), com fallback seguro
+  (retorna null em qualquer falha/config ausente).
+- app/api/cerne-projects: endpoint que o client component consulta ao
+  montar; site continua no conteúdo estático (PROJETOS_PADRAO) se o CMS
+  não estiver configurado ou a busca falhar — nunca quebra por isso.
+- app/api/cerne-photo/[pageId]: proxy de imagem que busca a foto atual no
+  Notion e repassa os bytes pela própria origem, em vez de expor a URL
+  assinada do Notion (expira em ~1h) direto no HTML.
+- docs/cerne-cms-notion.md: passo a passo completo de configuração
+  (criar integração, montar a database com as colunas exatas, obter as
+  chaves, configurar na Vercel) e como replicar o padrão pra cada cliente
+  real.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016gJcn5W4c85HuUXZs4RVHz
+---
+ .env.local.example                    |   6 ++
+ app/api/cerne-photo/[pageId]/route.ts |  35 +++++++
+ app/api/cerne-projects/route.ts       |  16 ++++
+ app/demo/marcenaria/page.tsx          |  46 ++++++++-
+ docs/cerne-cms-notion.md              |  96 +++++++++++++++++++
+ lib/notion.ts                         | 128 ++++++++++++++++++++++++++
+ 6 files changed, 324 insertions(+), 3 deletions(-)
+ create mode 100644 app/api/cerne-photo/[pageId]/route.ts
+ create mode 100644 app/api/cerne-projects/route.ts
+ create mode 100644 docs/cerne-cms-notion.md
+ create mode 100644 lib/notion.ts
+
+diff --git a/.env.local.example b/.env.local.example
+index 1cc6486..b5e67e9 100644
+--- a/.env.local.example
++++ b/.env.local.example
+@@ -12,3 +12,9 @@ RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxx
+ # servidor (app/api/send-email/route.ts) — não precisa, e não deve, ir
+ # parar no JavaScript que o navegador do visitante baixa.
+ CONTACT_EMAIL=seu-email@example.com
++
++# Notion como CMS do portfólio da demo CERNE (opcional — sem essas duas
++# variáveis o site usa o conteúdo estático normalmente).
++# Passo a passo completo: docs/cerne-cms-notion.md
++NOTION_API_KEY=ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
++NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+diff --git a/app/api/cerne-photo/[pageId]/route.ts b/app/api/cerne-photo/[pageId]/route.ts
+new file mode 100644
+index 0000000..27fc1dd
+--- /dev/null
++++ b/app/api/cerne-photo/[pageId]/route.ts
+@@ -0,0 +1,35 @@
++import { NextRequest } from 'next/server';
++import { fetchNotionPagePhotoUrl } from '@/lib/notion';
++
++// Proxy de imagem: o HTML nunca referencia a URL assinada do Notion
++// diretamente (ela expira em ~1h e trocaria o CSP do site pra liberar o
++// domínio da AWS/Notion à toa). Em vez disso, <Image src="/api/cerne-photo/<id>">
++// aponta pra cá — mesma origem, satisfaz o CSP de img-src 'self' sem
++// mudar nada nele — e a gente busca a foto atual no Notion e repassa os
++// bytes, com um Cache-Control curto o bastante pra nunca servir uma URL
++// já expirada.
++export async function GET(
++  _req: NextRequest,
++  { params }: { params: Promise<{ pageId: string }> }
++) {
++  const { pageId } = await params;
++
++  const photoUrl = await fetchNotionPagePhotoUrl(pageId);
++  if (!photoUrl) {
++    return new Response('Not found', { status: 404 });
++  }
++
++  const upstream = await fetch(photoUrl);
++  if (!upstream.ok || !upstream.body) {
++    return new Response('Upstream error', { status: 502 });
++  }
++
++  return new Response(upstream.body, {
++    headers: {
++      'Content-Type': upstream.headers.get('content-type') || 'image/jpeg',
++      // 30min: seguro dentro da janela de validade da URL assinada do
++      // Notion (~1h) e evita rebater na API do Notion a cada carregamento.
++      'Cache-Control': 'public, max-age=1800, s-maxage=1800',
++    },
++  });
++}
+diff --git a/app/api/cerne-projects/route.ts b/app/api/cerne-projects/route.ts
+new file mode 100644
+index 0000000..ef713a1
+--- /dev/null
++++ b/app/api/cerne-projects/route.ts
+@@ -0,0 +1,16 @@
++import { NextResponse } from 'next/server';
++import { fetchCerneProjetos } from '@/lib/notion';
++
++// Endpoint público e read-only: devolve os projetos do portfólio vindos do
++// Notion (quando configurado) pro grid da demo CERNE. `configured: false`
++// sinaliza pro cliente (ver useEffect em app/demo/marcenaria/page.tsx) que
++// não há CMS ligado ainda, mantendo o array estático como conteúdo real.
++export async function GET() {
++  const projetos = await fetchCerneProjetos();
++
++  if (!projetos) {
++    return NextResponse.json({ configured: false, projetos: [] });
++  }
++
++  return NextResponse.json({ configured: true, projetos });
++}
+diff --git a/app/demo/marcenaria/page.tsx b/app/demo/marcenaria/page.tsx
+index e4e4f50..d8720ac 100644
+--- a/app/demo/marcenaria/page.tsx
++++ b/app/demo/marcenaria/page.tsx
+@@ -71,6 +71,18 @@
+  * checkbox de consentimento LGPD obrigatório com link pra /privacy — ver
+  * components/CerneContactForm.tsx. Pensado como o padrão de referência
+  * pra reaproveitar em formulários de clientes reais.
++ *
++ * Portfólio editável sem código — CMS leve via Notion (opcional, ver
++ * docs/cerne-cms-notion.md pro passo a passo): sem NOTION_API_KEY/
++ * NOTION_DATABASE_ID configuradas, o portfólio usa PROJETOS_PADRAO abaixo
++ * normalmente. Configurando, o useEffect logo no início do componente
++ * busca em /api/cerne-projects (lib/notion.ts) e troca pelo conteúdo que
++ * o cliente mantém numa database do Notion — sem precisar de novo deploy
++ * a cada alteração. As fotos passam por um proxy próprio
++ * (/api/cerne-photo/[pageId]) em vez de expor a URL assinada do Notion
++ * (que expira em ~1h) direto no HTML. Pensado como o padrão de
++ * referência pra dar autonomia de conteúdo a clientes reais sem abrir
++ * mão do layout/motion/3D controlados por código.
+  */
+ 
+ import { useEffect, useRef, useState } from 'react';
+@@ -117,7 +129,11 @@ type Projeto = {
+   featured?: boolean;
+ };
+ 
+-const PROJETOS: Projeto[] = [
++// Conteúdo estático de referência — usado direto enquanto nenhum CMS está
++// ligado, e como fallback se a busca no Notion falhar (ver useEffect mais
++// abaixo, com fetch em /api/cerne-projects). Nunca deixa a seção de
++// portfólio vazia por causa de configuração pendente ou fora do ar.
++const PROJETOS_PADRAO: Projeto[] = [
+   {
+     idx: '01',
+     nome: 'Biblioteca em Nogueira',
+@@ -370,6 +386,30 @@ export default function MarcenariaDemo() {
+   const bannerParallaxRef = useParallax(0.05, isDesktop && !reducedMotion);
+   const rootRef = useMagnetic();
+ 
++  // Portfólio editável via Notion (CMS leve — ver lib/notion.ts e
++  // docs/cerne-cms-notion.md): busca em /api/cerne-projects ao montar e,
++  // só se vier configurado e com conteúdo, troca o array estático pelo
++  // que o cliente mantém no Notion. Qualquer falha (CMS não configurado,
++  // fora do ar, resposta vazia) mantém PROJETOS_PADRAO — a seção de
++  // portfólio nunca fica vazia nem quebra por causa disso.
++  const [projetos, setProjetos] = useState<Projeto[]>(PROJETOS_PADRAO);
++  useEffect(() => {
++    let cancelled = false;
++    fetch('/api/cerne-projects')
++      .then((res) => res.json())
++      .then((data) => {
++        if (!cancelled && data?.configured && Array.isArray(data.projetos) && data.projetos.length > 0) {
++          setProjetos(data.projetos);
++        }
++      })
++      .catch(() => {
++        // silencioso: fica no fallback estático
++      });
++    return () => {
++      cancelled = true;
++    };
++  }, []);
++
+   return (
+     <main
+       ref={rootRef}
+@@ -653,7 +693,7 @@ export default function MarcenariaDemo() {
+           </ScrollReveal>
+ 
+           {/* Case em destaque */}
+-          {PROJETOS.filter((p) => p.featured).map((p) => (
++          {projetos.filter((p) => p.featured).map((p) => (
+             <ScrollReveal key={p.idx}>
+               <div className="mb-20 grid gap-10 md:grid-cols-2 md:gap-4">
+                 <div className="group relative aspect-[4/5] overflow-hidden sm:rounded-sm md:aspect-auto">
+@@ -707,7 +747,7 @@ export default function MarcenariaDemo() {
+ 
+           {/* Grid dos demais projetos */}
+           <div className="grid gap-x-8 gap-y-16 sm:grid-cols-3">
+-            {PROJETOS.filter((p) => !p.featured).map((p, i) => (
++            {projetos.filter((p) => !p.featured).map((p, i) => (
+               <ScrollReveal key={p.idx} delay={i * 0.06}>
+                 <div className="group">
+                   <div className="relative mb-5 aspect-[4/5] overflow-hidden sm:rounded-sm">
+diff --git a/docs/cerne-cms-notion.md b/docs/cerne-cms-notion.md
+new file mode 100644
+index 0000000..e1a4e40
+--- /dev/null
++++ b/docs/cerne-cms-notion.md
+@@ -0,0 +1,96 @@
++# CMS do portfólio via Notion — CERNE (e modelo pra clientes reais)
++
++> Isso é opcional: sem configurar nada, a demo CERNE continua funcionando
++> normalmente com as fotos e textos fixos no código. Configure só quando
++> quiser que alguém (você ou um cliente) edite os projetos do portfólio
++> sem mexer em código.
++
++## O que isso faz
++
++A seção "Projetos recentes" do portfólio passa a ler os cards (nome,
++local, ano, materiais, descrição, foto, se é o "projeto em destaque", se
++está publicado) de uma database do Notion, em vez do array fixo no
++`page.tsx`. Quem tiver acesso à database edita lá — adiciona linha, troca
++foto, marca/desmarca "Publicar" — e o site atualiza sozinho, sem precisar
++de novo deploy.
++
++Se as variáveis de ambiente não estiverem configuradas (ou o Notion
++estiver fora do ar num momento específico), o site cai de volta pro
++conteúdo fixo automaticamente — nunca quebra por causa disso.
++
++## Passo 1 — Criar a integração no Notion
++
++1. Acesse [notion.so/my-integrations](https://www.notion.so/my-integrations)
++   (logada na conta/workspace onde vai ficar a database).
++2. **New integration** → dê um nome (ex.: "CERNE — Site").
++3. Em **Capabilities**, deixe marcado só **Read content** (não precisa de
++   escrita — o site só lê).
++4. Salve e copie o **Internal Integration Secret** (começa com `ntn_...`
++   ou `secret_...`). Isso vai virar `NOTION_API_KEY`.
++
++## Passo 2 — Criar a database
++
++Crie uma página no Notion do tipo **database** (tabela) com exatamente
++estas colunas (nome e tipo importam — o site procura por esses nomes):
++
++| Coluna | Tipo | Uso |
++|---|---|---|
++| `Nome` | Título (padrão) | Nome do projeto |
++| `Local` | Texto | Ex.: "Residência Privada · Porto Alegre" |
++| `Ano` | Texto | Ex.: "2025" |
++| `Materiais` | Seleção múltipla | Ex.: Nogueira maciça, Latão escovado |
++| `Descrição` | Texto | Só é usada no card "em destaque" |
++| `Foto` | Arquivo e mídia | Arraste a foto direto pra célula |
++| `Destaque` | Caixa de seleção | Marque em só um projeto — vira o card grande |
++| `Publicar` | Caixa de seleção | Desmarcada = some do site (rascunho) |
++| `Ordem` | Número | Define a ordem dos cards (1, 2, 3...) |
++
++Dica: cria a primeira linha já preenchida com um projeto de teste antes
++de seguir pro próximo passo, pra validar mais rápido.
++
++## Passo 3 — Compartilhar a database com a integração
++
++Na própria database, clique em **⋯** (canto superior direito) →
++**Connections** (ou "Conexões") → adicione a integração que você criou no
++Passo 1. Sem isso, a API não enxerga a database mesmo com a chave certa.
++
++## Passo 4 — Pegar o ID da database
++
++Abra a database em tela cheia no navegador. A URL fica assim:
++
++```
++https://www.notion.so/<workspace>/<NOME-DA-DATABASE>-1a2b3c4d5e6f7g8h9i0j...
++```
++
++O `NOTION_DATABASE_ID` é o trecho de 32 caracteres (letras e números) no
++final da URL, antes de qualquer `?v=...`.
++
++## Passo 5 — Configurar na Vercel
++
++No projeto da CERNE (ou do cliente) na Vercel: **Settings → Environment
++Variables** → adicione:
++
++- `NOTION_API_KEY` = o segredo do Passo 1
++- `NOTION_DATABASE_ID` = o ID do Passo 4
++
++Marque pra pelo menos **Production**. Depois, force um novo deploy (ou
++espere o próximo push) pra elas entrarem em efeito.
++
++## Usando no dia a dia
++
++Quem tiver acesso à database no Notion edita normalmente: nova linha =
++novo projeto no site, desmarcar "Publicar" = esconder sem apagar, marcar
++"Destaque" = vira o card grande do portfólio. Não precisa mexer em código
++nem pedir novo deploy pra mim — a próxima vez que alguém abrir o site, já
++aparece atualizado.
++
++## Reaproveitando pra clientes reais
++
++Esse é o padrão de referência: pra cada cliente novo, a ideia é duplicar
++essa mesma estrutura de database (Nome, Local, Ano, Materiais, Descrição,
++Foto, Destaque, Publicar, Ordem) dentro do Notion dele (ou numa página
++compartilhada com ele dentro do seu workspace), repetir os passos 1–5
++apontando pro `NOTION_DATABASE_ID` daquele cliente, e pronto — ele edita
++o próprio conteúdo sem depender de você pra cada alteração pequena.
++Mudanças de layout, motion ou 3D continuam exigindo código — isso aqui
++resolve só o conteúdo (fotos e texto dos projetos).
+diff --git a/lib/notion.ts b/lib/notion.ts
+new file mode 100644
+index 0000000..651db2e
+--- /dev/null
++++ b/lib/notion.ts
+@@ -0,0 +1,128 @@
++/**
++ * Notion como CMS leve — deixa um cliente (não-programador) editar os
++ * projetos do portfólio da CERNE direto numa planilha/database do Notion,
++ * sem tocar em código. Ver docs/cerne-cms-notion.md para o passo a passo
++ * de configuração (criar a integração, montar a database, variáveis de
++ * ambiente na Vercel).
++ *
++ * Se NOTION_API_KEY / NOTION_DATABASE_ID não estiverem configuradas (ou
++ * qualquer chamada à API do Notion falhar), fetchCerneProjetos retorna
++ * null — quem chama cai de volta pro array estático de PROJETOS_PADRAO em
++ * app/demo/marcenaria/page.tsx. Isso é proposital: um site real nunca deve
++ * quebrar porque o CMS está fora do ar ou ainda não foi configurado.
++ *
++ * API do Notion 2025-09-03+: databases e data sources são coisas
++ * separadas agora (uma database pode ter múltiplas data sources) — por
++ * isso o fluxo é sempre "pega a database, pega a data source dela, só
++ * então consulta". Ver https://developers.notion.com/docs/upgrade-guide-2025-09-03.
++ */
++
++const NOTION_VERSION = '2025-09-03';
++
++async function notionFetch(path: string, init?: RequestInit) {
++  const res = await fetch(`https://api.notion.com/v1/${path}`, {
++    ...init,
++    headers: {
++      Authorization: `Bearer ${process.env.NOTION_API_KEY}`,
++      'Notion-Version': NOTION_VERSION,
++      'Content-Type': 'application/json',
++      ...(init?.headers ?? {}),
++    },
++    // Nunca cachear: os campos "Files & media" do Notion viram URLs
++    // assinadas que expiram (~1h). Buscar sempre ao vivo garante que a URL
++    // devolvida esteja válida no momento do uso — ver também o proxy de
++    // foto em app/api/cerne-photo/[pageId]/route.ts, que resolve isso de
++    // vez servindo a imagem pelo nosso próprio domínio.
++    cache: 'no-store',
++  });
++  if (!res.ok) {
++    throw new Error(`Notion API ${res.status}: ${await res.text()}`);
++  }
++  return res.json();
++}
++
++type NotionProperty = any;
++
++const richText = (prop: NotionProperty): string =>
++  (prop?.rich_text ?? []).map((t: any) => t.plain_text).join('');
++
++const titleText = (prop: NotionProperty): string =>
++  (prop?.title ?? []).map((t: any) => t.plain_text).join('');
++
++export const fileUrl = (prop: NotionProperty): string => {
++  const file = prop?.files?.[0];
++  if (!file) return '';
++  return file.type === 'external' ? file.external?.url ?? '' : file.file?.url ?? '';
++};
++
++export type CerneProjeto = {
++  idx: string;
++  nome: string;
++  local: string;
++  ano: string;
++  materiais: string[];
++  img: string;
++  descricao?: string;
++  featured?: boolean;
++};
++
++async function getDataSourceId(databaseId: string): Promise<string | null> {
++  const db = await notionFetch(`databases/${databaseId}`);
++  return db.data_sources?.[0]?.id ?? null;
++}
++
++/** Busca os projetos publicados na database do Notion, prontos pro grid do portfólio. */
++export async function fetchCerneProjetos(): Promise<CerneProjeto[] | null> {
++  if (!process.env.NOTION_API_KEY || !process.env.NOTION_DATABASE_ID) {
++    return null;
++  }
++
++  try {
++    const dataSourceId = await getDataSourceId(process.env.NOTION_DATABASE_ID);
++    if (!dataSourceId) return null;
++
++    const result = await notionFetch(`data_sources/${dataSourceId}/query`, {
++      method: 'POST',
++      body: JSON.stringify({
++        sorts: [{ property: 'Ordem', direction: 'ascending' }],
++      }),
++    });
++
++    const projetos: CerneProjeto[] = (result.results ?? [])
++      .filter((page: any) => page.properties?.Publicar?.checkbox !== false)
++      .map((page: any, i: number) => {
++        const p = page.properties ?? {};
++        return {
++          idx: String(i + 1).padStart(2, '0'),
++          nome: titleText(p.Nome),
++          local: richText(p.Local),
++          ano: richText(p.Ano),
++          materiais: (p.Materiais?.multi_select ?? []).map((m: any) => m.name),
++          // Aponta pro nosso proxy (mesma origem), não pra URL assinada do
++          // Notion direto — ver app/api/cerne-photo/[pageId]/route.ts.
++          img: fileUrl(p.Foto) ? `/api/cerne-photo/${page.id}` : '',
++          descricao: richText(p.Descrição) || undefined,
++          featured: p.Destaque?.checkbox ?? false,
++        };
++      })
++      .filter((p: CerneProjeto) => p.nome && p.img);
++
++    return projetos.length > 0 ? projetos : null;
++  } catch (err) {
++    console.error('[notion] Erro ao buscar projetos da CERNE:', err);
++    return null;
++  }
++}
++
++/** Busca a URL de foto (assinada, válida no momento) de uma página específica. */
++export async function fetchNotionPagePhotoUrl(pageId: string): Promise<string | null> {
++  if (!process.env.NOTION_API_KEY) return null;
++  try {
++    const page = await notionFetch(`pages/${pageId}`);
++    const url = fileUrl(page.properties?.Foto);
++    return url || null;
++  } catch (err) {
++    console.error('[notion] Erro ao buscar foto:', err);
++    return null;
++  }
++}
+-- 
+2.43.0
+
