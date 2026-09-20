@@ -188,7 +188,7 @@ const PROJETOS_PADRAO: Projeto[] = [
     materiais: ['Cedro', 'Latão escovado'],
     descricao:
       'Closet planejado como uma pequena boutique particular — armários em cedro com puxadores de latão escovado, ilha central para acessórios e iluminação embutida desenhada peça a peça com a proprietária.',
-    img: '/images/cerne/closet-boutique.png',
+    img: '/images/cerne/closet-boutique.jpg',
   },
 ];
 
