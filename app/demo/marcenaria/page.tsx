@@ -810,9 +810,9 @@ export default function MarcenariaDemo() {
 
           <div className="relative">
             {ETAPAS.map((e, i) => (
-              <div 
-                key={e.n} 
-                className="sticky top-32 w-full pt-4 h-[60vh] sm:h-[50vh]"
+              <div
+                key={e.n}
+                className="sticky top-32 w-full pt-4 min-h-[60vh] sm:min-h-[50vh]"
                 style={{ zIndex: i + 10 }}
               >
                 <div
