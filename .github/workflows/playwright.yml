@@ -1,0 +1,57 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [ 18.x, 20.x ]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Playwright tests
+      run: npm test
+    - name: Upload blob report to GitHub Actions Artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: blob-report-${{ matrix.node-version }}
+        path: blob-report
+        retention-days: 1
+  merge-reports:
+    # Merge reports after test runs
+    if: always()
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+    - name: Install dependencies
+      run: npm ci
+    - name: Download blob reports from GitHub Actions Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-blob-reports
+        pattern: blob-report-*
+    - name: Merge reports
+      run: npx playwright merge-reports --reporter html ./all-blob-reports
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-report-merged
+        path: playwright-report
+        retention-days: 14
