@@ -30,9 +30,9 @@ export async function POST(req: Request) {
         {
           email,
           visitors,
-          conversionRate,
+          conversion_rate: conversionRate,
           ticket,
-          annualLoss,
+          annual_loss: annualLoss,
           created_at: new Date().toISOString(),
           whatsapp_sent: false,
         },
