@@ -611,8 +611,7 @@ export default function MarcenariaDemo() {
               <p className="text-[12.5px] leading-[1.6] text-[#2A2C22]">
                 Apenas <b>{vagasRestantes} vagas</b> restantes para novos projetos neste trimestre.
               </p>
-            </div>
-          </motion.div>
+            </motion.div>
           </motion.div>
       </section>
 
