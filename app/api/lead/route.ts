@@ -1,4 +1,10 @@
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export async function POST(req: Request) {
   try {
@@ -8,21 +14,40 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
-    // TODO: Connect this to ActiveCampaign, RD Station, or another CRM.
-    // For now, you can send an email via Resend or a webhook to Zapier.
-    // Example CRM webhook structure:
-    // await fetch(process.env.CRM_WEBHOOK_URL, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email, visitors, conversionRate, ticket, annualLoss }),
-    // });
+    const { data, error } = await supabase
+      .from('diagnosticos')
+      .insert([
+        {
+          email,
+          visitors,
+          conversionRate,
+          ticket,
+          annualLoss,
+          created_at: new Date().toISOString(),
+          whatsapp_sent: false,
+        },
+      ])
+      .select();
 
-    // Debug: only log in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('New Lead Captured');
+    if (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Supabase insert error:', error);
+      }
+      return NextResponse.json(
+        { error: 'Failed to save lead' },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ success: true, message: 'Lead captured successfully' });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Lead saved to Neuralabs CRM:', email);
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Lead captured successfully',
+      data,
+    });
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Lead capture error:', error);
