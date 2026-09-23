@@ -109,7 +109,6 @@ const PortfolioCard = ({
           className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-obsidian-900 font-bold uppercase text-xs tracking-wider rounded-lg w-fit"
           whileHover={{ scale: 1.08, x: 4 }}
           whileTap={{ scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
