@@ -511,37 +511,37 @@ const portfolioItems = [
     brandKit: {
       colors: [
         {
-          name: 'Jet Black',
-          hex: '#000000',
-          rgb: 'rgb(0, 0, 0)',
-          psychology: 'Autoridade absoluta, minimalismo. Reduz choice paralysis (menos cores = menos decisões).'
+          name: 'Deep Onyx',
+          hex: '#050505',
+          rgb: 'rgb(5, 5, 5)',
+          psychology: 'Sofisticação extrema. Quiet luxury (menos é mais). Reduz choice paralysis + aumenta percepção de premium.'
         },
         {
-          name: 'Neon Lime',
-          hex: '#D4FF00',
-          rgb: 'rgb(212, 255, 0)',
-          psychology: 'Urgência, rebeldia, youth energy. Força olho para botão de compra (atração atencional irresistível).'
+          name: 'Off-White Pearl',
+          hex: '#EFEFEF',
+          rgb: 'rgb(239, 239, 239)',
+          psychology: 'Pureza, clareza. Minimiza esforço cognitivo. Cria contraste máximo = legibilidade premium.'
         },
         {
-          name: 'Pure White',
-          hex: '#FFFFFF',
-          rgb: 'rgb(255, 255, 255)',
-          psychology: 'Clareza, confiança. Espaço negativo reduz cognitive load.'
+          name: 'Charcoal Accent',
+          hex: '#1A1A1A',
+          rgb: 'rgb(26, 26, 26)',
+          psychology: 'Profundidade, sofisticação. Transição visual entre extremos preto/branco sem quebrar elegância.'
         }
       ],
       typography: {
-        display: 'IBM Plex Sans Bold',
-        body: 'IBM Plex Sans',
-        hierarchy: 'Display bold uppercase (56px+) para força; corpo regular (14px) para leitura'
+        display: 'Bodoni Moda',
+        body: 'Plus Jakarta Sans',
+        hierarchy: 'Bodoni Moda italic/bold (60px+) para dramaticidade; Plus Jakarta Sans regular (14-16px) para corpo'
       },
       voiceTone: [
-        'Direto e sem filtro',
-        'Confiante, não apologético',
-        'Eficiente (poupador de tempo)',
-        'Underground luxury vibe'
+        'Discretamente luxuoso',
+        'Sensorial e ciência',
+        'Sofisticado sem arrogância',
+        'Storytelling através de ingredientes'
       ],
-      photography: 'Topo plano (flat lay), ângulo 45º. Luz frontal dura (sombras marcadas). Preto/branco com um pop de neon. Produto sempre em foco, fundo minimamente distrativo. Brutalist composition (geometria clara).',
-      justification: 'Preto reduz número de opções percebidas (brutalismo = menos é mais, psicologia de restrição aumenta valor percebido). Neon lime ativa "stop and stare" (resposta evolutiva a contraste extremo). IBM Plex comunica precision/engineering. Bordas pesadas = decisão óbvia, zero ambiguidade.'
+      photography: 'Close-ups sensoriais (gotas, ingredientes, texturas). Lighting cinematográfico (chiaroscuro). Monocromático + nuances de cinza. Foco em detalhe/craftsmanship. Nenhuma cor distrai - o produto é a cor.',
+      justification: 'Onyx (#050505) ativa percepção de "quiet luxury" (menos sinais visuais = mais premium). Contraste extremo com off-white força leitura sem esforço (reduz fricção). Bodoni Moda comunica tradição de fragrância de luxo (tipografia clássica). Psychology: paleta monocromática = focus puro no produto (menos competição visual).'
     }
   }
 ];
