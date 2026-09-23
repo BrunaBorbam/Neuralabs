@@ -104,7 +104,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fraunces, Jost } from 'next/font/google';
 import { ArrowLeft, ArrowUpRight, Minus, Plus, Ruler } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { CerneContactForm } from '@/components/CerneContactForm';
 import WoodGrainCanvas from './WoodGrainCanvas';
@@ -425,14 +425,6 @@ export default function MarcenariaDemo() {
   const vagasRestantes = useVagasRestantes(3);
   const [projetoAberto, setProjetoAberto] = useState<Projeto | null>(null);
 
-  const horizontalScrollRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: horizontalProgress } = useScroll({
-    target: horizontalScrollRef,
-    offset: ["start start", "end end"],
-  });
-  // Traduz a galeria horizontalmente enquanto o container está fixo (300vh = 200vh de área útil)
-  const horizontalX = useTransform(horizontalProgress, [0, 1], ["0%", "-45%"]);
-
   // Portfólio editável via Notion (CMS leve — ver lib/notion.ts e
   // docs/cerne-cms-notion.md): busca em /api/cerne-projects ao montar e,
   // só se vier configurado e com conteúdo, troca o array estático pelo
@@ -728,72 +720,71 @@ export default function MarcenariaDemo() {
         </div>
       </section>
 
-      {/* Trabalhos — Obras (Horizontal Scroll Cinematográfico - Huashu) */}
-      <section id="obras" ref={horizontalScrollRef} className="relative z-10 -mt-20 border-t border-[#D5D3C5] bg-[#EDECE3] h-[300vh]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col pt-24 sm:pt-32 px-5 sm:px-8 border-b border-[#2A2C22]/10">
-          
-          <div className="shrink-0 z-20 mb-6">
+      {/* Trabalhos — Obras (Grid Responsivo com Scroll Suave) */}
+      <section id="obras" className="relative z-10 border-t border-[#D5D3C5] bg-[#EDECE3] py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+
+          <div className="mb-16">
             <div className="mb-4 flex items-center gap-3">
               <span className="h-px w-9 bg-[#6B7A4E]" />
               <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">Portfólio</span>
             </div>
             <h2
-              className="text-[40px] leading-[1.1] sm:text-[50px] whitespace-nowrap"
+              className="text-[40px] leading-[1.1] sm:text-[50px]"
               style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
             >
               Galeria de <em className="text-[#6B7A4E] italic">Obras</em>
             </h2>
           </div>
 
-          <div className="flex-1 min-h-0 relative">
-            <motion.div 
-              className="flex gap-12 sm:gap-24 px-5 sm:px-[5vw] h-full items-start pt-6"
-              style={{ x: horizontalX }}
-            >
-              {projetos.map((p) => (
-                <div key={p.idx} className="w-[85vw] sm:w-[45vw] lg:w-[30vw] shrink-0 relative group">
-                  <div className="relative aspect-[4/5] overflow-hidden border border-[#2A2C22]/20 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12">
+            {projetos.map((p) => (
+              <ScrollReveal key={p.idx} delay={parseFloat(p.idx) * 0.1}>
+                <div className="relative group h-full flex flex-col">
+                  <div className="relative aspect-[4/5] overflow-hidden border border-[#2A2C22]/20 mb-6 rounded-sm">
                     <Image
                       src={p.img}
                       alt={p.nome}
                       fill
-                      sizes="(min-width: 768px) 35vw, 85vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 85vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/50 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   </div>
-                  
-                  <div className="flex items-baseline gap-3 mb-2 border-b border-[#2A2C22]/10 pb-2">
-                    <span className="text-[11px] font-bold text-[#6B7A4E]">{p.idx}</span>
-                    <span className="text-[11px] text-[#55584A] uppercase tracking-widest">{p.ano}</span>
+
+                  <div className="flex-1 flex flex-col">
+                    <div className="flex items-baseline gap-3 mb-3 border-b border-[#2A2C22]/10 pb-3">
+                      <span className="text-[11px] font-bold text-[#6B7A4E]">{p.idx}</span>
+                      <span className="text-[11px] text-[#55584A] uppercase tracking-widest">{p.ano}</span>
+                    </div>
+
+                    <h3
+                      className="mb-2 text-[24px] leading-tight text-[#2A2C22]"
+                      style={{ fontFamily: 'var(--font-cerne-serif)' }}
+                    >
+                      {p.nome}
+                    </h3>
+                    <p className="mb-6 text-[11px] uppercase tracking-widest text-[#5C5147]">{p.local}</p>
+
+                    <button
+                      type="button"
+                      onClick={() => setProjetoAberto(p)}
+                      className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E] transition-colors"
+                    >
+                      Ver Ficha Técnica <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
                   </div>
-                  
-                  <h3
-                    className="mb-2 text-[24px] leading-tight text-[#2A2C22]"
-                    style={{ fontFamily: 'var(--font-cerne-serif)' }}
-                  >
-                    {p.nome}
-                  </h3>
-                  <p className="mb-6 text-[11px] uppercase tracking-widest text-[#5C5147]">{p.local}</p>
-                  
-                  <button
-                    type="button"
-                    onClick={() => setProjetoAberto(p)}
-                    className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E] transition-colors"
-                  >
-                    Ver Ficha Técnica <ArrowUpRight className="h-3.5 w-3.5" />
-                  </button>
                 </div>
-              ))}
-            </motion.div>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Processo (Card Stacking ScrollTrigger) */}
+      {/* Processo (Card Stack - Simples e Limpo) */}
       <section id="processo" className="relative px-5 py-24 sm:px-8 md:py-32 bg-[#F5F4EE]">
         <div className="mx-auto max-w-4xl relative">
-          
+
           <div className="mb-16 text-center">
             <div className="mb-6 flex items-center justify-center gap-3">
               <span className="h-px w-9 bg-[#6B7A4E]" />
@@ -808,16 +799,14 @@ export default function MarcenariaDemo() {
             </h2>
           </div>
 
-          <div className="relative">
+          <div className="relative space-y-8">
             {ETAPAS.map((e, i) => (
-              <div 
-                key={e.n} 
-                className="sticky top-32 w-full pt-4 h-[60vh] sm:h-[50vh]"
-                style={{ zIndex: i + 10 }}
+              <div
+                key={e.n}
+                className="w-full"
               >
                 <div
-                  className="relative overflow-hidden rounded-sm border border-[#2A2C22]/15 bg-[#EDECE3] p-8 md:p-14 shadow-[0_-10px_40px_rgba(42,44,34,0.15)]"
-                  style={{ transform: `scale(${1 - (ETAPAS.length - 1 - i) * 0.02})` }}
+                  className="relative overflow-hidden rounded-sm border border-[#2A2C22]/15 bg-[#EDECE3] p-8 md:p-14 shadow-[0_2px_12px_rgba(42,44,34,0.1)] hover:shadow-[0_8px_24px_rgba(42,44,34,0.15)] transition-shadow duration-300"
                 >
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
                     <span
