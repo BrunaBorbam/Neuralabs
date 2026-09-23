@@ -1,18 +1,3 @@
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'VILLA SERENA — Boutique Retreat & Hospedagem de Luxo | Neuralabs',
-  description: 'Resort boutique premium com experiência imersiva de hospitalidade. Hospedagem de luxo em ambiente paradisíaco, reservas diretas e experiência sensorial.',
-  keywords: 'hospedagem premium, resort boutique, villa de luxo, experiência imersiva, turismo premium',
-  openGraph: {
-    title: 'VILLA SERENA — Luxury Retreat',
-    description: 'Hospedagem premium com experiência imersiva',
-    url: 'https://neuralabs.online/demo/airbnb',
-    type: 'website',
-    images: [{ url: '/og-villa-serena.jpg', width: 1200, height: 630, alt: 'VILLA SERENA' }],
-  },
-};
-
 'use client';
 
 /**

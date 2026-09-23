@@ -1,24 +1,3 @@
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'CERNE — Marcenaria Premium & Design de Interiores | Neuralabs',
-  description: 'Portfólio de projetos de marcenaria de luxo, mobiliário sob encomenda e design de interiores premium. Trabalhos em madeira nobre, aço e vidro.',
-  keywords: 'marcenaria, design de interiores, mobiliário sob encomenda, carpintaria premium, madeira nobre',
-  openGraph: {
-    title: 'CERNE — Marcenaria Autoral',
-    description: 'Projetos de marcenaria e design de interiores de alto padrão',
-    url: 'https://neuralabs.online/demo/marcenaria',
-    type: 'website',
-    images: [{ url: '/og-marcenaria.jpg', width: 1200, height: 630, alt: 'CERNE Studio' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'CERNE — Marcenaria Premium',
-    description: 'Design de interiores e mobiliário autoral',
-    images: ['/og-marcenaria.jpg'],
-  },
-};
-
 'use client';
 
 /**
