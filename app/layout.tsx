@@ -91,17 +91,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'LocalBusiness',
+              '@type': 'Organization',
               name: 'Neuralabs',
+              alternateName: 'Neuralabs Studio',
               description: 'Websites que aumentam conversão em 20-40% usando 3D, neuromarketing e IA',
               url: 'https://neuralabs.online',
-              telephone: '',
-              address: {
-                '@type': 'PostalAddress',
-                addressCountry: 'BR',
+              logo: 'https://neuralabs.online/logo.svg',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                telephone: '+55-51-99268-2717',
+                contactType: 'Sales',
+                areaServed: 'BR',
               },
-              priceRange: '$$',
-              knowsAbout: ['neuromarketing', 'web design', 'conversion optimization', '3D design'],
+              sameAs: [
+                'https://www.instagram.com/neuralabs',
+                'https://www.linkedin.com/company/neuralabs',
+              ],
+              areaServed: 'BR',
+              knowsAbout: ['neuromarketing', 'web design', 'conversion optimization', '3D design', 'UX/UI'],
             }),
           }}
         />

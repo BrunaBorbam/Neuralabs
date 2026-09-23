@@ -1,118 +1,39 @@
 const CACHE_NAME = 'neuralabs-v1';
-const ASSETS_TO_CACHE = [
+const urlsToCache = [
   '/',
-  '/index.html',
   '/manifest.json',
 ];
 
-// Install event - cache essential assets
-self.addEventListener('install', event => {
-  console.log('[Service Worker] Installing...');
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('[Service Worker] Caching assets');
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
+      .then((cache) => cache.addAll(urlsToCache))
       .then(() => self.skipWaiting())
   );
 });
 
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-  console.log('[Service Worker] Activating...');
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
+    caches.keys()
+      .then((cacheNames) => Promise.all(
+        cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('[Service Worker] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
-      );
-    }).then(() => self.clients.claim())
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', event => {
-  const { request } = event;
-
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') {
     return;
   }
 
-  // Deixa passar direto pra rede: a Cache API não lida bem com respostas
-  // parciais (206), e interceptar essas requisições quebra o carregamento
-  // de vídeo/áudio no Chrome (elemento fica preso em readyState 0 /
-  // networkState NETWORK_NO_SOURCE). Descoberto ao adicionar o vídeo real
-  // do hero da demo CERNE.
-  if (request.headers.has('range') || request.destination === 'video' || request.destination === 'audio') {
-    return;
-  }
-
-  // Network first strategy for API calls
-  if (request.url.includes('/api/')) {
-    event.respondWith(
-      fetch(request)
-        .then(response => {
-          if (response.ok) {
-            const cache = caches.open(CACHE_NAME);
-            cache.then(c => c.put(request, response.clone()));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request))
-    );
-    return;
-  }
-
-  // Cache first strategy for static assets
   event.respondWith(
-    caches.match(request)
-      .then(response => {
-        if (response) {
-          // Update cache in background
-          fetch(request).then(freshResponse => {
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(request, freshResponse);
-            });
-          }).catch(() => {});
-          return response;
-        }
-        return fetch(request)
-          .then(response => {
-            // Don't cache non-successful responses
-            if (!response || response.status !== 200 || response.type === 'error') {
-              return response;
-            }
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(request, responseToCache);
-            });
-            return response;
-          });
-      })
-      .catch(() => {
-        // Return a custom offline page if needed
-        if (request.destination === 'document') {
-          return new Response('Você está offline', {
-            status: 503,
-            statusText: 'Service Unavailable',
-            headers: new Headers({
-              'Content-Type': 'text/plain'
-            })
-          });
-        }
-      })
+    caches.match(event.request)
+      .then((response) => response || fetch(event.request))
+      .catch(() => caches.match('/'))
   );
-});
-
-// Handle messages from clients
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
 });

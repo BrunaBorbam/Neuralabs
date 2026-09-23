@@ -1,3 +1,18 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'NOX PARIS — Fragrância de Luxo Premium & E-Commerce | Neuralabs',
+  description: 'E-commerce de fragrâncias premium com design brutalista minimalista. Perfumes de assinatura, experiência sensorial e curadoria de aromas de luxo.',
+  keywords: 'fragrância, perfume premium, e-commerce de luxo, aromas, nox paris',
+  openGraph: {
+    title: 'NOX PARIS — Quiet Luxury Fragrance',
+    description: 'Fragrâncias de assinatura com design brutalista',
+    url: 'https://neuralabs.online/demo/nox-paris',
+    type: 'website',
+    images: [{ url: '/og-nox-paris.jpg', width: 1200, height: 630, alt: 'NOX PARIS' }],
+  },
+};
+
 'use client';
 
 /**

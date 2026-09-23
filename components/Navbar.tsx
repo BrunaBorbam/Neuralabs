@@ -82,12 +82,12 @@ export const Navbar = () => {
             rel="noopener noreferrer"
             onClick={handleCtaClick}
             aria-label={t.nav.cta}
-            className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-gold-500 text-obsidian-900"
+            className="flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-full bg-gold-500 text-obsidian-900 hover:scale-105 active:scale-95 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian-900"
           >
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-5 h-5" />
           </a>
           <button
-            className="text-pearl-100 flex-shrink-0"
+            className="text-pearl-100 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian-900 rounded-lg"
             onClick={() => setIsOpen((v) => !v)}
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >

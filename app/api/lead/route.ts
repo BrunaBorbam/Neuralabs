@@ -17,11 +17,16 @@ export async function POST(req: Request) {
     //   body: JSON.stringify({ email, visitors, conversionRate, ticket, annualLoss }),
     // });
 
-    console.log('New Lead Captured:', { email, annualLoss });
+    // Debug: only log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('New Lead Captured');
+    }
 
     return NextResponse.json({ success: true, message: 'Lead captured successfully' });
   } catch (error) {
-    console.error('Lead capture error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Lead capture error:', error);
+    }
     return NextResponse.json({ error: 'Failed to capture lead' }, { status: 500 });
   }
 }

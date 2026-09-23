@@ -203,7 +203,9 @@ export async function POST(req: NextRequest) {
     );
 
     if (userEmailResult.error) {
-      console.error('Error sending user email:', userEmailResult.error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error sending user email:', userEmailResult.error);
+      }
       return NextResponse.json(
         { error: 'Failed to send confirmation email' },
         { status: 500 }
@@ -239,7 +241,9 @@ export async function POST(req: NextRequest) {
         `,
       });
     } catch (error) {
-      console.error('Error sending admin notification:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error sending admin notification:', error);
+      }
       // Don't fail the request if admin email fails
     }
 
@@ -252,7 +256,9 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error('API Error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('API Error:', error);
+    }
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -1,3 +1,18 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'ARDÓSIA — Gastronomia de Assinatura & Experiência Culinária | Neuralabs',
+  description: 'Restaurante de gastronomia premium com identidade visual única. Pratos autorais, experiência sensorial imersiva e design editorial de luxo.',
+  keywords: 'gastronomia, restaurante premium, culinária de assinatura, experiência gastronômica, design culinário',
+  openGraph: {
+    title: 'ARDÓSIA — Fogo & Brasa',
+    description: 'Gastronomia de assinatura com caos visual organizado',
+    url: 'https://neuralabs.online/demo/gastronomia',
+    type: 'website',
+    images: [{ url: '/og-gastronomia.jpg', width: 1200, height: 630, alt: 'ARDÓSIA' }],
+  },
+};
+
 'use client';
 
 /**
