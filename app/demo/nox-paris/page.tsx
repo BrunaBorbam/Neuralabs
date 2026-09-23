@@ -467,37 +467,67 @@ export default function EcommerceDemo() {
             style={{ x: horizontalX }}
           >
             {/* Card 1 */}
-            <div className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group">
-              <Image src="/images/ecommerce/story-1.jpg" alt="Colheita em Grasse" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" />
+            <motion.div
+              className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group"
+              whileHover={{ y: -8 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            >
+              <motion.div
+                className="w-full h-full origin-center"
+                whileHover={{ scale: 1.08 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              >
+                <Image src="/images/ecommerce/story-1.jpg" alt="Colheita em Grasse" fill className="object-cover" />
+              </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="absolute bottom-10 left-10 right-10">
                 <span className="text-[10px] tracking-widest text-white/50 uppercase mb-3 block">01 / A Colheita</span>
                 <h3 className="text-3xl text-white mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>Jasmim de Grasse</h3>
                 <p className="text-xs text-white/60 font-light leading-relaxed max-w-sm">Colhido artesanalmente nas primeiras horas da madrugada, quando a flor exala seu absoluto máximo de fragrância.</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Card 2 */}
-            <div className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group">
-              <Image src="/images/ecommerce/story-2.jpg" alt="Extração Botânica" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" />
+            <motion.div
+              className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group"
+              whileHover={{ y: -8 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            >
+              <motion.div
+                className="w-full h-full origin-center"
+                whileHover={{ scale: 1.08 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              >
+                <Image src="/images/ecommerce/story-2.jpg" alt="Extração Botânica" fill className="object-cover" />
+              </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="absolute bottom-10 left-10 right-10">
                 <span className="text-[10px] tracking-widest text-white/50 uppercase mb-3 block">02 / A Extração</span>
                 <h3 className="text-3xl text-white mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>Alquimia Pura</h3>
                 <p className="text-xs text-white/60 font-light leading-relaxed max-w-sm">Alembic de cobre vintage e destilação a frio garantem que as moléculas mais voláteis e raras sejam preservadas intactas.</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Card 3 */}
-            <div className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group">
-              <Image src="/images/ecommerce/story-3.jpg" alt="Envasamento" fill className="object-cover transition-transform duration-1000 group-hover:scale-105" />
+            <motion.div
+              className="w-[85vw] sm:w-[60vw] lg:w-[45vw] aspect-[4/3] shrink-0 relative rounded-xl overflow-hidden shadow-2xl group"
+              whileHover={{ y: -8 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            >
+              <motion.div
+                className="w-full h-full origin-center"
+                whileHover={{ scale: 1.08 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              >
+                <Image src="/images/ecommerce/story-3.jpg" alt="Envasamento" fill className="object-cover" />
+              </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="absolute bottom-10 left-10 right-10">
                 <span className="text-[10px] tracking-widest text-white/50 uppercase mb-3 block">03 / A Obra</span>
                 <h3 className="text-3xl text-white mb-2" style={{ fontFamily: 'var(--font-nox-serif)' }}>Obsidiana Escura</h3>
                 <p className="text-xs text-white/60 font-light leading-relaxed max-w-sm">Líquido de ouro envolto em pedra vulcânica, bloqueando espectros de luz e envelhecendo o Extrait como um bom vinho.</p>
               </div>
-            </div>
+            </motion.div>
 
           </motion.div>
         </div>
@@ -516,37 +546,100 @@ export default function EcommerceDemo() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1,
+                  delayChildren: 0.05
+                }
+              }
+            }}
+          >
             {/* Produto 1 */}
-            <div className="group cursor-pointer">
-              <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src="/images/ecommerce/vela-real-v4.jpg" alt="Vela Botânica" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-              </div>
+            <motion.div
+              className="group cursor-pointer"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+              }}
+            >
+              <motion.div
+                className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm"
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              >
+                <motion.div
+                  className="w-full h-full origin-center"
+                  whileHover={{ scale: 1.06 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                  <Image src="/images/ecommerce/vela-real-v4.jpg" alt="Vela Botânica" fill className="object-cover" />
+                </motion.div>
+              </motion.div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Bougie Noire</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Vela Botânica • 250g</p>
               <p className="text-sm font-light text-white">R$ 540</p>
-            </div>
+            </motion.div>
 
             {/* Produto 2 */}
-            <div className="group cursor-pointer">
-              <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src="/images/ecommerce/perfume-real-v4.jpg" alt="Extrait 50ml" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-              </div>
+            <motion.div
+              className="group cursor-pointer"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+              }}
+            >
+              <motion.div
+                className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm"
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              >
+                <motion.div
+                  className="w-full h-full origin-center"
+                  whileHover={{ scale: 1.06 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                  <Image src="/images/ecommerce/perfume-real-v4.jpg" alt="Extrait 50ml" fill className="object-cover" />
+                </motion.div>
+              </motion.div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>Noir Ômbre</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Extrait de Parfum • 50ml</p>
               <p className="text-sm font-light text-white">R$ 1.150</p>
-            </div>
+            </motion.div>
 
             {/* Produto 3 */}
-            <div className="group cursor-pointer sm:hidden lg:block">
-              <div className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm">
-                <Image src="/images/ecommerce/sabonete-real-v4.jpg" alt="Sabonete Líquido" fill className="object-cover group-hover:scale-105 transition-all duration-700" />
-              </div>
+            <motion.div
+              className="group cursor-pointer sm:hidden lg:block"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+              }}
+            >
+              <motion.div
+                className="relative w-full aspect-[4/5] bg-[#050505] border border-white/5 overflow-hidden mb-6 rounded-sm"
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              >
+                <motion.div
+                  className="w-full h-full origin-center"
+                  whileHover={{ scale: 1.06 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                >
+                  <Image src="/images/ecommerce/sabonete-real-v4.jpg" alt="Sabonete Líquido" fill className="object-cover" />
+                </motion.div>
+              </motion.div>
               <h3 className="text-xl mb-1" style={{ fontFamily: 'var(--font-nox-serif)' }}>L'Eau Noire</h3>
               <p className="text-[10px] uppercase tracking-widest text-white/50 mb-3">Gel de Banho • 200ml</p>
               <p className="text-sm font-light text-white">R$ 380</p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
