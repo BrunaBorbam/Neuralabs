@@ -605,7 +605,11 @@ function DishCard({ prato, index = 0 }: { prato: Prato, index?: number }) {
 
       {hasPhoto && (
         <div className="relative h-[150px] w-full overflow-hidden sm:h-[170px]">
-          <div className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-110">
+          <motion.div
+            className="w-full h-full origin-center"
+            whileHover={{ scale: 1.08 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          >
             <Image
               src={prato.img}
               alt={prato.nome}
@@ -613,8 +617,13 @@ function DishCard({ prato, index = 0 }: { prato: Prato, index?: number }) {
               sizes="(min-width: 640px) 270px, 240px"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/25" />
-          </div>
+            <motion.div
+              className="absolute inset-0 bg-black/0"
+              initial={{ opacity: 0 }}
+              whileHover={{ opacity: 0.3 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.div>
           <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-[#F3EDE1]/25 bg-[#191712]/70 text-[#D9A441] backdrop-blur-sm z-10">
             <Icon className="h-3.5 w-3.5" />
           </span>
@@ -1106,16 +1115,46 @@ export default function GastronomiaDemo() {
             </h2>
           </div>
 
-          <div className="relative">
+          <motion.div
+            className="relative space-y-24"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.12,
+                  delayChildren: 0.08
+                }
+              }
+            }}
+          >
             {ETAPAS.map((e, i) => (
-              <div 
-                key={e.hora} 
-                className="sticky top-32 w-full pt-4 mb-24"
-                style={{ zIndex: i + 10 }}
+              <motion.div
+                key={e.hora}
+                className="w-full"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 30
+                    }
+                  }
+                }}
               >
-                <div
+                <motion.div
                   className="relative overflow-hidden rounded-xl border border-[#F3EDE1]/20 bg-[#2A2722] p-8 md:p-12 shadow-[0_-20px_50px_rgba(32,30,25,0.8)]"
-                  style={{ transform: `scale(${1 - (ETAPAS.length - 1 - i) * 0.02})` }}
+                  whileHover={{
+                    boxShadow: '0_-25px_60px_rgba(193,85,44,0.3)',
+                    y: -4
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
                   <div className="flex flex-col md:flex-row gap-8 items-center">
                     {e.img && (
@@ -1134,27 +1173,52 @@ export default function GastronomiaDemo() {
                       <p className="text-[15px] leading-[1.9] text-[#B6AF9E]">{e.body}</p>
                     </div>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </section>
 
       {/* Depoimentos (Gapless Bento Grid) */}
       <section className="relative mx-auto max-w-7xl px-5 py-32 sm:px-8 md:py-48">
-        
-        <div className="mb-20 text-center">
-            <h2
+
+        <motion.div
+          className="mb-20 text-center"
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+        >
+            <motion.h2
               className="text-[40px] leading-[1.1] sm:text-[56px]"
               style={{ fontFamily: 'var(--font-ardosia-serif)', fontWeight: 400 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
             >
               Avaliações Reais
-            </h2>
-        </div>
+            </motion.h2>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-rows-[auto] gap-0 border border-[#F3EDE1]/15 overflow-hidden rounded-sm bg-[#26241F]">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 grid-rows-[auto] gap-0 border border-[#F3EDE1]/15 overflow-hidden rounded-sm bg-[#26241F]"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.1
+              }
+            }
+          }}
+        >
           
           <div className="md:col-span-2 lg:col-span-2 p-10 border border-[#F3EDE1]/15 bg-[#2A2722] flex flex-col justify-between group">
             <Quote className="mb-8 h-8 w-8 text-[#C1552C]" />
@@ -1197,7 +1261,7 @@ export default function GastronomiaDemo() {
              <Image src="/images/gastronomia/a-mesa.jpg" alt="A Mesa" fill className="object-cover transition-transform duration-[2s] group-hover:scale-110" />
           </div>
 
-        </div>
+        </motion.div>
         <ArdosiaSectionDrip />
       </section>
 
