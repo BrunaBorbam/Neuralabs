@@ -586,10 +586,20 @@ export default function MarcenariaDemo() {
           {/* Cartão de vidro editorial — assinatura de motion da CERNE,
               equivalente ao card flutuante da Villa Serena, adaptado ao
               registro claro/linho: escassez de agenda em vez de preço. */}
-          <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-auto sm:w-[260px]">
-            <div
-              className="relative rounded-sm border border-[#2A2C22]/10 bg-[#F5F4EE]/90 p-5 backdrop-blur-xl"
-              style={{ boxShadow: '0 24px 50px -24px rgba(42,44,34,.35)' }}
+          <motion.div
+            className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-auto sm:w-[260px]"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <motion.div
+              className="relative rounded-sm border border-[#2A2C22]/10 bg-[#F5F4EE]/85 p-5 backdrop-blur-2xl"
+              style={{ boxShadow: '0 32px 64px -24px rgba(42,44,34,.25)' }}
+              whileHover={{
+                boxShadow: '0 40px 80px -16px rgba(42,44,34,.35)',
+                backgroundColor: 'rgba(245,244,238,0.95)'
+              }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             >
               <div
                 className="pointer-events-none absolute -top-px left-[10%] right-[10%] h-px"
@@ -602,8 +612,8 @@ export default function MarcenariaDemo() {
                 Apenas <b>{vagasRestantes} vagas</b> restantes para novos projetos neste trimestre.
               </p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Faixa de materiais — assinatura de motion da CERNE (marquee contínuo) */}
@@ -634,9 +644,30 @@ export default function MarcenariaDemo() {
 
       {/* O Ofício (Gapless Bento Grid) */}
       <section id="oficio" className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-px bg-[#2A2C22]/15 border border-[#2A2C22]/15 rounded-sm overflow-hidden">
-          
-          <div className="md:col-span-2 lg:col-span-2 p-10 lg:p-14 bg-[#F5F4EE] flex flex-col justify-center h-full">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-px bg-[#2A2C22]/15 border border-[#2A2C22]/15 rounded-sm overflow-hidden"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.08,
+                delayChildren: 0.1
+              }
+            }
+          }}
+        >
+
+          <motion.div
+            className="md:col-span-2 lg:col-span-2 p-10 lg:p-14 bg-[#F5F4EE] flex flex-col justify-center h-full"
+            variants={{
+              hidden: { opacity: 0, y: 12 },
+              show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+            }}
+          >
             <div className="mb-7 flex items-center gap-3">
               <span className="h-px w-9 bg-[#6B7A4E]" />
               <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">O Ofício</span>
@@ -653,18 +684,30 @@ export default function MarcenariaDemo() {
             <p className="max-w-md text-[13.5px] leading-[1.9] text-[#55584A]">
               A CERNE atende um número limitado de projetos por ano, o suficiente para que cada um receba atenção de atelier, não de fábrica.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="md:col-span-1 lg:col-span-1 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full">
+          <motion.div
+            className="md:col-span-1 lg:col-span-1 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full"
+            variants={{
+              hidden: { opacity: 0, y: 12 },
+              show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+            }}
+          >
             <Image
               src={OFICIO_IMAGE}
               alt="Detalhe de marcenaria"
               fill
               className="object-cover transition-transform duration-[2s] group-hover:scale-105"
             />
-          </div>
+          </motion.div>
 
-          <div className="md:col-span-1 lg:col-span-1 bg-[#2A2C22] p-10 flex flex-col justify-between text-[#F5F4EE] h-full">
+          <motion.div
+            className="md:col-span-1 lg:col-span-1 bg-[#2A2C22] p-10 flex flex-col justify-between text-[#F5F4EE] h-full"
+            variants={{
+              hidden: { opacity: 0, y: 12 },
+              show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+            }}
+          >
             <span
               className="block text-[48px] leading-none text-[#6B7A4E]"
               style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic' }}
@@ -674,24 +717,36 @@ export default function MarcenariaDemo() {
             <p className="text-[11px] uppercase tracking-[0.2em] opacity-70">
               Ano de Fundação
             </p>
-          </div>
+          </motion.div>
 
-          <div className="md:col-span-2 lg:col-span-3 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full">
+          <motion.div
+            className="md:col-span-2 lg:col-span-3 relative min-h-[300px] bg-[#EDECE3] overflow-hidden group h-full"
+            variants={{
+              hidden: { opacity: 0, y: 12 },
+              show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+            }}
+          >
             <Image
               src={HERO_BANNER_IMAGE}
               alt="Painel panorâmico"
               fill
               className="object-cover transition-transform duration-[2s] group-hover:scale-105"
             />
-          </div>
+          </motion.div>
 
-          <div className="md:col-span-1 lg:col-span-1 bg-[#EDECE3] p-10 flex items-center justify-center h-full">
+          <motion.div
+            className="md:col-span-1 lg:col-span-1 bg-[#EDECE3] p-10 flex items-center justify-center h-full"
+            variants={{
+              hidden: { opacity: 0, y: 12 },
+              show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+            }}
+          >
             <span className="text-[14px] uppercase tracking-[0.3em] font-semibold text-[#576141] text-center leading-[1.8]">
               Artesanato<br/>e Precisão
             </span>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
       </section>
 
       {/* Quebra panorâmica — respiro editorial entre Ofício e Portfólio,
@@ -738,18 +793,29 @@ export default function MarcenariaDemo() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12">
-            {projetos.map((p) => (
-              <ScrollReveal key={p.idx} delay={parseFloat(p.idx) * 0.1}>
+            {projetos.map((p, idx) => (
+              <ScrollReveal key={p.idx} delay={idx * 0.08}>
                 <div className="relative group h-full flex flex-col">
                   <div className="relative aspect-[4/5] overflow-hidden border border-[#2A2C22]/20 mb-6 rounded-sm">
-                    <Image
-                      src={p.img}
-                      alt={p.nome}
-                      fill
-                      sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 85vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                    <motion.div
+                      className="absolute inset-0 origin-center"
+                      whileHover={{ scale: 1.06 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    >
+                      <Image
+                        src={p.img}
+                        alt={p.nome}
+                        fill
+                        sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 85vw"
+                        className="object-cover"
+                      />
+                    </motion.div>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/60 via-[#2A2C22]/20 to-transparent"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A2C22]/50 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   </div>
 
                   <div className="flex-1 flex flex-col">
@@ -766,13 +832,37 @@ export default function MarcenariaDemo() {
                     </h3>
                     <p className="mb-6 text-[11px] uppercase tracking-widest text-[#5C5147]">{p.local}</p>
 
-                    <button
+                    <motion.button
                       type="button"
                       onClick={() => setProjetoAberto(p)}
-                      className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E] transition-colors"
+                      className="relative inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] group/btn"
+                      whileHover="hover"
+                      initial="rest"
+                      variants={{
+                        rest: { color: '#2A2C22' },
+                        hover: { color: '#6B7A4E' }
+                      }}
+                      transition={{ duration: 0.2 }}
                     >
-                      Ver Ficha Técnica <ArrowUpRight className="h-3.5 w-3.5" />
-                    </button>
+                      Ver Ficha Técnica
+                      <motion.div
+                        variants={{
+                          rest: { x: 0 },
+                          hover: { x: 3, y: -2 }
+                        }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                      >
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </motion.div>
+                      <motion.div
+                        className="absolute bottom-0 left-0 right-0 h-px bg-[#6B7A4E]"
+                        initial={{ scaleX: 0, originX: 0 }}
+                        variants={{
+                          hover: { scaleX: 1 }
+                        }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                      />
+                    </motion.button>
                   </div>
                 </div>
               </ScrollReveal>
@@ -799,14 +889,46 @@ export default function MarcenariaDemo() {
             </h2>
           </div>
 
-          <div className="relative space-y-8">
+          <motion.div
+            className="relative space-y-8"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1,
+                  delayChildren: 0.05
+                }
+              }
+            }}
+          >
             {ETAPAS.map((e, i) => (
-              <div
+              <motion.div
                 key={e.n}
                 className="w-full"
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: 'spring',
+                      stiffness: 350,
+                      damping: 28
+                    }
+                  }
+                }}
               >
-                <div
-                  className="relative overflow-hidden rounded-sm border border-[#2A2C22]/15 bg-[#EDECE3] p-8 md:p-14 shadow-[0_2px_12px_rgba(42,44,34,0.1)] hover:shadow-[0_8px_24px_rgba(42,44,34,0.15)] transition-shadow duration-300"
+                <motion.div
+                  className="relative overflow-hidden rounded-sm border border-[#2A2C22]/15 bg-[#EDECE3] p-8 md:p-14 shadow-[0_2px_12px_rgba(42,44,34,0.1)]"
+                  whileHover={{
+                    boxShadow: '0_12px_32px_rgba(42,44,34,0.18)',
+                    y: -2
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
                     <span
@@ -820,10 +942,10 @@ export default function MarcenariaDemo() {
                       <p className="text-[15px] leading-[1.9] text-[#55584A]">{e.body}</p>
                     </div>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -831,19 +953,35 @@ export default function MarcenariaDemo() {
       {/* Depoimento — credibilidade entre pares (arquiteto) */}
       <section className="border-t border-[#2A2C22]/10 bg-[#EDECE3] px-5 py-24 sm:px-8 sm:py-28">
         <ScrollReveal>
-          <div className="mx-auto max-w-2xl text-center">
-            <p
+          <motion.div
+            className="mx-auto max-w-2xl text-center"
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <motion.p
               className="mb-8 text-[22px] leading-[1.5] sm:text-[26px]"
               style={{ fontFamily: 'var(--font-cerne-serif)', fontStyle: 'italic', fontWeight: 400 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
             >
               &ldquo;A CERNE é a única marcenaria que indico sem ressalva para projetos
               autorais. Eles desenham junto, não só executam — o resultado final sempre bate
               exatamente com o que foi especificado em projeto.&rdquo;
-            </p>
-            <p className="text-[11.5px] uppercase tracking-[0.2em] text-[#576141]">
+            </motion.p>
+            <motion.p
+              className="text-[11.5px] uppercase tracking-[0.2em] text-[#576141]"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               Renata Xavier — Arquiteta, RX Arquitetura
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </ScrollReveal>
       </section>
 
