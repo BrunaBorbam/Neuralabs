@@ -613,6 +613,7 @@ export default function MarcenariaDemo() {
               </p>
             </motion.div>
           </motion.div>
+        </div>
       </section>
 
       {/* Faixa de materiais — assinatura de motion da CERNE (marquee contínuo) */}
