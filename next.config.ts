@@ -55,7 +55,7 @@ const nextConfig: NextConfig = {
               // React itself guarantees it never does in production — so
               // this widens nothing in what actually ships.
               `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval' " : ''}https://www.googletagmanager.com`,
-              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com",
+              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://*.supabase.co",
               "img-src 'self' data: https://www.google-analytics.com",
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
