@@ -40,11 +40,11 @@ export async function POST(req: Request) {
       .select();
 
     if (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Supabase insert error:', error);
-      }
+      console.error('Supabase insert error:', error);
+      console.error('Error message:', error.message);
+      console.error('Error details:', error.details);
       return NextResponse.json(
-        { error: 'Failed to save lead' },
+        { error: 'Failed to save lead', details: error.message },
         { status: 500 }
       );
     }
