@@ -14,22 +14,10 @@ export const PWAInstaller = () => {
   const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then(registration => {
-          console.log('Service Worker registered:', registration);
-
-          // Check for updates periodically
-          setInterval(() => {
-            registration.update();
-          }, 60000); // Check every minute
-        })
-        .catch(error => {
-          console.error('Service Worker registration failed:', error);
-        });
-    }
+    // NOTE: The service worker is intentionally NOT registered here.
+    // A previous cache-first service worker permanently served stale content
+    // after each deploy. `public/sw.js` is now a kill-switch that unregisters
+    // itself and clears old caches; we no longer register a new one.
 
     // Detect iOS
     const userAgent = navigator.userAgent;

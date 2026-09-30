@@ -1,39 +1,26 @@
-const CACHE_NAME = 'neuralabs-v1';
-const urlsToCache = [
-  '/',
-  '/manifest.json',
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
-      .then(() => self.skipWaiting())
-  );
+// Kill-switch service worker.
+// A previous version cached the site with a "cache-first" strategy under a
+// fixed cache name, which permanently served stale content after every deploy.
+// This version caches nothing, deletes any old caches, and unregisters itself
+// so every browser (returning visitors included) always gets the live version.
+self.addEventListener('install', () => {
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      ))
-      .then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+      await self.registration.unregister();
+      const clients = await self.clients.matchAll({ type: 'window' });
+      for (const client of clients) {
+        client.navigate(client.url);
+      }
+    } catch (e) {
+      // no-op: best effort cleanup
+    }
+  })());
 });
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') {
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => response || fetch(event.request))
-      .catch(() => caches.match('/'))
-  );
-});
+// No fetch handler on purpose: all requests go straight to the network.
