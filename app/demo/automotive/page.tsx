@@ -6,12 +6,57 @@ import Link from 'next/link';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Zap, Battery, ShieldCheck } from 'lucide-react';
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import { DemoLangToggle } from '@/components/DemoLangToggle';
+import { useLanguage } from '@/context/LanguageContext';
 
 const sans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-sans',
 });
+
+const CONTENT = {
+  pt: {
+    exit: 'Sair',
+    preorder: 'Pré-Reserva',
+    heroKicker: 'A Era da Eletricidade Pura',
+    discover: 'Descubra',
+    specsTitle: 'Engenharia do Futuro.',
+    specsIntro:
+      'Desenvolvido em túneis de vento aeroespaciais. Cada curva corta o ar, cada milímetro de fibra de carbono reduz o peso. O AETHER não é apenas um carro, é um manifesto da física.',
+    specs: [
+      { v: '1.9', u: 's', l: '0 a 100 km/h' },
+      { v: '850', u: 'km', l: 'Autonomia WLTP' },
+      { v: '1950', u: 'cv', l: 'Potência Combinada' },
+    ],
+    chassisTitle: 'Chassi Monocoque',
+    chassisBody:
+      'Construído inteiramente em fibra de carbono de grau balístico, garantindo rigidez torcional extrema e segurança inigualável. O centro de gravidade mais baixo da categoria.',
+    configure: 'Configurar o seu',
+    back: 'Voltar',
+  },
+  en: {
+    exit: 'Exit',
+    preorder: 'Pre-Order',
+    heroKicker: 'The Era of Pure Electricity',
+    discover: 'Discover',
+    specsTitle: 'Engineering of the Future.',
+    specsIntro:
+      "Developed in aerospace wind tunnels. Every curve cuts the air, every millimeter of carbon fiber sheds weight. The AETHER isn't just a car — it's a manifesto of physics.",
+    specs: [
+      { v: '1.9', u: 's', l: '0 to 100 km/h' },
+      { v: '850', u: 'km', l: 'WLTP Range' },
+      { v: '1950', u: 'hp', l: 'Combined Power' },
+    ],
+    chassisTitle: 'Monocoque Chassis',
+    chassisBody:
+      'Built entirely from ballistic-grade carbon fiber, delivering extreme torsional rigidity and unmatched safety. The lowest center of gravity in its class.',
+    configure: 'Configure yours',
+    back: 'Back',
+  },
+} as const;
+
+const SPEC_ICONS = [Zap, Battery, ShieldCheck];
 
 function TextReveal({ text, delay = 0 }: { text: string; delay?: number }) {
   const words = text.split(' ');
@@ -38,6 +83,8 @@ function TextReveal({ text, delay = 0 }: { text: string; delay?: number }) {
 }
 
 export default function AutomotiveDemo() {
+  const { language } = useLanguage();
+  const t = CONTENT[language];
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
 
@@ -45,7 +92,6 @@ export default function AutomotiveDemo() {
     setMounted(true);
   }, []);
 
-  // Framer Motion Scroll Setup
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -57,13 +103,11 @@ export default function AutomotiveDemo() {
     restDelta: 0.001,
   });
 
-  // Hero Parallax Effects
   const carScale = useTransform(smoothProgress, [0, 0.3], [1.1, 1]);
   const carY = useTransform(smoothProgress, [0, 0.3], ['0%', '20%']);
   const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
   const heroTextY = useTransform(smoothProgress, [0, 0.2], ['0%', '-50%']);
 
-  // Tech Specs Section Effects
   const specsY = useTransform(smoothProgress, [0.2, 0.5], ['20%', '0%']);
   const specsOpacity = useTransform(smoothProgress, [0.2, 0.4], [0, 1]);
 
@@ -74,6 +118,8 @@ export default function AutomotiveDemo() {
       ref={containerRef}
       className={`relative min-h-[200vh] w-full bg-[#080808] text-[#F5F5F5] selection:bg-[#F5F5F5] selection:text-[#080808] ${sans.variable} font-sans`}
     >
+      <DemoLangToggle />
+
       {/* Attribution Bar */}
       <div className="fixed top-0 z-50 flex w-full items-center justify-between gap-4 border-b border-white/10 bg-black/50 px-5 py-3 text-[10px] tracking-[0.2em] text-white/50 uppercase backdrop-blur-lg">
         <span>
@@ -81,7 +127,7 @@ export default function AutomotiveDemo() {
           <span className="text-white">NEURALABS</span>
         </span>
         <Link href="/" className="hover:text-white transition-colors">
-          Sair
+          {t.exit}
         </Link>
       </div>
 
@@ -97,13 +143,12 @@ export default function AutomotiveDemo() {
           whileTap={{ scale: 0.95 }}
           className="pointer-events-auto rounded-full bg-white px-6 py-2 text-xs font-semibold text-black tracking-widest uppercase hover:bg-gray-200 transition-colors"
         >
-          Pre-Order
+          {t.preorder}
         </motion.button>
       </header>
 
-      {/* 1. HERO SECTION (SCROLL-DRIVEN 3D FEEL) */}
+      {/* 1. HERO */}
       <section className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
-        {/* Car Image with Scale & Y Parallax */}
         <motion.div
           className="absolute inset-0 z-0 h-[110%] w-[110%] -left-[5%] -top-[5%]"
           style={{ scale: carScale, y: carY }}
@@ -115,12 +160,10 @@ export default function AutomotiveDemo() {
             className="object-cover"
             priority
           />
-          {/* Overlays for depth */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/50 via-transparent to-transparent" />
         </motion.div>
 
-        {/* Hero Typography */}
         <motion.div
           className="relative z-10 flex flex-col items-center mt-32 mix-blend-screen"
           style={{ y: heroTextY, opacity: heroOpacity }}
@@ -129,11 +172,10 @@ export default function AutomotiveDemo() {
             <TextReveal text="AETHER V1" />
           </h1>
           <p className="mt-2 text-sm sm:text-base tracking-[0.4em] text-blue-400 uppercase font-medium">
-            <TextReveal text="A Era da Eletricidade Pura" delay={0.5} />
+            <TextReveal text={t.heroKicker} delay={0.5} />
           </p>
         </motion.div>
 
-        {/* Scroll Indicator */}
         <motion.div
           className="absolute bottom-10 z-10 flex flex-col items-center gap-2"
           style={{ opacity: heroOpacity }}
@@ -141,73 +183,50 @@ export default function AutomotiveDemo() {
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
           <span className="text-[10px] uppercase tracking-[0.3em] text-white/50">
-            Descubra
+            {t.discover}
           </span>
           <div className="h-12 w-px bg-gradient-to-b from-blue-500 to-transparent" />
         </motion.div>
       </section>
 
-      {/* 2. TECH SPECS (BENTO GRID GLASSMORPHISM) */}
+      {/* 2. TECH SPECS */}
       <section className="relative z-20 bg-[#080808] w-full min-h-screen px-6 py-32 flex flex-col items-center">
-        <motion.div
-          style={{ y: specsY, opacity: specsOpacity }}
-          className="max-w-6xl w-full"
-        >
+        <motion.div style={{ y: specsY, opacity: specsOpacity }} className="max-w-6xl w-full">
           <div className="mb-20 text-center">
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
-              <TextReveal text="Engenharia do Futuro." />
+              <TextReveal text={t.specsTitle} />
             </h2>
             <p className="text-white/50 max-w-xl mx-auto text-sm sm:text-base">
-              Desenvolvido em túneis de vento aeroespaciais. Cada curva corta o ar,
-              cada milímetro de fibra de carbono reduz o peso. O AETHER não é
-              apenas um carro, é um manifesto da física.
+              {t.specsIntro}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Spec 1 */}
-            <div className="group relative overflow-hidden rounded-2xl bg-white/[0.02] border border-white/5 p-8 backdrop-blur-sm transition-colors hover:bg-white/[0.05]">
-              <Zap className="h-8 w-8 text-blue-500 mb-6" />
-              <div className="text-4xl font-bold mb-2 tracking-tighter">
-                1.9<span className="text-xl text-white/50 ml-1">s</span>
-              </div>
-              <div className="text-xs uppercase tracking-widest text-white/50">
-                0 a 100 km/h
-              </div>
-            </div>
+            {t.specs.map((spec, i) => {
+              const Icon = SPEC_ICONS[i];
+              return (
+                <div
+                  key={spec.l}
+                  className="group relative overflow-hidden rounded-2xl bg-white/[0.02] border border-white/5 p-8 backdrop-blur-sm transition-colors hover:bg-white/[0.05]"
+                >
+                  <Icon className="h-8 w-8 text-blue-500 mb-6" />
+                  <div className="text-4xl font-bold mb-2 tracking-tighter">
+                    {spec.v}<span className="text-xl text-white/50 ml-1">{spec.u}</span>
+                  </div>
+                  <div className="text-xs uppercase tracking-widest text-white/50">
+                    {spec.l}
+                  </div>
+                </div>
+              );
+            })}
 
-            {/* Spec 2 */}
-            <div className="group relative overflow-hidden rounded-2xl bg-white/[0.02] border border-white/5 p-8 backdrop-blur-sm transition-colors hover:bg-white/[0.05]">
-              <Battery className="h-8 w-8 text-blue-500 mb-6" />
-              <div className="text-4xl font-bold mb-2 tracking-tighter">
-                850<span className="text-xl text-white/50 ml-1">km</span>
-              </div>
-              <div className="text-xs uppercase tracking-widest text-white/50">
-                Autonomia WLTP
-              </div>
-            </div>
-
-            {/* Spec 3 */}
-            <div className="group relative overflow-hidden rounded-2xl bg-white/[0.02] border border-white/5 p-8 backdrop-blur-sm transition-colors hover:bg-white/[0.05]">
-              <ShieldCheck className="h-8 w-8 text-blue-500 mb-6" />
-              <div className="text-4xl font-bold mb-2 tracking-tighter">
-                1950<span className="text-xl text-white/50 ml-1">cv</span>
-              </div>
-              <div className="text-xs uppercase tracking-widest text-white/50">
-                Potência Combinada
-              </div>
-            </div>
-
-            {/* Large Bento Box */}
             <div className="md:col-span-3 relative overflow-hidden rounded-3xl bg-white/[0.02] border border-white/5 p-12 mt-6 flex flex-col md:flex-row items-center justify-between group">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-              
+
               <div className="relative z-10 max-w-lg mb-8 md:mb-0">
-                <h3 className="text-2xl font-bold mb-4">Chassi Monocoque</h3>
+                <h3 className="text-2xl font-bold mb-4">{t.chassisTitle}</h3>
                 <p className="text-white/60 text-sm leading-relaxed">
-                  Construído inteiramente em fibra de carbono de grau balístico,
-                  garantindo rigidez torcional extrema e segurança inigualável. O
-                  centro de gravidade mais baixo da categoria.
+                  {t.chassisBody}
                 </p>
               </div>
 
@@ -216,7 +235,7 @@ export default function AutomotiveDemo() {
                 whileTap={{ scale: 0.95 }}
                 className="relative z-10 flex items-center justify-center gap-3 rounded-full bg-blue-600 px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white hover:bg-blue-500 transition-colors"
               >
-                Configurar o seu <ArrowRight className="h-4 w-4" />
+                {t.configure} <ArrowRight className="h-4 w-4" />
               </motion.button>
             </div>
           </div>
@@ -229,7 +248,7 @@ export default function AutomotiveDemo() {
         className="fixed bottom-6 left-6 z-40 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-4 py-3 text-[11px] font-medium uppercase tracking-widest text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black"
       >
         <ArrowLeft className="h-4 w-4" />
-        Voltar
+        {t.back}
       </Link>
     </main>
   );

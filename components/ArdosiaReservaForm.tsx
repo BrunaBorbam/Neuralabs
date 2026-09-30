@@ -5,18 +5,57 @@ import Link from 'next/link';
 import { MessageCircle, Send, ShieldCheck } from 'lucide-react';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackFormSubmit } from '@/lib/ga';
+import { useLanguage } from '@/context/LanguageContext';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 const inputClass =
   'w-full rounded-sm border border-[#F3EDE1]/15 bg-[#322F28] px-4 py-3 text-[13.5px] text-[#F3EDE1] placeholder:text-[#F3EDE1]/35 transition-colors focus:border-[#C1552C]/60 focus:outline-none';
 
-// Formulário real de reserva — mesma infraestrutura da CERNE
-// (app/api/send-email/route.ts, source: 'ardosia'): honeypot anti-bot,
-// rate limit por IP, checkbox de consentimento LGPD obrigatório. Campos
-// extras (pessoas/data/horário) só existem pro contexto de reserva; a
-// rota já sabe formatá-los no e-mail (ver reservaLine na API).
+const copy = {
+  pt: {
+    name: 'Seu nome',
+    email: 'Seu e-mail',
+    phone: 'Telefone / WhatsApp',
+    personWord: 'pessoa',
+    peopleWord: 'pessoas',
+    notes: 'Alguma observação? (aniversário, restrição alimentar...)',
+    consentBefore: 'Concordo com o uso dos meus dados para confirmação da reserva, conforme a ',
+    consentLink: 'Política de Privacidade',
+    consentAfter: '.',
+    sending: 'Enviando…',
+    send: 'Pedir reserva',
+    security: 'Seus dados trafegam criptografados (HTTPS) e não são compartilhados com terceiros.',
+    success: 'Pedido recebido — confirmamos sua mesa por telefone ou e-mail em breve.',
+    errorGeneric: 'Não foi possível enviar agora. Tente novamente em instantes.',
+    errorConsent: 'É preciso concordar com a Política de Privacidade para enviar.',
+    whatsappAside: 'Prefere conversar direto? Chame no WhatsApp.',
+    whatsappMessage: 'Olá! Gostaria de reservar uma mesa na Ardósia.',
+  },
+  en: {
+    name: 'Your name',
+    email: 'Your email',
+    phone: 'Phone / WhatsApp',
+    personWord: 'guest',
+    peopleWord: 'guests',
+    notes: 'Any notes? (birthday, dietary restriction...)',
+    consentBefore: 'I agree to the use of my data to confirm the reservation, per the ',
+    consentLink: 'Privacy Policy',
+    consentAfter: '.',
+    sending: 'Sending…',
+    send: 'Request reservation',
+    security: 'Your data is transmitted encrypted (HTTPS) and is never shared with third parties.',
+    success: "Request received — we'll confirm your table by phone or email soon.",
+    errorGeneric: "Couldn't send right now. Please try again in a moment.",
+    errorConsent: 'You must agree to the Privacy Policy to submit.',
+    whatsappAside: 'Prefer to talk directly? Message us on WhatsApp.',
+    whatsappMessage: "Hi! I'd like to book a table at Ardósia.",
+  },
+} as const;
+
 export const ArdosiaReservaForm = () => {
+  const { language } = useLanguage();
+  const c = copy[language];
   const [status, setStatus] = useState<Status>('idle');
   const [form, setForm] = useState({
     name: '',
@@ -55,17 +94,7 @@ export const ArdosiaReservaForm = () => {
 
       trackFormSubmit('ardosia_reserva_form');
       setStatus('success');
-      setForm({
-        name: '',
-        email: '',
-        phone: '',
-        people: '2',
-        date: '',
-        time: '',
-        message: '',
-        website: '',
-        consent: false,
-      });
+      setForm({ name: '', email: '', phone: '', people: '2', date: '', time: '', message: '', website: '', consent: false });
     } catch {
       setStatus('error');
     }
@@ -74,112 +103,49 @@ export const ArdosiaReservaForm = () => {
   return (
     <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-10">
       <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3.5">
-        <input
-          type="text"
-          name="website"
-          value={form.website}
-          onChange={handleChange('website')}
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
-          className="absolute -left-[9999px] h-px w-px opacity-0"
-        />
-        <input
-          type="text"
-          required
-          placeholder="Seu nome"
-          value={form.name}
-          onChange={handleChange('name')}
-          className={inputClass}
-        />
+        <input type="text" name="website" value={form.website} onChange={handleChange('website')} tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-px w-px opacity-0" />
+        <input type="text" required placeholder={c.name} value={form.name} onChange={handleChange('name')} className={inputClass} />
         <div className="grid grid-cols-2 gap-3.5">
-          <input
-            type="email"
-            required
-            placeholder="Seu e-mail"
-            value={form.email}
-            onChange={handleChange('email')}
-            className={inputClass}
-          />
-          <input
-            type="tel"
-            placeholder="Telefone / WhatsApp"
-            value={form.phone}
-            onChange={handleChange('phone')}
-            className={inputClass}
-          />
+          <input type="email" required placeholder={c.email} value={form.email} onChange={handleChange('email')} className={inputClass} />
+          <input type="tel" placeholder={c.phone} value={form.phone} onChange={handleChange('phone')} className={inputClass} />
         </div>
         <div className="grid grid-cols-3 gap-3.5">
           <select value={form.people} onChange={handleChange('people')} className={inputClass}>
             {['1', '2', '3', '4', '5', '6', '7', '8+'].map((n) => (
               <option key={n} value={n} className="bg-[#322F28]">
-                {n} {n === '1' ? 'pessoa' : 'pessoas'}
+                {n} {n === '1' ? c.personWord : c.peopleWord}
               </option>
             ))}
           </select>
-          <input
-            type="date"
-            value={form.date}
-            onChange={handleChange('date')}
-            className={`${inputClass} [color-scheme:dark]`}
-          />
-          <input
-            type="time"
-            value={form.time}
-            onChange={handleChange('time')}
-            className={`${inputClass} [color-scheme:dark]`}
-          />
+          <input type="date" value={form.date} onChange={handleChange('date')} className={`${inputClass} [color-scheme:dark]`} />
+          <input type="time" value={form.time} onChange={handleChange('time')} className={`${inputClass} [color-scheme:dark]`} />
         </div>
-        <textarea
-          placeholder="Alguma observação? (aniversário, restrição alimentar...)"
-          value={form.message}
-          onChange={handleChange('message')}
-          rows={3}
-          className={`${inputClass} resize-none`}
-        />
+        <textarea placeholder={c.notes} value={form.message} onChange={handleChange('message')} rows={3} className={`${inputClass} resize-none`} />
 
         <label className="flex items-start gap-2.5 py-1 text-[11.5px] leading-relaxed text-[#D9D2C4]">
-          <input
-            type="checkbox"
-            required
-            checked={form.consent}
-            onChange={(e) => setForm((prev) => ({ ...prev, consent: e.target.checked }))}
-            className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 accent-[#C1552C]"
-          />
+          <input type="checkbox" required checked={form.consent} onChange={(e) => setForm((prev) => ({ ...prev, consent: e.target.checked }))} className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 accent-[#C1552C]" />
           <span>
-            Concordo com o uso dos meus dados para confirmação da reserva, conforme a{' '}
+            {c.consentBefore}
             <Link href="/privacy" target="_blank" className="underline hover:text-[#C1552C]">
-              Política de Privacidade
+              {c.consentLink}
             </Link>
-            .
+            {c.consentAfter}
           </span>
         </label>
 
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="mt-1 inline-flex items-center justify-center gap-2 rounded-sm bg-[#C1552C] px-8 py-4 text-[12px] font-medium uppercase tracking-[0.15em] text-[#F3EDE1] transition-colors hover:bg-[#a84523] disabled:opacity-60"
-        >
+        <button type="submit" disabled={status === 'loading'} className="mt-1 inline-flex items-center justify-center gap-2 rounded-sm bg-[#C1552C] px-8 py-4 text-[12px] font-medium uppercase tracking-[0.15em] text-[#F3EDE1] transition-colors hover:bg-[#a84523] disabled:opacity-60">
           <Send className="h-4 w-4" />
-          {status === 'loading' ? 'Enviando…' : 'Pedir reserva'}
+          {status === 'loading' ? c.sending : c.send}
         </button>
 
         <p className="flex items-start gap-1.5 pt-0.5 text-[10.5px] leading-relaxed text-[#D9A441]/90">
           <ShieldCheck className="h-3.5 w-3.5 flex-shrink-0" />
-          Seus dados trafegam criptografados (HTTPS) e não são compartilhados com terceiros.
+          {c.security}
         </p>
 
-        {status === 'success' && (
-          <p className="text-[12.5px] text-[#D9A441]">
-            Pedido recebido — confirmamos sua mesa por telefone ou e-mail em breve.
-          </p>
-        )}
+        {status === 'success' && <p className="text-[12.5px] text-[#D9A441]">{c.success}</p>}
         {status === 'error' && (
-          <p className="text-[12.5px] text-red-400/90">
-            {form.consent
-              ? 'Não foi possível enviar agora. Tente novamente em instantes.'
-              : 'É preciso concordar com a Política de Privacidade para enviar.'}
-          </p>
+          <p className="text-[12.5px] text-red-400/90">{form.consent ? c.errorGeneric : c.errorConsent}</p>
         )}
       </form>
 
@@ -187,16 +153,8 @@ export const ArdosiaReservaForm = () => {
         <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C1552C]/30 bg-[#C1552C]/10">
           <MessageCircle className="h-4.5 w-4.5 text-[#D9A441]" />
         </span>
-        <p className="text-[12.5px] leading-relaxed text-[#D9D2C4]">
-          Prefere conversar direto? Chame no WhatsApp.
-        </p>
-        <a
-          href={getWhatsAppLink('Olá! Gostaria de reservar uma mesa na Ardósia.')}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-magnetic
-          className="inline-flex items-center gap-2 rounded-sm border border-[#F3EDE1]/20 px-5 py-3 text-[11.5px] font-medium uppercase tracking-[0.14em] text-[#F3EDE1] transition-colors hover:border-[#C1552C]/60 hover:text-[#D9A441]"
-        >
+        <p className="text-[12.5px] leading-relaxed text-[#D9D2C4]">{c.whatsappAside}</p>
+        <a href={getWhatsAppLink(c.whatsappMessage)} target="_blank" rel="noopener noreferrer" data-magnetic className="inline-flex items-center gap-2 rounded-sm border border-[#F3EDE1]/20 px-5 py-3 text-[11.5px] font-medium uppercase tracking-[0.14em] text-[#F3EDE1] transition-colors hover:border-[#C1552C]/60 hover:text-[#D9A441]">
           <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
         </a>
       </div>
