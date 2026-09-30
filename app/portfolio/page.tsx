@@ -7,6 +7,395 @@ import { getWhatsAppLink } from '@/lib/whatsapp';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
 import { useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+
+// ============================================================================
+// UI LABELS (pt / en)
+// ============================================================================
+const ui = {
+  pt: {
+    modalKitPrefix: 'Kit de Identidade Visual — ',
+    modalRationale: 'FUNDAMENTAÇÃO NEUROMARKETING',
+    modalPalette: 'Paleta de Cores',
+    modalPsychology: 'Psicologia: ',
+    modalTypography: 'Sistema Tipográfico',
+    modalDisplayLabel: 'Display / Títulos',
+    modalDisplayNote: 'Elegância, autoridade, alto contraste visual',
+    modalBodyLabel: 'Corpo / UI',
+    modalBodyNote: 'Legibilidade, humanidade, funcionalidade',
+    modalHierarchy: 'Hierarquia: ',
+    modalVoice: 'Tom de Voz',
+    modalPhotography: 'Diretriz de Fotografia & Imagem',
+    modalCta: 'Quero este kit para meu negócio',
+    modalWa: 'Oi! Gostei do kit de identidade visual. Quero saber mais sobre os planos e como funciona a entrega.',
+    cardDemo: 'Visualizar Demo',
+    cardKit: 'Ver Kit de Identidade Visual',
+    badge: 'O Laboratório',
+    h1line1: 'A anatomia da',
+    h1highlight: 'conversão perfeita',
+    intro:
+      'Nós não usamos templates. Utilizamos "Arquétipos de Decisão" — estruturas validadas pela neurociência que dominam o mercado High-Ticket. Cada projeto abaixo é uma demonstração viva de psicologia aplicada ao design.',
+    ctaHeading: 'Qual arquétipo faz sentido pro seu negócio?',
+    ctaBody:
+      'Seu site será desenhado a partir da psicologia do seu cliente ideal, não de templates genéricos. Conversamos sobre o seu negócio e recomendamos qual estratégia funciona melhor.',
+    ctaButton: 'Marcar diagnóstico',
+    ctaWa: 'Oi! Vim pela página do Laboratório e quero saber qual arquétipo faz sentido pro meu negócio.',
+  },
+  en: {
+    modalKitPrefix: 'Visual Identity Kit — ',
+    modalRationale: 'NEUROMARKETING RATIONALE',
+    modalPalette: 'Color Palette',
+    modalPsychology: 'Psychology: ',
+    modalTypography: 'Typography System',
+    modalDisplayLabel: 'Display / Headings',
+    modalDisplayNote: 'Elegance, authority, high visual contrast',
+    modalBodyLabel: 'Body / UI',
+    modalBodyNote: 'Legibility, humanity, functionality',
+    modalHierarchy: 'Hierarchy: ',
+    modalVoice: 'Tone of Voice',
+    modalPhotography: 'Photography & Imagery Guidelines',
+    modalCta: 'I want this kit for my business',
+    modalWa: "Hi! I liked the visual identity kit. I'd like to know more about the plans and how delivery works.",
+    cardDemo: 'View Demo',
+    cardKit: 'View Visual Identity Kit',
+    badge: 'The Lab',
+    h1line1: 'The anatomy of',
+    h1highlight: 'the perfect conversion',
+    intro:
+      'We don\'t use templates. We use "Decision Archetypes" — neuroscience-validated structures that dominate the high-ticket market. Each project below is a living demonstration of psychology applied to design.',
+    ctaHeading: 'Which archetype fits your business?',
+    ctaBody:
+      'Your site will be designed around the psychology of your ideal customer, not generic templates. We talk about your business and recommend the strategy that works best.',
+    ctaButton: 'Book a diagnosis',
+    ctaWa: "Hi! I came from the Lab page and want to know which archetype fits my business.",
+  },
+} as const;
+
+// ============================================================================
+// STRUCTURAL DATA (not translated): images, links, color values
+// ============================================================================
+const portfolioBase = [
+  {
+    image: '/images/hero-studio/airbnb.jpg',
+    demoLink: '/demo/airbnb',
+    delay: 0,
+    colors: [
+      { name: 'Amber Gold', hex: '#D4A574', rgb: 'rgb(212, 165, 116)' },
+      { name: 'Deep Navy', hex: '#0F1F2E', rgb: 'rgb(15, 31, 46)' },
+      { name: 'Cream Ivory', hex: '#F5F1E8', rgb: 'rgb(245, 241, 232)' },
+    ],
+  },
+  {
+    image: '/images/hero-studio/marcenaria.jpg',
+    demoLink: '/demo/marcenaria',
+    delay: 0.1,
+    colors: [
+      { name: 'Forest Green', hex: '#576141', rgb: 'rgb(87, 97, 65)' },
+      { name: 'Warm Cream', hex: '#F5F4EE', rgb: 'rgb(245, 244, 238)' },
+      { name: 'Oak Tan', hex: '#8B7355', rgb: 'rgb(139, 115, 85)' },
+    ],
+  },
+  {
+    image: '/images/hero-studio/gastronomia.jpg',
+    demoLink: '/demo/gastronomia',
+    delay: 0.2,
+    colors: [
+      { name: 'Burnt Orange', hex: '#C84B31', rgb: 'rgb(200, 75, 49)' },
+      { name: 'Cream Warm', hex: '#E8DCC4', rgb: 'rgb(232, 220, 196)' },
+      { name: 'Deep Charcoal', hex: '#1A1A1A', rgb: 'rgb(26, 26, 26)' },
+    ],
+  },
+  {
+    image: '/images/hero-studio/ecommerce.jpg',
+    demoLink: '/demo/nox-paris',
+    delay: 0.3,
+    colors: [
+      { name: 'Deep Onyx', hex: '#050505', rgb: 'rgb(5, 5, 5)' },
+      { name: 'Off-White Pearl', hex: '#EFEFEF', rgb: 'rgb(239, 239, 239)' },
+      { name: 'Charcoal Accent', hex: '#1A1A1A', rgb: 'rgb(26, 26, 26)' },
+    ],
+  },
+];
+
+// ============================================================================
+// TRANSLATED CONTENT (pt / en) — same order as portfolioBase
+// ============================================================================
+const portfolioText = {
+  pt: [
+    {
+      title: 'Villa Serena',
+      subtitle: 'Imersão Cinética para Hospitalidade Luxury',
+      archetype: 'Arquétipo: Cinematic Full-Bleed',
+      description:
+        'Plataforma de reservas que vende o destino antes da estadia. Usando vídeo de alta produção com parallax scroll, criamos uma experiência imersiva que ancoriza expectativa de luxo e reduz fricção de decisão.',
+      strategy: [
+        'Parallax scroll com vídeo do destination hero',
+        'Glassmorphism card com preço e CTA destacado',
+        'Social proof integrado (reviews em scroll)',
+        'Zero cliques até conversão',
+      ],
+      colorPsych: [
+        'Conforto, luxo, aconchego natural. Âncora de preço premium e percepção de qualidade exclusiva.',
+        'Confiança, sofisticação. Reduz fricção de risco emocional na decisão de reserva.',
+        'Pureza, serenidade. Comunica exclusividade e experiência limpa.',
+      ],
+      typography: {
+        display: 'Bodoni Moda',
+        body: 'Inter',
+        hierarchy: 'Display para hero/títulos (72px+); corpo para copy (16px); captions (12px)',
+      },
+      voiceTone: [
+        'Aspiracional sem arrogância',
+        'Acolhedor e convidativo',
+        'Premium mas acessível',
+        'Narrativo (venda o destino, não o quarto)',
+      ],
+      photography:
+        'Golden hour (pôr/nascer), natural lighting, lifestyle shots (hóspedes em momentos felizes, não vagas vazias). Saturação +15%, warmth +10%. Sem pessoas cenário - sempre interação genuína.',
+      justification:
+        'Âmbar + Navy criam contraste que guia atenção. Âmbar ativa "reward processing" no cérebro (ancoriza expectativa de prazer). Navy reduz ansiedade pré-compra. Tipografia Bodoni comunica tradição + modernidade = confiança em marca nova.',
+    },
+    {
+      title: 'CERNE Studio',
+      subtitle: 'Split Editorial para Marcenaria Artesanal',
+      archetype: 'Arquétipo: Editorial Split',
+      description:
+        'Marcenaria de luxo pede apresentação escultural. Dividimos a tela entre storytelling editorial (esquerda) e showcasing técnico em 3D (direita). Comunica tradição + modernidade.',
+      strategy: [
+        'Wireframe 3D rotativo para produto técnico',
+        'Copy editorial com tipografia serif elegante',
+        'CTA minimalista mas clara (Ver Catálogo)',
+        'Spring physics em todos os estados de hover',
+        'Scroll reveal com stagger animations',
+      ],
+      colorPsych: [
+        'Natureza, sustentabilidade, maestria. Comunica craftmanship e materiais nobres.',
+        'Linho, naturalidade. Reduz fricção visual, aumenta legibilidade de conteúdo premium.',
+        'Madeira natural, autenticidade. Âncora de qualidade material e durabilidade.',
+      ],
+      typography: {
+        display: 'Fraunces',
+        body: 'Inter',
+        hierarchy: 'Display para títulos/seções (64px+); corpo (16px); técnico em mono para specs (12px)',
+      },
+      voiceTone: [
+        'Artesanal e autêntico',
+        'Técnico quando necessário',
+        'Educador (explica processo)',
+        'Respeitoso com o cliente',
+      ],
+      photography:
+        'Luz natural direta, texturas close-up de madeira, mãos em detalhe. Cores neutras com toques de verde. High detail, sharp focus. Mostrar processo de fabricação, não só resultado final.',
+      justification:
+        'Verde + Creme ativam senso de "natural premium" (psicologia ambiental). Forest Green reduz tempo de decisão (menos opções percebidas = mais foco no produto). Fraunces comunica tradição artesanal. Técnica mono em specs constrói autoridade.',
+    },
+    {
+      title: 'Ardósia',
+      subtitle: 'Caos Visual Organizado para Gastronomia',
+      archetype: 'Arquétipo: Editorial Assimétrico',
+      description:
+        'Gastronomia de assinatura exige quebra de padrão. Fontes provocativas, colagem assimétrica e scroll-driven animations criam desejo visual e fome instintiva.',
+      strategy: [
+        'Tipografia display ousada + paleta quente',
+        'Imagem rotacionável com hover reveal',
+        'SVG path animado (scroll-driven)',
+        'Micro-interações em card hover',
+        'CTA integrada ao copy',
+      ],
+      colorPsych: [
+        'Fogo, urgência, apetite. Ativa resposta visceral - fome emocional. Aumenta heart rate.',
+        'Conforto culinário, sofisticação. Acalma a urgência, mantém elegância.',
+        'Dramaticidade, sofisticação. Faz laranja "pular" (contraste máximo).',
+      ],
+      typography: {
+        display: 'Instrument Serif Italic',
+        body: 'Poppins',
+        hierarchy: 'Display italic bold (72px+) para dramaticidade; corpo sem serif (16px) para contraste',
+      },
+      voiceTone: [
+        'Provocador e irreverente',
+        'Apaixonado pelo detalhe',
+        'Teatral (storytelling sensorial)',
+        'Acessível apesar de premium',
+      ],
+      photography:
+        'Close-ups extremos de pratos, texturas, ingredientes. Golden hour com calor exagerado. Saturação +20%, contraste +15%. Sempre ação/movimento (mãos cortando, vapor). Sem plating tradicional - show comida como arte.',
+      justification:
+        'Laranja queimada ativa "approach motivation" + fome (resposta evolutiva). Creme mantém sofisticação (não é fast food). Italic serif comunica quebra de padrão (não é restaurante tradicional). Poppins (sans) cria tensão com display serif = visual dissonância planejada.',
+    },
+    {
+      title: 'Nox-Paris',
+      subtitle: 'Brutalismo & Fricção Zero para E-Commerce',
+      archetype: 'Arquétipo: Grid Brutalista',
+      description:
+        'E-commerce premium com identidade clara. Bordes pesados, cores sólidas, tipografia robusta. Zero distração — botões óbvios, imagens que comunicam, checkout direto.',
+      strategy: [
+        'Layout grid com bordas de 8px em preto',
+        'Marquee animado com mensagem repetida',
+        'Imagem em escala de cinza → cores no hover',
+        'Preço e botão comprar em fundo fluorescente',
+        'Product showcase com zoom suave',
+      ],
+      colorPsych: [
+        'Sofisticação extrema. Quiet luxury (menos é mais). Reduz choice paralysis + aumenta percepção de premium.',
+        'Pureza, clareza. Minimiza esforço cognitivo. Cria contraste máximo = legibilidade premium.',
+        'Profundidade, sofisticação. Transição visual entre extremos preto/branco sem quebrar elegância.',
+      ],
+      typography: {
+        display: 'Bodoni Moda',
+        body: 'Plus Jakarta Sans',
+        hierarchy: 'Bodoni Moda italic/bold (60px+) para dramaticidade; Plus Jakarta Sans regular (14-16px) para corpo',
+      },
+      voiceTone: [
+        'Discretamente luxuoso',
+        'Sensorial e ciência',
+        'Sofisticado sem arrogância',
+        'Storytelling através de ingredientes',
+      ],
+      photography:
+        'Close-ups sensoriais (gotas, ingredientes, texturas). Lighting cinematográfico (chiaroscuro). Monocromático + nuances de cinza. Foco em detalhe/craftsmanship. Nenhuma cor distrai - o produto é a cor.',
+      justification:
+        'Onyx (#050505) ativa percepção de "quiet luxury" (menos sinais visuais = mais premium). Contraste extremo com off-white força leitura sem esforço (reduz fricção). Bodoni Moda comunica tradição de fragrância de luxo (tipografia clássica). Psychology: paleta monocromática = focus puro no produto (menos competição visual).',
+    },
+  ],
+  en: [
+    {
+      title: 'Villa Serena',
+      subtitle: 'Kinetic Immersion for Luxury Hospitality',
+      archetype: 'Archetype: Cinematic Full-Bleed',
+      description:
+        'A booking platform that sells the destination before the stay. Using high-production video with parallax scroll, we create an immersive experience that anchors a luxury expectation and reduces decision friction.',
+      strategy: [
+        'Parallax scroll with a destination hero video',
+        'Glassmorphism card with price and a standout CTA',
+        'Integrated social proof (reviews on scroll)',
+        'Zero clicks to conversion',
+      ],
+      colorPsych: [
+        'Comfort, luxury, natural warmth. Anchors a premium price and a perception of exclusive quality.',
+        'Trust, sophistication. Reduces emotional-risk friction in the booking decision.',
+        'Purity, serenity. Communicates exclusivity and a clean experience.',
+      ],
+      typography: {
+        display: 'Bodoni Moda',
+        body: 'Inter',
+        hierarchy: 'Display for hero/headings (72px+); body for copy (16px); captions (12px)',
+      },
+      voiceTone: [
+        'Aspirational without arrogance',
+        'Warm and inviting',
+        'Premium yet approachable',
+        'Narrative (sell the destination, not the room)',
+      ],
+      photography:
+        'Golden hour (sunset/sunrise), natural lighting, lifestyle shots (guests in happy moments, not empty rooms). Saturation +15%, warmth +10%. No staged people — always genuine interaction.',
+      justification:
+        'Amber + Navy create a contrast that guides attention. Amber activates the brain\'s "reward processing" (anchoring an expectation of pleasure). Navy reduces pre-purchase anxiety. Bodoni typography communicates tradition + modernity = trust in a new brand.',
+    },
+    {
+      title: 'CERNE Studio',
+      subtitle: 'Editorial Split for Artisan Woodwork',
+      archetype: 'Archetype: Editorial Split',
+      description:
+        'Luxury woodwork calls for a sculptural presentation. We split the screen between editorial storytelling (left) and technical 3D showcasing (right). It communicates tradition + modernity.',
+      strategy: [
+        'Rotating 3D wireframe for the technical product',
+        'Editorial copy with elegant serif typography',
+        'Minimalist yet clear CTA (View Catalog)',
+        'Spring physics on every hover state',
+        'Scroll reveal with staggered animations',
+      ],
+      colorPsych: [
+        'Nature, sustainability, mastery. Communicates craftsmanship and fine materials.',
+        'Linen, naturalness. Reduces visual friction and improves legibility of premium content.',
+        'Natural wood, authenticity. Anchors material quality and durability.',
+      ],
+      typography: {
+        display: 'Fraunces',
+        body: 'Inter',
+        hierarchy: 'Display for headings/sections (64px+); body (16px); mono for technical specs (12px)',
+      },
+      voiceTone: [
+        'Artisanal and authentic',
+        'Technical when needed',
+        'Educational (explains the process)',
+        'Respectful of the client',
+      ],
+      photography:
+        'Direct natural light, close-up wood textures, hands in detail. Neutral colors with touches of green. High detail, sharp focus. Show the making process, not just the final result.',
+      justification:
+        'Green + Cream activate a "natural premium" sense (environmental psychology). Forest Green shortens decision time (fewer perceived options = more focus on the product). Fraunces communicates artisan tradition. Mono type on specs builds authority.',
+    },
+    {
+      title: 'Ardósia',
+      subtitle: 'Organized Visual Chaos for Fine Dining',
+      archetype: 'Archetype: Asymmetric Editorial',
+      description:
+        'Signature dining demands breaking the mold. Provocative fonts, asymmetric collage, and scroll-driven animations create visual desire and instinctive hunger.',
+      strategy: [
+        'Bold display typography + warm palette',
+        'Rotatable image with hover reveal',
+        'Animated SVG path (scroll-driven)',
+        'Micro-interactions on card hover',
+        'CTA integrated into the copy',
+      ],
+      colorPsych: [
+        'Fire, urgency, appetite. Triggers a visceral response — emotional hunger. Raises heart rate.',
+        'Culinary comfort, sophistication. Calms the urgency while keeping elegance.',
+        'Drama, sophistication. Makes the orange "pop" (maximum contrast).',
+      ],
+      typography: {
+        display: 'Instrument Serif Italic',
+        body: 'Poppins',
+        hierarchy: 'Bold italic display (72px+) for drama; sans-serif body (16px) for contrast',
+      },
+      voiceTone: [
+        'Provocative and irreverent',
+        'Passionate about detail',
+        'Theatrical (sensory storytelling)',
+        'Approachable despite being premium',
+      ],
+      photography:
+        'Extreme close-ups of dishes, textures, ingredients. Golden hour with exaggerated warmth. Saturation +20%, contrast +15%. Always action/motion (hands slicing, steam). No traditional plating — show food as art.',
+      justification:
+        'Burnt orange activates "approach motivation" + hunger (an evolutionary response). Cream keeps it sophisticated (this isn\'t fast food). Italic serif signals a break from the norm (not a traditional restaurant). Poppins (sans) creates tension with the serif display = intentional visual dissonance.',
+    },
+    {
+      title: 'Nox-Paris',
+      subtitle: 'Brutalism & Zero Friction for E-Commerce',
+      archetype: 'Archetype: Brutalist Grid',
+      description:
+        'Premium e-commerce with a clear identity. Heavy borders, solid colors, robust typography. Zero distraction — obvious buttons, images that communicate, direct checkout.',
+      strategy: [
+        'Grid layout with 8px black borders',
+        'Animated marquee with a repeated message',
+        'Grayscale image → color on hover',
+        'Price and buy button on a fluorescent background',
+        'Product showcase with smooth zoom',
+      ],
+      colorPsych: [
+        'Extreme sophistication. Quiet luxury (less is more). Reduces choice paralysis + raises the premium perception.',
+        'Purity, clarity. Minimizes cognitive effort. Creates maximum contrast = premium legibility.',
+        'Depth, sophistication. A visual transition between black/white extremes without breaking elegance.',
+      ],
+      typography: {
+        display: 'Bodoni Moda',
+        body: 'Plus Jakarta Sans',
+        hierarchy: 'Bodoni Moda italic/bold (60px+) for drama; Plus Jakarta Sans regular (14-16px) for body',
+      },
+      voiceTone: [
+        'Discreetly luxurious',
+        'Sensory and scientific',
+        'Sophisticated without arrogance',
+        'Storytelling through ingredients',
+      ],
+      photography:
+        'Sensory close-ups (droplets, ingredients, textures). Cinematic lighting (chiaroscuro). Monochrome + shades of gray. Focus on detail/craftsmanship. No color distracts — the product is the color.',
+      justification:
+        'Onyx (#050505) activates a "quiet luxury" perception (fewer visual signals = more premium). Extreme contrast with off-white forces effortless reading (reducing friction). Bodoni Moda communicates the tradition of luxury fragrance (classic typography). Psychology: a monochrome palette = pure focus on the product (less visual competition).',
+    },
+  ],
+} as const;
 
 // ============================================================================
 // BRAND KIT MODAL
@@ -32,6 +421,8 @@ const BrandKitModal = ({
   photography,
   justification
 }: BrandKitModalProps) => {
+  const { language } = useLanguage();
+  const l = ui[language];
   return (
     <AnimatePresence>
       {isOpen && (
@@ -57,7 +448,7 @@ const BrandKitModal = ({
               {/* Header */}
               <div className="sticky top-0 bg-obsidian-800/95 border-b border-pearl-200/10 p-6 flex justify-between items-center backdrop-blur">
                 <h2 className="text-2xl font-black text-pearl-100">
-                  Kit de Identidade Visual — {brandName}
+                  {l.modalKitPrefix}{brandName}
                 </h2>
                 <motion.button
                   onClick={onClose}
@@ -78,7 +469,7 @@ const BrandKitModal = ({
                   transition={{ delay: 0.1 }}
                   className="bg-gold-500/10 border border-gold-500/20 rounded-lg p-6"
                 >
-                  <p className="text-gold-300 text-sm font-semibold mb-2">FUNDAMENTAÇÃO NEUROMARKETING</p>
+                  <p className="text-gold-300 text-sm font-semibold mb-2">{l.modalRationale}</p>
                   <p className="text-pearl-300/80 text-sm leading-relaxed">{justification}</p>
                 </motion.div>
 
@@ -88,7 +479,7 @@ const BrandKitModal = ({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
                 >
-                  <h3 className="text-lg font-bold text-pearl-100 mb-6">Paleta de Cores</h3>
+                  <h3 className="text-lg font-bold text-pearl-100 mb-6">{l.modalPalette}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {colors.map((color, idx) => (
                       <div key={idx} className="border border-pearl-200/10 rounded-lg p-4">
@@ -104,7 +495,7 @@ const BrandKitModal = ({
                           </div>
                         </div>
                         <p className="text-xs text-pearl-300/70 leading-relaxed border-t border-pearl-200/10 pt-3">
-                          <span className="text-gold-300 font-semibold">Psicologia: </span>{color.psychology}
+                          <span className="text-gold-300 font-semibold">{l.modalPsychology}</span>{color.psychology}
                         </p>
                       </div>
                     ))}
@@ -117,24 +508,24 @@ const BrandKitModal = ({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <h3 className="text-lg font-bold text-pearl-100 mb-6">Sistema Tipográfico</h3>
+                  <h3 className="text-lg font-bold text-pearl-100 mb-6">{l.modalTypography}</h3>
                   <div className="space-y-4">
                     <div className="border border-pearl-200/10 rounded-lg p-6">
-                      <p className="text-sm text-pearl-300/60 uppercase tracking-widest mb-2">Display / Títulos</p>
+                      <p className="text-sm text-pearl-300/60 uppercase tracking-widest mb-2">{l.modalDisplayLabel}</p>
                       <p className="text-4xl font-black mb-3" style={{ fontFamily: 'Fraunces, serif' }}>
                         {typography.display}
                       </p>
-                      <p className="text-xs text-pearl-300/70">Elegância, autoridade, alto contraste visual</p>
+                      <p className="text-xs text-pearl-300/70">{l.modalDisplayNote}</p>
                     </div>
                     <div className="border border-pearl-200/10 rounded-lg p-6">
-                      <p className="text-sm text-pearl-300/60 uppercase tracking-widest mb-2">Corpo / UI</p>
+                      <p className="text-sm text-pearl-300/60 uppercase tracking-widest mb-2">{l.modalBodyLabel}</p>
                       <p className="text-base leading-relaxed mb-3">
                         {typography.body}
                       </p>
-                      <p className="text-xs text-pearl-300/70">Legibilidade, humanidade, funcionalidade</p>
+                      <p className="text-xs text-pearl-300/70">{l.modalBodyNote}</p>
                     </div>
                     <div className="bg-gold-500/5 border border-gold-500/20 rounded-lg p-4">
-                      <p className="text-xs text-pearl-300/70"><span className="text-gold-300 font-semibold">Hierarquia: </span>{typography.hierarchy}</p>
+                      <p className="text-xs text-pearl-300/70"><span className="text-gold-300 font-semibold">{l.modalHierarchy}</span>{typography.hierarchy}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -145,7 +536,7 @@ const BrandKitModal = ({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 }}
                 >
-                  <h3 className="text-lg font-bold text-pearl-100 mb-6">Tom de Voz</h3>
+                  <h3 className="text-lg font-bold text-pearl-100 mb-6">{l.modalVoice}</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {voiceTone.map((tone, idx) => (
                       <div key={idx} className="flex items-center gap-3 p-3 bg-pearl-200/5 rounded-lg border border-pearl-200/10">
@@ -163,13 +554,13 @@ const BrandKitModal = ({
                   transition={{ delay: 0.3 }}
                   className="border border-pearl-200/10 rounded-lg p-6 bg-pearl-200/5"
                 >
-                  <h4 className="font-bold text-pearl-100 mb-3">Diretriz de Fotografia & Imagem</h4>
+                  <h4 className="font-bold text-pearl-100 mb-3">{l.modalPhotography}</h4>
                   <p className="text-pearl-300/80 text-sm leading-relaxed">{photography}</p>
                 </motion.div>
 
                 {/* CTA */}
                 <motion.a
-                  href={getWhatsAppLink('Oi! Gostei do kit de identidade visual. Quero saber mais sobre os planos e como funciona a entrega.')}
+                  href={getWhatsAppLink(l.modalWa)}
                   target="_blank"
                   rel="noreferrer"
                   className="block w-full py-4 bg-gold-500 hover:bg-gold-400 text-obsidian-900 font-bold uppercase text-center rounded-lg transition-colors"
@@ -179,7 +570,7 @@ const BrandKitModal = ({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35 }}
                 >
-                  Quero este kit para meu negócio
+                  {l.modalCta}
                 </motion.a>
               </div>
             </motion.div>
@@ -223,6 +614,8 @@ const PortfolioCard = ({
   brandKit
 }: PortfolioCardProps) => {
   const [showBrandKit, setShowBrandKit] = useState(false);
+  const { language } = useLanguage();
+  const l = ui[language];
   return (
     <motion.div
       className="relative bg-gradient-to-br from-obsidian-800 to-obsidian-900 rounded-2xl overflow-hidden border border-pearl-200/10 group"
@@ -307,7 +700,7 @@ const PortfolioCard = ({
             viewport={{ once: true }}
             transition={{ delay: delay + 0.25, type: 'spring', stiffness: 300, damping: 30 }}
           >
-            Visualizar Demo
+            {l.cardDemo}
             <ArrowUpRight className="w-4 h-4" />
           </motion.a>
           <motion.button
@@ -320,7 +713,7 @@ const PortfolioCard = ({
             viewport={{ once: true }}
             transition={{ delay: delay + 0.3, type: 'spring', stiffness: 300, damping: 30 }}
           >
-            Ver Kit de Identidade Visual
+            {l.cardKit}
           </motion.button>
         </div>
       </div>
@@ -340,213 +733,30 @@ const PortfolioCard = ({
   );
 };
 
-const portfolioItems = [
-  {
-    title: 'Villa Serena',
-    subtitle: 'Imersão Cinética para Hospitalidade Luxury',
-    archetype: 'Arquétipo: Cinematic Full-Bleed',
-    description: 'Plataforma de reservas que vende o destino antes da estadia. Usando vídeo de alta produção com parallax scroll, criamos uma experiência imersiva que ancoriza expectativa de luxo e reduz fricção de decisão.',
-    strategy: [
-      'Parallax scroll com vídeo do destination hero',
-      'Glassmorphism card com precio e CTA destacado',
-      'Social proof integrado (reviews em scroll)',
-      'Zero cliques até conversão'
-    ],
-    image: '/images/hero-studio/airbnb.jpg',
-    demoLink: '/demo/airbnb',
-    delay: 0,
-    brandKit: {
-      colors: [
-        {
-          name: 'Amber Gold',
-          hex: '#D4A574',
-          rgb: 'rgb(212, 165, 116)',
-          psychology: 'Conforto, luxo, aconchego natural. Âncora de preço premium e percepção de qualidade exclusiva.'
-        },
-        {
-          name: 'Deep Navy',
-          hex: '#0F1F2E',
-          rgb: 'rgb(15, 31, 46)',
-          psychology: 'Confiança, sofisticação. Reduz fricção de risco emocional na decisão de reserva.'
-        },
-        {
-          name: 'Cream Ivory',
-          hex: '#F5F1E8',
-          rgb: 'rgb(245, 241, 232)',
-          psychology: 'Pureza, serenidade. Comunica exclusividade e experiência limpa.'
-        }
-      ],
-      typography: {
-        display: 'Bodoni Moda',
-        body: 'Inter',
-        hierarchy: 'Display para hero/títulos (72px+); corpo para copy (16px); captions (12px)'
-      },
-      voiceTone: [
-        'Aspiracional sem arrogância',
-        'Acolhedor e convidativo',
-        'Premium mas acessível',
-        'Narrativo (venda o destino, não o quarto)'
-      ],
-      photography: 'Golden hour (pôr/nascer), natural lighting, lifestyle shots (hóspedes em momentos felizes, não vagas vazias). Saturação +15%, warmth +10%. Sem pessoas cenário - sempre interação genuína.',
-      justification: 'Âmbar + Navy criam contraste que guia atenção. Âmbar ativa "reward processing" no cérebro (ancoriza expectativa de prazer). Navy reduz ansiedade pré-compra. Tipografia Bodoni comunica tradição + modernidade = confiança em marca nova.'
-    }
-  },
-  {
-    title: 'CERNE Studio',
-    subtitle: 'Split Editorial para Marcenaria Artesanal',
-    archetype: 'Arquétipo: Editorial Split',
-    description: 'Marcenaria de luxo pede apresentação escultural. Dividimos a tela entre storytelling editorial (esquerda) e showcasing técnico em 3D (direita). Comunica tradição + modernidade.',
-    strategy: [
-      'Wireframe 3D rotativo para produto técnico',
-      'Copy editorial com tipografia serif elegante',
-      'CTA minimalista mas clara (Ver Catálogo)',
-      'Spring physics em todos os estados de hover',
-      'Scroll reveal com stagger animations'
-    ],
-    image: '/images/hero-studio/marcenaria.jpg',
-    demoLink: '/demo/marcenaria',
-    delay: 0.1,
-    brandKit: {
-      colors: [
-        {
-          name: 'Forest Green',
-          hex: '#576141',
-          rgb: 'rgb(87, 97, 65)',
-          psychology: 'Natureza, sustentabilidade, maestria. Comunica craftmanship e materiais nobres.'
-        },
-        {
-          name: 'Warm Cream',
-          hex: '#F5F4EE',
-          rgb: 'rgb(245, 244, 238)',
-          psychology: 'Linho, naturalidade. Reduz fricção visual, aumenta legibilidade de conteúdo premium.'
-        },
-        {
-          name: 'Oak Tan',
-          hex: '#8B7355',
-          rgb: 'rgb(139, 115, 85)',
-          psychology: 'Madeira natural, autenticidade. Âncora de qualidade material e durabilidade.'
-        }
-      ],
-      typography: {
-        display: 'Fraunces',
-        body: 'Inter',
-        hierarchy: 'Display para títulos/seções (64px+); corpo (16px); técnico em mono para specs (12px)'
-      },
-      voiceTone: [
-        'Artesanal e autêntico',
-        'Técnico quando necessário',
-        'Educador (explica processo)',
-        'Respeitoso com o cliente'
-      ],
-      photography: 'Luz natural direta, texturas close-up de madeira, mãos em detalhe. Cores neutras com toques de verde. High detail, sharp focus. Mostrar processo de fabricação, não só resultado final.',
-      justification: 'Verde + Creme ativam senso de "natural premium" (psicologia ambiental). Forest Green reduz tempo de decisão (menos opções percebidas = mais foco no produto). Fraunces comunica tradição artesanal. Técnica mono em specs constrói autoridade.'
-    }
-  },
-  {
-    title: 'Ardósia',
-    subtitle: 'Caos Visual Organizado para Gastronomia',
-    archetype: 'Arquétipo: Editorial Assimétrico',
-    description: 'Gastronomia de assinatura exige quebra de padrão. Fontes provocativas, colagem assimétrica e scroll-driven animations criam desejo visual e fome instintiva.',
-    strategy: [
-      'Tipografia display ousada + paleta quente',
-      'Imagem rotacionável com hover reveal',
-      'SVG path animado (scroll-driven)',
-      'Micro-interações em card hover',
-      'CTA integrada ao copy'
-    ],
-    image: '/images/hero-studio/gastronomia.jpg',
-    demoLink: '/demo/gastronomia',
-    delay: 0.2,
-    brandKit: {
-      colors: [
-        {
-          name: 'Burnt Orange',
-          hex: '#C84B31',
-          rgb: 'rgb(200, 75, 49)',
-          psychology: 'Fogo, urgência, apetite. Ativa resposta visceral - fome emocional. Aumenta heart rate.'
-        },
-        {
-          name: 'Cream Warm',
-          hex: '#E8DCC4',
-          rgb: 'rgb(232, 220, 196)',
-          psychology: 'Conforto culinário, sofisticação. Acalma a urgência, mantém elegância.'
-        },
-        {
-          name: 'Deep Charcoal',
-          hex: '#1A1A1A',
-          rgb: 'rgb(26, 26, 26)',
-          psychology: 'Dramaticidade, sofisticação. Faz laranja "pular" (contraste máximo).'
-        }
-      ],
-      typography: {
-        display: 'Instrument Serif Italic',
-        body: 'Poppins',
-        hierarchy: 'Display italic bold (72px+) para dramaticidade; corpo sem serif (16px) para contraste'
-      },
-      voiceTone: [
-        'Provocador e irreverente',
-        'Apaixonado pelo detalhe',
-        'Teatral (storytelling sensorial)',
-        'Acessível apesar de premium'
-      ],
-      photography: 'Close-ups extremos de pratos, texturas, ingredientes. Golden hour com calor exagerado. Saturação +20%, contraste +15%. Sempre ação/movimento (mãos cortando, vapor). Sem plating tradicional - show comida como arte.',
-      justification: 'Laranja queimada ativa "approach motivation" + fome (resposta evolutiva). Creme mantém sofisticação (não é fast food). Italic serif comunica quebra de padrão (não é restaurante tradicional). Poppins (sans) cria tensão com display serif = visual dissonância planejada.'
-    }
-  },
-  {
-    title: 'Nox-Paris',
-    subtitle: 'Brutalismo & Fricção Zero para E-Commerce',
-    archetype: 'Arquétipo: Grid Brutalista',
-    description: 'E-commerce premium com identidade clara. Bordes pesados, cores sólidas, tipografia robusta. Zero distração — botões óbvios, imagens que comunicam, checkout direto.',
-    strategy: [
-      'Layout grid com bordas de 8px em preto',
-      'Marquee animado com mensagem repetida',
-      'Imagem em escala de cinza → cores no hover',
-      'Preço e botão comprar em fundo fluorescente',
-      'Product showcase com zoom suave'
-    ],
-    image: '/images/hero-studio/ecommerce.jpg',
-    demoLink: '/demo/nox-paris',
-    delay: 0.3,
-    brandKit: {
-      colors: [
-        {
-          name: 'Deep Onyx',
-          hex: '#050505',
-          rgb: 'rgb(5, 5, 5)',
-          psychology: 'Sofisticação extrema. Quiet luxury (menos é mais). Reduz choice paralysis + aumenta percepção de premium.'
-        },
-        {
-          name: 'Off-White Pearl',
-          hex: '#EFEFEF',
-          rgb: 'rgb(239, 239, 239)',
-          psychology: 'Pureza, clareza. Minimiza esforço cognitivo. Cria contraste máximo = legibilidade premium.'
-        },
-        {
-          name: 'Charcoal Accent',
-          hex: '#1A1A1A',
-          rgb: 'rgb(26, 26, 26)',
-          psychology: 'Profundidade, sofisticação. Transição visual entre extremos preto/branco sem quebrar elegância.'
-        }
-      ],
-      typography: {
-        display: 'Bodoni Moda',
-        body: 'Plus Jakarta Sans',
-        hierarchy: 'Bodoni Moda italic/bold (60px+) para dramaticidade; Plus Jakarta Sans regular (14-16px) para corpo'
-      },
-      voiceTone: [
-        'Discretamente luxuoso',
-        'Sensorial e ciência',
-        'Sofisticado sem arrogância',
-        'Storytelling através de ingredientes'
-      ],
-      photography: 'Close-ups sensoriais (gotas, ingredientes, texturas). Lighting cinematográfico (chiaroscuro). Monocromático + nuances de cinza. Foco em detalhe/craftsmanship. Nenhuma cor distrai - o produto é a cor.',
-      justification: 'Onyx (#050505) ativa percepção de "quiet luxury" (menos sinais visuais = mais premium). Contraste extremo com off-white força leitura sem esforço (reduz fricção). Bodoni Moda comunica tradição de fragrância de luxo (tipografia clássica). Psychology: paleta monocromática = focus puro no produto (menos competição visual).'
-    }
-  }
-];
-
 export default function PortfolioPage() {
+  const { language } = useLanguage();
+  const l = ui[language];
+  const items = portfolioBase.map((base, i) => {
+    const tx = portfolioText[language][i];
+    return {
+      image: base.image,
+      demoLink: base.demoLink,
+      delay: base.delay,
+      title: tx.title,
+      subtitle: tx.subtitle,
+      archetype: tx.archetype,
+      description: tx.description,
+      strategy: tx.strategy as unknown as string[],
+      brandKit: {
+        colors: base.colors.map((col, ci) => ({ ...col, psychology: tx.colorPsych[ci] })),
+        typography: tx.typography,
+        voiceTone: tx.voiceTone as unknown as string[],
+        photography: tx.photography,
+        justification: tx.justification,
+      },
+    };
+  });
+
   return (
     <>
       <Navbar />
@@ -575,7 +785,7 @@ export default function PortfolioPage() {
             }}
           >
             <Badge variant="primary" className="mb-6 mx-auto">
-              O Laboratório
+              {l.badge}
             </Badge>
           </motion.div>
           <motion.h1
@@ -585,9 +795,9 @@ export default function PortfolioPage() {
               show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
             }}
           >
-            A anatomia da <br className="hidden md:block"/>
+            {l.h1line1} <br className="hidden md:block"/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-500 to-gold-600">
-              conversão perfeita
+              {l.h1highlight}
             </span>
           </motion.h1>
           <motion.p
@@ -597,13 +807,13 @@ export default function PortfolioPage() {
               show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
             }}
           >
-            Nós não usamos templates. Utilizamos "Arquétipos de Decisão" — estruturas validadas pela neurociência que dominam o mercado High-Ticket. Cada projeto abaixo é uma demonstração viva de psicologia aplicada ao design.
+            {l.intro}
           </motion.p>
         </motion.div>
 
         {/* PORTFOLIO GRID */}
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 mb-32">
-          {portfolioItems.map((item, idx) => (
+          {items.map((item, idx) => (
             <PortfolioCard key={idx} {...item} />
           ))}
         </div>
@@ -631,7 +841,7 @@ export default function PortfolioPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 30 }}
             >
-              Qual arquétipo faz sentido pro seu negócio?
+              {l.ctaHeading}
             </motion.h2>
             <motion.p
               className="text-pearl-300/60 mb-8 max-w-2xl mx-auto text-lg"
@@ -640,10 +850,10 @@ export default function PortfolioPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.15, type: 'spring', stiffness: 300, damping: 30 }}
             >
-              Seu site será desenhado a partir da psicologia do seu cliente ideal, não de templates genéricos. Conversamos sobre o seu negócio e recomendamos qual estratégia funciona melhor.
+              {l.ctaBody}
             </motion.p>
             <motion.a
-              href={getWhatsAppLink('Oi! Vim pela página do Laboratório e quero saber qual arquétipo faz sentido pro meu negócio.')}
+              href={getWhatsAppLink(l.ctaWa)}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gold-500 hover:bg-gold-400 text-obsidian-900 font-bold uppercase text-sm tracking-wider"
@@ -651,7 +861,7 @@ export default function PortfolioPage() {
               whileTap={{ scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             >
-              Marcar diagnóstico
+              {l.ctaButton}
               <ArrowUpRight className="w-4 h-4" />
             </motion.a>
           </motion.div>
