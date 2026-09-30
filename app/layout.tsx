@@ -67,6 +67,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL("https://neuralabs.online"),
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
