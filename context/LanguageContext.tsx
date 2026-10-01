@@ -10,7 +10,7 @@ interface NavLink {
 }
 
 interface StudioTabCopy {
-  emoji: string;
+  icon: 'stay' | 'wood' | 'food' | 'shop';
   label: string;
   headline: string;
   cta: string;
@@ -199,43 +199,46 @@ const pt: Dictionary = {
     // performance number sitting outside the mockup's "Conceito
     // Ilustrativo" disclosure. Replaced with a capability claim, same
     // register as badgeNeuro below, instead of an invented benchmark.
-    badgeSpeed: '⚡ Design 3D & Alta Performance',
-    badgeNeuro: '🧠 Neuromarketing & Alta Conversão',
+    // The tab metrics below used to be invented percentages (+42%, +58%,
+    // +35%, +27%). There is no client result behind them yet, so each tab
+    // now names the project's focus instead of promising a number.
+    badgeSpeed: 'Design 3D & Alta Performance',
+    badgeNeuro: 'Neuromarketing & Alta Conversão',
     tabs: [
       {
-        emoji: '🏨',
+        icon: 'stay',
         label: 'Airbnb / Praia',
         headline: 'Reserve sua estadia dos sonhos',
         cta: 'Reservar Agora',
-        metricLabel: 'Conversão de Reservas',
-        metricValue: '+42%',
+        metricLabel: 'Foco do projeto',
+        metricValue: 'Reservas diretas',
         domain: 'suaestadia.com.br',
       },
       {
-        emoji: '🪵',
+        icon: 'wood',
         label: 'Marcenaria',
         headline: 'Projetos sob medida, feitos pra durar',
         cta: 'Solicitar Orçamento',
-        metricLabel: 'Leads Qualificados',
-        metricValue: '+58%',
+        metricLabel: 'Foco do projeto',
+        metricValue: 'Leads qualificados',
         domain: 'marcenariadeluxo.com.br',
       },
       {
-        emoji: '🍽️',
+        icon: 'food',
         label: 'Gastronomia',
         headline: 'Sabores que enchem mesas',
         cta: 'Reservar Mesa',
-        metricLabel: 'Reservas Online',
-        metricValue: '+35%',
+        metricLabel: 'Foco do projeto',
+        metricValue: 'Reservas online',
         domain: 'sabordamesa.com.br',
       },
       {
-        emoji: '💎',
+        icon: 'shop',
         label: 'E-commerce',
         headline: 'Da vitrine ao carrinho, sem fricção',
         cta: 'Comprar Agora',
-        metricLabel: 'Ticket Médio',
-        metricValue: '+27%',
+        metricLabel: 'Foco do projeto',
+        metricValue: 'Ticket médio',
         domain: 'boutiqueonline.com.br',
       },
     ],
@@ -320,7 +323,7 @@ const pt: Dictionary = {
     monthlyLossLabel: 'Perda mensal estimada',
     annualLossSuffix: 'perdidos por ano',
     benchmarkNote:
-      'Comparado a uma taxa de conversão de referência de 4,5% — o padrão que buscamos entregar num site otimizado por neuromarketing.',
+      'Estimativa ilustrativa. Compara sua taxa atual com uma meta de 4,5%, o objetivo que buscamos num site otimizado por neuromarketing. Não é uma média de mercado nem uma garantia de resultado.',
     locale: 'pt-BR',
     currency: 'BRL',
   },
@@ -481,43 +484,43 @@ const en: Dictionary = {
       "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
   },
   heroStudio: {
-    badgeSpeed: '⚡ 3D Design & High Performance',
-    badgeNeuro: '🧠 Neuromarketing & High Conversion',
+    badgeSpeed: '3D Design & High Performance',
+    badgeNeuro: 'Neuromarketing & High Conversion',
     tabs: [
       {
-        emoji: '🏨',
+        icon: 'stay',
         label: 'Airbnb / Beach',
         headline: 'Book your dream stay',
         cta: 'Book Now',
-        metricLabel: 'Booking Conversion',
-        metricValue: '+42%',
+        metricLabel: 'Project focus',
+        metricValue: 'Direct bookings',
         domain: 'yourstay.com',
       },
       {
-        emoji: '🪵',
+        icon: 'wood',
         label: 'Woodwork',
         headline: 'Custom projects, built to last',
         cta: 'Request a Quote',
-        metricLabel: 'Qualified Leads',
-        metricValue: '+58%',
+        metricLabel: 'Project focus',
+        metricValue: 'Qualified leads',
         domain: 'luxewoodwork.com',
       },
       {
-        emoji: '🍽️',
+        icon: 'food',
         label: 'Fine Dining',
         headline: 'Flavors that fill tables',
         cta: 'Reserve a Table',
-        metricLabel: 'Online Reservations',
-        metricValue: '+35%',
+        metricLabel: 'Project focus',
+        metricValue: 'Online reservations',
         domain: 'tablesavor.com',
       },
       {
-        emoji: '💎',
+        icon: 'shop',
         label: 'E-commerce',
         headline: 'From showcase to cart, frictionless',
         cta: 'Buy Now',
-        metricLabel: 'Average Order Value',
-        metricValue: '+27%',
+        metricLabel: 'Project focus',
+        metricValue: 'Average order value',
         domain: 'shopboutique.com',
       },
     ],
@@ -602,7 +605,7 @@ const en: Dictionary = {
     monthlyLossLabel: 'Estimated monthly loss',
     annualLossSuffix: 'lost per year',
     benchmarkNote:
-      'Compared to a 4.5% reference conversion rate — the benchmark we aim to deliver with a neuromarketing-optimized site.',
+      'Illustrative estimate. Compares your current rate to a 4.5% target, the goal we aim for with a neuromarketing-optimized site. It is not a market average or a guarantee of results.',
     locale: 'en-US',
     currency: 'USD',
   },
