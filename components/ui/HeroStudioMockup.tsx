@@ -3,9 +3,16 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock } from 'lucide-react';
+import { Lock, Zap, Brain, BedDouble, Hammer, UtensilsCrossed, Gem } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { DemoVillaSerena, DemoCerne, DemoArdosia, DemoEcommerce } from '../HeroDemos';
+
+const TAB_ICONS = {
+  stay: BedDouble,
+  wood: Hammer,
+  food: UtensilsCrossed,
+  shop: Gem,
+} as const;
 
 // Same AI-generated editorial set used in Nichos (public/images/verticals),
 // copied here rather than hotlinked from Unsplash: one less third-party
@@ -32,6 +39,7 @@ export const HeroStudioMockup = () => {
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       >
+        <Zap className="w-3.5 h-3.5 text-graphite-500" aria-hidden="true" />
         {t.heroStudio.badgeSpeed}
       </motion.div>
 
@@ -40,6 +48,7 @@ export const HeroStudioMockup = () => {
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
       >
+        <Brain className="w-3.5 h-3.5 text-graphite-500" aria-hidden="true" />
         {t.heroStudio.badgeNeuro}
       </motion.div>
 
@@ -57,21 +66,24 @@ export const HeroStudioMockup = () => {
               on mobile rather than an intentional scroll strip. */}
           <div className="relative min-w-0 flex-1">
             <div className="flex flex-nowrap gap-1.5 overflow-x-auto scrollbar-none py-1">
-              {tabs.map((tab, idx) => (
-                <button
-                  key={tab.label}
-                  type="button"
-                  onClick={() => setActive(idx)}
-                  className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
-                    idx === active
-                      ? 'bg-gold-500/15 border border-gold-500/40 text-pearl-100'
-                      : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'
-                  }`}
-                >
-                  <span>{tab.emoji}</span>
-                  {tab.label}
-                </button>
-              ))}
+              {tabs.map((tab, idx) => {
+                const TabIcon = TAB_ICONS[tab.icon];
+                return (
+                  <button
+                    key={tab.label}
+                    type="button"
+                    onClick={() => setActive(idx)}
+                    className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                      idx === active
+                        ? 'bg-gold-500/15 border border-gold-500/40 text-pearl-100'
+                        : 'border border-transparent text-pearl-300/50 hover:text-pearl-200'
+                    }`}
+                  >
+                    <TabIcon className="w-3.5 h-3.5" aria-hidden="true" />
+                    {tab.label}
+                  </button>
+                );
+              })}
             </div>
             <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#121019] to-transparent" />
           </div>

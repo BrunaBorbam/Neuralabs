@@ -37,12 +37,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Neuralabs | Onde Neurociência Vira Conversão",
-  description: "Websites que aumentam conversão em 20-40% usando 3D, neuromarketing e IA. Neuralabs é especialista em design premium e psicologia do consumidor.",
+  description: "Websites desenhados pela neurociência da decisão: SEO de intenção, neuromarketing e 3D para atrair quem já está pronto para comprar. Neuralabs é especialista em design premium e psicologia do consumidor.",
   keywords: "neuromarketing, design web, conversão, 3D, websites premium, agência digital, aumento de vendas",
   robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
   openGraph: {
     title: "Neuralabs | Onde Neurociência Vira Conversão",
-    description: "Websites que aumentam conversão em 20-40% usando 3D, neuromarketing e IA",
+    description: "Websites desenhados pela neurociência da decisão: SEO de intenção, neuromarketing e 3D para atrair quem já está pronto para comprar.",
     url: "https://neuralabs.online",
     type: "website",
     locale: "pt_BR",
@@ -97,7 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@type': 'Organization',
               name: 'Neuralabs',
               alternateName: 'Neuralabs Studio',
-              description: 'Websites que aumentam conversão em 20-40% usando 3D, neuromarketing e IA',
+              description: 'Websites desenhados pela neurociência da decisão: SEO de intenção, neuromarketing e 3D para atrair quem já está pronto para comprar.',
               url: 'https://neuralabs.online',
               logo: 'https://neuralabs.online/logo.svg',
               contactPoint: {

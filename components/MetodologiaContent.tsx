@@ -1,5 +1,6 @@
 'use client';
 
+import { Brain } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Badge } from '@/components/ui/Badge';
@@ -60,7 +61,7 @@ export function MetodologiaContent() {
           </p>
 
           <div className="p-12 border border-pearl-100/10 rounded-2xl bg-obsidian-800/50 backdrop-blur-sm max-w-3xl mx-auto">
-            <span className="text-5xl mb-6 block">🧠</span>
+            <Brain className="w-12 h-12 mb-6 text-graphite-500" aria-hidden="true" />
             <h3 className="text-2xl font-bold text-pearl-100 mb-4">{c.cardTitle}</h3>
             <p className="text-pearl-300/60 mb-8">
               {c.cardBody}

@@ -167,7 +167,7 @@ export async function POST(req: NextRequest) {
         : {
             from: 'Neuralabs <onboarding@resend.dev>',
             to: email,
-            subject: '🧠 Recebemos sua solicitação de diagnóstico!',
+            subject: 'Recebemos sua solicitação de diagnóstico',
             html: `
               <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0B0A0E;">
                 <h1 style="color: #B98CA8; font-size: 24px; margin-bottom: 20px;">Obrigado, ${safeName}!</h1>
@@ -225,7 +225,7 @@ export async function POST(req: NextRequest) {
           ? `Nova reserva via demo Ardósia: ${safeName}`
           : isCerne
           ? `Novo contato via demo CERNE: ${safeName}`
-          : `🧠 Novo Lead: ${safeName}`,
+          : `Novo Lead: ${safeName}`,
         html: `
           <div style="font-family: Arial, sans-serif;">
             <h2>${isArdosia ? 'Nova reserva (demo Ardósia)' : isCerne ? 'Novo contato (demo CERNE)' : 'Novo Lead Recebido'}</h2>
