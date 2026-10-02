@@ -45,7 +45,7 @@ export function CookieConsent() {
 
   const activateAnalytics = () => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('consent', 'default', {
+      (window as any).gtag('consent', 'update', {
         ad_storage: 'granted',
         analytics_storage: 'granted',
       });
