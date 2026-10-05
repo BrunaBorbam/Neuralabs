@@ -359,12 +359,12 @@ const pt: Dictionary = {
     badge: 'Investimento Transparente',
     heading: 'Sem letras miúdas, sem surpresas',
     subheading:
-      'Dois formatos de projeto sob medida, sempre em investimento único — sem mensalidades.',
+      'Três formatos de projeto sob medida, sempre em investimento único — sem mensalidades.',
     plans: [
       {
         name: 'Landing Page de Alta Conversão',
         price: 'R$ 5.000',
-        priceNote: 'ou $1,500 USD',
+        priceNote: 'ou USD 2.500',
         subtitle: 'Investimento único • Entrega em 7 dias úteis',
         deliverables: [
           '1 Página de Alto Impacto com Neuromarketing',
@@ -382,7 +382,7 @@ const pt: Dictionary = {
         name: 'Plataforma Web Premium',
         badge: 'MAIS ESCOLHIDO',
         price: 'R$ 8.000',
-        priceNote: 'ou $2,500 USD',
+        priceNote: 'ou USD 5.000',
         subtitle: 'Investimento único • Entrega em 10 dias úteis',
         deliverables: [
           'Projeto Completo e Exclusivo Sob Medida',
@@ -396,6 +396,21 @@ const pt: Dictionary = {
         cta: 'Solicitar Proposta no WhatsApp →',
         waMessage:
           'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o site da minha empresa.',
+      },
+      {
+        name: 'E-commerce sob medida',
+        price: '8.000–12.000',
+        priceNote: 'USD • Investimento final definido conforme o escopo',
+        subtitle: 'Projeto sob medida • Prazo definido após análise',
+        deliverables: [
+          'Arquitetura da loja alinhada ao catálogo e à jornada de compra',
+          'Páginas de produto e navegação com foco em clareza',
+          'Experiência de compra otimizada para dispositivos móveis',
+          'Escopo de checkout, integrações e suporte definido na proposta',
+        ],
+        cta: 'Solicitar Proposta no WhatsApp →',
+        waMessage:
+          'Olá! Vim pelo site da NEURALABS e gostaria de solicitar um diagnóstico visual para o meu e-commerce.',
       },
     ],
   },
@@ -640,11 +655,11 @@ const en: Dictionary = {
   pricing: {
     badge: 'Transparent Investment',
     heading: 'No fine print, no surprises',
-    subheading: 'Two tailor-made project formats, always a one-time investment — no monthly fees.',
+    subheading: 'Three tailor-made project formats, always a one-time investment — no monthly fees.',
     plans: [
       {
         name: 'High-Conversion Landing Page',
-        price: '$1,500 USD',
+        price: '$2,500 USD',
         priceNote: 'or R$ 5,000 BRL',
         subtitle: 'One-time investment • Delivered in 7 business days',
         deliverables: [
@@ -662,7 +677,7 @@ const en: Dictionary = {
       {
         name: 'Premium Web Platform',
         badge: 'MOST CHOSEN',
-        price: '$2,500 USD',
+        price: '$5,000 USD',
         priceNote: 'or R$ 8,000 BRL',
         subtitle: 'One-time investment • Delivered in 10 business days',
         deliverables: [
@@ -677,6 +692,21 @@ const en: Dictionary = {
         cta: 'Request Proposal on WhatsApp →',
         waMessage:
           "Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my company's website.",
+      },
+      {
+        name: 'Custom E-commerce',
+        price: '$8,000–$12,000',
+        priceNote: 'USD • Final investment depends on project scope',
+        subtitle: 'Tailored project • Timeline set after scope review',
+        deliverables: [
+          'Store architecture tailored to your catalog and buying journey',
+          'Product pages and navigation designed for clarity',
+          'Shopping experience optimized for mobile devices',
+          'Checkout, integrations, and support scope defined in the proposal',
+        ],
+        cta: 'Request Proposal on WhatsApp →',
+        waMessage:
+          'Hi! I came from the NEURALABS website and would like to request a visual diagnosis for my e-commerce store.',
       },
     ],
   },

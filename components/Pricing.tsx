@@ -14,7 +14,7 @@ export const Pricing = () => {
 
   return (
     <section id="precos" className="py-24 px-6 bg-obsidian-900">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <div className="text-center mb-14">
             <Badge variant="primary" className="mb-4">
@@ -29,7 +29,7 @@ export const Pricing = () => {
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-8 items-stretch">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8 items-stretch">
           {t.pricing.plans.map((plan, idx) => {
             const highlight = idx === 1;
             return (
@@ -54,7 +54,9 @@ export const Pricing = () => {
                         Playfair Display numerals are decorative enough to
                         slow down reading a price, which should register
                         instantly. */}
-                    <span className="text-3xl md:text-4xl font-sans font-black text-pearl-100 tracking-tight">
+                    <span
+                      className={`${plan.price.length > 14 ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'} font-sans font-black text-pearl-100 tracking-tight`}
+                    >
                       {plan.price}
                     </span>
                   </div>
