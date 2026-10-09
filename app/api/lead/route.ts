@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { enforceFormRateLimit } from '@/lib/rate-limit';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: Request) {
+  const limited = await enforceFormRateLimit(req, 'lead');
+  if (limited) return limited;
   try {
     const body: unknown = await req.json();
     if (!body || typeof body !== 'object') {
