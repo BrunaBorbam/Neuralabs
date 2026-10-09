@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
+import { enforceFormRateLimit } from '@/lib/rate-limit';
 
 // Anything typed here is interpolated straight into the HTML email body
 // below (both the copy sent to the visitor AND the internal lead
@@ -38,6 +39,8 @@ const isRateLimited = (ip: string) => {
 };
 
 export async function POST(req: NextRequest) {
+  const limited = await enforceFormRateLimit(req, 'email');
+  if (limited) return limited;
   try {
     const ip =
       req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
