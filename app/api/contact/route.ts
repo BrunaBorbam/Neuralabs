@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { enforceFormRateLimit } from '@/lib/rate-limit';
 
 export async function POST(req: NextRequest) {
+  const limited = await enforceFormRateLimit(req, 'contact');
+  if (limited) return limited;
   try {
     const body: unknown = await req.json();
     if (!body || typeof body !== 'object') {
