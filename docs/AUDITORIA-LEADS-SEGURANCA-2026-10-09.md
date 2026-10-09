@@ -35,3 +35,14 @@
 - O formulário não envia confirmação por email; apenas grava. Notificação/Resend ficará para outro passo.
 - Não houve testes de integração reais, pois banco pausado e sem credenciais seguras.
 - Não foi executado SQL no Supabase e a branch main não foi alterada.
+
+## Proteção anti-spam preparada em branch (09/10/2026)
+- Novo módulo `lib/rate-limit.ts` integrado a `/api/contact`, `/api/lead` e `/api/send-email`.
+- Vercel KV / Upstash Redis REST: `KV_REST_API_URL` e `KV_REST_API_TOKEN` (alternativas `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN`).
+- Operação Redis atômica via EVAL: no máximo 10 requisições/IP em 60 minutos para todos os formulários e 3/IP por rota em 15 minutos.
+- Identificador de IP derivado por HMAC; não armazena IP em texto claro no Redis.
+- Resposta 429 com Retry-After ao exceder limite; 503 (fail closed) em caso de configuração ausente ou falha de Redis.
+- Validação de código: 11 verificações estáticas realizadas e aprovadas. **Não houve testes ao vivo com Redis nem build completo de Next.js**.
+- Confirmar comportamento do encaminhamento de IP na Vercel, suporte a EVAL pelo serviço conectado, capacidade de Redis e políticas de proteção de dados antes do deploy.
+- Ainda falta anti-bot complementar (Turnstile / challenge), teste de concorrência real, privacidade e revisão de formulários.
+- Qualquer Preview pode ser criada automaticamente pela Vercel; verificar proteção contra deploy Preview antes de revisão.
