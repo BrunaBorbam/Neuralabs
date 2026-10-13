@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageCircle } from 'lucide-react';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { trackButtonClick } from '@/lib/ga';
@@ -8,6 +9,7 @@ import { useLanguage } from '@/context/LanguageContext';
 
 export const FloatingWhatsApp = () => {
   const { t } = useLanguage();
+  const pathname = usePathname();
   // The fixed FAB sits on top of page content by design, but on mobile it
   // ends up parked directly over the contact form's fields (and its own
   // "Falar Agora" CTA) — a redundant WhatsApp entry point blocking the one
@@ -25,6 +27,8 @@ export const FloatingWhatsApp = () => {
     observer.observe(contactSection);
     return () => observer.disconnect();
   }, []);
+
+  if (pathname?.startsWith('/neuralabs-2')) return null;
 
   return (
     <a
