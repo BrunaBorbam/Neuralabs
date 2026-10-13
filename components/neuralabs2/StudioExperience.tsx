@@ -232,38 +232,56 @@ function Symbol({ size = 36 }: { size?: number }) {
 }
 
 function SignalSculpture() {
+  // A self-contained SVG direction-flow signature: no canvas, images, or JS animation loops.
+  // Lines converge and diverge around decision nodes; a quiet traveling signal hints at technology.
   return (
-    <div className="n2-sculpture" aria-hidden="true">
-      <div className="n2-sculpture-grid" />
-      <div className="n2-aura" />
-      <div className="n2-ray n2-ray-a" />
-      <div className="n2-ray n2-ray-b" />
-      <div className="n2-ray n2-ray-c" />
-      <div className="n2-prism">
-        <svg viewBox="0 0 420 420" className="n2-prism-svg">
-          <defs>
-            <linearGradient id="n2g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#F0EAE1" stopOpacity=".95"/>
-              <stop offset=".45" stopColor="#B98CA8" stopOpacity=".48"/>
-              <stop offset="1" stopColor="#B7BFC6" stopOpacity=".87"/>
-            </linearGradient>
-            <linearGradient id="n2g2" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#B98CA8" stopOpacity=".55"/>
-              <stop offset="1" stopColor="#B98CA8" stopOpacity=".04"/>
-            </linearGradient>
-          </defs>
-          <path d="M210 27L356 112L356 280L210 365L64 280L64 112Z" fill="url(#n2g2)" stroke="url(#n2g)" strokeWidth="1.3"/>
-          <path d="M210 27V197M356 112L210 197L64 112M210 197V365" stroke="url(#n2g)" strokeOpacity=".82" strokeWidth="1.4" fill="none"/>
-          <path d="M64 280L210 197L356 280M64 112L210 365L356 112" fill="none" stroke="#E3C3D2" strokeOpacity=".18"/>
-          <path d="M210 27C108 90 116 310 210 365C302 320 302 77 210 27Z" stroke="#F0EAE1" strokeOpacity=".36" fill="none"/>
-          <circle cx="210" cy="197" r="8" fill="#F0EAE1"/>
-          <circle cx="64" cy="112" r="4" fill="#B98CA8"/>
-          <circle cx="356" cy="280" r="4" fill="#B7BFC6"/>
-          <circle cx="210" cy="27" r="4" fill="#E3C3D2"/>
-        </svg>
-      </div>
-      <div className="n2-signal-label n2-signal-one">N / 001 — observe</div>
-      <div className="n2-signal-label n2-signal-two">N / 002 — respond</div>
+    <div className="n2-sculpture n2-decision-signature" aria-hidden="true">
+      <svg viewBox="0 0 560 470" className="n2-decision-svg" focusable="false">
+        <defs>
+          <linearGradient id="n2-flow-silver" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#B7BFC6" stopOpacity="0"/>
+            <stop offset=".2" stopColor="#B7BFC6" stopOpacity=".38"/>
+            <stop offset=".57" stopColor="#FAF7F2" stopOpacity=".92"/>
+            <stop offset="1" stopColor="#B7BFC6" stopOpacity=".22"/>
+          </linearGradient>
+          <radialGradient id="n2-signal-haze">
+            <stop offset="0" stopColor="#FAF7F2" stopOpacity=".12"/>
+            <stop offset="1" stopColor="#FAF7F2" stopOpacity="0"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="292" cy="241" rx="200" ry="180" fill="url(#n2-signal-haze)"/>
+        <g className="n2-flow-network" fill="none" strokeLinecap="round">
+          <path className="n2-flow-line n2-flow-quiet" d="M36 134 C130 134 151 219 253 219 S386 130 531 130"/>
+          <path className="n2-flow-line" d="M25 271 C137 271 167 219 253 219 S386 326 537 326"/>
+          <path className="n2-flow-line n2-flow-feature" d="M45 358 C152 358 164 264 253 219 S370 221 514 73"/>
+          <path className="n2-flow-line n2-flow-quiet" d="M60 80 C159 80 190 161 253 219 S384 407 505 407"/>
+          <path className="n2-flow-line n2-flow-secondary" d="M79 413 C160 413 203 320 302 277 S420 236 519 241"/>
+          <path className="n2-flow-line n2-flow-secondary" d="M27 219 H253"/>
+        </g>
+        <g className="n2-flow-nodes">
+          <circle cx="36" cy="134" r="3"/>
+          <circle cx="25" cy="271" r="3"/>
+          <circle cx="45" cy="358" r="3"/>
+          <circle cx="60" cy="80" r="3"/>
+          <circle cx="79" cy="413" r="3"/>
+          <circle cx="253" cy="219" r="7" className="n2-decision-core"/>
+          <circle cx="253" cy="219" r="23" className="n2-decision-halo"/>
+          <circle cx="302" cy="277" r="4" className="n2-decision-branch"/>
+          <circle cx="514" cy="73" r="3"/>
+          <circle cx="531" cy="130" r="3"/>
+          <circle cx="519" cy="241" r="3"/>
+          <circle cx="537" cy="326" r="3"/>
+          <circle cx="505" cy="407" r="3"/>
+        </g>
+        <g className="n2-flow-pulses" fill="none" stroke="#FAF7F2" strokeWidth="2" strokeLinecap="round">
+          <path d="M25 271 C137 271 167 219 253 219 S386 326 537 326" pathLength="100" className="n2-moving-pulse"/>
+          <path d="M45 358 C152 358 164 264 253 219 S370 221 514 73" pathLength="100" className="n2-moving-pulse n2-moving-pulse-late"/>
+        </g>
+        <g className="n2-flow-coordinate" fill="#B7BFC6" fontSize="9" letterSpacing="2">
+          <text x="19" y="51">INTENT / 01</text>
+          <text x="405" y="451">RESPONSE / 02</text>
+        </g>
+      </svg>
     </div>
   );
 }
