@@ -38,3 +38,11 @@ Todos os conteúdos das cinco páginas têm variantes PT/EN via controle de idio
 ## Direção visual
 
 Obsidiana #0B0A0E, malva #B98CA8, pérola #FAF7F2 e prata #B7BFC6. Newsreader editorial para headlines, Inter para UI; símbolo autoral provisório como gesto geométrico, sem cérebro genérico. Layout editorial fluido, alto contraste de hierarquia e movimentos que respeitam prefers-reduced-motion. CTA de contato dirige ao simulador, não promete envio.
+
+## Configuração de Preview (13/10/2026)
+
+- Credenciais HTTP Basic Auth cadastradas na Vercel exclusivamente com target Preview e gitBranch `feat/neuralabs-2-prototipo-20261013`.
+- **Não registrar credenciais neste documento nem no repositório.**
+- Esta atualização provoca nova compilação da branch para incorporar as variáveis de ambiente; nenhuma implantação em Production é solicitada.
+- Proteção da plataforma Vercel também permanece habilitada. Mesmo com Basic Auth, a primeira camada pode exigir login Vercel autorizado.
+- Próxima etapa: testar resposta da Preview e revisar logs de build, sem alterar configurações globais de autenticação.
