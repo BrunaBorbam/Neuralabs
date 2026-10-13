@@ -236,9 +236,9 @@ function SignalSculpture() {
     <div className="n2-sculpture" aria-hidden="true">
       <div className="n2-sculpture-grid" />
       <div className="n2-aura" />
-      <div className="n2-orbit n2-orbit-outer" />
-      <div className="n2-orbit n2-orbit-mid" />
-      <div className="n2-orbit n2-orbit-inner" />
+      <div className="n2-ray n2-ray-a" />
+      <div className="n2-ray n2-ray-b" />
+      <div className="n2-ray n2-ray-c" />
       <div className="n2-prism">
         <svg viewBox="0 0 420 420" className="n2-prism-svg">
           <defs>
@@ -318,7 +318,7 @@ function Home({ t, lang }: { t: typeof dictionary.pt; lang: Lang }) {
         <SectionTop eyebrow={t.projectsEyebrow} title={t.projectsTitle} copy={t.projectsCopy}/>
         <div className="n2-case-grid">
           <CaseCard name="CERNE" type={t.cerneDesc} image="/images/cerne/hero.jpg" href={routes.work+'#cerne'} demo={t.concept} view={t.seeStudy} lang={lang} />
-          <CaseCard name="Villa Serena" type={t.villaDesc} image="/images/villa-serena/hero.jpg" href={routes.work+'#villa'} demo={t.concept} view={t.seeStudy} lang={lang} />
+          <CaseCard name="Villa Serena" type={t.villaDesc} image="/images/villa-serena/hero.jpg" href={routes.work} demo={t.concept} view={t.seeStudy} lang={lang} />
         </div>
       </div>
     </section>
