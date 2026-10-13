@@ -286,7 +286,7 @@ function CaseCard({ name, type, image, href, anchor, demo, view, lang }: {
     </Link>
     <div className="n2-case-detail">
       <div><span className="n2-case-caption">{demo}</span><h3>{name}</h3><p>{type}</p></div>
-      <Link href={href + (lang === 'en' ? '?lang=en' : '')} aria-label={view + ': ' + name} className="n2-round-link"><ArrowUpRight size={20}/></Link>
+      <Link href={href + (lang === 'en' ? '?lang=en' : '') + '#' + anchor} aria-label={view + ': ' + name} className="n2-round-link"><ArrowUpRight size={20}/></Link>
     </div>
   </article>;
 }
@@ -317,8 +317,8 @@ function Home({ t, lang }: { t: typeof dictionary.pt; lang: Lang }) {
       <div className="n2-container">
         <SectionTop eyebrow={t.projectsEyebrow} title={t.projectsTitle} copy={t.projectsCopy}/>
         <div className="n2-case-grid">
-          <CaseCard name="CERNE" type={t.cerneDesc} image="/images/cerne/hero.jpg" href={routes.work+'#cerne'} demo={t.concept} view={t.seeStudy} lang={lang} />
-          <CaseCard name="Villa Serena" type={t.villaDesc} image="/images/villa-serena/hero.jpg" href={routes.work} anchor="cerne" demo={t.concept} view={t.seeStudy} lang={lang} />
+          <CaseCard name="CERNE" type={t.cerneDesc} image="/images/cerne/hero.jpg" href={routes.work} anchor="cerne" demo={t.concept} view={t.seeStudy} lang={lang} />
+          <CaseCard name="Villa Serena" type={t.villaDesc} image="/images/villa-serena/hero.jpg" href={routes.work} anchor="villa" demo={t.concept} view={t.seeStudy} lang={lang} />
         </div>
       </div>
     </section>
