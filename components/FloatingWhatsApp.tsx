@@ -28,7 +28,8 @@ export const FloatingWhatsApp = () => {
     return () => observer.disconnect();
   }, []);
 
-  if (pathname?.startsWith('/neuralabs-2')) return null;
+  // Demo CERNE: o FAB da NEURALABS cobria título e CTA do Hero no mobile.
+  if (pathname?.startsWith('/neuralabs-2') || pathname?.startsWith('/demo/marcenaria')) return null;
 
   return (
     <a

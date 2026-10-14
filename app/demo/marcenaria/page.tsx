@@ -13,13 +13,13 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fraunces, Jost } from 'next/font/google';
-import { ArrowLeft, ArrowUpRight, Minus, Plus, Ruler } from 'lucide-react';
+import { ArrowUpRight, Minus, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/HeroAnimations';
 import { CerneContactForm } from '@/components/CerneContactForm';
 import { DemoLangToggle } from '@/components/DemoLangToggle';
 import { useLanguage } from '@/context/LanguageContext';
-import WoodGrainCanvas from './WoodGrainCanvas';
+import { CerneHero } from './CerneHero';
 
 const serif = Fraunces({
   subsets: ['latin'],
@@ -36,7 +36,6 @@ const sans = Jost({
 });
 
 // Fotos reais geradas pela Bruna no Gemini — ver histórico do projeto.
-const HERO_IMAGE = '/images/cerne/hero.jpg';
 const HERO_BANNER_IMAGE = '/images/cerne/banner.jpg';
 const OFICIO_IMAGE = '/images/cerne/oficio.jpg';
 
@@ -62,6 +61,7 @@ const STATS_BASE = [
 const CONTENT = {
   pt: {
     attributionBefore: 'Demonstração desenvolvida por ',
+    attributionShort: 'Demo por ',
     attributionStudio: 'NEURALABS Studio',
     back: '← Voltar',
     nav: { oficio: 'O Ofício', portfolio: 'Portfólio', processo: 'Processo', faq: 'Perguntas' },
@@ -72,10 +72,10 @@ const CONTENT = {
     heroText:
       'Projetos autorais em madeira e metal para quem trata cada ambiente como peça de arquitetura, não decoração. Do desenho técnico ao acabamento manual, uma equipe só para o seu projeto.',
     heroSeePortfolio: 'Ver Portfólio',
-    agendaLabel: 'Agenda 2026',
-    scarcityBefore: 'Apenas ',
-    spotsWord: 'vagas',
-    scarcityAfter: ' restantes para novos projetos neste trimestre.',
+    heroAlt: 'Closet em madeira com ilha de pedra clara, puxadores metálicos e iluminação embutida',
+    heroCaption: 'Closet · estudo conceitual',
+    heroMaterialsLabel: 'Materiais em cena',
+    heroSwatches: ['Nogueira', 'Pedra clara', 'Metal escovado'],
     oficioEyebrow: 'O Ofício',
     oficioTitle1: 'Cada peça, ',
     oficioTitleEm: 'um projeto.',
@@ -105,8 +105,6 @@ const CONTENT = {
     contatoRegions: 'Atendemos Rio Grande do Sul · Santa Catarina · Paraná',
     footerDisclaimerBefore: 'Projeto fictício de demonstração criado por ',
     footerDisclaimerAfter: '. Marca, fotos e depoimentos são ilustrativos.',
-    backFull: 'Voltar para NEURALABS Studio',
-    backShort: 'NEURALABS',
     close: 'Fechar',
     statsLabels: ['Anos de ofício', 'Projetos entregues', 'Sob encomenda', 'Estados atendidos'],
     materiais: ['Nogueira Maciça', 'Carvalho Fumê', 'Freijó', 'Cedro', 'Latão Escovado', 'Mármore Calacatta', 'Vidro Fosco'],
@@ -131,6 +129,7 @@ const CONTENT = {
   },
   en: {
     attributionBefore: 'Demo developed by ',
+    attributionShort: 'Demo by ',
     attributionStudio: 'NEURALABS Studio',
     back: '← Back',
     nav: { oficio: 'The Craft', portfolio: 'Portfolio', processo: 'Process', faq: 'FAQ' },
@@ -141,10 +140,10 @@ const CONTENT = {
     heroText:
       'Bespoke projects in wood and metal for those who treat every space as a piece of architecture, not decoration. From technical drawing to hand finishing, a team dedicated to your project alone.',
     heroSeePortfolio: 'View Portfolio',
-    agendaLabel: '2026 Schedule',
-    scarcityBefore: 'Only ',
-    spotsWord: 'spots',
-    scarcityAfter: ' left for new projects this quarter.',
+    heroAlt: 'Wooden walk-in closet with a light stone island, metal handles and built-in lighting',
+    heroCaption: 'Closet · concept study',
+    heroMaterialsLabel: 'Materials in the scene',
+    heroSwatches: ['Walnut', 'Light stone', 'Brushed metal'],
     oficioEyebrow: 'The Craft',
     oficioTitle1: 'Every piece, ',
     oficioTitleEm: 'a project.',
@@ -174,8 +173,6 @@ const CONTENT = {
     contatoRegions: 'Serving Rio Grande do Sul · Santa Catarina · Paraná',
     footerDisclaimerBefore: 'Fictional demo project created by ',
     footerDisclaimerAfter: '. Brand, photos, and testimonials are illustrative.',
-    backFull: 'Back to NEURALABS Studio',
-    backShort: 'NEURALABS',
     close: 'Close',
     statsLabels: ['Years of craft', 'Projects delivered', 'Fully bespoke', 'States served'],
     materiais: ['Solid Walnut', 'Smoked Oak', 'Freijó', 'Cedar', 'Brushed Brass', 'Calacatta Marble', 'Frosted Glass'],
@@ -250,16 +247,6 @@ function usePrefersReducedMotion() {
     return () => mq.removeEventListener('change', update);
   }, []);
   return reduced;
-}
-
-const VAGAS_POR_MES_NO_TRIMESTRE = [4, 3, 2] as const;
-
-function useVagasRestantes(fallback: number) {
-  const [vagas, setVagas] = useState(fallback);
-  useEffect(() => {
-    setVagas(VAGAS_POR_MES_NO_TRIMESTRE[new Date().getMonth() % 3]);
-  }, []);
-  return vagas;
 }
 
 function useParallax(strength: number, enabled: boolean) {
@@ -358,10 +345,8 @@ export default function MarcenariaDemo() {
   const t = CONTENT[language];
   const isDesktop = useIsDesktop();
   const reducedMotion = usePrefersReducedMotion();
-  const heroParallaxRef = useParallax(0.08, isDesktop && !reducedMotion);
   const bannerParallaxRef = useParallax(0.05, isDesktop && !reducedMotion);
   const rootRef = useMagnetic();
-  const vagasRestantes = useVagasRestantes(3);
   const [projetoAberto, setProjetoAberto] = useState<Projeto | null>(null);
 
   // Portfólio editável via Notion (CMS leve). Fica null a menos que o CMS
@@ -396,9 +381,11 @@ export default function MarcenariaDemo() {
       <DemoLangToggle />
 
       {/* Selo NEURALABS — única menção à marca dentro da demo */}
-      <div className="flex items-center justify-between gap-4 border-b border-[#2A2C22]/10 bg-[#EDECE3] px-5 py-2 text-[11px] tracking-wide text-[#2A2C22]/70 sm:px-8">
-        <span>
-          <span className="text-[#6B7A4E]">✦</span> {t.attributionBefore}
+      <div className="flex items-center justify-between gap-4 border-b border-[#2A2C22]/10 bg-[#EDECE3] py-2 pl-5 pr-[7.5rem] text-[11px] tracking-wide text-[#2A2C22]/70 sm:pl-8">
+        <span className="whitespace-nowrap">
+          <span className="text-[#6B7A4E]">✦</span>{' '}
+          <span className="hidden sm:inline">{t.attributionBefore}</span>
+          <span className="sm:hidden">{t.attributionShort}</span>
           <span className="font-semibold text-[#2A2C22]">{t.attributionStudio}</span>
         </span>
         <Link href="/" className="whitespace-nowrap font-medium hover:text-[#6B7A4E]">
@@ -408,7 +395,7 @@ export default function MarcenariaDemo() {
 
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-[#2A2C22]/10 bg-[#F5F4EE]/85 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-5 sm:px-8">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 py-5 pl-5 pr-[7.5rem] sm:pl-8 min-[1440px]:pr-8">
           <span
             className="text-sm uppercase tracking-[0.3em] sm:text-base"
             style={{ fontFamily: 'var(--font-cerne-serif)' }}
@@ -424,113 +411,14 @@ export default function MarcenariaDemo() {
           <a
             href="#contato"
             data-magnetic
-            className="inline-flex flex-shrink-0 items-center justify-center whitespace-nowrap rounded-sm border border-[#2A2C22] px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.15em] text-[#2A2C22] transition-colors hover:bg-[#2A2C22] hover:text-[#F5F4EE] sm:px-6 sm:py-3"
+            className="hidden flex-shrink-0 items-center justify-center whitespace-nowrap rounded-sm border border-[#2A2C22] px-4 py-2.5 min-[400px]:inline-flex text-[11px] font-medium uppercase tracking-[0.15em] text-[#2A2C22] transition-colors hover:bg-[#2A2C22] hover:text-[#F5F4EE] sm:px-6 sm:py-3"
           >
             {t.ctaConsult}
           </a>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative mx-auto grid max-w-6xl gap-10 px-5 pb-16 pt-14 sm:px-8 sm:pt-20 md:grid-cols-[1.05fr_1fr] md:gap-6 md:pb-0">
-        <div className="flex flex-col justify-center py-6 md:py-20">
-          <div className="mb-8 flex items-center gap-3">
-            <span className="h-px w-9 bg-[#6B7A4E]" />
-            <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#576141]">
-              {t.heroEyebrow}
-            </span>
-          </div>
-          <h1
-            className="mb-7 max-w-[500px] text-[42px] leading-[1.08] sm:text-[52px] md:text-[56px]"
-            style={{ fontFamily: 'var(--font-cerne-serif)', fontWeight: 400 }}
-          >
-            {t.heroTitle1}<br />
-            <em className="text-[#6B7A4E]" style={{ fontStyle: 'italic' }}>
-              {t.heroTitleEm}
-            </em>
-          </h1>
-          <p className="mb-9 max-w-[380px] text-[13.5px] leading-[1.9] text-[#55584A]">
-            {t.heroText}
-          </p>
-          <div className="flex flex-wrap items-center gap-6">
-            <a
-              href="#portfolio"
-              className="inline-flex w-fit items-center gap-2 border-b border-[#6B7A4E] pb-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[#2A2C22] hover:text-[#6B7A4E]"
-            >
-              {t.heroSeePortfolio} <ArrowUpRight className="h-3.5 w-3.5" />
-            </a>
-            <a
-              href="#contato"
-              data-magnetic
-              className="inline-flex w-fit items-center gap-2 rounded-sm bg-[#2A2C22] px-6 py-3 text-[11px] font-medium uppercase tracking-[0.15em] text-[#F5F4EE] transition-colors hover:bg-[#6B7A4E]"
-            >
-              {t.ctaConsult}
-            </a>
-          </div>
-        </div>
-
-        <div className="relative -mx-5 aspect-[4/5] overflow-hidden sm:mx-0 sm:rounded-sm md:aspect-auto md:h-[86vh] md:min-h-[560px]">
-          <div ref={heroParallaxRef} className="absolute inset-0 -top-[6%] h-[112%] w-full">
-            {isDesktop && !reducedMotion ? (
-              <video
-                key="hero-video"
-                autoPlay
-                muted
-                loop
-                playsInline
-                poster={HERO_IMAGE}
-                className="h-full w-full object-cover"
-              >
-                <source src="/videos/cerne/hero-shaving.webm" type="video/webm" />
-                <source src="/videos/cerne/hero-shaving.mp4" type="video/mp4" />
-              </video>
-            ) : (
-              <div className={reducedMotion ? '' : 'h-full w-full animate-ken-burns'}>
-                <Image
-                  src={HERO_IMAGE}
-                  alt="Marcenaria sob medida em tons de madeira, luz natural"
-                  fill
-                  priority
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-            )}
-          </div>
-
-          <WoodGrainCanvas />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F5F4EE]/20 via-transparent to-transparent md:bg-gradient-to-l md:from-transparent md:via-transparent md:to-[#F5F4EE]/10" />
-
-          <motion.div
-            className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-auto sm:w-[260px]"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6, ease: [0.23, 1, 0.32, 1] }}
-          >
-            <motion.div
-              className="relative rounded-sm border border-[#2A2C22]/10 bg-[#F5F4EE]/85 p-5 backdrop-blur-2xl"
-              style={{ boxShadow: '0 32px 64px -24px rgba(42,44,34,.25)' }}
-              whileHover={{
-                boxShadow: '0 40px 80px -16px rgba(42,44,34,.35)',
-                backgroundColor: 'rgba(245,244,238,0.95)'
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            >
-              <div
-                className="pointer-events-none absolute -top-px left-[10%] right-[10%] h-px"
-                style={{ background: 'linear-gradient(90deg,transparent,#6B7A4E,transparent)' }}
-              />
-              <span className="mb-2 flex items-center gap-1.5 text-[10px] uppercase tracking-[0.16em] text-[#576141]">
-                <Ruler className="h-3 w-3" /> {t.agendaLabel}
-              </span>
-              <p className="text-[12.5px] leading-[1.6] text-[#2A2C22]">
-                {t.scarcityBefore}<b>{vagasRestantes} {t.spotsWord}</b>{t.scarcityAfter}
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+      <CerneHero t={t} />
 
       {/* Faixa de materiais */}
       <div className="overflow-hidden border-y border-[#2A2C22]/10 bg-[#EDECE3] py-3.5">
@@ -911,16 +799,6 @@ export default function MarcenariaDemo() {
           </p>
         </div>
       </footer>
-
-      {/* Botão flutuante de voltar */}
-      <Link
-        href="/"
-        className="fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 rounded-full border border-[#2A2C22]/15 bg-[#F5F4EE]/95 px-4 py-3 text-xs font-semibold text-[#2A2C22] shadow-lg backdrop-blur-md transition-colors hover:bg-[#F5F4EE] sm:px-5 sm:text-sm"
-      >
-        <ArrowLeft className="h-4 w-4 flex-shrink-0" />
-        <span className="hidden sm:inline">{t.backFull}</span>
-        <span className="sm:hidden">{t.backShort}</span>
-      </Link>
 
       <ProjetoModal projeto={projetoAberto} onClose={() => setProjetoAberto(null)} closeLabel={t.close} />
     </main>
