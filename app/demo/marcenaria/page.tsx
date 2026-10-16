@@ -46,6 +46,7 @@ type Projeto = {
   ano: string;
   materiais: string[];
   img: string;
+  alt?: string;
   descricao?: string;
   featured?: boolean;
 };
@@ -72,7 +73,7 @@ const CONTENT = {
     heroText:
       'Projetos autorais em madeira e metal para quem trata cada ambiente como peça de arquitetura, não decoração. Do desenho técnico ao acabamento manual, uma equipe só para o seu projeto.',
     heroSeePortfolio: 'Ver Portfólio',
-    heroAlt: 'Closet em madeira com ilha de pedra clara, puxadores metálicos e iluminação embutida',
+    heroAlt: 'Closet simétrico em madeira escura com espelho central, ilha em quartzito claro e iluminação embutida',
     heroCaption: 'Closet · estudo conceitual',
     heroMaterialsLabel: 'Materiais em cena',
     heroSwatches: ['Nogueira', 'Pedra clara', 'Metal escovado'],
@@ -124,7 +125,7 @@ const CONTENT = {
       { idx: '01', nome: 'Biblioteca em Nogueira', local: 'Residência Privada · Porto Alegre', ano: '2025', materiais: ['Nogueira maciça', 'Latão escovado'], descricao: 'Biblioteca de pé-direito duplo com escada suspensa e estante corrida em nogueira maciça — desenhada em conjunto com o arquiteto do projeto desde a planta baixa, não como reforma posterior.', img: '/images/cerne/biblioteca.jpg', featured: true },
       { idx: '02', nome: 'Cozinha em Carvalho Fumê', local: 'Cobertura · Florianópolis', ano: '2024', materiais: ['Carvalho fumê', 'Mármore Calacatta'], descricao: 'Cozinha integrada à sala de uma cobertura de frente pro mar — marcenaria em carvalho fumê contrastando com bancada de mármore Calacatta, desenhada pra abrir totalmente durante recepções e fechar em painéis discretos no dia a dia.', img: '/images/cerne/cozinha.jpg' },
       { idx: '03', nome: 'Escritório Executivo', local: 'Sede Corporativa · Curitiba', ano: '2024', materiais: ['Freijó', 'Vidro fosco'], descricao: 'Sala de diretoria e recepção executiva em freijó e vidro fosco — painéis de marcenaria fazem a divisória acústica entre os ambientes sem recorrer a drywall, mantendo a mesma linguagem do desenho arquitetônico original.', img: '/images/cerne/escritorio.jpg' },
-      { idx: '04', nome: 'Closet Boutique', local: 'Residência Privada · Gramado', ano: '2023', materiais: ['Cedro', 'Latão escovado'], descricao: 'Closet planejado como uma pequena boutique particular — armários em cedro com puxadores de latão escovado, ilha central para acessórios e iluminação embutida desenhada peça a peça com a proprietária.', img: '/images/cerne/closet-boutique.png' },
+      { idx: '04', nome: 'Closet Boutique', local: 'Residência Privada · Gramado', ano: '2023', materiais: ['Nogueira', 'Quartzito', 'Metal escovado'], descricao: 'Closet planejado como uma pequena boutique particular — armários simétricos em nogueira com puxadores em metal escovado, ilha central em quartzito, espelho ao fundo e iluminação embutida desenhada peça a peça com a proprietária.', img: '/images/cerne/cerne-closet-hero-aprovado.webp', alt: 'Closet simétrico em nogueira com ilha central em quartzito e espelho ao fundo' },
     ] as Projeto[],
   },
   en: {
@@ -140,7 +141,7 @@ const CONTENT = {
     heroText:
       'Bespoke projects in wood and metal for those who treat every space as a piece of architecture, not decoration. From technical drawing to hand finishing, a team dedicated to your project alone.',
     heroSeePortfolio: 'View Portfolio',
-    heroAlt: 'Wooden walk-in closet with a light stone island, metal handles and built-in lighting',
+    heroAlt: 'Symmetrical dark-wood walk-in closet with a central mirror, a light quartzite island and built-in lighting',
     heroCaption: 'Closet · concept study',
     heroMaterialsLabel: 'Materials in the scene',
     heroSwatches: ['Walnut', 'Light stone', 'Brushed metal'],
@@ -192,7 +193,7 @@ const CONTENT = {
       { idx: '01', nome: 'Walnut Library', local: 'Private Residence · Porto Alegre', ano: '2025', materiais: ['Solid walnut', 'Brushed brass'], descricao: "A double-height library with a suspended ladder and a full-length shelf in solid walnut — designed together with the project's architect from the floor plan up, not as a later renovation.", img: '/images/cerne/biblioteca.jpg', featured: true },
       { idx: '02', nome: 'Smoked Oak Kitchen', local: 'Penthouse · Florianópolis', ano: '2024', materiais: ['Smoked oak', 'Calacatta marble'], descricao: 'A kitchen integrated into the living room of an oceanfront penthouse — smoked-oak cabinetry contrasting with a Calacatta marble countertop, designed to open fully during gatherings and close into discreet panels day to day.', img: '/images/cerne/cozinha.jpg' },
       { idx: '03', nome: 'Executive Office', local: 'Corporate HQ · Curitiba', ano: '2024', materiais: ['Freijó', 'Frosted glass'], descricao: 'A boardroom and executive reception in freijó and frosted glass — cabinetry panels form the acoustic partition between the spaces without resorting to drywall, keeping the language of the original architecture.', img: '/images/cerne/escritorio.jpg' },
-      { idx: '04', nome: 'Boutique Closet', local: 'Private Residence · Gramado', ano: '2023', materiais: ['Cedar', 'Brushed brass'], descricao: 'A closet planned like a small private boutique — cedar wardrobes with brushed-brass handles, a central island for accessories, and built-in lighting designed piece by piece with the owner.', img: '/images/cerne/closet-boutique.png' },
+      { idx: '04', nome: 'Boutique Closet', local: 'Private Residence · Gramado', ano: '2023', materiais: ['Walnut', 'Quartzite', 'Brushed metal'], descricao: 'A closet planned like a small private boutique — symmetrical walnut wardrobes with brushed-metal handles, a central quartzite island, a mirror at the far end, and built-in lighting designed piece by piece with the owner.', img: '/images/cerne/cerne-closet-hero-aprovado.webp', alt: 'Symmetrical walnut walk-in closet with a central quartzite island and a mirror at the far end' },
     ] as Projeto[],
   },
 } as const;
@@ -582,7 +583,7 @@ export default function MarcenariaDemo() {
                     >
                       <Image
                         src={p.img}
-                        alt={p.nome}
+                        alt={p.alt ?? p.nome}
                         fill
                         sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 85vw"
                         className="object-cover"
@@ -838,7 +839,7 @@ function ProjetoModal({ projeto, onClose, closeLabel }: { projeto: Projeto | nul
           <Minus className="h-4 w-4 rotate-45" />
         </button>
         <div className="relative aspect-[4/5] sm:aspect-auto">
-          <Image src={projeto.img} alt={projeto.nome} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
+          <Image src={projeto.img} alt={projeto.alt ?? projeto.nome} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
         </div>
         <div className="flex flex-col justify-center p-7 sm:p-9">
           <span className="text-[11px] text-[#6B7A4E]">{projeto.idx} — {projeto.ano}</span>

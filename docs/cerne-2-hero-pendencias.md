@@ -2,20 +2,19 @@
 
 Branch: `feat/neuralabs-2-prototipo-20261013`. Hero em `app/demo/marcenaria/CerneHero.tsx`.
 
-## Bloqueante para uso comercial
+## Foto do closet
 
-- **Foto do closet (`public/images/cerne/closet-boutique.png`) contém referências à Louis Vuitton**
-  (livro com o nome na estante e bolsas com monograma na vitrine). **Não aprovada comercialmente.**
-  Substituir por imagem original, sem marcas de terceiros, de preferência com 2000 px ou mais de
-  largura (a atual tem 1122 x 1402 e perde nitidez em telas grandes). Não usar imagens de
-  terceiros sem licença identificada.
-- A mesma foto também aparece no card "Closet Boutique" do portfólio da demo.
+- **Resolvido no código (16/10/2026):** Hero e card "Closet Boutique" usam a imagem original aprovada
+  `public/images/cerne/cerne-closet-hero-aprovado.webp` (1374 x 1145, commit `b907bba`).
+- **Pendente:** o arquivo antigo `public/images/cerne/closet-boutique.png` (referências à Louis Vuitton)
+  continua no repositório, sem uso no código. Excluir em etapa autorizada.
+- Não usar imagens de terceiros sem licença identificada.
 
 ## Origem dos recursos do Hero
 
 | Arquivo | Uso | Origem |
 |---|---|---|
-| `closet-boutique.png` | Cena principal | Gerada pela Bruna (Gemini); ver pendência acima |
+| `cerne-closet-hero-aprovado.webp` | Cena principal e card do portfólio | Original aprovada pela Bruna |
 | `oficio-detalhe.jpg` | Portas e amostra "Nogueira" | Gerada pela Bruna (Gemini) |
 | `material-pedra.jpg` | Amostra "Pedra clara" | Textura procedural original (gerada por script) |
 | `material-metal.jpg` | Amostra "Metal escovado" | Textura procedural original (gerada por script) |

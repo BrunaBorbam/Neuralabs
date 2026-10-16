@@ -16,9 +16,8 @@ import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { MotionConfig, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 
-// PENDENTE: foto contém marca de terceiros (Louis Vuitton). Não aprovada para uso
-// comercial; substituir por imagem original. Ver docs/cerne-2-hero-pendencias.md.
-const CLOSET_IMAGE = '/images/cerne/closet-boutique.png';
+// Imagem original aprovada (b907bba). Composição simétrica: espelho e ilha em x = 50%.
+const CLOSET_IMAGE = '/images/cerne/cerne-closet-hero-aprovado.webp';
 const WALNUT_IMAGE = '/images/cerne/oficio-detalhe.jpg';
 // Texturas originais geradas para o projeto (procedurais), não fotografias.
 const STONE_IMAGE = '/images/cerne/material-pedra.jpg';
@@ -211,7 +210,7 @@ export function CerneHero({ t }: { t: CerneHeroCopy }) {
                     preload
                     sizes="(min-width: 768px) 58vw, 100vw"
                     className="object-cover"
-                    style={{ objectPosition: '50% 58%' }}
+                    style={{ objectPosition: '50% 55%' }}
                   />
                 </motion.div>
               </motion.div>
@@ -244,7 +243,7 @@ export function CerneHero({ t }: { t: CerneHeroCopy }) {
                   {(['left', 'right'] as const).map((side) => (
                     <motion.div
                       key={side}
-                      className={`absolute inset-y-0 w-1/2 overflow-hidden ${side === 'left' ? 'left-0' : 'right-0'}`}
+                      className={`absolute inset-y-0 w-1/2 overflow-hidden bg-[#2B1D14] ${side === 'left' ? 'left-0' : 'right-0'}`}
                       initial={{ x: '0%' }}
                       animate={{ x: side === 'left' ? '-101%' : '101%' }}
                       transition={{ duration: DOOR_DURATION, delay: DOOR_DELAY, ease: EASE_DOOR }}
