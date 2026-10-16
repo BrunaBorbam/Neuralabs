@@ -1,12 +1,16 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Newsreader } from 'next/font/google';
+import localFont from 'next/font/local';
 import './studio.css';
 
-const editorial = Newsreader({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
+// Newsreader (SIL OFL, ver fonts/OFL.txt) servida localmente: os mesmos arquivos latin v26
+// que next/font/google baixava. Evita que o build dependa da URL devolvida pelo Google Fonts,
+// que derrubou o Turbopack em um build sem cache ("queries have exactly one entry").
+const editorial = localFont({
+  src: [
+    { path: './fonts/newsreader-latin.woff2', weight: '400 600', style: 'normal' },
+    { path: './fonts/newsreader-latin-italic.woff2', weight: '400 600', style: 'italic' },
+  ],
   variable: '--font-n2-display',
   display: 'swap',
 });
